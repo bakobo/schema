@@ -159,6 +159,32 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             reframes the "open-source it as a product" question as one of release cadence / packaging (a later
             concern) rather than open-vs-closed — the repo is already OSS-intended (Apache fork; GCD is imbu's
             keystone).
+        Tooling is laid out as tools/py (now) and tools/ts (reserved); the inherited scripts become oldtools = decision:
+          id: w3kp6m
+          why: >
+            The inherited public-schema tooling (tools/) is provisional (@p4zc7n) and not the committed
+            toolchain. Chose to (a) rename it to oldtools/ — kept as a faithful REFERENCE, not deleted, so the
+            original saidify / register / check logic stays inspectable — and (b) build the new committed tooling
+            under tools/py/ as a clean, uv- and pytest-native Python package, RESERVING tools/ts/ as the sibling
+            namespace for the future browser / TypeScript layer whose language is still deferred (@p4zc7n,
+            @xv4m7d). Chose the tools/py|ts split over a flat tools/ (which would force an awkward rename or
+            intermixing when the TS layer arrives) and over scattered top-level dirs (which would fragment the
+            tooling identity). This makes @c5tj3p's "generic-in-shape, extract-when-a-second-consumer-appears"
+            concrete: the Python oracle layer and the eventual browser layer are siblings under one tools/ tree,
+            each independently packageable. tools/ts/ is NOT created empty now (YAGNI); the load-bearing part is
+            the CONVENTION that Python tooling lives under tools/py/ rather than a bare tools/.
+        keri is pinned to ==1.2.13, verified SAID-identical to the corpus's minting version = decision:
+          id: m4vd7s
+          why: >
+            keri is the SAID oracle (@xv4m7d), so its version is load-bearing — a keri that serialized or
+            digested differently would silently change every SAID. The inherited tools ran against keri 1.1.33
+            (the version the 10-schema corpus was minted under). Chose to pin keri==1.2.13 rather than stay on
+            1.1.33, AFTER empirically verifying (2026-07-11) that 1.2.13 recomputes byte-IDENTICAL SAIDs for all
+            10 currently-valid schemas — so the bump carries the 1.1→1.2 line's fixes without invalidating any
+            existing SAID or credential. Tradeoff accepted: 1.2.x resolves to a newer Python and emits some
+            cosmetic upstream SyntaxWarnings, taken in exchange for not shipping tooling pinned to an
+            unreasonably old runtime. The pin is EXACT (==), not a range, because "the oracle" must be a single
+            reproducible version; any future bump REQUIRES re-running the same SAID-identity check as a gate.
         The full surfaced tooling program is scoped far beyond the near-term need = tension:
           id: g6dm2v
           why: >
