@@ -16,6 +16,7 @@ from __future__ import annotations
 import copy
 
 from keri.core.coring import MtrDex, Saider
+from keri.core.serdering import SerderACDC
 
 #: The label whose value is the SAID. For a JSON Schema this is ``$id``.
 SAID_LABEL = "$id"
@@ -58,3 +59,37 @@ def compute_schema_said(schema: dict, *, label: str = SAID_LABEL, code: str = SA
     ``$id`` to detect a schema whose content and SAID have drifted apart.
     """
     return saidify_schema(schema, label=label, code=code)[label]
+
+
+#: The label carrying a self-addressing datum's own SAID (``d`` for an ACDC).
+SAD_LABEL = "d"
+
+
+def _saidify_children(node: dict, label: str) -> None:
+    # Post-order: saidify every nested block carrying the label, deepest first,
+    # so an enclosing block's SAID is computed over already-correct child SAIDs.
+    for value in node.values():
+        if isinstance(value, dict) and label in value:
+            _saidify_children(value, label)
+            _, saidified = Saider.saidify(sad=value, label=label)
+            value[label] = saidified[label]
+
+
+def saidify_sad(sad: dict, *, label: str = SAD_LABEL) -> dict:
+    """Return a deep copy of a self-addressing datum with every SAID recomputed.
+
+    Nested blocks (the ``a``/``e``/``r`` of an ACDC) are saidified bottom-up so
+    a change deep in the structure propagates outward. For a versioned ACDC (a
+    top-level ``v`` string), the top is finished with keri's ``SerderACDC``,
+    which recomputes both the version string's size and the top-level ``d`` —
+    so arbitrary content edits (not only SAID-for-SAID swaps) stay correct.
+    A plain, unversioned SAD is finished with :class:`Saider` alone.
+    """
+    out = copy.deepcopy(sad)
+    _saidify_children(out, label)
+    if "v" in out and label == SAD_LABEL:
+        out = SerderACDC(sad=out, makify=True).sad
+    elif label in out:
+        _, saidified = Saider.saidify(sad=out, label=label)
+        out[label] = saidified[label]
+    return out

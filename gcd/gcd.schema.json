@@ -1,5 +1,5 @@
 {
-  "$id": "EL7irIKYJL9Io0hhKSGWI4OznhwC7qgJG5Qf4aEs6j0o",
+  "$id": "EM3kQ1QEU3kJFqV8aZrse-QXs5oNlaFfaiwEUFt4uq4C",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Generalized Cooperative Delegation Credential",
   "description": "Define the authorizations, duties, and constraints of a person who receives delegated authority.",
@@ -48,7 +48,7 @@
           "type": "string"
         },
         {
-          "$id": "EOzZucVeu1wmEih4lVOq1hoLpXLsfzEloYTykHGgWkYG",
+          "$id": "EPLlRCJPjk3jr27r43DSMoz2oeo80KrkPHc0-WukrNL3",
           "description": "Attributes block",
           "type": "object",
           "required": [
@@ -176,8 +176,7 @@
                 "25 CHF",
                 "0.3 BTC",
                 "4 OZ-XAU"
-                ]
-              }
+              ]
             },
             "c_proto": {
               "description": "Array of strings that each name a protocol followed by one or more formally named roles in that protocol. The delegate is authorized to participate in the named protocols in any of the named roles, subject to other constraints. Protocols that are defined in a formal standard MUST be identified by the standard org and number, if possible (e.g., HTTP/2 is identified by \"rfc7540\", and a credit card protocol \"iso8353\"). In some cases, a semver-style number is used instead of a standard number (as with the EMV credit card protocol, which is represented with \"emv3.0\"). DIDComm protocols use PIURIs (https://bit.ly/474pyRZ). The protocol name is followed by a colon, and then a comma-separated list of role names. This field is case-insensitive. Comparisons of strings in this constraint field MUST ignore whitespace and punctuation except the punctuation in version numbers.",

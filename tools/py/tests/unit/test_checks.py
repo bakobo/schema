@@ -71,3 +71,15 @@ def test_examples_passes_valid_instance(synthetic_repo):
     (synthetic_repo / "widget" / "example.json").write_text(json.dumps(good))
     assert said  # schema is saidified
     assert checks.check_examples(synthetic_repo) == []
+
+
+def test_example_refs_catches_stale_s(synthetic_repo):
+    (synthetic_repo / "widget" / "example.json").write_text(json.dumps({"s": "E" + "Z" * 43}))
+    problems = checks.check_example_refs(synthetic_repo)
+    assert len(problems) == 1 and problems[0].check == "example_ref"
+
+
+def test_example_refs_passes_when_s_matches_schema(synthetic_repo):
+    schema = json.loads((synthetic_repo / "widget" / "widget.schema.json").read_text())
+    (synthetic_repo / "widget" / "example.json").write_text(json.dumps({"s": schema[SAID_LABEL]}))
+    assert checks.check_example_refs(synthetic_repo) == []

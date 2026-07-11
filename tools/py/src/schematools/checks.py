@@ -134,8 +134,46 @@ def check_examples(root: str | Path) -> list[Problem]:
     return problems
 
 
+def check_example_refs(root: str | Path) -> list[Problem]:
+    """An example's ``s`` (schema SAID) must equal its folder's schema ``$id``.
+
+    Catches an example credential that has drifted away from — or was never
+    saidified against — the schema it claims to instantiate (this.i @n7xk4r,
+    referential integrity).
+    """
+    problems: list[Problem] = []
+    for entry in discover_schemas(root):
+        if entry.example is None:
+            continue
+        try:
+            schema = _load_json(entry.path)
+        except json.JSONDecodeError:
+            continue  # a broken schema is already reported by check_structure
+        try:
+            instance = _load_json(entry.example)
+        except json.JSONDecodeError:
+            continue  # already reported by check_examples
+        schema_said = schema.get(SAID_LABEL)
+        instance_s = instance.get("s")
+        if instance_s != schema_said:
+            problems.append(
+                Problem(
+                    "example_ref",
+                    f"{entry.name}/example.json",
+                    f"'s' {instance_s!r} != schema $id {schema_said!r}",
+                )
+            )
+    return problems
+
+
 #: All repo-wide checks, in a stable order.
-ALL_CHECKS = (check_structure, check_said_integrity, check_registry, check_examples)
+ALL_CHECKS = (
+    check_structure,
+    check_said_integrity,
+    check_registry,
+    check_examples,
+    check_example_refs,
+)
 
 
 def run_all(root: str | Path) -> list[Problem]:

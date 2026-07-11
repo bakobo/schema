@@ -23,7 +23,8 @@ uv sync
 
 ```bash
 uv run schematools check                 # run all conformance checks over the repo
-uv run schematools saidify -f ../../gcd/gcd.schema.json   # (re)compute SAIDs into a file
+uv run schematools saidify -f ../../gcd/gcd.schema.json      # (re)SAID a schema file
+uv run schematools saidify-sad -f ../../gcd/example.json     # (re)SAID an ACDC instance
 uv run schematools registry              # rebuild ../../registry.json from disk
 ```
 
@@ -52,3 +53,4 @@ Two suites:
 | `said` | recomputed SAID == embedded `$id` (the keystone) |
 | `registry` | `registry.json` ⇔ disk agree; indexed once; no orphans/dangling |
 | `example` | `<folder>/example.json` validates against its schema |
+| `example_ref` | an example's `s` equals its schema's `$id` (referential integrity) |

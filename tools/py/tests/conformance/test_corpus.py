@@ -21,23 +21,29 @@ from schematools.repo import discover_schemas, find_repo_root
 
 ROOT = find_repo_root(Path(__file__).resolve().parent)
 
-CHECK_FUNCS = {
-    "structure": checks.check_structure,
-    "said": checks.check_said_integrity,
-    "registry": checks.check_registry,
-    "example": checks.check_examples,
+# Derived from ALL_CHECKS so the conformance matrix can never silently omit a
+# check. The key is the ``Problem.check`` string each function emits.
+_CHECK_NAME = {
+    checks.check_structure: "structure",
+    checks.check_said_integrity: "said",
+    checks.check_registry: "registry",
+    checks.check_examples: "example",
+    checks.check_example_refs: "example_ref",
 }
+CHECK_FUNCS = {_CHECK_NAME[fn]: fn for fn in checks.ALL_CHECKS}
 
 # (schema_name, check_name) -> reason. Each cites the tracking tick.
+# GCD is fully clean after Task 1 (schema repaired, example re-saidified). The
+# remaining known failures are inherited placeholder examples on OTHER schemas.
 KNOWN_XFAIL = {
-    # Task 1: GCD was inherited as invalid JSON; repair + re-SAIDify clears all four.
-    ("gcd", "structure"): "Task 1: GCD inherited as invalid JSON (~4wfn)",
-    ("gcd", "said"): "Task 1: GCD unparseable, SAID cannot verify (~4wfn)",
-    ("gcd", "registry"): "Task 1: GCD unparseable, registry key unverifiable (~4wfn)",
-    ("gcd", "example"): "Task 1: GCD schema unparseable, example unvalidatable (~4wfn)",
-    # Inherited content bugs: example 'a' block holds face-to-face fields.
+    # Wrong content: example 'a' block holds face-to-face fields.
     ("ai-coder", "example"): "inherited content bug: example holds face-to-face fields (~56xf)",
     ("award", "example"): "inherited content bug: example holds face-to-face fields (~5s4i)",
+    # Stale 's': example never saidified against its schema (placeholder SAID).
+    ("ai-coder", "example_ref"): "inherited placeholder: stale 's' (~3dgd)",
+    ("award", "example_ref"): "inherited placeholder: stale 's' (~3dgd)",
+    ("faa", "example_ref"): "inherited placeholder: stale 's' (~3dgd)",
+    ("face-to-face", "example_ref"): "inherited placeholder: stale 's' (~3dgd)",
 }
 
 SCHEMA_NAMES = [entry.name for entry in discover_schemas(ROOT)]

@@ -15,7 +15,7 @@ from pathlib import Path
 
 from . import checks
 from .repo import REGISTRY_NAME, discover_schemas, find_repo_root
-from .said import SAID_LABEL, saidify_schema
+from .said import SAD_LABEL, SAID_LABEL, saidify_sad, saidify_schema
 
 
 def _resolve_root(root: str | None) -> Path:
@@ -40,6 +40,15 @@ def cmd_saidify(args: argparse.Namespace) -> int:
     saidified = saidify_schema(schema)
     path.write_text(json.dumps(saidified, indent=2) + "\n")
     print(f"saidified {path} -> {SAID_LABEL} {saidified[SAID_LABEL]}")
+    return 0
+
+
+def cmd_saidify_sad(args: argparse.Namespace) -> int:
+    path = Path(args.file).resolve()
+    sad = json.loads(path.read_text())
+    saidified = saidify_sad(sad, label=args.label)
+    path.write_text(json.dumps(saidified, indent=2) + "\n")
+    print(f"saidified SAD {path} -> {args.label} {saidified[args.label]}")
     return 0
 
 
@@ -68,6 +77,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_said = sub.add_parser("saidify", help="(re)compute and write SAIDs into a schema file")
     p_said.add_argument("-f", "--file", required=True, help="path to the schema JSON file")
     p_said.set_defaults(func=cmd_saidify)
+
+    p_sad = sub.add_parser("saidify-sad", help="(re)compute SAIDs of a self-addressing datum (ACDC instance)")
+    p_sad.add_argument("-f", "--file", required=True, help="path to the SAD/instance JSON file")
+    p_sad.add_argument("-l", "--label", default=SAD_LABEL, help=f"SAID field label (default: {SAD_LABEL!r})")
+    p_sad.set_defaults(func=cmd_saidify_sad)
 
     p_reg = sub.add_parser("registry", help="rebuild registry.json from schemas on disk")
     p_reg.add_argument("--root", help="repo root (default: auto-detect via registry.json)")
