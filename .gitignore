@@ -1,0 +1,8 @@
+/.tick
+.tick.lock
+
+# python reference machinery (provisional)
+.venv/
+__pycache__/
+*.egg-info/
+*.pyc

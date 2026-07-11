@@ -1,0 +1,71 @@
+name: Copilot Review Gate
+
+# Adds or removes Copilot as a PR reviewer based on the PR title and labels.
+#
+# Convention:
+#   [no-ccr] in title or label "no-ccr"   -> Copilot is NOT requested as a reviewer
+#                                            (any existing assignment is removed)
+#   anything else                          -> Copilot IS requested as a reviewer
+#
+# The [light-ccr] convention is NOT handled here. CCR sees [light-ccr] in the
+# title/body and self-narrows per .github/copilot-instructions.md. So this
+# workflow only distinguishes "review or not" — light-vs-full is CCR's call.
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, ready_for_review, labeled, unlabeled, synchronize, converted_to_draft]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Decide whether Copilot should review
+        id: decide
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+          PR_DRAFT: ${{ github.event.pull_request.draft }}
+        run: |
+          set -euo pipefail
+          skip=false
+          if [[ "$PR_DRAFT" == "true" ]]; then
+            skip=true
+          fi
+          if [[ "$PR_TITLE" == *"[no-ccr]"* ]]; then
+            skip=true
+          fi
+          if echo "$PR_LABELS" | jq -e 'any(.[]; . == "no-ccr")' > /dev/null 2>&1; then
+            skip=true
+          fi
+          echo "skip=$skip" >> "$GITHUB_OUTPUT"
+
+      - name: Request Copilot as reviewer
+        if: steps.decide.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/$REPO/pulls/$PR_NUMBER/requested_reviewers" \
+            -f 'reviewers[]=Copilot' \
+            || echo "Note: request_reviewers returned non-zero; Copilot may already be assigned. Safe to ignore."
+
+      - name: Remove Copilot as reviewer
+        if: steps.decide.outputs.skip == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh api \
+            --method DELETE \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/$REPO/pulls/$PR_NUMBER/requested_reviewers" \
+            -f 'reviewers[]=Copilot' \
+            || echo "Note: removal returned non-zero; Copilot may not have been assigned. Safe to ignore."
