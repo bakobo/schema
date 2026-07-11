@@ -58,3 +58,10 @@ def test_content_change_changes_top_said():
     changed = _acdc()
     changed["a"]["role"] = "different"
     assert saidify_sad(changed)["d"] != before
+
+
+def test_saidify_sad_without_top_label_only_saidifies_children():
+    # No top-level 'd' and no 'v': children are saidified, top is left as-is.
+    out = saidify_sad({"a": {"d": "", "x": "y"}})
+    assert "d" not in out
+    assert out["a"]["d"].startswith("E")

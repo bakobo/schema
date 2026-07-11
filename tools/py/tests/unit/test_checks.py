@@ -27,6 +27,13 @@ def test_structure_catches_invalid_json(synthetic_repo):
     assert "invalid JSON" in problems[0].message
 
 
+def test_structure_catches_invalid_jsonschema(synthetic_repo):
+    # Valid JSON, but not a valid Draft 2020-12 schema (type must be a string/array).
+    (synthetic_repo / "widget" / "widget.schema.json").write_text(json.dumps({"type": 123}))
+    problems = checks.check_structure(synthetic_repo)
+    assert len(problems) == 1 and "invalid JSON Schema" in problems[0].message
+
+
 def test_said_integrity_catches_tampered_id(synthetic_repo):
     path = synthetic_repo / "widget" / "widget.schema.json"
     schema = json.loads(path.read_text())
@@ -108,3 +115,62 @@ def test_example_saids_passes_self_consistent_instance(synthetic_repo):
 def test_example_saids_ignores_non_sad_example(synthetic_repo):
     (synthetic_repo / "widget" / "example.json").write_text(json.dumps({"note": "not a SAD"}))
     assert checks.check_example_saids(synthetic_repo) == []
+
+
+def test_example_saids_reports_unsaidifiable(synthetic_repo):
+    # Has a 'd' (looks like a SAD) but a malformed 'v' the ACDC saidifier rejects.
+    (synthetic_repo / "widget" / "example.json").write_text(json.dumps({"v": "bogus", "d": ""}))
+    problems = checks.check_example_saids(synthetic_repo)
+    assert len(problems) == 1 and "cannot saidify" in problems[0].message
+
+
+def test_example_saids_skips_unparseable_example(synthetic_repo):
+    (synthetic_repo / "widget" / "example.json").write_text("{ not json")
+    assert checks.check_example_saids(synthetic_repo) == []
+
+
+# --- error paths on unparseable / dangling inputs -------------------------------
+
+
+def _break_schema(repo):
+    (repo / "widget" / "widget.schema.json").write_text("{ not json")
+
+
+def test_said_integrity_reports_unparseable(synthetic_repo):
+    _break_schema(synthetic_repo)
+    problems = checks.check_said_integrity(synthetic_repo)
+    assert len(problems) == 1 and "unparseable" in problems[0].message
+
+
+def test_examples_reports_unparseable_schema(synthetic_repo):
+    (synthetic_repo / "widget" / "example.json").write_text("{}")
+    _break_schema(synthetic_repo)
+    problems = checks.check_examples(synthetic_repo)
+    assert any("schema unparseable" in p.message for p in problems)
+
+
+def test_examples_reports_unparseable_example(synthetic_repo):
+    (synthetic_repo / "widget" / "example.json").write_text("{ not json")
+    problems = checks.check_examples(synthetic_repo)
+    assert len(problems) == 1 and "invalid JSON" in problems[0].message
+
+
+def test_registry_reports_unparseable_schema(synthetic_repo):
+    _break_schema(synthetic_repo)
+    problems = checks.check_registry(synthetic_repo)
+    assert any("unparseable" in p.message for p in problems)
+
+
+def test_registry_reports_dangling_path(synthetic_repo):
+    reg = json.loads((synthetic_repo / REGISTRY_NAME).read_text())
+    reg["E" + "G" * 43] = "ghost/ghost.schema.json"
+    (synthetic_repo / REGISTRY_NAME).write_text(json.dumps(reg))
+    problems = checks.check_registry(synthetic_repo)
+    assert any("not found on disk" in p.message for p in problems)
+
+
+def test_example_refs_skips_unparseable(synthetic_repo):
+    (synthetic_repo / "widget" / "example.json").write_text("{ not json")
+    assert checks.check_example_refs(synthetic_repo) == []
+    _break_schema(synthetic_repo)
+    assert checks.check_example_refs(synthetic_repo) == []

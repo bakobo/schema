@@ -18,6 +18,7 @@ schematools = "schematools.cli:main"
 [dependency-groups]
 dev = [
     "pytest>=8",
+    "pytest-cov>=5",
 ]
 
 [build-system]
@@ -29,8 +30,15 @@ packages = ["src/schematools"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Strict TDD at 100% branch coverage of new code is an always-on Bakobo standard
+# (AGENTS.md). CI and local runs both enforce it.
+addopts = "--cov=schematools --cov-branch --cov-report=term-missing --cov-fail-under=100"
 # keri 1.2.x emits cosmetic SyntaxWarnings from its own regex literals on
 # newer Pythons; silence them so real warnings stay visible.
 filterwarnings = [
     "ignore::SyntaxWarning",
 ]
+
+[tool.coverage.report]
+# The module-execution guard is not a unit-testable branch.
+exclude_also = ["if __name__ == .__main__.:"]

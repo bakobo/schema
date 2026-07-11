@@ -1,5 +1,7 @@
 # schema
 
+[![CI](https://github.com/bakobo/schema/actions/workflows/ci.yml/badge.svg)](https://github.com/bakobo/schema/actions/workflows/ci.yml)
+
 Bakobo's home for **general-purpose [ACDC](https://trustoverip.github.io/tswg-acdc-specification/draft-ssmith-acdc.html)
 credential schemas** — chief among them **GCD**, the Generalized Cooperative
 Delegation credential.
@@ -32,29 +34,44 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 | [org-vet](org-vet/) | authenticate an org at an explicit level of assurance |
 | [proof-of-control](proof-of-control/) | issuee demonstrated control of a digital resource |
 
-## Status — captured, not yet evolved
+## Status
 
-> This is a fresh capture. The schemas are **as inherited** from public-schema;
-> they have not yet been re-validated or re-SAIDified here.
->
-> **Known issue (task #1):** `gcd/gcd.schema.json` is not valid JSON as inherited
-> (an extra closing brace in/after the `c_upto` block). It must be repaired and
-> re-SAIDified before use. See [`this.i` `@b6xh4m`](this.i).
->
-> **GCD needs evolving** to the model in *The Shape of Delegated Authority*:
-> it currently lacks `c_effect`, state-kind, target modulators, the
+GCD's inherited JSON has been **repaired and re-SAIDified**, its example is now a
+valid, self-consistent ACDC instance, and the whole corpus is validated in CI —
+SAID integrity, registry consistency, JSON-Schema validity, and the validation,
+referential integrity, and SAID integrity of example instances. See
+[`this.i` `@tq5wnh`](this.i).
+
+> **Next (Task 2):** GCD still needs evolving to the model in *The Shape of
+> Delegated Authority* — it lacks `c_effect`, state-kind, target modulators, the
 > relation/obligation facet, the may/must split, and `c_disc`. GCD is imbu's
-> keystone delegation credential; evolving it is the near-term work.
+> keystone delegation credential; evolving it is the near-term design work
+> ([`this.i` `@b6xh4m`](this.i)).
 
-## Tooling — provisional, to be decided
+## Tooling
 
-`tools/` holds the Python machinery from public-schema (SAIDification, registry
-build, a small serving API) as a **reference to replicate in concept, not the
-committed toolchain**. Whether this repo lands on browser-compatible TypeScript
-(to enable browser-based schema-design and client-side validation tools) or
-stays Python is an **open decision** — see [`this.i` `@p4zc7n`](this.i). The
-Provenant deployment infra (Dockerfile / docker-compose / schema-registry
-deployment) was intentionally not carried over.
+The committed toolchain is the Python package in [`tools/py`](tools/py): SAID
+computation (for schemas and ACDC instances), a repo-wide conformance linter,
+and registry maintenance, driven by uv + pytest. keri is the SAID oracle, pinned
+exactly. The inherited public-schema scripts are kept for reference in
+[`oldtools`](oldtools); a `tools/ts` sibling is reserved for a possible future
+browser/TypeScript layer. Whether that layer gets built — and the Provenant
+deployment infra that was intentionally not carried over — are recorded in
+[`this.i`](this.i) (`@w3kp6m`, `@p4zc7n`).
+
+## Development
+
+From a fresh clone:
+
+```bash
+cd tools/py
+uv sync
+uv run pytest        # tooling unit tests + the corpus conformance suite
+```
+
+`uv run schematools check` runs the conformance linter over the whole repo; see
+[`tools/py/README.md`](tools/py/README.md) for the full command set. Every push
+and PR runs the suite in CI (badge above) behind a 100%-branch-coverage gate.
 
 ## Working here
 

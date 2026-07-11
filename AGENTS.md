@@ -29,29 +29,24 @@ later need to know *why*) may skip intent entirely — just delete `this.i.seed`
 
 ## Testing Protocol
 
-This repository appears to have no test suite yet. Before writing feature code
-or fixing bugs, propose an appropriate testing framework for this project type
-and add a single trivially-passing test to confirm the setup works. In the
-same commit, propose to change AGENTS.md to replace this instruction with one
-that instructs agents to follow strict TDD from now on: write failing tests
-that capture happy path and edge cases/unhappy paths for each requirement,
-observe them fail, implement until tests pass, never checkin without proving
-that all tests pass, aim for 100% of all new code, and always leave existing
-code better tested than it was before you touched it.
+This repo follows **strict TDD**. For each requirement, write failing tests that
+capture the happy path and the edge/unhappy cases *first*, watch them fail, then
+implement until they pass. Never check in without proving all tests pass. Target
+**100% branch coverage of new code** — enforced in CI via `--cov-fail-under=100`
+— and always leave existing code better tested than you found it. The test
+command is `uv run pytest`, run in [`tools/py`](tools/py); see
+[`tools/py/README.md`](tools/py/README.md) for the full command set. A gap from
+the coverage target requires an approved `deviation:` node (see the methodology).
 
 ## CI and Documentation
 
-This repo appears to have no CI workflows yet. Until it does, any time you make
-code changes to the user, propose an appropriate set of GitHub actions (e.g.,
-`.github/workflows/ci.yml`) that builds and runs tests on every push and
-pull request. Propose to remove this instruction from AGENTS.md on the
-same commit.
+CI is active: [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs the
+test suite (with the 100%-branch-coverage gate) on every push to `main` and
+every pull request. Keep it green; add jobs as new toolchains land.
 
-This repository has no README. As long is this is the case, any time you
-make code changes for the user, propose to add a `README.md` that explains how
-to get from a fresh clone to passing tests, with a clickable CI status
-badge at the top for each active workflow. Propose to remove this
-instruction from AGENTS.md on the same commit.
+The repository [`README.md`](README.md) explains how to get from a fresh clone
+to passing tests and carries the CI status badge at the top — keep it current as
+workflows change.
 
 When writing or modifying GitHub Actions workflows, always use the latest
 stable release of each action. Avoid versions pinned to Node.js 16 or

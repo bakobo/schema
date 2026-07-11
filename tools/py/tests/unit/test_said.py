@@ -55,3 +55,25 @@ def test_content_change_changes_said():
 def test_stored_said_matches_recomputed_after_saidify():
     saidified = saidify_schema(_schema())
     assert saidified[SAID_LABEL] == compute_schema_said(saidified)
+
+
+def test_saidify_skips_blocks_without_said_label():
+    # 'a' is a plain object (no $id, no oneOf) and 'e' is not an object at all;
+    # both are left untouched while the top-level $id is still computed.
+    schema = {
+        "$id": "",
+        "type": "object",
+        "properties": {
+            "a": {"type": "object", "properties": {"x": {"type": "string"}}},
+            "e": "not-an-object",
+        },
+    }
+    out = saidify_schema(schema)
+    assert out[SAID_LABEL].startswith("E")
+    assert SAID_LABEL not in out["properties"]["a"]
+    assert out["properties"]["e"] == "not-an-object"
+
+
+def test_saidify_schema_without_properties():
+    out = saidify_schema({"$id": "", "type": "string"})
+    assert out[SAID_LABEL].startswith("E")
