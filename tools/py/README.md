@@ -54,3 +54,4 @@ Two suites:
 | `registry` | `registry.json` ⇔ disk agree; indexed once; no orphans/dangling |
 | `example` | `<folder>/example.json` validates against its schema |
 | `example_ref` | an example's `s` equals its schema's `$id` (referential integrity) |
+| `example_said` | an example instance is internally SAID-consistent (a re-saidify fixed point) |

@@ -83,3 +83,28 @@ def test_example_refs_passes_when_s_matches_schema(synthetic_repo):
     schema = json.loads((synthetic_repo / "widget" / "widget.schema.json").read_text())
     (synthetic_repo / "widget" / "example.json").write_text(json.dumps({"s": schema[SAID_LABEL]}))
     assert checks.check_example_refs(synthetic_repo) == []
+
+
+def test_example_saids_catches_inconsistent_instance(synthetic_repo):
+    from schematools.said import saidify_sad
+
+    # A plain (unversioned) SAD exercises the drift logic; the ACDC/v path is
+    # covered by the conformance suite against the real corpus.
+    good = saidify_sad({"d": "", "a": {"d": "", "x": "y"}})
+    good["a"]["x"] = "tampered"  # content changed, SAIDs now stale
+    (synthetic_repo / "widget" / "example.json").write_text(json.dumps(good))
+    problems = checks.check_example_saids(synthetic_repo)
+    assert len(problems) == 1 and problems[0].check == "example_said"
+
+
+def test_example_saids_passes_self_consistent_instance(synthetic_repo):
+    from schematools.said import saidify_sad
+
+    good = saidify_sad({"d": "", "a": {"d": "", "x": "y"}})
+    (synthetic_repo / "widget" / "example.json").write_text(json.dumps(good))
+    assert checks.check_example_saids(synthetic_repo) == []
+
+
+def test_example_saids_ignores_non_sad_example(synthetic_repo):
+    (synthetic_repo / "widget" / "example.json").write_text(json.dumps({"note": "not a SAD"}))
+    assert checks.check_example_saids(synthetic_repo) == []

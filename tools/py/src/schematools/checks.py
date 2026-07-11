@@ -23,7 +23,7 @@ from jsonschema import Draft202012Validator
 from jsonschema import exceptions as js_exc
 
 from .repo import discover_schemas, load_registry
-from .said import SAID_LABEL, compute_schema_said
+from .said import SAD_LABEL, SAID_LABEL, compute_schema_said, saidify_sad
 
 
 @dataclass(frozen=True)
@@ -166,6 +166,37 @@ def check_example_refs(root: str | Path) -> list[Problem]:
     return problems
 
 
+def check_example_saids(root: str | Path) -> list[Problem]:
+    """An example that is a SAD (has a ``d``) must be internally SAID-consistent.
+
+    Re-saidifying it through the oracle must be a fixed point — every block
+    ``d``, the top ``d``, and any ACDC version string already correct.
+    """
+    problems: list[Problem] = []
+    for entry in discover_schemas(root):
+        if entry.example is None:
+            continue
+        try:
+            instance = _load_json(entry.example)
+        except json.JSONDecodeError:
+            continue  # already reported by check_examples
+        if not isinstance(instance, dict) or SAD_LABEL not in instance:
+            continue  # not a self-addressing datum
+        where = f"{entry.name}/example.json"
+        try:
+            resaidified = saidify_sad(instance)
+        except Exception as exc:  # malformed SAD the saidifier can't process
+            problems.append(Problem("example_said", where, f"cannot saidify: {exc}"))
+            continue
+        if resaidified != instance:
+            drifted = sorted(
+                k for k in set(instance) | set(resaidified)
+                if instance.get(k) != resaidified.get(k)
+            )
+            problems.append(Problem("example_said", where, f"SAIDs not self-consistent; drifted: {drifted}"))
+    return problems
+
+
 #: All repo-wide checks, in a stable order.
 ALL_CHECKS = (
     check_structure,
@@ -173,6 +204,7 @@ ALL_CHECKS = (
     check_registry,
     check_examples,
     check_example_refs,
+    check_example_saids,
 )
 
 

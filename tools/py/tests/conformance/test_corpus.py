@@ -29,22 +29,12 @@ _CHECK_NAME = {
     checks.check_registry: "registry",
     checks.check_examples: "example",
     checks.check_example_refs: "example_ref",
+    checks.check_example_saids: "example_said",
 }
 CHECK_FUNCS = {_CHECK_NAME[fn]: fn for fn in checks.ALL_CHECKS}
 
-# (schema_name, check_name) -> reason. Each cites the tracking tick.
-# GCD is fully clean after Task 1 (schema repaired, example re-saidified). The
-# remaining known failures are inherited placeholder examples on OTHER schemas.
-KNOWN_XFAIL = {
-    # Wrong content: example 'a' block holds face-to-face fields.
-    ("ai-coder", "example"): "inherited content bug: example holds face-to-face fields (~56xf)",
-    ("award", "example"): "inherited content bug: example holds face-to-face fields (~5s4i)",
-    # Stale 's': example never saidified against its schema (placeholder SAID).
-    ("ai-coder", "example_ref"): "inherited placeholder: stale 's' (~3dgd)",
-    ("award", "example_ref"): "inherited placeholder: stale 's' (~3dgd)",
-    ("faa", "example_ref"): "inherited placeholder: stale 's' (~3dgd)",
-    ("face-to-face", "example_ref"): "inherited placeholder: stale 's' (~3dgd)",
-}
+# (schema_name, check_name) -> reason. Empty: the whole corpus is clean.
+KNOWN_XFAIL: dict[tuple[str, str], str] = {}
 
 SCHEMA_NAMES = [entry.name for entry in discover_schemas(ROOT)]
 
