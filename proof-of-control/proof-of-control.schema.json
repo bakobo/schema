@@ -1,0 +1,131 @@
+{
+  "$id": "EG68irpfVX667KCLwG85Cn1Mp3sCe38ftARyQJrxP2kF",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proof-of-Control Credential",
+  "description": "Assert the issuee has demonstrated to the issuer the ability to control a digital resource like a web site, social media handle, or email address.",
+  "type": "object",
+  "credentialType": "ProofOfControlCredential",
+  "version": "1.0.0",
+  "required": [
+    "v",
+    "d",
+    "i",
+    "ri",
+    "s",
+    "a"
+  ],
+  "properties": {
+    "v": {
+      "description": "Version string using ACDC conventions",
+      "type": "string"
+    },
+    "d": {
+      "description": "SAID of the credential",
+      "type": "string"
+    },
+    "u": {
+      "description": "A salty nonce",
+      "type": "string"
+    },
+    "i": {
+      "description": "AID of the issuer",
+      "type": "string"
+    },
+    "ri": {
+      "description": "Registry for issuer's credential status",
+      "type": "string"
+    },
+    "s": {
+      "description": "SAID of this schema",
+      "type": "string"
+    },
+    "a": {
+      "oneOf": [
+        {
+          "description": "SAID of attributes block",
+          "type": "string"
+        },
+        {
+          "$id": "EJCRA-bCyM960Md5eEb5EISCFJsavO11K6iqUVAVhlcO",
+          "description": "Attributes block",
+          "type": "object",
+          "required": [
+            "d",
+            "u",
+            "i",
+            "res",
+            "assertDate",
+            "minutes"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of attributes block",
+              "type": "string"
+            },
+            "u": {
+              "description": "A salty nonce",
+              "type": "string"
+            },
+            "i": {
+              "description": "Identifier of issuee",
+              "type": "string"
+            },
+            "dt": {
+              "description": "Issuance datetime, ISO-8601 datetime string",
+              "type": "string",
+              "format": "date-time"
+            },
+            "res": {
+              "description": "Resource that issuee controls",
+              "type": "string",
+              "$comment": "No regex-based enforcement. However, follow conventions for interop: raw domain for DNS, URL for website, mailto:address for email, service:handle for social media and similar, blockchain:address for cryptcurrency and similar.",
+              "examples": [
+                "foo.org",
+                "https://foo.org/",
+                "github:abc123.xyz",
+                "twitter:tweetsasx",
+                "mailto:fred@acme.com",
+                "linkedin:foobargeek",
+                "btc:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq"
+              ]
+            },
+            "be": {
+              "description": "How much entropy was used in the challenge and response? A 6-digit numeric code = 1M possibilities = ~20 bits.",
+              "type": "integer",
+              "exclusiveMin": 0
+            },
+            "assertDate": {
+              "description": "Time as of which the issuer asserts the control of the resource to be fresh. This may be before the time of issuance.",
+              "format": "date-time",
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "r": {
+      "oneOf": [
+        {
+          "description": "Rules section SAID",
+          "type": "string"
+        },
+        {
+          "$id": "EGFgHT7Xrzy9YLdQNXnNTYVBu9_Q0O7K5A2VCWjg93t3",
+          "description": "Rules detail",
+          "type": "object",
+          "properties": {
+            "d": {
+              "description": "Rule section SAID",
+              "type": "string"
+            }
+          },
+          "additionalProperties": true,
+          "required": [
+            "d"
+          ]
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

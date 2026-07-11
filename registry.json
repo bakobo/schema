@@ -1,0 +1,13 @@
+{
+  "EPhWFgeOy8g7yRy-Xtyvbdieqvl_3YVXNHMgTEZuJOWh": "ai-coder/ai-coder.schema.json",
+  "EBCnd7qk82wLBOgFukdmsdkksAuPpmzt5-eg9YKWWP3j": "ai-user-coca/ai-user-coca.schema.json",
+  "EJxFPpyDRV-W6O2Vtjdy2K90ltWmQK8l1jePw5YOo_Ft": "attestation/attestation.schema.json",
+  "EBxJHMk6MOEUogB6A1rP5x9te7DscPfxFfUGJCkq1Lq5": "award/award.schema.json",
+  "EFvHYHX0cUx9sdjxZOr9fpPcQKdzRNFH42D8R29p7lAH": "bindkey/bindkey.schema.json",
+  "EDH3Q0MW6oCcwyYw2MN39n1YfPs37o1QEv86kB-fBzmh": "citation/citation.schema.json",
+  "ELuPsd1mylvD9iY_gH5hEJzoUd8OZWtU6J2svJwIq-TJ": "faa/faa.schema.json",
+  "EKrv2S0OVc8SeKCzIAOSE-y4j5ybLOOgB69y12Lzxh6Y": "face-to-face/face-to-face.schema.json",
+  "EL7irIKYJL9Io0hhKSGWI4OznhwC7qgJG5Qf4aEs6j0o": "gcd/gcd.schema.json",
+  "EJvwY9n7EsJ4ZejUBHFrnrNammC8BkGI9YaW1Wnp5c22": "org-vet/org-vet.schema.json",
+  "EG68irpfVX667KCLwG85Cn1Mp3sCe38ftARyQJrxP2kF": "proof-of-control/proof-of-control.schema.json"
+}

@@ -1,0 +1,76 @@
+{
+  "$id": "EBCnd7qk82wLBOgFukdmsdkksAuPpmzt5-eg9YKWWP3j",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI user code of conduct attestation",
+  "description": "Attest that the issuer is committed to follow a particular code of conduct with respect to their personal use of AI.",
+  "type": "object",
+  "credentialType": "ai-user-coca",
+  "version": "1.0.0",
+  "required": [
+    "v",
+    "d",
+    "i",
+    "ri",
+    "s",
+    "a"
+  ],
+  "properties": {
+    "v": {
+      "description": "Version string using ACDC conventions",
+      "type": "string"
+    },
+    "d": {
+      "description": "Credential SAID",
+      "type": "string"
+    },
+    "i": {
+      "description": "Identifier of the issuer (the one giving the award)",
+      "type": "string"
+    },
+    "ri": {
+      "description": "Registry for issuer's assertion status",
+      "type": "string"
+    },
+    "s": {
+      "description": "Schema SAID",
+      "type": "string"
+    },
+    "a": {
+      "$id": "EAW5GnX6EEoSPYkOQPlF-uLs-IKPTaI1rkK1fHy0zwAw",
+      "description": "Attributes block",
+      "type": "object",
+      "required": [
+        "d",
+        "i",
+        "dt",
+        "coc"
+      ],
+      "properties": {
+        "d": {
+          "description": "Attributes block SAID",
+          "type": "string"
+        },
+        "i": {
+          "description": "AID of issuee (award recipient)",
+          "type": "string"
+        },
+        "dt": {
+          "description": "Issuance datetime, ISO-8601 datetime string",
+          "type": "string",
+          "format": "date-time"
+        },
+        "effective_dt": {
+          "description": "Time at which the award becomes public. This may be before or after the time of issuance.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "coc": {
+          "description": "The code of conduct to which the issuer commits. SHOULD hold the SAID of a document published elsewhere, OR HTML encoded as a data URL. MAY also contain an ordinary URL. In the latter case, the issuer is asserting a commitment to whatever is published at that location, but not to specific content (since the content can change after the issuance date). This may or may not justify the trust of the verifier.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}
