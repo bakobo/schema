@@ -1,3 +1,18 @@
+## Bakobo engineering standards
+
+How every Bakobo repo builds is governed by cross-cutting standards, canonical in the sibling
+[`bakobo/dev`](../dev) repo. If `../dev` is not checked out beside this one, clone it before design
+work: `git clone --depth 1 https://github.com/bakobo/dev`. Always on:
+
+- **Intent-first** development and **strict TDD at 100% branch coverage of new code** — see the
+  sections below and [`dev/methodology.md`](../dev/methodology.md).
+- **Fail closed.** Untrusted input never carries authority; when something can't be checked, the
+  effect does not land ([`org` principle 8](../org/design/purpose-and-principles.md)).
+- **High-quality errors.** Every error carries a stable symbolic code, says whether retrying could
+  help (permanent vs. transient), and reads as complete, plain sentences in the house voice — never
+  "something went wrong." Full standard: [`dev/standards/error-handling.md`](../dev/standards/error-handling.md).
+- **Tasks and tech debt in `tick`** — see the tick stanza below, not an external tracker.
+
 ## Intent methodology
 
 Bakobo develops intent-first. If this repo has design decisions worth explaining, its source of
@@ -5,11 +20,12 @@ truth is `this.i` (the intent tree) at the repository root — code and `docs/` 
 Record each consequential decision in `this.i` **first**, in its own commit, **before** the code
 commit it justifies. The full rules — what `this.i` is, when a repo needs one, the speculative
 interview, the `why` rebuttal-surface standard, the gate ceremony, and adversarial review — are in
-[`docs/methodology.md`](docs/methodology.md). Read it before making design decisions here.
+[`dev/methodology.md`](../dev/methodology.md), in the sibling `bakobo/dev` repo. Read it before
+making design decisions here.
 
-If this repo has no `this.i` yet and warrants one, see `docs/methodology.md` §2 and the shipped
-`this.i.seed`. A trivial repo (pure content/assets/config, where no one will later need to know
-*why*) may skip intent entirely — just delete `this.i.seed`.
+If this repo has no `this.i` yet and warrants one, see [`dev/methodology.md`](../dev/methodology.md)
+§2 and the shipped `this.i.seed`. A trivial repo (pure content/assets/config, where no one will
+later need to know *why*) may skip intent entirely — just delete `this.i.seed`.
 
 ## Testing Protocol
 
