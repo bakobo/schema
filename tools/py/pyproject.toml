@@ -1,0 +1,36 @@
+[project]
+name = "schematools"
+version = "0.1.0"
+description = "ACDC / JSON-Schema authoring and conformance tooling for a schema repo"
+readme = "README.md"
+requires-python = ">=3.12.2"
+# keri is the SAID conformance oracle (this.i @xv4m7d). The pin is EXACT: a
+# different keri could silently change every SAID. 1.2.13 is verified
+# SAID-identical to the corpus's minting version (this.i @m4vd7s).
+dependencies = [
+    "keri==1.2.13",
+    "jsonschema>=4.21",
+]
+
+[project.scripts]
+schematools = "schematools.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/schematools"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# keri 1.2.x emits cosmetic SyntaxWarnings from its own regex literals on
+# newer Pythons; silence them so real warnings stay visible.
+filterwarnings = [
+    "ignore::SyntaxWarning",
+]
