@@ -199,3 +199,79 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             stable released schemas worth publishing. Left OPEN deliberately — this node exists so a future
             reader sees the whole intended surface and why only a slice of it was built first, rather than
             rediscovering the ambition from scratch.
+    Temporal drift is bounded by proactive revocation and the per-act gate, not per-action minting or keep-alives = decision:
+      id: tj6vq4
+      why: >
+        A standing GCD credential is checked against its own static constraints, so the conditions that
+        justified a grant can drift before an action takes effect — the "standing authority" critique Paul
+        Knowles / Secours.ai raised as an "Exhaustibility Test" (2026). Rejected his cure — authority minted
+        and consumed per action by a Warden (single-use Warrants) — because a live evaluator in the path of
+        every effect is a reference monitor: the closed-loop, phone-home model that open-loop verification
+        (imbu's this.i @kp5l4o) and SDA §7 deliberately reject, and it does not scale to unattended
+        stranger-verifiers. Rejected mandatory keep-alives / short-TTL churn as the default, because it taxes
+        every standing steward for a risk only a minority of grants carry and re-creates the short-expiry
+        churn KERI-native revocation was chosen to avoid (imbu's this.i @n3xwkp). Chose to answer drift with
+        mechanisms already in the model: (1) the per-act gate, DERIVED per action and re-evaluated at the
+        execution boundary (imbu's this.i @d6mk3g), which already forces a fresh decision on exactly the
+        high-stakes, irreversible acts where drift is dangerous (a payment is create-in-commitment above
+        threshold → human/rule gate at the moment of effect); and (2) robust, proactive revocation, already
+        in the open-loop verification path (KERI-native TEL, real-time). Accepted tradeoff: revocation is
+        FAIL-OPEN — it does not stop an act inside the drift window if the delegator is slow or compromised —
+        so positive-freshness (a short c_before, or a future c_fresh keep-alive) is RESERVED and documented as
+        the exception, strictly for the narrow tail where an irreversible effect meets unattended
+        machine-speed action that no gate catches and revocation cannot propagate fast enough. Legal
+        grounding: agency law already terminates actual authority on accomplishment of the object (Restatement
+        (Third) of Agency §3.09–3.10) — a closer hook than the patent-exhaustion doctrine (Impression v.
+        Lexmark) the exhaustibility discourse cites. This refinement post-dates the canonical paper and
+        extends the GCD-to-SDA evolution (@b6xh4m); it is being folded into "The Shape of Delegated Authority"
+        §8 as a v1.1 addition.
+      children:
+        The GCD rules gain a sixth clause, timelyReviewAndRevoke = decision:
+          id: k3wm7d
+          stage-status: planned
+          why: >
+            Adds a sixth rule to the GCD governance framework (rules.json + the schema's embedded r block and
+            its required array): "Issuers agree to review each delegation they have issued on a cadence
+            appropriate to its stakes, and to revoke or narrow it promptly once the conditions that justified
+            the grant no longer hold ... it does not extend authority, since a delegation is valid only while
+            its constraints are met." Chose a governance RULE over a new schema field because the schema
+            already anticipates rule evolution ("possible to modify or override these rules") and a rule needs
+            no credential-shape change; it mirrors onlyDelegateHeldAuthority's "modest, auditable
+            accountability" framing and pairs with issuerNotResponsibleOutsideConstraints (which caps issuer
+            liability OUTSIDE the constraints) by making the issuer responsible for keeping the constraints
+            CURRENT. The closing clause forecloses the "authority persists until revoked" misreading, so the
+            duty strengthens the verifier's position without weakening exhaustion. Accepted CONSEQUENCE: a new
+            clause changes the rules-block content, so its SAID (currently
+            EFthNcTE20MLMaCOoXlSmNtdooGEbZF8uGmO5G85eMSF) MUST be recomputed by tools/py against the keripy
+            oracle (@xv4m7d) and the references to it in gcd/index.md and ../org/delegation-theory.md updated;
+            existing credentials that inline the old rules SAID are a migration concern folded into the
+            @b6xh4m repair-and-re-SAIDify step, not handled independently. Rejected hand-editing the SAID — a
+            99.9%-right SAID silently fails to verify (@xv4m7d).
+        GCD constraints split into enabling and voiding polarity; termination is an attested event = decision:
+          id: v5nq2r
+          stage-status: planned
+          why: >
+            Every constraint field today is ENABLING — "permit if the presented value is in this set" (an
+            allow-list: c_goal, c_jur, c_rgeo, ...). Expressing "this authority ENDS when X becomes true" needs
+            the opposite polarity — VOIDING: "deny if X is observed." So the vocabulary gains a named second
+            polarity (a proof-shaped c_until, and a possible live c_...When) rather than overloading the
+            allow-list fields; the voiding polarity, not observability, is the real novelty. Chose to realize
+            termination preferably as a monotonic, attested EVENT (a TEL revocation, or a completion ACDC
+            chaining to the delegation) over a live predicate embedded in the credential, because an
+            in-credential live predicate makes the credential's meaning time- and verifier-dependent and breaks
+            "any two verifiers replay to the same result"; an event keeps the credential static and the log
+            monotonic. Driving distinction: open-loop does NOT require uniformity (cryptographic VERIFICATION
+            is uniform; VALIDATION against a verifier's own business goals is not), but a voiding condition is
+            safe-as-binding only to the degree the observation is unambiguous and universally accessible — time
+            (c_before) is the gold standard; "the email address exists" already slides on what "exists" means;
+            "good enough" is a quality judgment, never observable, always a signoff (an attestation). So the
+            primary completion hook is proof-shaped (c_until = an attested fact, an oracle's signed observation
+            being one such proof), and a live c_untilObserved is added ONLY on a concrete crisp / low-stakes /
+            fail-closed use case, never speculatively. Accepted backstop convention: task-scoped grants always
+            carry a hard c_before ceiling, so completion/revocation only end them EARLIER (fail-open early-exit
+            under a fail-closed ceiling) and a never-fired "done" signal cannot leave authority alive forever.
+            Rejected two coequal fields c_untilProven / c_untilObserved as the framing, because an assured
+            observation collapses into an attestation and the genuinely observation-only case is the narrow,
+            fail-closed tail. Stage: planned and deferred behind the @b6xh4m repair-and-re-SAIDify; the rule
+            (@k3wm7d) is the near-term artifact, while the voiding-constraint field is pulled in when a concrete
+            GCD need requires it (@tq5wnh).
