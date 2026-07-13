@@ -52,5 +52,6 @@ Because of the third rule, these credentails do not support graduated disclosure
 
 ### Governance Framework
 
-These credentials are governed by rules to enhance assurance, discourage abuse, and keep use cases crisp. The current rules are stated in [rules.json](rules.json) and are identified by SAID `EFthNcTE20MLMaCOoXlSmNtdooGEbZF8uGmO5G85eMSF`. New governance frameworks can be written that supplement these rules; see the `gfw` field in the schema. It is also possible to modify or override these rules, by placing a different value in the `r` field. The act of issuing or receiving a GCD credential constitutes binding acceptance of the rules.
+These credentials are governed by rules to enhance assurance, discourage abuse, and keep use cases crisp. The current rules are stated in [rules.json](rules.json) and are identified by SAID `EFthNcTE20MLMaCOoXlSmNtdooGEbZF8uGmO5G85eMSF`. <!-- ~3isv — planned: add a sixth rule `timelyReviewAndRevoke` and voiding-polarity `c_until` (this.i @tj6vq4/@k3wm7d/@v5nq2r); this changes the rules-block SAID and requires re-SAIDify via tools/py plus updating this reference and ../../org/delegation-theory.md. -->
+ New governance frameworks can be written that supplement these rules; see the `gfw` field in the schema. It is also possible to modify or override these rules, by placing a different value in the `r` field. The act of issuing or receiving a GCD credential constitutes binding acceptance of the rules.
 
