@@ -36,46 +36,10 @@ jobs:
           enable-cache: true
           cache-dependency-glob: "tools/py/uv.lock"
 
-      - name: Lint the corpus (fail closed before publishing)
-        working-directory: tools/py
+      - name: Build the machine site (lints first; fail closed)
         run: |
-          uv sync --frozen
-          uv run schematools check
-
-      - name: Assemble _site (schemas + registry; exclude tooling and fixtures)
-        run: |
-          mkdir -p _site
-          rsync -a \
-            --exclude '.git' \
-            --exclude '.github' \
-            --exclude '.tick' \
-            --exclude 'tools' \
-            --exclude 'oldtools' \
-            --exclude '_site' \
-            --exclude 'invalid' \
-            --exclude 'this.i' \
-            --exclude 'this.i.seed' \
-            --exclude 'AGENTS.md' \
-            --exclude 'CLAUDE.md' \
-            --exclude 'GEMINI.md' \
-            --exclude 'KNOWLEDGE_TRANSFER.md' \
-            --exclude '.cursorrules' \
-            ./ _site/
-          echo 'schema.bakobo.com' > _site/CNAME
-          cat > _site/index.html <<'HTML'
-          <!doctype html>
-          <meta charset="utf-8">
-          <title>Bakobo ACDC schema registry</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <style>body{font:16px/1.5 system-ui,sans-serif;max-width:44rem;margin:4rem auto;padding:0 1rem}</style>
-          <h1>Bakobo ACDC schema registry</h1>
-          <p>General-purpose <a href="https://trustoverip.github.io/tswg-acdc-specification/">ACDC</a>
-          credential schemas, each addressed by its SAID. The machine-readable index is
-          <a href="registry.json">registry.json</a>. Source and docs:
-          <a href="https://github.com/bakobo/schema">github.com/bakobo/schema</a>.</p>
-          <p><em>A richer browsable site is in progress; for now each schema resolves as raw JSON
-          under its folder (e.g. <code>/face-to-face/face-to-face.schema.json</code>).</em></p>
-          HTML
+          uv sync --frozen --project tools/py
+          uv run --project tools/py schematools publish --root . --out _site
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4

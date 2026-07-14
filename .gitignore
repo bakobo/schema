@@ -10,3 +10,7 @@ __pycache__/
 # Python coverage artifacts
 .coverage
 htmlcov/
+
+# generated site (schematools publish / zensical build)
+/_site/
+/site/

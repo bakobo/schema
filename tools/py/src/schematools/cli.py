@@ -13,7 +13,7 @@ import json
 import sys
 from pathlib import Path
 
-from . import checks
+from . import checks, publish
 from .repo import REGISTRY_NAME, discover_schemas, find_repo_root
 from .said import SAD_LABEL, SAID_LABEL, saidify_sad, saidify_schema
 
@@ -63,6 +63,19 @@ def cmd_registry(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_publish(args: argparse.Namespace) -> int:
+    root = _resolve_root(args.root)
+    problems = checks.run_all(root)
+    if problems:
+        for problem in problems:
+            print(problem, file=sys.stderr)
+        print(f"refusing to publish: {len(problems)} problem(s) — fail closed", file=sys.stderr)
+        return 1
+    manifest = publish.build_site(root, Path(args.out), base_url=args.base_url)
+    print(f"published {len(manifest['schemas'])} schema(s) to {args.out}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="schematools",
@@ -86,6 +99,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_reg = sub.add_parser("registry", help="rebuild registry.json from schemas on disk")
     p_reg.add_argument("--root", help="repo root (default: auto-detect via registry.json)")
     p_reg.set_defaults(func=cmd_registry)
+
+    p_pub = sub.add_parser("publish", help="build the deployable machine site (lints first, fail closed)")
+    p_pub.add_argument("--root", help="repo root (default: auto-detect via registry.json)")
+    p_pub.add_argument("--out", required=True, help="output directory for the built site")
+    p_pub.add_argument("--base-url", default=publish.DEFAULT_BASE_URL, help="canonical site base URL")
+    p_pub.set_defaults(func=cmd_publish)
 
     return parser
 
