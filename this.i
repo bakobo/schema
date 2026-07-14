@@ -481,6 +481,39 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                     stale link in the generated landing at the same time. Layer 2 (publish a JSON Schema FOR the
                     discovery manifest, so others can adopt the shape) and Layer 3 (best-effort cross-registry SAID
                     aggregation) remain deferred, gated on peers exposing manifests.
+                SEO is done as generated on-page signals, not off-page tricks = decision:
+                  id: s6eqk4
+                  why: >
+                    Goal: someone searching for "ACDC schema", "KERI credential schema", "SAID schema registry"
+                    should find this site (2026-07-14). Zensical already ships the fundamentals (semantic HTML,
+                    absolute-URL ``sitemap.xml``, ``rel=canonical``, mobile, HTTPS) and fills a per-page
+                    ``<meta description>`` from the site-wide ``site_description``. Chose to add only the HIGH
+                    bang-for-buck GENERATED signals, all from the corpus so they never drift: (1) UNIQUE per-page
+                    ``<meta description>`` — ``build-docs`` prepends YAML front-matter ``description:`` to each
+                    schema page from that schema's own ``description`` field (verified Zensical honors front-matter
+                    over the site default); (2) keyword-rich landing + Ecosystem copy naming the terms people
+                    actually search (ACDC / Authentic Chained Data Container, KERI, SAID, OOBI, verifiable
+                    credentials, registry); (3) a ``robots.txt`` at the site root pointing at the sitemap. Rejected
+                    (deferred) the medium-value items that need template overrides or plugins — Open Graph / Twitter
+                    cards (Zensical emits none by default) and JSON-LD structured data — as not worth the theme-
+                    surgery yet. Off-page (Search Console submission, backlinks) is Daniel's to do; the Ecosystem
+                    page's outbound authority links (ToIP, GLEIF, WebOfTrust) are the one on-site lever for it.
+                Layer 2: publish a JSON Schema FOR the discovery manifest, so others can adopt the shape = decision:
+                  id: m5tqw3
+                  why: >
+                    The reusable-pattern payoff (@f7dr3k Layer 2): a committed ``spec/acdc-schema-registry.schema.json``
+                    (Draft 2020-12) that DESCRIBES the ``/.well-known/acdc-schemas.json`` discovery manifest —
+                    ``baseUrl`` + a ``schemas`` array of {said, name, schema, oobi, title/version/rules}. Published by
+                    ``schematools publish`` at the site root so its ``$id`` URL resolves, and our own emitted manifest
+                    now carries a ``$schema`` pointer to it (self-describing; editors validate/autocomplete against
+                    it). Chose to keep this meta-schema OUT of the ACDC registry (it is a JSON Schema for a manifest,
+                    not an ACDC credential) — it lives under ``spec/`` where ``discover_schemas`` never picks it up,
+                    so it does not pollute the corpus, its SAID checks, or ``registry.json``. Made it PERMISSIVE
+                    (extra fields allowed, several fields nullable) because it is a convention others EXTEND, not a
+                    fail-closed gate. Dogfooded: a test asserts the meta-schema is a valid Draft 2020-12 schema AND
+                    that the manifest ``build_site`` emits validates against it. Deliberately scoped to the discovery
+                    manifest, not ``registries.json`` (the bakobo-specific federation index), because the manifest is
+                    the shape we want OTHER publishers to copy.
     Temporal drift is bounded by proactive revocation and the per-act gate, not per-action minting or keep-alives = decision:
       id: tj6vq4
       why: >
