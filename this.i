@@ -409,11 +409,19 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                     an extension-less ``/oobi/<said>`` (canonical KERI form but served as octet-stream on static
                     Pages), because WE advertise the OOBI URLs (in the manifest and registry) so ecosystem tools
                     consume what we publish, and OOBI resolution SAID-verifies the body regardless of Content-Type
-                    — the extension is cosmetic to the security model. ``.well-known/acdc-schemas.json`` is a
-                    Bakobo convention (no IANA registration), placed under ``.well-known`` as the machine front
-                    door a crawler can find from the domain root. Tradeoff: a tool that blindly constructs
+                    — the extension is cosmetic to the security model. Tradeoff: a tool that blindly constructs
                     ``{host}/oobi/{said}`` without extension gets octet-stream, not our file — accepted because the
                     manifest is the intended discovery path and the folder-path JSON also resolves.
+                    CORRECTION (2026-07-14, from the live deploy): GitHub Pages' ``upload-pages-artifact`` tars the
+                    site with ``--exclude=".[^/]*"``, STRIPPING every top-level dot-entry — so a
+                    ``.well-known/`` file never reaches the served site (verified: ``/.well-known/acdc-schemas.json``
+                    404s while ``/registry.json`` and ``/oobi/<said>.json`` serve). Resolution: the CANONICAL
+                    discovery manifest is a root path, ``/acdc-schemas.json`` (served), and the build ALSO writes a
+                    byte-identical ``.well-known/acdc-schemas.json`` MIRROR — kept for the cross-host convention the
+                    repo wants other publishers to copy (it serves on hosts that don't strip dot-dirs), but never
+                    the advertised URL on this host. The landing page and the ``_render_index`` link point at the
+                    root path. This is a property of the Pages deploy action, not our build; a future move off
+                    ``upload-pages-artifact`` could make ``.well-known`` primary.
                 Zensical renders the human HTML chrome, layered over the machine site, not load-bearing = decision:
                   id: z5nc4d
                   stage-status: in-progress
