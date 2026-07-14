@@ -498,7 +498,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                     cards (Zensical emits none by default) and JSON-LD structured data — as not worth the theme-
                     surgery yet. Off-page (Search Console submission, backlinks) is Daniel's to do; the Ecosystem
                     page's outbound authority links (ToIP, GLEIF, WebOfTrust) are the one on-site lever for it.
-                Layer 2: publish a JSON Schema FOR the discovery manifest, so others can adopt the shape = decision:
+                Layer 2 — publish a JSON Schema FOR the discovery manifest, so others can adopt the shape = decision:
                   id: m5tqw3
                   why: >
                     The reusable-pattern payoff (@f7dr3k Layer 2): a committed ``spec/acdc-schema-registry.schema.json``
