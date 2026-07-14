@@ -275,3 +275,82 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             fail-closed tail. Stage: planned and deferred behind the @b6xh4m repair-and-re-SAIDify; the rule
             (@k3wm7d) is the near-term artifact, while the voiding-constraint field is pulled in when a concrete
             GCD need requires it (@tq5wnh).
+    Governance-framework ideas surveyed from Aries RFC 0430; adopt the constraints, reject the mechanism = decision:
+      id: g7rkn4
+      why: >
+        Evaluated Aries RFC 0430 (machine-readable governance frameworks) as prior art for the GCD gfw/rules
+        layer — the gfw field already gestures at exactly this kind of framework. Rejected its MECHANISM
+        wholesale: the SGL rule DSL (grant/when/thus — a boolean role-grammar that fights GCD's declarative
+        c_-field, full-disclosure, any-verifier-computes-the-same discipline); the docs_uri/data_uri
+        fetch-the-framework-at-runtime resolution (a closed-loop phone-home, where GCD's SAID content-addressing
+        is the open-loop answer); and the DIDComm-decorator localization. Adopted four IDEAS about what the
+        rules/gfw layer should EXPRESS, captured as children — @d5tqm6 (first-class duties), @w4nzp3
+        (version-compatibility class), and two tentatives @r6kv2m (redress pointer) and @c3wqn7 (counterparty
+        qualification). Also recorded that GCD is already AHEAD of 0430 where 0430 is explicitly silent: it has
+        no framework signing, no TTL, and no version revocation, whereas GCD's gfw/rules are
+        SAID-self-authenticating and GCD carries c_before/c_after (TTL) + TEL revocation. Chose mine-and-cite
+        over ignore (0430 is the prior art the gfw field points at) and over adopt-wholesale (its ecosystem-trust
+        mechanism is closed-loop and its rule DSL is un-analyzable). Extends the GCD-to-SDA evolution (@b6xh4m).
+      children:
+        GCD gains first-class duties (the "must"), with terms-of-service acceptance = decision:
+          id: d5tqm6
+          stage-status: planned
+          why: >
+            The GCD credential is ALL "may" — every field (c_goal, c_effect, c_prove, ...) is a permission or a
+            condition; nothing expresses an obligation (a "must"). "The Shape of Delegated Authority" §5 names
+            the may/must split and parks the "must" in the reciprocal record, but the credential itself cannot
+            carry it. RFC 0430's duties (name+URI obligations incurred when a party takes a role/privilege —
+            GDPR-dat-control, accept-kmk-tos) is a concrete shape to copy: a duty is a referenced obligation,
+            and exercising the authority binds the delegate to it, terms-of-service acceptance included. Chose to
+            first-class duties over leaving them prose-only, because (a) our own timelyReviewAndRevoke (@k3wm7d)
+            is a duty smuggled in as a disclaimer "rule" — evidence the rules block already conflates duties with
+            disclaimers; and (b) ToS-acceptance-as-duty is the machine-readable form of the liability lever
+            (issuerNotResponsibleOutsideConstraints made affirmative). OPEN: whether duties ride on the GCD
+            credential (0430's vote — on the framework, inherited by role) or the reciprocal record (SDA's
+            parking spot) — a live input to the record-shape question (org this.i @ot4puqrj). Tradeoff: a duty is
+            an obligation a stranger-verifier cannot ENFORCE (it binds the delegate, checked by audit and
+            recourse, not at a c_-style gate) — so it is disclosure + accountability, not an enabling constraint.
+        A gfw/rules revision carries a trust-compatibility class (breaking vs preserving) = decision:
+          id: w4nzp3
+          stage-status: planned
+          why: >
+            Changing GCD's rules block yields a new SAID, so today ANY rule change — adding timelyReviewAndRevoke
+            included — produces a brand-new, opaque gfw with NO signal about whether a party who relied on the
+            old one may rely on the new (the SAID-churn flagged at @k3wm7d). RFC 0430's versioning semantics
+            classify a change as MAJOR (breaks trust: removes a role/privilege, makes an optional field required,
+            changes grant logic to eliminate privileges), MINOR (adds precision without invalidating: new
+            roles/privileges, grant changes that only benefit existing holders), or PATCH (safe: new topics,
+            description tweaks). Chose to copy a compatibility CLASS onto a gfw/rules revision over relying on the
+            bare SAID, because a graded "is this trust-preserving?" signal is exactly what lets a verifier or
+            delegate decide whether an updated framework is auto-acceptable or needs fresh consent. Constraint:
+            because verification is open-loop, the class MUST be a self-describing, SAID-committed property of the
+            revision (published in the ruleset), never a lookup. Tradeoff: semver-style promises are social, not
+            cryptographic — a mis-declared "minor" that actually breaks trust is possible; the class is a claim a
+            verifier MAY check against the diff, not a proof.
+        TENTATIVE — a redress / recourse pointer in the gfw/rules = decision:
+          id: r6kv2m
+          stage-status: planned
+          why: >
+            TENTATIVE / candidate, not yet adopted. SDA and GCD name the obligation-bearer (who answers if an act
+            goes wrong) but provide no LOCUS OF RECOURSE — where a harmed counterparty actually appeals. RFC
+            0430's redress {uri} treats an appeal endpoint as a legitimacy signal. Candidate: a rules-block/gfw
+            redress pointer ("recourse for acts taken under this delegation lives here"), as disclosure metadata
+            (human/legal process, not machine-checkable). Left tentative because (a) it may belong to the
+            org/instance layer (a concrete Bakobo redress process) rather than the generic GCD schema, and (b) a
+            bare URI is the closed-loop-flavored part of 0430 we otherwise reject — the open-loop rendering (a
+            SAID, an AID, or a pointer that is resolvable but never verification-critical) is unsettled. Revisit
+            when the accountability / obligation-bearer axis is specified.
+        TENTATIVE — constrain the counterparty (who may rely or verify) — a shape for c_disc = decision:
+          id: c3wqn7
+          stage-status: planned
+          why: >
+            TENTATIVE / candidate, not yet adopted. RFC 0430 can restrict WHO may rely — "only approved-verifiers
+            may request this proof" (Rule 4) — the counterparty must itself present a qualification. That is a
+            concrete shape for SDA's reserved-but-unspecified OUTBOUND c_disc axis ("what a delegate may reveal
+            about its principal, and to whom"): a delegation could require the counterparty prove a qualification
+            before the delegate discloses or acts. Candidate because it operationalizes the earlier finding that
+            a verifier always serves its own purpose, yet an issuer can still bound WHICH verifiers a delegate
+            engages. Left tentative because c_disc's whole vocabulary is deliberately open (SDA §6) and adding a
+            counterparty-qualification constraint pre-commits part of it, and because a mutual-proof handshake
+            edges toward the interaction complexity GCD has so far avoided. Revisit when c_disc is opened for
+            design.
