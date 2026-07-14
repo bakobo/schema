@@ -19,6 +19,7 @@ copyright = "Apache-2.0. Derived from provenant-dev/public-schema."
 # the schema JSON and icons resolve. When adding a schema, add one line here.
 nav = [
     { "Home" = "index.md" },
+    { "Ecosystem" = "ecosystem.md" },
     { "GCD" = "gcd/index.md" },
     { "AI coder" = "ai-coder/index.md" },
     { "AI user code of conduct" = "ai-user-coca/index.md" },

@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/bakobo/schema/actions/workflows/ci.yml/badge.svg)](https://github.com/bakobo/schema/actions/workflows/ci.yml)
 
-Bakobo's home for **general-purpose [ACDC](https://trustoverip.github.io/tswg-acdc-specification/draft-ssmith-acdc.html)
+Bakobo's home for **general-purpose [ACDC](https://trustoverip.github.io/kswg-acdc-specification/)
 credential schemas** — chief among them **GCD**, the Generalized Cooperative
 Delegation credential.
 

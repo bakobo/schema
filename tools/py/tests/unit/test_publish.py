@@ -110,3 +110,54 @@ def test_build_docs_cli(synthetic_repo, tmp_path):
     rc = main(["build-docs", "--root", str(synthetic_repo), "--out", str(tmp_path / "_docs")])
     assert rc == 0
     assert (tmp_path / "_docs" / "index.md").is_file()
+
+
+# --- federation layer (this.i @f7dr3k) ------------------------------------------
+
+_FEDERATION = {
+    "registries": [
+        {"name": "Us", "operator": "Bakobo", "self": True, "homepage": "https://x.example/",
+         "registry": "https://x.example/registry.json", "sourceRepo": "https://github.com/bakobo/schema",
+         "resolution": "static", "notes": "self"},
+        {"name": "Bare", "resolution": "source-only"},  # no homepage/repo/registry -> exercises _md_link '—'
+    ],
+    "specifications": [{"name": "ACDC", "url": "https://spec.example/acdc"}],
+}
+
+
+def _write_federation(repo):
+    (repo / "federation.json").write_text(json.dumps(_FEDERATION))
+
+
+def test_load_federation_present_and_absent(synthetic_repo):
+    assert publish.load_federation(synthetic_repo) is None
+    _write_federation(synthetic_repo)
+    assert publish.load_federation(synthetic_repo)["registries"][0]["name"] == "Us"
+
+
+def test_build_site_emits_registries_when_federation_present(synthetic_repo, tmp_path):
+    _write_federation(synthetic_repo)
+    publish.build_site(synthetic_repo, tmp_path / "site")
+    assert (tmp_path / "site" / publish.REGISTRIES_PATH).is_file()
+
+
+def test_build_site_skips_registries_without_federation(synthetic_repo, tmp_path):
+    publish.build_site(synthetic_repo, tmp_path / "site")
+    assert not (tmp_path / "site" / publish.REGISTRIES_PATH).exists()
+
+
+def test_build_docs_emits_ecosystem_and_links_it(synthetic_repo, tmp_path):
+    _write_federation(synthetic_repo)
+    out = tmp_path / "_docs"
+    publish.build_docs(synthetic_repo, out)
+    eco = (out / "ecosystem.md").read_text()
+    assert "Us" in eco and "*(this site)*" in eco and "Bare" in eco and "ACDC" in eco
+    assert "—" in eco  # the Bare entry has no links
+    assert "ecosystem/" in (out / "index.md").read_text()  # landing links to it
+
+
+def test_build_docs_no_ecosystem_without_federation(synthetic_repo, tmp_path):
+    out = tmp_path / "_docs"
+    publish.build_docs(synthetic_repo, out)
+    assert not (out / "ecosystem.md").exists()
+    assert "ecosystem/" not in (out / "index.md").read_text()

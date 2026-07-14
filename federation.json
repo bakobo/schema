@@ -1,0 +1,57 @@
+{
+  "description": "Known ACDC schema registries and the specs behind them. Hand-edited source of truth (this.i @f7dr3k); rendered by `schematools publish` into /registries.json and the Ecosystem page. resolution: static = browsable schema JSON at stable URLs; oobi = served via KERI /oobi/{said}; source-only = repo only, no confirmed live host; unknown = host not confirmed.",
+  "registries": [
+    {
+      "name": "Bakobo",
+      "operator": "Bakobo",
+      "self": true,
+      "homepage": "https://schema.bakobo.com/",
+      "manifest": "https://schema.bakobo.com/.well-known/acdc-schemas.json",
+      "registry": "https://schema.bakobo.com/registry.json",
+      "oobiPattern": "https://schema.bakobo.com/oobi/{said}.json",
+      "sourceRepo": "https://github.com/bakobo/schema",
+      "resolution": "static",
+      "notes": "General-purpose ACDC schemas, GCD chief among them; browsable pages + machine manifest + per-SAID OOBIs."
+    },
+    {
+      "name": "Provenant public-schema",
+      "operator": "Provenant",
+      "homepage": "https://schema.origincloud.net/",
+      "registry": "https://schema.origincloud.net/registry.json",
+      "oobiPattern": "https://schema.origincloud.net/oobi/{said}",
+      "sourceRepo": "https://github.com/provenant-dev/public-schema",
+      "resolution": "oobi",
+      "notes": "The repo bakobo forked from; general + telco/vLEI types. Served via a KERI schema-registry (S3+CloudFront), application/schema+json."
+    },
+    {
+      "name": "vLEI (GLEIF)",
+      "operator": "GLEIF / WebOfTrust",
+      "homepage": "https://github.com/WebOfTrust/vLEI",
+      "sourceRepo": "https://github.com/GLEIF-IT/vLEI-schema",
+      "resolution": "oobi",
+      "notes": "The vLEI credential family (QVI, LE, OOR/ECR + authorizations, iXBRL attestation). Served via KERI OOBI (vlei-server); production endpoints per GLEIF."
+    },
+    {
+      "name": "WebOfTrust schema",
+      "operator": "WebOfTrust",
+      "homepage": "https://github.com/WebOfTrust/schema",
+      "sourceRepo": "https://github.com/WebOfTrust/schema",
+      "resolution": "source-only",
+      "notes": "KERI/ACDC reference schemas (bindkey, designator-aliases, vLEI); carries its own registry.json and /oobi files. No confirmed public host."
+    },
+    {
+      "name": "Veridian",
+      "operator": "Cardano Foundation",
+      "homepage": "https://docs.veridian.id/",
+      "sourceRepo": "https://github.com/cardano-foundation/veridian-wallet",
+      "resolution": "unknown",
+      "notes": "ACDC wallet + platform; Cardano-anchored credentials. Public schema-serving endpoint not confirmed."
+    }
+  ],
+  "specifications": [
+    { "name": "ACDC (Authentic Chained Data Container)", "url": "https://trustoverip.github.io/kswg-acdc-specification/" },
+    { "name": "KERI (Key Event Receipt Infrastructure)", "url": "https://trustoverip.github.io/kswg-keri-specification/" },
+    { "name": "CESR (Composable Event Streaming Representation)", "url": "https://trustoverip.github.io/kswg-cesr-specification/" },
+    { "name": "OOBI (Out-Of-Band Introduction)", "url": "https://weboftrust.github.io/ietf-oobi/draft-ssmith-oobi.html" }
+  ]
+}

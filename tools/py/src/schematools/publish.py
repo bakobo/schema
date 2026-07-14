@@ -36,6 +36,25 @@ CNAME_HOST = "schema.bakobo.com"
 MANIFEST_PATH = ".well-known/acdc-schemas.json"
 ROOT_ALIAS_MANIFEST = "acdc-schemas.json"
 
+# Federation: the hand-edited directory of OTHER ACDC schema registries (this.i
+# @f7dr3k), rendered into a machine index and a human Ecosystem page.
+FEDERATION_NAME = "federation.json"
+REGISTRIES_PATH = "registries.json"
+ACDC_SPEC_URL = "https://trustoverip.github.io/kswg-acdc-specification/"
+
+
+def load_federation(root: str | Path) -> dict | None:
+    """The parsed ``federation.json`` if the repo has one, else ``None``."""
+    path = Path(root) / FEDERATION_NAME
+    if not path.is_file():
+        return None
+    return json.loads(path.read_text())
+
+
+def _md_link(text: str, url: str | None) -> str:
+    """A markdown link, or an em-dash when there is no URL."""
+    return f"[{text}]({url})" if url else "—"
+
 
 def _rules_said(schema: dict) -> str | None:
     """The governance/rules SAID a schema pins, if it fixes one via ``r.const``.
@@ -90,7 +109,7 @@ def _render_index(base_url: str, schemas: list[dict]) -> str:
   code{{font-size:.85em}}
 </style>
 <h1>Bakobo ACDC schema registry</h1>
-<p>General-purpose <a href="https://trustoverip.github.io/tswg-acdc-specification/">ACDC</a>
+<p>General-purpose <a href="{ACDC_SPEC_URL}">ACDC</a>
 credential schemas, each addressed by its SAID. Machine index:
 <a href="{MANIFEST_PATH}">discovery manifest</a> · <a href="registry.json">registry.json</a>.
 Source: <a href="https://github.com/bakobo/schema">github.com/bakobo/schema</a>.</p>
@@ -133,31 +152,66 @@ def build_docs(root: str | Path, out: str | Path) -> list[str]:
         shutil.copytree(committed, out, dirs_exist_ok=True)
 
     entries = discover_schemas(root)
+    federation = load_federation(root)
 
     rows = []
     for entry in entries:
         schema = json.loads(entry.path.read_text())
         rows.append(f"| [{entry.name}]({entry.name}/) | {schema.get('title', '')} | `{schema.get('version', '')}` |")
+    eco_link = " See also [other ACDC schema registries](ecosystem/)." if federation else ""
     landing = (
         "# Bakobo ACDC schema registry\n\n"
-        "General-purpose [ACDC](https://trustoverip.github.io/tswg-acdc-specification/) credential "
-        "schemas, each addressed by its SAID. Machine index: "
-        f"[registry.json](registry.json) · [discovery manifest]({MANIFEST_PATH}).\n\n"
+        f"General-purpose [ACDC]({ACDC_SPEC_URL}) (Authentic Chained Data Container) credential "
+        "schemas — GCD chief among them — each addressed by its SAID and resolvable as a KERI OOBI. "
+        f"Machine index: [registry.json](registry.json) · [discovery manifest]({MANIFEST_PATH}).{eco_link}\n\n"
         "| Schema | Asserts | Version |\n|---|---|---|\n" + "\n".join(rows) + "\n"
     )
     (out / "index.md").write_text(landing)
 
-    # ``<name>/index.md`` (not a flat ``<name>.md``) so the page sits IN the
-    # schema folder and its relative links to the schema JSON and icons resolve.
-    # The sidebar renders each as a single link (no folder/index nesting) via the
-    # ``navigation.indexes`` theme feature: a section whose only content is its
-    # index page collapses to one clickable link (this.i @z5nc4d).
+    # ``<name>/index.md`` (not a flat ``<name>.md``) so the page sits IN the schema
+    # folder and its relative links to the schema JSON and icons resolve; the flat
+    # sidebar link per schema comes from the explicit nav in zensical.toml (@z5nc4d).
     for entry in entries:
         page_dir = out / entry.name
         page_dir.mkdir(exist_ok=True)
         (page_dir / "index.md").write_text(_schema_doc(entry))
 
+    if federation:
+        (out / "ecosystem.md").write_text(_render_ecosystem(federation))
+
     return [entry.name for entry in entries]
+
+
+def _render_ecosystem(federation: dict) -> str:
+    """The 'Ecosystem' page: a table of known ACDC schema registries + specs."""
+    reg_rows = []
+    for r in federation.get("registries", []):
+        label = r["name"] + (" *(this site)*" if r.get("self") else "")
+        home = r.get("homepage")
+        name_cell = f"[{label}]({home})" if home else label
+        reg_rows.append(
+            f"| {name_cell} | {r.get('operator', '')} "
+            f"| `{r.get('resolution', '')}` "
+            f"| {_md_link('repo', r.get('sourceRepo'))} · {_md_link('registry', r.get('registry'))} "
+            f"| {r.get('notes', '')} |"
+        )
+    spec_rows = [f"- [{s['name']}]({s['url']})" for s in federation.get("specifications", [])]
+    return (
+        "# Ecosystem — other ACDC schema registries\n\n"
+        f"[ACDC]({ACDC_SPEC_URL}) (Authentic Chained Data Container) credential schemas are published "
+        "by several organizations across the KERI ecosystem. Because every schema is identified by its "
+        "**SAID** (a content hash), the same schema is identical wherever it is served — a static site, "
+        "a KERI **OOBI** endpoint (`/oobi/{said}`), or a source repository. This page indexes the "
+        "registries we know of; the machine-readable version is [registries.json](registries.json).\n\n"
+        "| Registry | Operator | Resolution | Links | Notes |\n|---|---|---|---|---|\n"
+        + "\n".join(reg_rows) + "\n\n"
+        "`resolution`: **static** = browsable schema JSON at stable URLs · **oobi** = served via KERI "
+        "`/oobi/{said}` · **source-only** = repository, no confirmed public host · **unknown** = host "
+        "not confirmed.\n\n"
+        "## Specifications\n\n" + "\n".join(spec_rows) + "\n\n"
+        "*Publish ACDC schemas and want to be listed? Open a PR adding an entry to "
+        "[`federation.json`](https://github.com/bakobo/schema/blob/main/federation.json).*\n"
+    )
 
 
 def build_site(root: str | Path, out: str | Path, base_url: str = DEFAULT_BASE_URL) -> dict:
@@ -189,6 +243,11 @@ def build_site(root: str | Path, out: str | Path, base_url: str = DEFAULT_BASE_U
     canonical.parent.mkdir(parents=True, exist_ok=True)
     canonical.write_text(body)
     (out / ROOT_ALIAS_MANIFEST).write_text(body)  # non-dot alias
+
+    # federation index of other ACDC registries, if the repo has one (@f7dr3k)
+    federation = load_federation(root)
+    if federation is not None:
+        (out / REGISTRIES_PATH).write_text(json.dumps(federation, indent=2) + "\n")
 
     # custom domain + landing page
     (out / "CNAME").write_text(CNAME_HOST + "\n")
