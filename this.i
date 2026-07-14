@@ -143,6 +143,54 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             SAID-integrity + registry-consistency + positive-example are the Phase-1 MVP that Task 1 needs
             anyway, while negative corpora, semantic rules, and regression are pulled in as GCD's evolution
             requires them. The browser editor and CD-publish are consumers of this contract, not part of it.
+          children:
+            The negative axis lands as a per-schema invalid/ corpus that a check proves is rejected = decision:
+              id: n6dqw2
+              why: >
+                Realizing @n7xk4r's negative (golden should-fail) axis — the part that actually TESTS a schema
+                rather than lints it. Chose a per-schema ``<folder>/invalid/*.json`` directory of full-instance
+                fixtures, each one mutation away from a valid instance, plus a repo-wide ``check_negative_examples``
+                that asserts every fixture is REJECTED and reports any the schema ACCEPTS as a too-permissive
+                defect. Chose full-instance-minus-one-mutation over minimal violating stubs because a single
+                isolated defect is legible ("this differs from valid by exactly one thing") and mirrors how the
+                positive example.json is authored; chose a plain directory (filename carries intent, since JSON
+                has no comments) over a manifest with per-fixture metadata because the check only needs "reject or
+                not" and a manifest is a second source of truth to drift. Fixtures were authored by probing the
+                REAL Draft-2020-12 validator (not by eyeballing), so the shipped corpus contains only fixtures the
+                schema genuinely rejects today — 49 across the 11 registered schemas, covering missing-required,
+                wrong-type, null, additionalProperties, const/enum, regex pattern, min/minItems/uniqueItems, and
+                edge-operator violations. Scope boundary held: the corpus covers only violations expressible AND
+                asserted in JSON Schema — it does not cover ``format`` (date-time/uri/cesr are annotation-only and
+                NOT asserted by the checker; see the defect node), semantic/business rules (@n7xk4r's third axis),
+                or SAID integrity (the fixtures carry deliberately-bogus SAIDs and are seen only by this check,
+                never by the SAID/example checks). Tradeoff: the corpus grows by hand per schema, but that is the
+                nature of the fixtures axis and the check makes a missing/weak corpus visible rather than silent.
+            Building the negative corpus surfaced five schema defects; fixing them is deferred (re-mint decision) = tension:
+              id: d7km4v
+              stage-status: planned
+              why: >
+                Authoring should-reject fixtures against the real validator exposed five pre-existing defects
+                inherited/introduced in the schemas — recorded here so they are tracked, not silently absorbed,
+                and deliberately NOT fixed in the same unit of work because every one changes a schema's bytes and
+                therefore its SAID, cascading to registry.json, the example's ``s``, and re-SAIDification (@xv4m7d,
+                @tq5wnh) — a re-mint that is Daniel's call, not a lint cleanup. The defects: (1) face-to-face
+                ``a.minutes`` uses ``exclusiveMin`` and (2) proof-of-control ``a.be`` uses ``exclusiveMin`` — NOT
+                a Draft-2020-12 keyword (the correct spelling is ``exclusiveMinimum``); as written the keyword is
+                ignored, so ``minutes``/``be`` of 0 or negative are wrongly ACCEPTED. (3) proof-of-control lists
+                ``minutes`` in its attributes ``required`` but defines no such property — only ``be`` — so the
+                required list looks copy-pasted from face-to-face; a correct instance per the intended design
+                (``be`` present, no ``minutes``) is wrongly rejected. (4) face-to-face ``a.basis`` pattern
+                ``^[-a-z0-0 ]+$`` has a range typo ``0-0`` (a single character, "0") where ``0-9`` was meant, so
+                the schema rejects its OWN documented example values ("nist-ial1".."nist-ial3") and any basis
+                containing a digit 1-9. (5) faa attributes constrain a ``content_identifier`` property with a SAID
+                regex, but ``required``/the example use ``art_digest`` (unconstrained) — the constrained property
+                is dead and the used one is unvalidated; a bogus ``art_digest`` is accepted. Also surfaced, but
+                classed as design choices to review rather than defects: top-level and ``a``-level
+                ``additionalProperties: true`` on several schemas (ai-user-coca top, citation top, award/bindkey/
+                face-to-face/org-vet ``a``) let unknown fields through; and ``format`` assertion is off repo-wide
+                (date-time/uri/cesr unchecked). Resolution stance: when Daniel approves a re-mint, fix 1-5, add
+                the now-enforceable negatives (minutes<=0, be<=0, bad art_digest) to the corpus, and separately
+                decide the additionalProperties / format-assertion posture; until then these live as tick entries.
         Tooling stays in this repo, generic in shape, until a second consumer justifies a split = decision:
           id: c5tj3p
           why: >
