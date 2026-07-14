@@ -514,6 +514,37 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                     that the manifest ``build_site`` emits validates against it. Deliberately scoped to the discovery
                     manifest, not ``registries.json`` (the bakobo-specific federation index), because the manifest is
                     the shape we want OTHER publishers to copy.
+                A contribution / schema-submission process is deferred until the publication gate is tooled = decision:
+                  id: c5nq7d
+                  stage-status: planned
+                  why: >
+                    This repo intends to accept OUTSIDE schema submissions — "instructions for submitting a schema
+                    for consideration to be published here" was part of the founding ask, alongside a publication
+                    CONTRACT: a schema is publishable only if it has a name, correct semver, passes validation
+                    (valid JSON Schema + SAID integrity + a valid example + a should-reject negative corpus), AND
+                    carries a good narrative ``index.md``, good examples, and a recommended visualization/icon.
+                    Chose to DEFER writing ``CONTRIBUTING.md`` (and the GitHub issue/PR "propose a schema"
+                    templates) until that contract is MECHANICALLY ENFORCED by a ``schematools`` publication-
+                    readiness gate — Daniel's explicit call (2026-07-14): more tooling should exist before the guide
+                    is written. Decisive reason: this repo's standing pattern is that the human checklist and the
+                    machine gate must be the SAME list from one source so they cannot drift (the generated-vs-hand-
+                    written discipline behind @f7dr3k / @z5nc4d and the fail-closed publish of @o6bw3k); a prose
+                    contribution guide written BEFORE the gate documents rules CI cannot check, invites non-
+                    conforming submissions, and forces manual gatekeeping — the opposite of fail-closed. Rejected
+                    writing the guide now and backfilling enforcement later (the guide would be aspirational and go
+                    stale on the first submission it cannot actually reject). What must exist first: a per-schema
+                    readiness check that extends the @n7xk4r linter to the FULL contract — most pieces already exist
+                    (structure, SAID integrity, example validity, negative corpus, registry consistency, format
+                    assertion); the GAPS are a required-``index.md``-sections check, an icon/visualization-present
+                    check, a semver field + validity check, and a single ``check-submission`` (or ``publish
+                    --check``) entry point that runs them together; optionally a scaffolder (``schematools new
+                    <name>``) so contributors start conformant. The Layer-2 manifest meta-schema (@m5tqw3) is the
+                    interop half and already exists. Tradeoff accepted: until the gate lands there is NO written
+                    contribution path, so any external interest is handled ad hoc (issue / hand-reviewed PR) at low
+                    volume. WHEN the gate exists: author ``CONTRIBUTING.md`` to POINT AT it (run the gate locally;
+                    CI runs the same), so the human checklist IS the gate's checklist, then add the issue/PR
+                    templates. This is the same "surface the contract as tooling, not prose" stance @n7xk4r took for
+                    schema tests, applied to submissions.
     Temporal drift is bounded by proactive revocation and the per-act gate, not per-action minting or keep-alives = decision:
       id: tj6vq4
       why: >
