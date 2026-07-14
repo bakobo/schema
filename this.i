@@ -60,6 +60,58 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         inherited from the source: gcd/gcd.schema.json is NOT valid JSON (an extra closing brace in/after
         the c_upto block, ~line 180) — it must be repaired and re-SAIDified as the first evolution step; its
         current $id SAID cannot match its bytes. Captured byte-for-byte anyway, so provenance is provable.
+      children:
+        The a-block replaces the flat c_ prefix with named container objects = decision:
+          id: h4tqm7
+          stage-status: planned
+          why: >
+            Today every GCD constraint is a c_-prefixed field flat in the a block (c_goal, c_jur, ...), a naming
+            CONVENTION whose real job is safe-ignore forward-compat: noConstraintSansPrefix lets a stranger-
+            verifier split fields into "must-satisfy-or-fail-closed" vs "informational, ignore" from the field
+            name alone (open-loop, imbu @kp5l4o). v2.0 replaces the flat prefix with NAMED CONTAINER OBJECTS in
+            the a block: constraints{} (the "may" — enabling and voiding @v5nq2r), plus reserved facet{} (the
+            relation/obligation facet, imbu @nf5rx7) and discloses{} (the outbound axis, imbu @m3xc7d / @c3wqn7).
+            The "must" (duties) does NOT get an a.duties object — it lives in the r block (@r5dnk2). The c_ prefix
+            is DROPPED, fields renamed per the house style (@p6mwk4: goals, effects, juris, physGeos, ...). The
+            safe-ignore rule is preserved and STRENGTHENED (a subtree boundary is firmer than a lexical
+            convention), restated as "nothing outside constraints constrains; an unrecognized key inside
+            constraints → fail closed" (replacing noConstraintSansPrefix). Bonus the prefix could not express: the
+            container encodes ENFORCEMENT SEMANTICS — constraints{} is gate-relevant / fail-closed, whereas duties
+            are accountability a verifier may ignore for the authorization decision; a flat scheme would need a
+            SECOND prefix to say that. Chose this at v2.0 (the sanctioned break) because (a) the c_* blast-radius
+            inventory (2026-07-13) found ZERO code dependency on the prefix or names — pap_policy collects
+            metadata by isinstance-dict, name-agnostic; semantic-perm-hook has none; imbu enforcement is unbuilt —
+            so the cost is prose, not code; and (b) the container shape is STABLE even while the field set still
+            moves (c_effect / kind / dom, voiding c_until), decoupling structure from field-set, so it is the
+            low-thrash decision to make first. Rejected "just strip c_" (keeps cryptic names, gives duties no home)
+            and keeping the flat prefix (cannot carry the may/must enforcement split without a second prefix).
+            CONSEQUENCE: every c_ reference in schema/imbu/org prose (and the upstream pap doc) goes stale on
+            authoring — tracked in tick ~5hlz (schema docs) and ~44oc (cross-repo); the schema artifact + example +
+            registry re-SAIDify per @b6xh4m.
+        The reciprocal record IS the GCD r block; the "must" is first-class there, not a second credential = decision:
+          id: r5dnk2
+          stage-status: planned
+          why: >
+            The may/must split (SDA §5; imbu @v2kd7m; org @dwx5twwyh) parks the "must" (duties) in a "reciprocal
+            record," and @d5tqm6 left OPEN whether duties ride on the GCD credential or a separate reciprocal
+            record (mirrored by the org tension @ot4puqrj). Resolved: the reciprocal record is NOT a second
+            credential — it is the GCD's own r (rules) block, which v2.0 upgrades to carry FIRST-CLASS structured
+            duties alongside its Ricardian disclaimer clauses. Chose one credential with duties in r over a paired
+            second credential because: (1) open-loop — a duty-bearing act stays verifiable from ONE self-contained
+            artifact, where a second record forces two-artifact correlation at verification, the closed loop imbu
+            forbids (@kp5l4o); (2) the r block IS the accepted-terms / Ricardian mechanism, and because the
+            delegator issues (signs) the GCD, anything in r is delegator-signed by construction — exactly what
+            "delegator-signed reciprocal record" asked for; (3) multi-principal conflicting duties (@v2kd7m) are
+            handled naturally — each principal's duties sit on THEIR own GCD to the delegate, and imbu aggregates
+            across held credentials regardless; (4) @k3wm7d already puts a duty (timelyReviewAndRevoke) into the
+            rules block, so first-classing duties there regularizes what exists. Duties are DISCLOSURE +
+            ACCOUNTABILITY, not enabling constraints (@d5tqm6) — a stranger-verifier does not gate on them (audit +
+            recourse) — so they belong in r, NOT in a.constraints, and NOT in an a.duties object (this CORRECTS an
+            earlier container sketch that tentatively placed duties in a). The lone case a separate record would win
+            — duties renegotiated far more often than permissions — is YAGNI (SDA duties are role-level, ~as stable
+            as permissions) and extractable later (@c5tj3p logic). This resolves @ot4puqrj and @d5tqm6's open, and
+            REQUIRES a paired update to imbu @v2kd7m / @nf5rx7 and org @dwx5twwyh / @ot4puqrj (which still model a
+            distinct reciprocal record) — the cross-repo obligation tracked in tick ~44oc.
     Schema-authoring tooling is deferred, pending a TypeScript-vs-Python decision = decision:
       id: p4zc7n
       stage-status: planned
@@ -341,7 +393,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                     matter already carry explicit ``pattern`` regexes (faa). Tradeoff: cesr-format typos still pass
                     until that rule is defined. The additionalProperties posture from @d7km4v remains separately
                     open (flipping to false is a MAJOR break of graduated-disclosure extensibility).
-                schematools publish emits the machine site: raw schemas + /oobi/<said>.json + a .well-known manifest = decision:
+                schematools publish emits the machine site — raw schemas + /oobi/<said>.json + a .well-known manifest = decision:
                   id: o6bw3k
                   why: >
                     Chose to move site assembly OUT of the workflow YAML and INTO a tested ``schematools publish``
