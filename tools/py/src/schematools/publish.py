@@ -42,6 +42,10 @@ FEDERATION_NAME = "federation.json"
 REGISTRIES_PATH = "registries.json"
 ACDC_SPEC_URL = "https://trustoverip.github.io/kswg-acdc-specification/"
 
+# Layer 2 (this.i @m5tqw3): the published JSON Schema FOR the discovery manifest.
+META_SCHEMA_SRC = "spec/acdc-schema-registry.schema.json"
+META_SCHEMA_PATH = "acdc-schema-registry.schema.json"
+
 
 def load_federation(root: str | Path) -> dict | None:
     """The parsed ``federation.json`` if the repo has one, else ``None``."""
@@ -54,6 +58,17 @@ def load_federation(root: str | Path) -> dict | None:
 def _md_link(text: str, url: str | None) -> str:
     """A markdown link, or an em-dash when there is no URL."""
     return f"[{text}]({url})" if url else "—"
+
+
+def _front_matter(description: str) -> str:
+    """YAML front-matter carrying a page ``description`` (unique <meta> for SEO)."""
+    desc = " ".join(description.split())[:200].replace("\\", "\\\\").replace('"', '\\"')
+    return f'---\ndescription: "{desc}"\n---\n\n'
+
+
+def _schema_description(schema: dict, name: str) -> str:
+    """A schema's own ``description``, or a sensible default for the meta tag."""
+    return schema.get("description") or f"{name} — an ACDC credential schema."
 
 
 def _rules_said(schema: dict) -> str | None:
@@ -159,10 +174,15 @@ def build_docs(root: str | Path, out: str | Path) -> list[str]:
         schema = json.loads(entry.path.read_text())
         rows.append(f"| [{entry.name}]({entry.name}/) | {schema.get('title', '')} | `{schema.get('version', '')}` |")
     eco_link = " See also [other ACDC schema registries](ecosystem/)." if federation else ""
-    landing = (
+    landing = _front_matter(
+        "Registry of general-purpose ACDC (Authentic Chained Data Container) credential schemas — "
+        "GCD and more — each a KERI JSON Schema addressed by its SAID and resolvable as an OOBI."
+    ) + (
         "# Bakobo ACDC schema registry\n\n"
         f"General-purpose [ACDC]({ACDC_SPEC_URL}) (Authentic Chained Data Container) credential "
-        "schemas — GCD chief among them — each addressed by its SAID and resolvable as a KERI OOBI. "
+        "schemas — GCD chief among them — for [KERI](https://trustoverip.github.io/kswg-keri-specification/)-"
+        "based verifiable credentials. Each schema is a Draft 2020-12 JSON Schema addressed by its "
+        "**SAID** (a self-addressing content hash) and resolvable as an **OOBI**. "
         f"Machine index: [registry.json](registry.json) · [discovery manifest]({MANIFEST_PATH}).{eco_link}\n\n"
         "| Schema | Asserts | Version |\n|---|---|---|\n" + "\n".join(rows) + "\n"
     )
@@ -171,13 +191,21 @@ def build_docs(root: str | Path, out: str | Path) -> list[str]:
     # ``<name>/index.md`` (not a flat ``<name>.md``) so the page sits IN the schema
     # folder and its relative links to the schema JSON and icons resolve; the flat
     # sidebar link per schema comes from the explicit nav in zensical.toml (@z5nc4d).
+    # Each page carries a unique <meta description> from its schema (this.i @s6eqk4).
     for entry in entries:
+        schema = json.loads(entry.path.read_text())
         page_dir = out / entry.name
         page_dir.mkdir(exist_ok=True)
-        (page_dir / "index.md").write_text(_schema_doc(entry))
+        (page_dir / "index.md").write_text(
+            _front_matter(_schema_description(schema, entry.name)) + _schema_doc(entry)
+        )
 
     if federation:
-        (out / "ecosystem.md").write_text(_render_ecosystem(federation))
+        eco = _front_matter(
+            "Directory of known ACDC schema registries across the KERI ecosystem — GLEIF vLEI, "
+            "Provenant, WebOfTrust and more — each schema SAID-addressed and OOBI-resolvable."
+        ) + _render_ecosystem(federation)
+        (out / "ecosystem.md").write_text(eco)
 
     return [entry.name for entry in entries]
 
@@ -209,8 +237,11 @@ def _render_ecosystem(federation: dict) -> str:
         "`/oobi/{said}` · **source-only** = repository, no confirmed public host · **unknown** = host "
         "not confirmed.\n\n"
         "## Specifications\n\n" + "\n".join(spec_rows) + "\n\n"
-        "*Publish ACDC schemas and want to be listed? Open a PR adding an entry to "
-        "[`federation.json`](https://github.com/bakobo/schema/blob/main/federation.json).*\n"
+        "## Publish your own\n\n"
+        f"Adopt the [discovery-manifest schema](../{META_SCHEMA_PATH}) — serve a "
+        "`/.well-known/acdc-schemas.json` conforming to it, and your registry is machine-discoverable "
+        "by the same convention. Then open a PR adding an entry to "
+        "[`federation.json`](https://github.com/bakobo/schema/blob/main/federation.json).\n"
     )
 
 
@@ -235,9 +266,14 @@ def build_site(root: str | Path, out: str | Path, base_url: str = DEFAULT_BASE_U
     for said, rel in registry.items():
         shutil.copy2(root / rel, oobi_dir / f"{said}.json")
 
-    # discovery manifest
+    # discovery manifest — self-describing via a $schema pointer when the repo
+    # publishes the Layer-2 meta-schema (this.i @m5tqw3)
     schemas = [_manifest_entry(entry, rel_to_said[entry.rel]) for entry in entries]
     manifest = {"baseUrl": base_url, "schemas": schemas}
+    meta_src = root / META_SCHEMA_SRC
+    if meta_src.is_file():
+        shutil.copy2(meta_src, out / META_SCHEMA_PATH)
+        manifest = {"$schema": f"{base_url.rstrip('/')}/{META_SCHEMA_PATH}", **manifest}
     body = json.dumps(manifest, indent=2) + "\n"
     canonical = out / MANIFEST_PATH  # .well-known/acdc-schemas.json
     canonical.parent.mkdir(parents=True, exist_ok=True)
@@ -249,8 +285,11 @@ def build_site(root: str | Path, out: str | Path, base_url: str = DEFAULT_BASE_U
     if federation is not None:
         (out / REGISTRIES_PATH).write_text(json.dumps(federation, indent=2) + "\n")
 
-    # custom domain + landing page
+    # custom domain, crawler hints, landing page
     (out / "CNAME").write_text(CNAME_HOST + "\n")
+    (out / "robots.txt").write_text(
+        f"User-agent: *\nAllow: /\nSitemap: {base_url.rstrip('/')}/sitemap.xml\n"
+    )
     (out / "index.html").write_text(_render_index(base_url, schemas))
 
     return manifest

@@ -161,3 +161,67 @@ def test_build_docs_no_ecosystem_without_federation(synthetic_repo, tmp_path):
     publish.build_docs(synthetic_repo, out)
     assert not (out / "ecosystem.md").exists()
     assert "ecosystem/" not in (out / "index.md").read_text()
+
+
+# --- SEO (this.i @s6eqk4) -------------------------------------------------------
+
+
+def test_front_matter_sanitizes_and_caps():
+    fm = publish._front_matter('a "quote" and\na newline ' + "x" * 300)
+    assert fm.startswith("---\ndescription: \"") and fm.endswith("---\n\n")
+    assert "\\\"quote\\\"" in fm  # quotes escaped
+    assert "\n" not in fm.split('description: "', 1)[1].split('"', 1)[0]  # value single-line
+    assert len(fm) < 260  # capped
+
+
+def test_schema_description_falls_back():
+    assert publish._schema_description({"description": "D"}, "w") == "D"
+    assert "ACDC credential schema" in publish._schema_description({}, "widget")
+
+
+def test_build_docs_writes_unique_meta_descriptions(synthetic_repo, tmp_path):
+    out = tmp_path / "_docs"
+    publish.build_docs(synthetic_repo, out)
+    page = (out / "widget" / "index.md").read_text()
+    assert page.startswith("---\ndescription:")  # front-matter present -> unique <meta>
+    assert (out / "index.md").read_text().startswith("---\ndescription:")
+
+
+def test_build_site_writes_robots_with_sitemap(synthetic_repo, tmp_path):
+    publish.build_site(synthetic_repo, tmp_path / "site", base_url="https://x.example/")
+    robots = (tmp_path / "site" / "robots.txt").read_text()
+    assert "Sitemap: https://x.example/sitemap.xml" in robots
+
+
+# --- federation Layer 2: meta-schema (this.i @m5tqw3) ---------------------------
+
+
+def _write_meta_schema(repo):
+    # copy the real committed meta-schema so the dogfood test is meaningful
+    from pathlib import Path
+
+    from schematools.repo import find_repo_root
+
+    real = find_repo_root(Path(__file__).resolve().parent) / publish.META_SCHEMA_SRC
+    (repo / "spec").mkdir(exist_ok=True)
+    (repo / "spec" / "acdc-schema-registry.schema.json").write_text(real.read_text())
+
+
+def test_meta_schema_absent_no_pointer(synthetic_repo, tmp_path):
+    manifest = publish.build_site(synthetic_repo, tmp_path / "site")
+    assert "$schema" not in manifest
+    assert not (tmp_path / "site" / publish.META_SCHEMA_PATH).exists()
+
+
+def test_meta_schema_published_and_manifest_conforms(synthetic_repo, tmp_path):
+    from jsonschema import Draft202012Validator
+
+    _write_meta_schema(synthetic_repo)
+    out = tmp_path / "site"
+    manifest = publish.build_site(synthetic_repo, out, base_url="https://x.example")
+    # published at the root, and the manifest points at it
+    meta = json.loads((out / publish.META_SCHEMA_PATH).read_text())
+    Draft202012Validator.check_schema(meta)  # it is a valid Draft 2020-12 schema
+    assert manifest["$schema"] == "https://x.example/acdc-schema-registry.schema.json"
+    # dogfood: the emitted manifest validates against its own meta-schema
+    assert not list(Draft202012Validator(meta).iter_errors(manifest))

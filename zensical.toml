@@ -7,7 +7,7 @@
 # the committed docs/ and adds per-schema pages); never edit _docs by hand.
 docs_dir = "_docs"
 site_name = "Bakobo ACDC schemas"
-site_description = "General-purpose ACDC credential schemas, each addressed by its SAID."
+site_description = "Registry of general-purpose ACDC (Authentic Chained Data Container) credential schemas for KERI verifiable credentials — each a JSON Schema addressed by its SAID and resolvable as an OOBI."
 site_url = "https://schema.bakobo.com/"
 repo_url = "https://github.com/bakobo/schema"
 repo_name = "bakobo/schema"

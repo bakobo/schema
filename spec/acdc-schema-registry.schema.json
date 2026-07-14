@@ -1,0 +1,61 @@
+{
+  "$id": "https://schema.bakobo.com/acdc-schema-registry.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ACDC schema registry discovery manifest",
+  "description": "The shape of an ACDC schema registry's discovery manifest, published at /.well-known/acdc-schemas.json (this.i @m5tqw3). Any ACDC schema publisher can adopt this shape so its schemas are discoverable by a uniform crawler. Intentionally permissive: unknown fields are allowed so publishers may extend it.",
+  "type": "object",
+  "required": ["baseUrl", "schemas"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "URL of this meta-schema, making the manifest self-describing."
+    },
+    "baseUrl": {
+      "type": "string",
+      "description": "Canonical base URL the manifest's relative paths are resolved against.",
+      "examples": ["https://schema.bakobo.com"]
+    },
+    "schemas": {
+      "type": "array",
+      "description": "Every released schema this registry publishes.",
+      "items": {
+        "type": "object",
+        "required": ["said", "name", "schema"],
+        "properties": {
+          "said": {
+            "type": "string",
+            "description": "SAID of the schema — its content-addressed identity."
+          },
+          "name": {
+            "type": "string",
+            "description": "Short human-friendly identifier (typically the folder name)."
+          },
+          "title": {
+            "type": ["string", "null"],
+            "description": "Human-readable title from the schema's `title`."
+          },
+          "credentialType": {
+            "type": ["string", "null"],
+            "description": "The ACDC credential type, if the schema declares one."
+          },
+          "version": {
+            "type": ["string", "null"],
+            "description": "Publisher's semantic version of the schema, if any."
+          },
+          "schema": {
+            "type": "string",
+            "description": "Path or URL (relative to baseUrl) of the schema JSON, for browsing."
+          },
+          "oobi": {
+            "type": "string",
+            "description": "Path or URL (relative to baseUrl) at which the schema resolves as an OOBI."
+          },
+          "rules": {
+            "type": ["string", "null"],
+            "description": "SAID of the governance/rules block this schema pins, if any."
+          }
+        }
+      }
+    }
+  }
+}
