@@ -13,11 +13,30 @@ repo_url = "https://github.com/bakobo/schema"
 repo_name = "bakobo/schema"
 copyright = "Apache-2.0. Derived from provenant-dev/public-schema."
 
+# Explicit, FLAT nav: each entry maps a label straight to a schema's index page,
+# so the sidebar renders one plain link per schema (no collapsible folder with an
+# index child). Each page still lives at <name>/index.md so its relative links to
+# the schema JSON and icons resolve. When adding a schema, add one line here.
+nav = [
+    { "Home" = "index.md" },
+    { "GCD" = "gcd/index.md" },
+    { "AI coder" = "ai-coder/index.md" },
+    { "AI user code of conduct" = "ai-user-coca/index.md" },
+    { "Attestation" = "attestation/index.md" },
+    { "Award" = "award/index.md" },
+    { "Bind key" = "bindkey/index.md" },
+    { "Citation" = "citation/index.md" },
+    { "Face-to-face" = "face-to-face/index.md" },
+    { "Foreign artifact affidavit" = "faa/index.md" },
+    { "Org vet" = "org-vet/index.md" },
+    { "Proof of control" = "proof-of-control/index.md" },
+    { "Schema house style" = "style.md" },
+]
+
 [project.theme]
 features = [
     "navigation.instant",
     "navigation.top",
-    "navigation.sections",
     "content.code.copy",
     "search.highlight",
 ]

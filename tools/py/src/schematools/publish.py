@@ -146,6 +146,11 @@ def build_docs(root: str | Path, out: str | Path) -> list[str]:
     )
     (out / "index.md").write_text(landing)
 
+    # ``<name>/index.md`` (not a flat ``<name>.md``) so the page sits IN the
+    # schema folder and its relative links to the schema JSON and icons resolve.
+    # The sidebar renders each as a single link (no folder/index nesting) via the
+    # ``navigation.indexes`` theme feature: a section whose only content is its
+    # index page collapses to one clickable link (this.i @z5nc4d).
     for entry in entries:
         page_dir = out / entry.name
         page_dir.mkdir(exist_ok=True)

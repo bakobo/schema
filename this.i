@@ -438,6 +438,18 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                     asset-path / dotdir (``.well-known``) handling right is iterative; the site ships on the machine
                     layer meanwhile. Config lives at repo root (``zensical.toml``) per the tool's convention, an
                     accepted minor exception to "derived artifacts stay under tools/".
+                    NAV (2026-07-14, from the live site): each schema is generated as ``<name>/index.md`` — a page
+                    IN its folder, so its committed relative links to the schema JSON and icons resolve unchanged.
+                    That makes Zensical render each as a collapsible SECTION (folder + toggle + index child), which
+                    Daniel rejected: he wants one plain link per schema. ``navigation.indexes`` alone did NOT
+                    flatten it (the toggle/nested item persisted). Chose an EXPLICIT ``nav`` in zensical.toml
+                    mapping each label straight to ``<name>/index.md`` — an explicit entry to a single file renders
+                    as a flat page link (no section, no toggle) while the page still lives in its folder so links
+                    resolve. Rejected the flat-``<name>.md`` alternative: it renders flat but relocates the page to
+                    the docs root, so Zensical rewrites the committed relative links to ``../<name>.schema.json``
+                    (points at root, 404). Tradeoff: the explicit nav is hand-maintained — adding a schema needs
+                    one nav line — accepted because it is the idiomatic MkDocs/Zensical control and schemas are
+                    added rarely; the coupling is noted in zensical.toml and belongs in the future CONTRIBUTING.
     Temporal drift is bounded by proactive revocation and the per-act gate, not per-action minting or keep-alives = decision:
       id: tj6vq4
       why: >

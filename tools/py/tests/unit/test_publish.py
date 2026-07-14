@@ -83,6 +83,8 @@ def test_build_docs_uses_index_md_when_present(synthetic_repo, tmp_path):
     docs = tmp_path / "_docs"
     names = publish.build_docs(synthetic_repo, docs)
     assert names == ["widget"]
+    # page sits in the schema folder so its relative links resolve; the sidebar
+    # collapses it to one link via the navigation.indexes theme feature
     assert "Hand-written narrative." in (docs / "widget" / "index.md").read_text()
     landing = (docs / "index.md").read_text()
     assert "[widget](widget/)" in landing and "discovery manifest" in landing
