@@ -9,9 +9,11 @@
     "u": "0AAt-NwGI1OZzj7e52Jq9JDD",
     "i": "EP4CmMn6ZTM3oTq-iI-2TQdlwdMXF6a2WFWaeQQRULsn",
     "knownAs": "Alice",
-    "minutes": 10,
+    "minutes": 0,
     "dt": "2023-03-13T16:15:07.686737+00:00",
-    "biometricHashes": [],
+    "biometricHashes": [
+      "EDIai3Wkd-Z_4cezz9nYEcCK3KNH5saLvZoS_84JL6NU"
+    ],
     "basis": "acquaintance",
     "caveats": "Loud conference; hard to hear Alice speaking."
   },

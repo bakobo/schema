@@ -1,11 +1,11 @@
 {
-  "$id": "EG68irpfVX667KCLwG85Cn1Mp3sCe38ftARyQJrxP2kF",
+  "$id": "EO6WbKaHwNOalVVY5oHi4NaZWG5yynFIDCHpQACVPCw7",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Proof-of-Control Credential",
   "description": "Assert the issuee has demonstrated to the issuer the ability to control a digital resource like a web site, social media handle, or email address.",
   "type": "object",
   "credentialType": "ProofOfControlCredential",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "required": [
     "v",
     "d",
@@ -46,7 +46,7 @@
           "type": "string"
         },
         {
-          "$id": "EJCRA-bCyM960Md5eEb5EISCFJsavO11K6iqUVAVhlcO",
+          "$id": "EARUVVTwcioAsrTaNy5TwdluBlpQUlRXuzFfoPyp-dQn",
           "description": "Attributes block",
           "type": "object",
           "required": [
@@ -55,7 +55,7 @@
             "i",
             "res",
             "assertDate",
-            "minutes"
+            "be"
           ],
           "properties": {
             "d": {
@@ -92,7 +92,7 @@
             "be": {
               "description": "How much entropy was used in the challenge and response? A 6-digit numeric code = 1M possibilities = ~20 bits.",
               "type": "integer",
-              "exclusiveMin": 0
+              "exclusiveMinimum": 0
             },
             "assertDate": {
               "description": "Time as of which the issuer asserts the control of the resource to be fresh. This may be before the time of issuance.",

@@ -1,11 +1,11 @@
 {
-  "$id": "ELuPsd1mylvD9iY_gH5hEJzoUd8OZWtU6J2svJwIq-TJ",
+  "$id": "EJvd1ns0KVsbB4Ji1MEv4cdq8WOSQezILlluN63K_JOH",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Foreign Artifact Affidavit",
   "description": "An ACDC wrapper that gives arbitrary binary data a tamper-evident, cryptographic identity, and that documents key attributes. This allows it to be cited as evidence in a verifiable data graph.",
   "type": "object",
   "credentialType": "foreign-artifact-affidavit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "required": [
     "v",
     "d",
@@ -49,7 +49,7 @@
         },
         {
           "description": "Attributes block",
-          "$id": "EHhP6un6a3BqmyTJbCJ4TBz4cctdDgKc9TAi7-cEUrDJ",
+          "$id": "ELvaIX-aUWBjGThCoYSPtB-vUbVp53Tv_zFYoUNZLL6O",
           "type": "object",
           "required": [
             "d",
@@ -71,7 +71,7 @@
               "type": "string",
               "format": "date-time"
             },
-            "content_identifier": {
+            "art_digest": {
               "description": "A CESR-encoded cryptographic hash of the artifact. SHOULD be a SAID; see https://doi.org/10.2139/ssrn.6128466 for saidification options. MAY be a raw CESR hash if saidification is impractical.",
               "type": "string",
               "pattern": "^(?:[EFGHI][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$",

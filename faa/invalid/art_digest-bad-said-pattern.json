@@ -8,10 +8,10 @@
     "d": "EDNXkTZKHs4MtVZJyM1MUBZ91c6aiOBdUB3PQ_Ely43-",
     "u": "0ADY50r_UJ3OaDC9ww7UcwXM",
     "dt": "2025-03-01T14:22:00.000000+00:00",
-    "art_digest": "EK2r6EnDXre2pecTBO8s99j4OtNaaDIhVyr7uGugDhmp",
+    "art_digest": "xyz",
     "art_posture": "witness",
     "rev_latency": 0,
-    "content_type": "IMAGE/JPEG",
+    "content_type": "image/jpeg",
     "content_size": 2847392,
     "content_location": [
       "https://evidence.example.org/artifacts/crash-scene-photo-01.jpg",

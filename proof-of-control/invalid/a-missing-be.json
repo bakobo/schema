@@ -9,8 +9,6 @@
     "u": "0AAt-NwGI1OZzj7e52Jq9JDD",
     "i": "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
     "res": "example.org",
-    "assertDate": "2025-01-01T00:00:00+00:00",
-    "be": 20
-  },
-  "extra": "x"
+    "assertDate": "2025-01-01T00:00:00+00:00"
+  }
 }

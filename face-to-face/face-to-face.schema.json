@@ -1,12 +1,12 @@
 {
-  "$id": "EKrv2S0OVc8SeKCzIAOSE-y4j5ybLOOgB69y12Lzxh6Y",
+  "$id": "EIKBsDes_F_XIlPWUtGMNbP7Gfu-PdUVkSByMETV9FBg",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Face-to-Face credential",
   "description": "Assert that an issuer knows the issuee to be a human being, based one or more face-to-face interactions.",
   "$comment": "These credentials have no edges. They can be chained by showing that the issuer's identifier is also an identifier associated with another credential of whatever type, but they do not require chaining.",
   "type": "object",
   "credentialType": "FaceToFaceCredential",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "required": [
     "v",
     "d",
@@ -48,7 +48,7 @@
           "type": "string"
         },
         {
-          "$id": "EDj-sksErd9pEJNhd4aX9TeKbCPsgLoZ4JHTAL-5Cq2a",
+          "$id": "EIc37FrFFA2T3V-sVljNsH_Pdd0WdkodQVx315UocO0d",
           "description": "Attributes block",
           "type": "object",
           "required": [
@@ -84,7 +84,7 @@
             "minutes": {
               "description": "At least how many minutes has issuer spent with issuee, face-to-face in real life?",
               "type": "integer",
-              "exclusiveMin": 0
+              "exclusiveMinimum": 0
             },
             "biometricHashes": {
               "description": "Hashes of photos, voiceprints, or biometric enrollments that the issuer attests characterized the issuee accurately, when they interacted face-to-face",
@@ -109,7 +109,7 @@
                 "nist-ial2",
                 "nist-ial3"
               ],
-              "pattern": "^[-a-z0-0 ]+$"
+              "pattern": "^[-a-z0-9 ]+$"
             },
             "caveats": {
               "description": "Note about limits on issuer observations of issuee during face-to-face",
