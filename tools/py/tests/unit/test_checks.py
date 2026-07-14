@@ -174,3 +174,45 @@ def test_example_refs_skips_unparseable(synthetic_repo):
     assert checks.check_example_refs(synthetic_repo) == []
     _break_schema(synthetic_repo)
     assert checks.check_example_refs(synthetic_repo) == []
+
+
+# --- negative-example corpus ----------------------------------------------------
+
+
+def _write_invalid(repo, name, text):
+    invalid = repo / "widget" / "invalid"
+    invalid.mkdir(exist_ok=True)
+    (invalid / name).write_text(text)
+
+
+def test_negative_examples_absent_dir_is_clean(synthetic_repo):
+    # No invalid/ directory at all -> nothing to check.
+    assert checks.check_negative_examples(synthetic_repo) == []
+
+
+def test_negative_examples_passes_when_fixture_rejected(synthetic_repo):
+    # A fixture missing the required 'a' block is correctly rejected -> clean.
+    _write_invalid(synthetic_repo, "missing-a.json", json.dumps({"d": "x"}))
+    assert checks.check_negative_examples(synthetic_repo) == []
+
+
+def test_negative_examples_flags_accepted_fixture(synthetic_repo):
+    # A fully-valid instance parked in invalid/ means the "negative" is not one:
+    # the schema accepts it, which the check must report as too-permissive.
+    good = {"d": "", "a": {"d": "", "color": "blue"}}
+    _write_invalid(synthetic_repo, "actually-valid.json", json.dumps(good))
+    problems = checks.check_negative_examples(synthetic_repo)
+    assert len(problems) == 1 and problems[0].check == "negative"
+    assert "too permissive" in problems[0].message
+
+
+def test_negative_examples_reports_unparseable_fixture(synthetic_repo):
+    _write_invalid(synthetic_repo, "broken.json", "{ not json")
+    problems = checks.check_negative_examples(synthetic_repo)
+    assert len(problems) == 1 and "invalid JSON" in problems[0].message
+
+
+def test_negative_examples_skips_when_schema_unparseable(synthetic_repo):
+    _write_invalid(synthetic_repo, "missing-a.json", json.dumps({"d": "x"}))
+    _break_schema(synthetic_repo)
+    assert checks.check_negative_examples(synthetic_repo) == []

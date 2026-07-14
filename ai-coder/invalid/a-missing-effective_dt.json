@@ -1,0 +1,17 @@
+{
+  "v": "ACDC10JSON00027b_",
+  "d": "EPF06XAheXkems-AWURdXU-mZAmKeLVvZFF6EwGG2EEb",
+  "i": "EMRlhEQK44_V5804rsRvQ99Gtf7uDpYQqZuvrw0LhV3S",
+  "ri": "EKfi58Jiv-NVqr6GOrxgxzhrE5RsDaH4QNwv9rCyZCwZ",
+  "s": "EPhWFgeOy8g7yRy-Xtyvbdieqvl_3YVXNHMgTEZuJOWh",
+  "a": {
+    "d": "EA4nLdpYIzuw-vpnnA_OtanB_Qr9K1dWYwES9mrCz0Bs",
+    "u": "0AAt-NwGI1OZzj7e52Jq9JDD",
+    "i": "EP4CmMn6ZTM3oTq-iI-2TQdlwdMXF6a2WFWaeQQRULsn",
+    "dt": "2024-12-27T13:11:29.062000+00:00",
+    "expire_dt": "2026-01-01T00:00:00.000000+00:00",
+    "issuer_name": "Acme AI Certification Authority",
+    "issuee_name": "Alice Example"
+  },
+  "r": "EGhkNqT1LbfYlimCBMsorDt7PpeGKYdOdj6hKpUjrqtB"
+}

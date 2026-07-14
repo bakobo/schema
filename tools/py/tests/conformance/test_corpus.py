@@ -30,6 +30,7 @@ _CHECK_NAME = {
     checks.check_examples: "example",
     checks.check_example_refs: "example_ref",
     checks.check_example_saids: "example_said",
+    checks.check_negative_examples: "negative",
 }
 CHECK_FUNCS = {_CHECK_NAME[fn]: fn for fn in checks.ALL_CHECKS}
 

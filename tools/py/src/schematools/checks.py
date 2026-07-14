@@ -197,6 +197,38 @@ def check_example_saids(root: str | Path) -> list[Problem]:
     return problems
 
 
+def check_negative_examples(root: str | Path) -> list[Problem]:
+    """Every ``<folder>/invalid/*.json`` MUST be *rejected* by its schema.
+
+    This is the golden should-fail corpus of @n7xk4r — the axis that actually
+    *tests* a schema rather than merely lints it. A fixture the schema
+    **accepts** is a permissiveness defect (the schema is too loose): reported
+    so it is tracked and fixed, never silently tolerated.
+    """
+    problems: list[Problem] = []
+    for entry in discover_schemas(root):
+        invalid_dir = entry.path.parent / "invalid"
+        if not invalid_dir.is_dir():
+            continue
+        try:
+            schema = _load_json(entry.path)
+        except json.JSONDecodeError:
+            continue  # a broken schema is already reported by check_structure
+        validator = Draft202012Validator(schema)
+        for fixture in sorted(invalid_dir.glob("*.json")):
+            where = f"{entry.name}/invalid/{fixture.name}"
+            try:
+                instance = _load_json(fixture)
+            except json.JSONDecodeError as exc:
+                problems.append(Problem("negative", where, f"invalid JSON: {exc}"))
+                continue
+            if not any(validator.iter_errors(instance)):
+                problems.append(
+                    Problem("negative", where, "schema ACCEPTED a should-reject fixture (too permissive)")
+                )
+    return problems
+
+
 #: All repo-wide checks, in a stable order.
 ALL_CHECKS = (
     check_structure,
@@ -205,6 +237,7 @@ ALL_CHECKS = (
     check_examples,
     check_example_refs,
     check_example_saids,
+    check_negative_examples,
 )
 
 

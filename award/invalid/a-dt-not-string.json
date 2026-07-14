@@ -1,0 +1,19 @@
+{
+  "v": "ACDC10JSON000279_",
+  "d": "EDI9yRmKgNFaGfXVe-5e6igt9d3aczIMZxkAMXP_fd60",
+  "i": "EMRlhEQK44_V5804rsRvQ99Gtf7uDpYQqZuvrw0LhV3S",
+  "ri": "EKfi58Jiv-NVqr6GOrxgxzhrE5RsDaH4QNwv9rCyZCwZ",
+  "s": "EBxJHMk6MOEUogB6A1rP5x9te7DscPfxFfUGJCkq1Lq5",
+  "a": {
+    "d": "EBcJAPMN7jXUVLpukWS32SAQgckSMOCtxY5xyFEbmiEE",
+    "u": "0AAt-NwGI1OZzj7e52Jq9JDD",
+    "i": "EP4CmMn6ZTM3oTq-iI-2TQdlwdMXF6a2WFWaeQQRULsn",
+    "dt": 5,
+    "effective_dt": "2025-01-01T00:00:00.000000+00:00",
+    "issuer_name": "International Widget Society",
+    "award_name": "Widget of the Year",
+    "category": "engineering",
+    "timeframe": "2024"
+  },
+  "r": "EGhkNqT1LbfYlimCBMsorDt7PpeGKYdOdj6hKpUjrqtB"
+}
