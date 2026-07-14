@@ -176,6 +176,22 @@ def test_example_refs_skips_unparseable(synthetic_repo):
     assert checks.check_example_refs(synthetic_repo) == []
 
 
+# --- format assertion -----------------------------------------------------------
+
+
+def test_validator_asserts_date_time_format():
+    # format must be ENFORCED, not merely annotated (this.i @f4mt6k).
+    schema = {"type": "object", "properties": {"dt": {"type": "string", "format": "date-time"}}}
+    assert list(checks._validator(schema).iter_errors({"dt": "not a date"}))
+    assert not list(checks._validator(schema).iter_errors({"dt": "2025-01-01T00:00:00+00:00"}))
+
+
+def test_validator_ignores_unknown_cesr_format():
+    # An unknown format (cesr) is ignored, never a validation failure (this.i @f4mt6k).
+    schema = {"type": "object", "properties": {"k": {"type": "string", "format": "cesr"}}}
+    assert not list(checks._validator(schema).iter_errors({"k": "anything at all"}))
+
+
 # --- negative-example corpus ----------------------------------------------------
 
 

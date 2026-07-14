@@ -42,6 +42,15 @@ def _load_json(path: Path):
     return json.loads(Path(path).read_text())
 
 
+def _validator(schema: dict) -> Draft202012Validator:
+    """A validator that ASSERTS ``format`` (date-time, uri, ...), not just annotates.
+
+    Backed by ``jsonschema[format-nongpl]`` (this.i @f4mt6k). Unknown formats
+    such as ``cesr`` are ignored by the checker, so they never fail validation.
+    """
+    return Draft202012Validator(schema, format_checker=Draft202012Validator.FORMAT_CHECKER)
+
+
 def check_structure(root: str | Path) -> list[Problem]:
     """Every schema file is valid JSON and a valid Draft 2020-12 schema."""
     problems: list[Problem] = []
@@ -127,7 +136,7 @@ def check_examples(root: str | Path) -> list[Problem]:
         except json.JSONDecodeError as exc:
             problems.append(Problem("example", f"{entry.name}/example.json", f"invalid JSON: {exc}"))
             continue
-        errors = sorted(Draft202012Validator(schema).iter_errors(instance), key=lambda e: list(e.path))
+        errors = sorted(_validator(schema).iter_errors(instance), key=lambda e: list(e.path))
         for err in errors:
             loc = "/".join(str(p) for p in err.absolute_path) or "<root>"
             problems.append(Problem("example", f"{entry.name}/example.json", f"at {loc}: {err.message[:160]}"))
@@ -214,7 +223,7 @@ def check_negative_examples(root: str | Path) -> list[Problem]:
             schema = _load_json(entry.path)
         except json.JSONDecodeError:
             continue  # a broken schema is already reported by check_structure
-        validator = Draft202012Validator(schema)
+        validator = _validator(schema)
         for fixture in sorted(invalid_dir.glob("*.json")):
             where = f"{entry.name}/invalid/{fixture.name}"
             try:

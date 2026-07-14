@@ -9,7 +9,9 @@ requires-python = ">=3.12.2"
 # SAID-identical to the corpus's minting version (this.i @m4vd7s).
 dependencies = [
     "keri==1.2.13",
-    "jsonschema>=4.21",
+    # format-nongpl (not [format]) enables date-time/uri format ASSERTION in
+    # instance validation without pulling GPL rfc3987 (this.i @f4mt6k).
+    "jsonschema[format-nongpl]>=4.21",
 ]
 
 [project.scripts]
