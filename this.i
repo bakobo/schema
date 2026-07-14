@@ -412,16 +412,23 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                     — the extension is cosmetic to the security model. Tradeoff: a tool that blindly constructs
                     ``{host}/oobi/{said}`` without extension gets octet-stream, not our file — accepted because the
                     manifest is the intended discovery path and the folder-path JSON also resolves.
-                    CORRECTION (2026-07-14, from the live deploy): GitHub Pages' ``upload-pages-artifact`` tars the
-                    site with ``--exclude=".[^/]*"``, STRIPPING every top-level dot-entry — so a
-                    ``.well-known/`` file never reaches the served site (verified: ``/.well-known/acdc-schemas.json``
-                    404s while ``/registry.json`` and ``/oobi/<said>.json`` serve). Resolution: the CANONICAL
-                    discovery manifest is a root path, ``/acdc-schemas.json`` (served), and the build ALSO writes a
-                    byte-identical ``.well-known/acdc-schemas.json`` MIRROR — kept for the cross-host convention the
-                    repo wants other publishers to copy (it serves on hosts that don't strip dot-dirs), but never
-                    the advertised URL on this host. The landing page and the ``_render_index`` link point at the
-                    root path. This is a property of the Pages deploy action, not our build; a future move off
-                    ``upload-pages-artifact`` could make ``.well-known`` primary.
+                    WELL-KNOWN (2026-07-14, revised twice): first deploy 404'd on ``/.well-known/acdc-schemas.json``
+                    while ``/registry.json`` served, and I WRONGLY concluded GitHub Pages can't serve ``.well-known``
+                    and moved the canonical manifest to a root path. That was wrong: GitHub Pages' CDN serves
+                    ``.well-known`` fine — WebOfTrust does it (``weboftrust.github.io/.well-known/host-meta.json`` and
+                    ``/.well-known/oobi/`` both 200, via deploy-from-branch + Jekyll ``include: [".well-known"]``).
+                    The ONLY barrier was ``actions/upload-pages-artifact``, which tars the site with
+                    ``--exclude=".[^/]*"`` (stripping top-level dot-entries) and exposes no option to disable it.
+                    Chose to STOP using that action and build the ``github-pages`` artifact ourselves — a plain
+                    ``tar`` of ``_site`` excluding only ``.git``, uploaded via ``actions/upload-artifact`` under the
+                    name ``github-pages``, then the unchanged ``deploy-pages`` — so ``.well-known`` ships. Rejected
+                    forking the action (a maintained dependency + supply-chain surface for what is three lines of
+                    tar) and rejected switching to deploy-from-branch (a gh-pages branch + committed build output,
+                    more moving parts, loses the clean Actions source). With that, the CANONICAL manifest is again
+                    ``/.well-known/acdc-schemas.json`` (web standard + aligns with the KERI ecosystem's
+                    ``.well-known/`` convention); a byte-identical non-dot alias ``/acdc-schemas.json`` is kept as a
+                    convenience and a fallback. Verified locally that our tar contains ``./.well-known/...``; the live
+                    200 is confirmed on the next deploy.
                 Zensical renders the human HTML chrome, layered over the machine site, not load-bearing = decision:
                   id: z5nc4d
                   stage-status: in-progress

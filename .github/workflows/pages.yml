@@ -47,10 +47,23 @@ jobs:
           uv run --project tools/py --group docs zensical build
           cp -r site/. _site/
 
+      # NOTE: we do NOT use actions/upload-pages-artifact — it tars the site with
+      # `--exclude ".[^/]*"`, which drops top-level dot-entries and would strip our
+      # /.well-known/ directory. We build the identical `github-pages` artifact
+      # ourselves (a plain tar of _site), excluding only .git, so .well-known ships.
+      # The Pages CDN serves .well-known fine (this.i @o6bw3k).
+      - name: Archive the site as the github-pages artifact (keeping .well-known)
+        run: |
+          tar --dereference --hard-dereference --directory _site \
+            -cvf "$RUNNER_TEMP/artifact.tar" --exclude=.git .
+
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
-          path: _site
+          name: github-pages
+          path: ${{ runner.temp }}/artifact.tar
+          retention-days: "1"
+          include-hidden-files: "true"
 
   deploy:
     needs: build

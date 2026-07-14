@@ -29,9 +29,9 @@ def test_build_site_produces_machine_site(synthetic_repo, tmp_path):
     assert wk["baseUrl"] == "https://x.example"
     assert wk["schemas"][0]["name"] == "widget"
     assert wk["schemas"][0]["oobi"] == f"oobi/{said}.json"
-    # canonical manifest is a served root path; the .well-known mirror is identical
-    assert not publish.MANIFEST_PATH.startswith(".")
-    assert (out / publish.WELL_KNOWN_MANIFEST).read_text() == (out / publish.MANIFEST_PATH).read_text()
+    # canonical manifest is the .well-known path; a non-dot alias is byte-identical
+    assert publish.MANIFEST_PATH == ".well-known/acdc-schemas.json"
+    assert (out / publish.ROOT_ALIAS_MANIFEST).read_text() == (out / publish.MANIFEST_PATH).read_text()
     assert (out / "CNAME").read_text().strip() == publish.CNAME_HOST
     assert "widget" in (out / "index.html").read_text()
     assert manifest == wk

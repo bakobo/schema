@@ -27,13 +27,14 @@ from .said import SAID_LABEL
 
 DEFAULT_BASE_URL = "https://schema.bakobo.com"
 CNAME_HOST = "schema.bakobo.com"
-# Canonical discovery-manifest path. It is a ROOT (non-dot) path because GitHub
-# Pages' upload-pages-artifact strips every top-level dot-entry (--exclude
-# ".[^/]*"), so a `.well-known/` file never reaches the deployed site. The
-# `.well-known` mirror is emitted too, for the cross-host convention (this.i
-# @o6bw3k), but the manifest advertises and the site links to the root path.
-MANIFEST_PATH = "acdc-schemas.json"
-WELL_KNOWN_MANIFEST = ".well-known/acdc-schemas.json"
+# Canonical discovery-manifest path: the web-standard `.well-known/` location,
+# which also aligns with the KERI ecosystem's `.well-known/…` convention. GitHub
+# Pages CAN serve `.well-known` (WebOfTrust does); the only barrier was
+# `upload-pages-artifact` stripping top-level dot-entries, which the Pages
+# workflow now avoids by tarring the site itself (this.i @o6bw3k). A byte-
+# identical non-dot alias is also emitted for convenience / hosts that differ.
+MANIFEST_PATH = ".well-known/acdc-schemas.json"
+ROOT_ALIAS_MANIFEST = "acdc-schemas.json"
 
 
 def _rules_said(schema: dict) -> str | None:
@@ -184,10 +185,10 @@ def build_site(root: str | Path, out: str | Path, base_url: str = DEFAULT_BASE_U
     schemas = [_manifest_entry(entry, rel_to_said[entry.rel]) for entry in entries]
     manifest = {"baseUrl": base_url, "schemas": schemas}
     body = json.dumps(manifest, indent=2) + "\n"
-    (out / MANIFEST_PATH).write_text(body)  # canonical, served on GitHub Pages
-    mirror = out / WELL_KNOWN_MANIFEST  # cross-host convention mirror
-    mirror.parent.mkdir(parents=True, exist_ok=True)
-    mirror.write_text(body)
+    canonical = out / MANIFEST_PATH  # .well-known/acdc-schemas.json
+    canonical.parent.mkdir(parents=True, exist_ok=True)
+    canonical.write_text(body)
+    (out / ROOT_ALIAS_MANIFEST).write_text(body)  # non-dot alias
 
     # custom domain + landing page
     (out / "CNAME").write_text(CNAME_HOST + "\n")
