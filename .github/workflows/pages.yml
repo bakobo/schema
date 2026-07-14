@@ -38,8 +38,14 @@ jobs:
 
       - name: Build the machine site (lints first; fail closed)
         run: |
-          uv sync --frozen --project tools/py
+          uv sync --frozen --group docs --project tools/py
           uv run --project tools/py schematools publish --root . --out _site
+
+      - name: Render browsable HTML with Zensical and merge over the machine site
+        run: |
+          uv run --project tools/py schematools build-docs --root . --out _docs
+          uv run --project tools/py --group docs zensical build
+          cp -r site/. _site/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4

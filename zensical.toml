@@ -1,0 +1,45 @@
+# Zensical config for the browsable schema site (this.i @z5nc4d). The docs/
+# source tree is GENERATED from the corpus by `schematools build-docs`; this
+# config renders it to HTML that is merged over the machine site (@o6bw3k).
+
+[project]
+# The docs tree is GENERATED into _docs by `schematools build-docs` (it folds in
+# the committed docs/ and adds per-schema pages); never edit _docs by hand.
+docs_dir = "_docs"
+site_name = "Bakobo ACDC schemas"
+site_description = "General-purpose ACDC credential schemas, each addressed by its SAID."
+site_url = "https://schema.bakobo.com/"
+repo_url = "https://github.com/bakobo/schema"
+repo_name = "bakobo/schema"
+copyright = "Apache-2.0. Derived from provenant-dev/public-schema."
+
+[project.theme]
+features = [
+    "navigation.instant",
+    "navigation.top",
+    "navigation.sections",
+    "content.code.copy",
+    "search.highlight",
+]
+
+[[project.theme.palette]]
+scheme = "default"
+primary = "indigo"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+scheme = "slate"
+primary = "indigo"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
+
+[project.markdown_extensions.admonition]
+[project.markdown_extensions.attr_list]
+[project.markdown_extensions.md_in_html]
+[project.markdown_extensions.tables]
+[project.markdown_extensions.toc]
+permalink = true
+[project.markdown_extensions.pymdownx.superfences]
+[project.markdown_extensions.pymdownx.highlight]
+anchor_linenums = true

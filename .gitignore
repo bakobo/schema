@@ -11,6 +11,7 @@ __pycache__/
 .coverage
 htmlcov/
 
-# generated site (schematools publish / zensical build)
+# generated site + generated Zensical source tree (folds in committed docs/)
 /_site/
 /site/
+/_docs/

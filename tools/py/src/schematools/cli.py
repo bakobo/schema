@@ -76,6 +76,13 @@ def cmd_publish(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_build_docs(args: argparse.Namespace) -> int:
+    root = _resolve_root(args.root)
+    names = publish.build_docs(root, Path(args.out))
+    print(f"generated docs for {len(names)} schema(s) in {args.out}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="schematools",
@@ -105,6 +112,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_pub.add_argument("--out", required=True, help="output directory for the built site")
     p_pub.add_argument("--base-url", default=publish.DEFAULT_BASE_URL, help="canonical site base URL")
     p_pub.set_defaults(func=cmd_publish)
+
+    p_docs = sub.add_parser("build-docs", help="generate the Zensical markdown source tree from the corpus")
+    p_docs.add_argument("--root", help="repo root (default: auto-detect via registry.json)")
+    p_docs.add_argument("--out", default="_docs", help="generated Zensical source dir (default: _docs)")
+    p_docs.set_defaults(func=cmd_build_docs)
 
     return parser
 

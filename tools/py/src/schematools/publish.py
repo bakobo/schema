@@ -98,6 +98,56 @@ A richer browsable site is in progress.</em></p>
 """
 
 
+def _schema_doc(entry: SchemaEntry) -> str:
+    """The narrative markdown for a schema: its ``index.md``, or a stub."""
+    src = entry.path.parent / "index.md"
+    if src.is_file():
+        return src.read_text()
+    schema = json.loads(entry.path.read_text())
+    return f"# {schema.get('title', entry.name)}\n\n{schema.get('description', '')}\n"
+
+
+def build_docs(root: str | Path, out: str | Path) -> list[str]:
+    """Generate the Zensical source tree (this.i @z5nc4d) from the corpus.
+
+    Folds in the committed ``docs/`` (hand-written pages such as the house
+    style), then writes a landing ``index.md`` plus ``<name>/index.md`` per
+    schema (the committed schema ``index.md`` narratives are the source of
+    truth). Referenced icons and the raw JSON are NOT copied here; they come
+    from the machine site (@o6bw3k) when the built HTML is merged over it.
+    Returns the schema names.
+    """
+    root = Path(root)
+    out = Path(out)
+    out.mkdir(parents=True, exist_ok=True)
+
+    committed = root / "docs"
+    if committed.is_dir():
+        shutil.copytree(committed, out, dirs_exist_ok=True)
+
+    entries = discover_schemas(root)
+
+    rows = []
+    for entry in entries:
+        schema = json.loads(entry.path.read_text())
+        rows.append(f"| [{entry.name}]({entry.name}/) | {schema.get('title', '')} | `{schema.get('version', '')}` |")
+    landing = (
+        "# Bakobo ACDC schema registry\n\n"
+        "General-purpose [ACDC](https://trustoverip.github.io/tswg-acdc-specification/) credential "
+        "schemas, each addressed by its SAID. Machine index: "
+        "[registry.json](registry.json) · [discovery manifest](.well-known/acdc-schemas.json).\n\n"
+        "| Schema | Asserts | Version |\n|---|---|---|\n" + "\n".join(rows) + "\n"
+    )
+    (out / "index.md").write_text(landing)
+
+    for entry in entries:
+        page_dir = out / entry.name
+        page_dir.mkdir(exist_ok=True)
+        (page_dir / "index.md").write_text(_schema_doc(entry))
+
+    return [entry.name for entry in entries]
+
+
 def build_site(root: str | Path, out: str | Path, base_url: str = DEFAULT_BASE_URL) -> dict:
     """Assemble the machine site under ``out``; return the discovery manifest dict."""
     root = Path(root)
