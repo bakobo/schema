@@ -1,0 +1,94 @@
+name: Deploy to GitHub Pages
+
+# Publishes the schema corpus to https://schema.bakobo.com so every schema is
+# resolvable as raw JSON at a stable URL (the foundation for ACDC OOBIs). This
+# is a minimal static deploy; the richer docs site is a later thread. It is
+# FAIL-CLOSED: the corpus is linted first, and nothing publishes if a schema,
+# registry entry, example, or negative fixture is broken.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One in-flight deploy at a time; let a newer push supersede an older run.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.3.2
+        with:
+          enable-cache: true
+          cache-dependency-glob: "tools/py/uv.lock"
+
+      - name: Lint the corpus (fail closed before publishing)
+        working-directory: tools/py
+        run: |
+          uv sync --frozen
+          uv run schematools check
+
+      - name: Assemble _site (schemas + registry; exclude tooling and fixtures)
+        run: |
+          mkdir -p _site
+          rsync -a \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude '.tick' \
+            --exclude 'tools' \
+            --exclude 'oldtools' \
+            --exclude '_site' \
+            --exclude 'invalid' \
+            --exclude 'this.i' \
+            --exclude 'this.i.seed' \
+            --exclude 'AGENTS.md' \
+            --exclude 'CLAUDE.md' \
+            --exclude 'GEMINI.md' \
+            --exclude 'KNOWLEDGE_TRANSFER.md' \
+            --exclude '.cursorrules' \
+            ./ _site/
+          echo 'schema.bakobo.com' > _site/CNAME
+          cat > _site/index.html <<'HTML'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>Bakobo ACDC schema registry</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <style>body{font:16px/1.5 system-ui,sans-serif;max-width:44rem;margin:4rem auto;padding:0 1rem}</style>
+          <h1>Bakobo ACDC schema registry</h1>
+          <p>General-purpose <a href="https://trustoverip.github.io/tswg-acdc-specification/">ACDC</a>
+          credential schemas, each addressed by its SAID. The machine-readable index is
+          <a href="registry.json">registry.json</a>. Source and docs:
+          <a href="https://github.com/bakobo/schema">github.com/bakobo/schema</a>.</p>
+          <p><em>A richer browsable site is in progress; for now each schema resolves as raw JSON
+          under its folder (e.g. <code>/face-to-face/face-to-face.schema.json</code>).</em></p>
+          HTML
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
