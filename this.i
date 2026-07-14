@@ -261,6 +261,35 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             cosmetic upstream SyntaxWarnings, taken in exchange for not shipping tooling pinned to an
             unreasonably old runtime. The pin is EXACT (==), not a range, because "the oracle" must be a single
             reproducible version; any future bump REQUIRES re-running the same SAID-identity check as a gate.
+        Bakobo-authored schema fields follow a house style — camelCase, obvious-abbrev, plural arrays = decision:
+          id: p6mwk4
+          why: >
+            ACDC schemas mix naming styles — a terse lowercase envelope (v / d / i / s), snake_case customs
+            (c_goal, effective_dt), and camelCase rules clauses (noRoleSemanticsWithoutGfw) — so authoring a
+            schema without a house style re-creates that inconsistency, and because a field name is part of the
+            SAID, fixing a name later forces a re-SAIDify plus a cross-repo prose churn. Adopted one style for
+            Bakobo-authored DOMAIN fields (the members of a / e / r beyond the ACDC envelope):
+            (1) camelCase — the JSON default, and already what imbu writes for the facet (relationType,
+            obligationBearer, presentsAs, exerciseMode), so it REDUCES cross-repo friction rather than adding it;
+            (2) expressive by default, but an OBVIOUS abbreviation is preferred over the full word — "obvious" =
+            understood with no legend AND no collision with a well-known other meaning (so juris / phys / virt /
+            val / proto pass; dom is rejected for the HTML-DOM collision → domain). An abbreviation SHORTENS a
+            word; it never DROPS one: stateKind stays, because "kind" alone amputates the load-bearing "state" —
+            abbreviate freely, amputate never;
+            (3) array-valued fields are PLURAL, the plural taken of the English word before abbreviating (goals,
+            effects, stateKinds, protos, proofs, physGeos, virtGeos, juris);
+            (4) the terse ACDC envelope and block SAIDs (v / d / u / i / ri / s / a / e / r, block d) are FIXED by
+            ACDC and NOT restyled — their terseness earns its keep because they are universal and, in the compact
+            form, are all that ships, whereas domain field names appear only in the EXPANDED form and so cost
+            nothing on the wire.
+            Rejected "just strip the c_ prefix" (keeps cryptic pgeo / upto / ical), rejected fully-spelled names
+            (verbose — the container already contextualizes, so constraints.juris needs no legalJurisdiction), and
+            rejected pure-ACDC terseness for domain fields (unreadable, and the compact-form argument for envelope
+            terseness does not apply to a-block attributes). The consistency mechanism is a canonical abbreviation
+            glossary in docs/style.md (authors ADD to the list, never invent ad hoc), which is also the future
+            spec for a schematools check_naming lint (@n7xk4r). Applies to schemas going FORWARD and to GCD v2.0
+            (@b6xh4m); existing schemas' snake_case fields are retrofitted only when they next get a version bump,
+            never repo-wide-renamed now.
         The full surfaced tooling program is scoped far beyond the near-term need = tension:
           id: g6dm2v
           why: >
