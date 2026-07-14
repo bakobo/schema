@@ -457,6 +457,30 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                     (points at root, 404). Tradeoff: the explicit nav is hand-maintained — adding a schema needs
                     one nav line — accepted because it is the idiomatic MkDocs/Zensical control and schemas are
                     added rarely; the coupling is noted in zensical.toml and belongs in the future CONTRIBUTING.
+                A federation layer indexes OTHER ACDC schema registries, from a committed federation.json = decision:
+                  id: f7dr3k
+                  why: >
+                    A goal of the site is to make the WHOLE ACDC schema ecosystem more discoverable, not just
+                    bakobo's own schemas (2026-07-14). Research (three web/GitHub agents + live verification) found
+                    no existing cross-ecosystem index and no other publisher with a browsable registry+manifest like
+                    ours — peers are either source-only or OOBI-only. So bakobo can be the FIRST cross-ecosystem
+                    index and the reference for the discovery pattern. Chose LAYER 1 first: a hand-edited committed
+                    ``federation.json`` (source of truth) that ``schematools publish`` renders into a machine
+                    ``/registries.json`` and a human "Ecosystem" nav page. Each entry carries a ``resolution`` type
+                    (``static`` | ``oobi`` | ``source-only`` | ``unknown``) because peers differ in shape — not
+                    everyone serves browsable JSON. Chose hand-edited-JSON over auto-crawling peers because (a)
+                    almost none expose a machine manifest to crawl yet (that is Layer 3, deferred until they do),
+                    and (b) a curated list is honest and lets us list source-only peers flagged as such (a nudge to
+                    publish). VERIFIED peers before publishing (dead outbound links hurt users and SEO): Provenant
+                    serves live at schema.origincloud.net (``/oobi/{said}`` + ``/registry.json``, application/
+                    schema+json, AWS S3+CloudFront — found via origin-deployment/.env, NOT the repo, which points
+                    nowhere); GLEIF/vLEI (GLEIF-IT/vLEI-schema + WebOfTrust/vLEI, OOBI-served); WebOfTrust/schema
+                    (source-only, closest structural peer — has its own registry.json); Veridian/Cardano
+                    (docs.veridian.id, resolution unknown). Specs (ACDC/KERI/CESR) live under ToIP's ``kswg-*``
+                    paths — the ``tswg-*`` URLs the repo had been using 404 (working group renamed); fixed the
+                    stale link in the generated landing at the same time. Layer 2 (publish a JSON Schema FOR the
+                    discovery manifest, so others can adopt the shape) and Layer 3 (best-effort cross-registry SAID
+                    aggregation) remain deferred, gated on peers exposing manifests.
     Temporal drift is bounded by proactive revocation and the per-act gate, not per-action minting or keep-alives = decision:
       id: tj6vq4
       why: >
