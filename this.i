@@ -167,7 +167,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                 nature of the fixtures axis and the check makes a missing/weak corpus visible rather than silent.
             Building the negative corpus surfaced five schema defects; fixing them is deferred (re-mint decision) = tension:
               id: d7km4v
-              stage-status: planned
+              stage-status: partially-resolved
               why: >
                 Authoring should-reject fixtures against the real validator exposed five pre-existing defects
                 inherited/introduced in the schemas — recorded here so they are tracked, not silently absorbed,
@@ -191,6 +191,34 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                 (date-time/uri/cesr unchecked). Resolution stance: when Daniel approves a re-mint, fix 1-5, add
                 the now-enforceable negatives (minutes<=0, be<=0, bad art_digest) to the corpus, and separately
                 decide the additionalProperties / format-assertion posture; until then these live as tick entries.
+              children:
+                Defects 1-5 fixed as a re-mint; each fix is MINOR (adds precision), not a breaking change = decision:
+                  id: p3rk6d
+                  why: >
+                    Daniel approved the re-mint (2026-07-13). Fixed all five: (1)+(2) ``exclusiveMin`` ->
+                    ``exclusiveMinimum`` on face-to-face ``minutes`` and proof-of-control ``be``; (3)
+                    proof-of-control ``required`` now lists ``be`` (the defined field, confirmed intended by its
+                    own index.md §"the `be` field in the schema") instead of the phantom ``minutes``; (4)
+                    face-to-face ``basis`` pattern ``0-0`` -> ``0-9``; (5) faa renamed the orphan constrained
+                    property ``content_identifier`` -> ``art_digest`` so the SAID-shape regex lands on the field
+                    that is actually required and used. Chose to give each fix a MINOR ``version`` bump
+                    (1.0.0 -> 1.1.0) over PATCH or MAJOR, applying @k3wm7d's RFC-0430 grading: every change ADDS
+                    PRECISION (enforces an intended bound, widens ``basis`` to the documented digit set, or
+                    constrains a live field) without invalidating any legitimately-valid instance — the shipped
+                    examples all re-validate — so none "breaks trust" (MAJOR) and none is a mere cosmetic/no-op
+                    (PATCH). Each edit changes the schema bytes, so the full cascade ran: re-saidify schema (new
+                    ``$id`` and nested block ``$id``s), rebuild registry.json, set each example's ``s`` to the new
+                    schema SAID and re-saidify the example (new ``d``/block-``d``s/``v``), and regenerate the three
+                    schemas' negative corpora from now-valid bases — adding the three negatives the bugs had made
+                    unenforceable (face-to-face minutes<=0, proof-of-control be<=0 and missing-be, faa bad
+                    art_digest). No cross-schema ``const`` referenced these SAIDs (only ai-coder->ai-user-coca,
+                    untouched), so the blast radius stayed inside the three folders + registry. Tradeoff of MINOR
+                    over MAJOR: a consumer pinning only the major version sees tightened validation without a
+                    major signal — accepted because no real credential is invalidated and the schemas carry no
+                    released-instance install base yet. STILL OPEN (not part of this re-mint): the
+                    additionalProperties posture and repo-wide ``format`` assertion — deferred to their own
+                    decision because flipping additionalProperties to false is a genuine MAJOR (breaks graduated-
+                    disclosure extensibility) and format assertion needs a dependency + a checker change.
         Tooling stays in this repo, generic in shape, until a second consumer justifies a split = decision:
           id: c5tj3p
           why: >
