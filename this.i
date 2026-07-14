@@ -304,6 +304,80 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             stable released schemas worth publishing. Left OPEN deliberately — this node exists so a future
             reader sees the whole intended surface and why only a slice of it was built first, rather than
             rediscovering the ambition from scratch.
+          children:
+            The CD-to-website slice ships now as a machine-first static site on GitHub Pages = decision:
+              id: pv6k3d
+              why: >
+                Approved 2026-07-13: the schemas are stable enough (post-re-mint, all valid, registry
+                consistent) to publish, so the CD-to-website slice of @g6dm2v is now PULLED. Chose a
+                MACHINE-FIRST static site served from GitHub Pages with the source set to GitHub Actions
+                (justified over deploy-from-branch in the 2026-07-13 discussion: every artifact below is
+                GENERATED and must be linted before publishing — branch-deploy can do neither). "Machine-first"
+                means the load-bearing output is resolvable JSON — each schema at a stable folder URL and each
+                as a SAID-addressed OOBI — with human-browsable HTML layered on top (@z5nc4d), never the other
+                way round, because the whole point of an ACDC schema registry is content-addressed resolution,
+                not documentation. Canonical host: schema.bakobo.com (DNS CNAME -> bakobo.github.io, verified).
+                The build is FAIL-CLOSED: the conformance linter runs first and nothing publishes if any schema,
+                registry entry, example, or negative fixture is broken (the org's fail-closed principle applied
+                to publication). This node also establishes the reusable PATTERN the repo wants other ACDC
+                schema publishers to copy (registry + per-SAID OOBI + a .well-known discovery manifest), which is
+                why the generation lives in the generic tooling (@c5tj3p), not in one-off workflow YAML.
+              children:
+                Instance validation asserts formats repo-wide via the non-GPL checker; cesr stays unchecked = decision:
+                  id: f4mt6k
+                  why: >
+                    ``format`` (date-time, uri, ...) is annotation-only in JSON Schema unless a checker is passed,
+                    so until now a malformed ``dt`` or ``content_location`` URI validated clean — the input-
+                    validation gap flagged in @d7km4v. Chose to enable format ASSERTION in both instance checks
+                    (positive examples and the negative corpus) by passing ``Draft202012Validator.FORMAT_CHECKER``,
+                    backed by the ``jsonschema[format-nongpl]`` extra (rfc3339-validator for date-time,
+                    rfc3986-validator for uri) — the NON-GPL extra deliberately, since the default ``[format]``
+                    pulls GPL ``rfc3987`` and this repo is Apache-2.0 in a DCO/LF context. Verified before adopting
+                    that all eight positive examples still validate clean under assertion (including citation's
+                    4-digit fractional-second ``sdt``), so nothing breaks. Chose to leave ``cesr`` UNCHECKED (an
+                    unknown format is ignored by the checker) rather than register a validator, because "valid
+                    CESR" spans many primitive types and defining the rule — and deciding whether to lean on keri's
+                    Matter for it — is its own decision not forced by this change; the SAID-shaped fields that
+                    matter already carry explicit ``pattern`` regexes (faa). Tradeoff: cesr-format typos still pass
+                    until that rule is defined. The additionalProperties posture from @d7km4v remains separately
+                    open (flipping to false is a MAJOR break of graduated-disclosure extensibility).
+                schematools publish emits the machine site: raw schemas + /oobi/<said>.json + a .well-known manifest = decision:
+                  id: o6bw3k
+                  why: >
+                    Chose to move site assembly OUT of the workflow YAML and INTO a tested ``schematools publish``
+                    command (100% branch coverage like the rest of the toolchain), because the assembly is real
+                    logic (OOBI generation, manifest generation, curation) that must be unit-testable and runnable
+                    locally, not shell glue that only executes in CI. ``publish --out DIR`` lints (fail closed),
+                    then writes: every schema at ``DIR/<name>/<name>.schema.json`` (+ examples + icons) for
+                    browsable folder-URL resolution; ``DIR/registry.json``; a byte-identical OOBI copy of each
+                    schema at ``DIR/oobi/<said>.json``; a discovery manifest at ``DIR/.well-known/acdc-schemas.json``
+                    (base URL + per-schema {said, name, title, version, schema-path, oobi-path, governance-SAID
+                    if any}); ``DIR/CNAME``; and a generated ``DIR/index.html`` registry landing. OOBI URL scheme:
+                    ``/oobi/<said>.json`` — chose the ``.json`` extension (proper application/json, browsable) over
+                    an extension-less ``/oobi/<said>`` (canonical KERI form but served as octet-stream on static
+                    Pages), because WE advertise the OOBI URLs (in the manifest and registry) so ecosystem tools
+                    consume what we publish, and OOBI resolution SAID-verifies the body regardless of Content-Type
+                    — the extension is cosmetic to the security model. ``.well-known/acdc-schemas.json`` is a
+                    Bakobo convention (no IANA registration), placed under ``.well-known`` as the machine front
+                    door a crawler can find from the domain root. Tradeoff: a tool that blindly constructs
+                    ``{host}/oobi/{said}`` without extension gets octet-stream, not our file — accepted because the
+                    manifest is the intended discovery path and the folder-path JSON also resolves.
+                Zensical renders the human HTML chrome, layered over the machine site, not load-bearing = decision:
+                  id: z5nc4d
+                  stage-status: in-progress
+                  why: >
+                    Chose Zensical (the Material-for-MkDocs team's successor; pip ``zensical``, currently 0.0.50 —
+                    NOT the 0.5 first assumed) for the browsable HTML, over hand-rolled HTML or classic MkDocs,
+                    because the per-schema ``index.md`` narratives are already Material-flavored and Zensical is the
+                    maintained line. Kept it strictly LAYERED and non-load-bearing: the machine site (@o6bw3k) is
+                    complete and deployable without any HTML, and Zensical only upgrades the per-schema pages —
+                    chosen so a Zensical breakage or API churn can never take down schema resolution. Integration
+                    shape: the build generates a ``docs/`` tree (a landing page + each schema's ``index.md`` and
+                    assets) and a ``zensical.toml``, runs ``zensical build`` to HTML, and merges it over the machine
+                    site. Left ``stage-status: in-progress`` because Zensical is young (0.0.x) and getting the nav /
+                    asset-path / dotdir (``.well-known``) handling right is iterative; the site ships on the machine
+                    layer meanwhile. Config lives at repo root (``zensical.toml``) per the tool's convention, an
+                    accepted minor exception to "derived artifacts stay under tools/".
     Temporal drift is bounded by proactive revocation and the per-act gate, not per-action minting or keep-alives = decision:
       id: tj6vq4
       why: >
