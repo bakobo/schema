@@ -43,7 +43,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         brand-owner (the non-OVC sibling of the telco branded-calling pair) and aegis-std-vetting.
     GCD is the flagship and must be evolved to the SDA model = decision:
       id: b6xh4m
-      stage-status: planned
+      stage-status: done
       why: >
         The captured GCD (credentialType gcd-credential, version 1.0.0) already carries much of the model:
         c_goal, c_jur, c_pgeo / c_rgeo, c_ical, c_upto, c_proto, c_prove, c_human, c_after / c_before, plus
@@ -63,7 +63,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
       children:
         The a-block replaces the flat c_ prefix with named container objects = decision:
           id: h4tqm7
-          stage-status: planned
+          stage-status: done
           why: >
             Today every GCD constraint is a c_-prefixed field flat in the a block (c_goal, c_jur, ...), a naming
             CONVENTION whose real job is safe-ignore forward-compat: noConstraintSansPrefix lets a stranger-
@@ -91,7 +91,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
           children:
             The v2.0 constraints container is a closed enum-checked gate; facet stays permissive = decision:
               id: k7wd3m
-              stage-status: in-progress
+              stage-status: done
               why: >
                 Realizes @h4tqm7's containers with the FINAL v2.0 field set and the fail-closed boundary.
                 constraints{} carries goals, effects, stateKinds, domains, jurisdictions, physGeos, virtGeos, icals,
@@ -117,7 +117,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                 effect/stateKind (ungateable) and a fail-closed facet (churns on every imbu facet addition).
             exerciseMode is the enum act|authorize|both; imbu's delegated-only reconciles to authorize = decision:
               id: x4nq6t
-              stage-status: in-progress
+              stage-status: done
               why: >
                 exerciseMode encodes which of the two independent authorities (@z6tq4a: authority-to-act vs
                 authority-to-authorize) a GCD confers: act (goals, no authorize), authorize (the pure delegator —
@@ -131,7 +131,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                 canAct/canAuthorize (three states read more clearly as one enum, and "both" is a real, common case).
             terminatingEvents and disclosables are a-block siblings of constraints, each a distinct polarity = decision:
               id: v3rk5p
-              stage-status: in-progress
+              stage-status: done
               why: >
                 @h4tqm7 reserved discloses{} and @v5nq2r introduced the voiding polarity; v2.0 realizes both as
                 a-block SIBLINGS of constraints, NOT keys inside it, because their enforcement semantics differ from
@@ -148,7 +148,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                 (deferred @tq5wnh — kept proof-shaped so any two verifiers replay to the same result).
         The reciprocal record IS the GCD r block; the "must" is first-class there, not a second credential = decision:
           id: r5dnk2
-          stage-status: planned
+          stage-status: done
           why: >
             The may/must split (SDA §5; imbu @v2kd7m; org @dwx5twwyh) parks the "must" (duties) in a "reciprocal
             record," and @d5tqm6 left OPEN whether duties ride on the GCD credential or a separate reciprocal
@@ -173,7 +173,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
           children:
             The r-block duties are a first-class array keyed by bearer; timelyReviewAndRevoke becomes an issuer duty = decision:
               id: m6tq4w
-              stage-status: in-progress
+              stage-status: done
               why: >
                 Realizes @r5dnk2's first-class duties with the FINAL shape. r gains an OPTIONAL duties array whose
                 items are one of two bearer-discriminated objects: a DELEGATE duty {bearer:delegate, effect, goal,
@@ -193,7 +193,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                 timelyReviewAndRevoke as a disclaimer (it is an obligation, not a liability-scoping clause).
         GCD 1.0.0 is preserved as a registered versioned directory; gcd/ becomes 2.0.0 = decision:
           id: r5vk3n
-          stage-status: in-progress
+          stage-status: done
           why: >
             @b6xh4m evolves GCD "as a new version, keeping the old"; this fixes HOW. Chose to copy the current gcd/
             to a sibling gcd-1.0.0/ (its schema at gcd-1.0.0/gcd-1.0.0.schema.json plus its example), keep its
@@ -436,6 +436,22 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             spec for a schematools check_naming lint (@n7xk4r). Applies to schemas going FORWARD and to GCD v2.0
             (@b6xh4m); existing schemas' snake_case fields are retrofitted only when they next get a version bump,
             never repo-wide-renamed now.
+          children:
+            Array-field abbreviations must be clearly plural; juris is reversed to jurisdictions = decision:
+              id: n4wq7t
+              stage-status: done
+              why: >
+                This node's parent why (@p6mwk4) illustrated the pluralize-then-abbreviate rule with `juris` for
+                jurisdiction(s), but authoring GCD v2.0 (@k7wd3m) found `juris` fails the rule's own intent: a bare
+                `juris` does not read as a plural, so an array field cannot be told from a scalar by its name.
+                Reversed the illustrative choice — the shipped schema field, docs/style.md rule 4, and the negative
+                corpus all use `jurisdictions`; the glossary drops the jurisdiction->juris row. Chose to record the
+                reversal as this child node over editing @p6mwk4's why in place, because the why is a dated record of
+                what was decided then and rewriting it would falsify the audit trail (methodology §4); a superseding
+                child keeps both the history and a single authoritative go-forward name. Format-label plurals
+                (`icals`) remain the one accepted exception, since the label is not abbreviated at all. Rejected
+                keeping `juris` (diverges from the shipped field and fails the plural-clarity test the parent rule
+                itself states) and silently diverging doc-from-tree (the divergence the review flagged as CON-F2).
         The full surfaced tooling program is scoped far beyond the near-term need = tension:
           id: g6dm2v
           why: >
@@ -668,7 +684,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
       children:
         The GCD rules gain a sixth clause, timelyReviewAndRevoke = decision:
           id: k3wm7d
-          stage-status: planned
+          stage-status: done
           why: >
             Adds a sixth rule to the GCD governance framework (rules.json + the schema's embedded r block and
             its required array): "Issuers agree to review each delegation they have issued on a cadence
@@ -689,7 +705,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             99.9%-right SAID silently fails to verify (@xv4m7d).
         GCD constraints split into enabling and voiding polarity; termination is an attested event = decision:
           id: v5nq2r
-          stage-status: planned
+          stage-status: done
           why: >
             Every constraint field today is ENABLING — "permit if the presented value is in this set" (an
             allow-list: c_goal, c_jur, c_rgeo, ...). Expressing "this authority ENDS when X becomes true" needs
@@ -734,7 +750,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
       children:
         GCD gains first-class duties (the "must"), with terms-of-service acceptance = decision:
           id: d5tqm6
-          stage-status: planned
+          stage-status: done
           why: >
             The GCD credential is ALL "may" — every field (c_goal, c_effect, c_prove, ...) is a permission or a
             condition; nothing expresses an obligation (a "must"). "The Shape of Delegated Authority" §5 names

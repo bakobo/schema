@@ -120,7 +120,7 @@ carried over.
 ### House rules (from the Bakobo environment)
 
 - **Intent-first:** record decisions in `this.i` in their **own commit, before**
-  the code/schema commit they justify (`docs/methodology.md` §5). A decision not in
+  the code/schema commit they justify (`../dev/methodology.md` §5). A decision not in
   `this.i` is not yet made.
 - **DCO:** sign every commit — `git commit -s`.
 - **`tick`** for task/tech-debt tracking — `tick ls` / `tick grep` to see open
@@ -133,7 +133,7 @@ carried over.
 ### First moves
 
 1. Read `this.i` (`@q3nv6t`, `@k5wd2r`, `@b6xh4m` and its children, `@tq5wnh`,
-   `@p4zc7n`), `AGENTS.md`, `docs/methodology.md`, and `gcd/index.md`; read
+   `@p4zc7n`), `AGENTS.md`, `../dev/methodology.md`, and `gcd/index.md`; read
    `../../papers/sda.md` if present.
 2. `cd tools/py && uv sync && uv run pytest` to confirm a green baseline, and
    `uv run schematools check` to lint the corpus.

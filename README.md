@@ -76,7 +76,7 @@ and PR runs the suite in CI (badge above) behind a 100%-branch-coverage gate.
 
 ## Working here
 
-Read [`AGENTS.md`](AGENTS.md) and [`docs/methodology.md`](docs/methodology.md)
+Read [`AGENTS.md`](AGENTS.md) and [`dev/methodology.md`](../dev/methodology.md)
 first — this repo is developed intent-first (decisions recorded in `this.i`
 before the code they justify). Task tracking is via `tick` (run `tick init`
 once to connect this clone to the ledger).
