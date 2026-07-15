@@ -16,7 +16,7 @@ Individual fields are described in [award.schema.json](award.schema.json). Some 
 
 * Awards can have an optional category (e.g., it's a Nobel prize, specifically in the *literature* category).
 
-* Awards can have an optional timeframe (e.g., it's an employee=of-the-month award, specifically in the July 2026 timeframe).
+* Awards can have an optional timeframe (e.g., it's an employee-of-the-month award, specifically in the July 2026 timeframe).
 
 * Awards can have an optional citation (e.g., it's a certified world record for the marathon, specifically "For running the 2024 Olympic Marathon in Paris in 2:01:03").
 

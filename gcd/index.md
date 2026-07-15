@@ -4,7 +4,7 @@
 
 These credentials document the specifics of a KERI-style cooperative delegation.
 
-The delegation relationship itself is not embodied in a credential, but rather in a special delegate AID that's bound to the delegator's AID via an inception event on the delegate side, and an interaction event in the KEL on the delegator side. See section 2.3.4 in [version 2.6 of the KERI whitepaper](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/KERI_WP_2.x.web.pdf). This interlocking two-way binding is what gives rise to the term "cooperative delegation", and it is signifcantly more secure and flexible than many other delegation mechanisms.
+The delegation relationship itself is not embodied in a credential, but rather in a special delegate AID that's bound to the delegator's AID via an inception event on the delegate side, and an interaction event in the KEL on the delegator side. See section 2.3.4 in [version 2.6 of the KERI whitepaper](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/KERI_WP_2.x.web.pdf). This interlocking two-way binding is what gives rise to the term "cooperative delegation", and it is significantly more secure and flexible than many other delegation mechanisms.
 
 However, the binding between AIDs only proves the state of the delegation relationship, and defines how it is controlled. It does not specify which specific actions are expected of the delegate, or what constraints govern the exercise of the authority they receive. That is the purpose of the Generalized Cooperative Delegation (GCD) credentials described here. 
 

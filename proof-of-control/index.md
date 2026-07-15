@@ -17,11 +17,11 @@ However, a proof-of-control credential can be *combined* (via a common issuee ID
 
 ### Challenge and Response
 
-The parties follows a standard challenge and response pattern to collect and evaluate evidence of the issuee's control:
+The parties follow a standard challenge and response pattern to collect and evaluate evidence of the issuee's control:
 
 1. Over any secure or insecure channel, the issuee gives to the issuer a handle, a URL, or similar identifier for the resource that the issuee claims to control. This allows the issuer to interact directly, but in an unprivileged way, with the resource that the issuee claims to control.
 
-2. The issuer generates or captures entropy. This is random number that was unknown before step 1, and that neither party could have predicted in advance.
+2. The issuer generates or captures entropy. This is a random number that was unknown before step 1, and that neither party could have predicted in advance.
 
 3. Over any secure or insecure channel, the issuer challenges the issuee to demonstrate a binding between the content of the resource and the entropy. How this happens depends on the nature of the resource.
 
@@ -33,9 +33,9 @@ The parties follows a standard challenge and response pattern to collect and eva
 
    2. *Data Sinks*: Some resources exhibit the opposite behavior &mdash; they are widely writable (sendable), but readable only by the party that controls them. Email inboxes and phone numbers are examples.
    
-        In these cases, the issuer communicates the entropy directly to the data sink (e.g., via an email, an SMS message, or a phone call), and challenges the issuee to prove they can read it. The issuee communicates back to the issuer, in a way that's strongly attributable to the issuee's idetifier, the entropy that they saw.
+        In these cases, the issuer communicates the entropy directly to the data sink (e.g., via an email, an SMS message, or a phone call), and challenges the issuee to prove they can read it. The issuee communicates back to the issuer, in a way that's strongly attributable to the issuee's identifier, the entropy that they saw.
 
-        >Example: The issuee digitally sign a message to the issuer that says, "You sent me entropy value X."
+        >Example: The issuee digitally signs a message to the issuer that says, "You sent me entropy value X."
 
 ### Security Considerations
 
@@ -44,7 +44,7 @@ An issuee who does not directly control a resource, but who colludes with or is 
 Issuers should make reasonable efforts to ensure that certain assumptions hold, if they want to produce trustworthy credentials. Verifiers should judge their confidence in the credentials with these assumptions in mind, considering the issuer's reputation.
 
 * Data sources really MUST be writable only by the controller (e.g., not a wiki that anybody can update), and data sinks really MUST be readable only by the controller (e.g., not an email distribution list).
-* The response of the issuee to the challenge MUST be bound to the issuer's identifier via a cryptographic key. Ideally, this is done at the time the response is created, by affixing a digital signature. However, other methods are conceivable. For example, issuer and issuee could have a trust relationship based not on cryptographic identifiers but on accounts and traditional login. They could do steps 1-3 without cryptographic identifiers, within the trust context of a secure session, and then exchange crypographic identifiers after the fact, and transfer trust from the session to the identifiers. This is suboptimal because the transfer of trust may be clumsy or imperfect or unauditable &mdash; but it may be acceptable in some cases.
+* The response of the issuee to the challenge MUST be bound to the issuer's identifier via a cryptographic key. Ideally, this is done at the time the response is created, by affixing a digital signature. However, other methods are conceivable. For example, issuer and issuee could have a trust relationship based not on cryptographic identifiers but on accounts and traditional login. They could do steps 1-3 without cryptographic identifiers, within the trust context of a secure session, and then exchange cryptographic identifiers after the fact, and transfer trust from the session to the identifiers. This is suboptimal because the transfer of trust may be clumsy or imperfect or unauditable &mdash; but it may be acceptable in some cases.
 * Enough entropy must be used to make the chosen value unguessable to an appropriate level of assurance. Here "appropriate" may be influenced by how much friction is imposed by different resource types and interaction modalities. See the `be` field in the schema.
 
 ### Schema
