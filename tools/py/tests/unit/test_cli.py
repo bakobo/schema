@@ -12,7 +12,19 @@ from tests.support import minimal_schema
 
 def test_check_clean_repo_returns_zero(synthetic_repo, capsys):
     assert main(["check", "--root", str(synthetic_repo)]) == 0
-    assert "OK" in capsys.readouterr().out
+    out = capsys.readouterr().out
+    assert "OK" in out
+    # natural English, not "(s)" jargon: 0 problems (plural) across 1 schema (singular)
+    assert "(s)" not in out and "0 problems" in out and "1 schema " in out
+
+
+def test_check_outside_repo_reports_coded_error(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)  # no registry.json here or above
+    rc = main(["check"])
+    assert rc == 2
+    err = capsys.readouterr().err
+    assert "BK_NO_SCHEMA_REPO" in err  # coded, actionable message
+    assert "Traceback" not in err     # not a raw traceback
 
 
 def test_check_dirty_repo_returns_one(synthetic_repo, capsys):

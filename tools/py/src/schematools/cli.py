@@ -14,12 +14,17 @@ import sys
 from pathlib import Path
 
 from . import checks, publish
-from .repo import REGISTRY_NAME, discover_schemas, find_repo_root
+from .repo import REGISTRY_NAME, SchemaRepoNotFoundError, discover_schemas, find_repo_root
 from .said import SAD_LABEL, SAID_LABEL, saidify_sad, saidify_schema
 
 
 def _resolve_root(root: str | None) -> Path:
     return Path(root).resolve() if root else find_repo_root()
+
+
+def _count(n: int, noun: str) -> str:
+    """Render a count in natural English (``1 schema`` / ``2 schemas``)."""
+    return f"{n} {noun}{'' if n == 1 else 's'}"
 
 
 def cmd_check(args: argparse.Namespace) -> int:
@@ -30,7 +35,7 @@ def cmd_check(args: argparse.Namespace) -> int:
     count = len(problems)
     schemas = len(discover_schemas(root))
     verdict = "FAIL" if count else "OK"
-    print(f"{verdict}: {count} problem(s) across {schemas} schema(s) in {root}")
+    print(f"{verdict}: {_count(count, 'problem')} across {_count(schemas, 'schema')} in {root}")
     return 1 if count else 0
 
 
@@ -72,14 +77,14 @@ def cmd_publish(args: argparse.Namespace) -> int:
         print(f"refusing to publish: {len(problems)} problem(s) — fail closed", file=sys.stderr)
         return 1
     manifest = publish.build_site(root, Path(args.out), base_url=args.base_url)
-    print(f"published {len(manifest['schemas'])} schema(s) to {args.out}")
+    print(f"published {_count(len(manifest['schemas']), 'schema')} to {args.out}")
     return 0
 
 
 def cmd_build_docs(args: argparse.Namespace) -> int:
     root = _resolve_root(args.root)
     names = publish.build_docs(root, Path(args.out))
-    print(f"generated docs for {len(names)} schema(s) in {args.out}")
+    print(f"generated docs for {_count(len(names), 'schema')} in {args.out}")
     return 0
 
 
@@ -123,7 +128,12 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    return args.func(args)
+    try:
+        return args.func(args)
+    except SchemaRepoNotFoundError as exc:
+        # Surface the coded, actionable message instead of a raw traceback.
+        print(str(exc), file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

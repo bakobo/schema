@@ -4,7 +4,12 @@ from __future__ import annotations
 
 import pytest
 
-from schematools.repo import discover_schemas, find_repo_root, load_registry
+from schematools.repo import (
+    SchemaRepoNotFoundError,
+    discover_schemas,
+    find_repo_root,
+    load_registry,
+)
 
 
 def test_discover_finds_the_synthetic_schema(synthetic_repo):
@@ -35,9 +40,15 @@ def test_find_repo_root_walks_up_from_a_file(synthetic_repo):
     assert find_repo_root(deep) == synthetic_repo
 
 
-def test_find_repo_root_raises_without_registry(tmp_path):
-    with pytest.raises(FileNotFoundError):
+def test_find_repo_root_raises_coded_error_without_registry(tmp_path):
+    with pytest.raises(FileNotFoundError) as excinfo:  # still a FileNotFoundError subclass
         find_repo_root(tmp_path)
+    exc = excinfo.value
+    assert isinstance(exc, SchemaRepoNotFoundError)
+    assert exc.code == "BK_NO_SCHEMA_REPO"
+    assert exc.searched == tmp_path.resolve()
+    # actionable, complete-sentence message (no bare "not found")
+    assert "registry.json" in str(exc) and "--root" in str(exc)
 
 
 def test_load_registry_has_one_entry(synthetic_repo):

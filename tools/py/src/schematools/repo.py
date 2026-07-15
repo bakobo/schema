@@ -15,15 +15,42 @@ from pathlib import Path
 REGISTRY_NAME = "registry.json"
 
 
+class SchemaRepoNotFoundError(FileNotFoundError):
+    """No schema repository (a directory with a ``registry.json``) was found.
+
+    Carries a stable symbolic :attr:`code` so a caller can branch on the kind of
+    failure without string-matching (Bakobo error-handling standard). Subclasses
+    :class:`FileNotFoundError` so existing callers that catch that still work.
+    Permanent: the same location will fail identically until a ``registry.json``
+    exists at or above it, so retrying unchanged cannot help.
+    """
+
+    #: Stable identifier, independent of the human-readable message.
+    code = "BK_NO_SCHEMA_REPO"
+
+    def __init__(self, searched: Path):
+        self.searched = searched
+        super().__init__(
+            f"[{self.code}] No schema repository was found at or above {searched}. "
+            f"A schema repository is a directory that contains a {REGISTRY_NAME!r} index. "
+            f"Run the command from inside one, or pass --root pointing at one. "
+            f"Retrying from the same location will not help."
+        )
+
+
 def find_repo_root(start: str | Path | None = None) -> Path:
-    """Walk up from ``start`` (default: cwd) to the nearest dir with a registry."""
+    """Walk up from ``start`` (default: cwd) to the nearest dir with a registry.
+
+    Raises :class:`SchemaRepoNotFoundError` (a coded ``FileNotFoundError``) when
+    no ``registry.json`` is found at or above ``start``.
+    """
     here = Path(start).resolve() if start is not None else Path.cwd()
     if here.is_file():
         here = here.parent
     for candidate in (here, *here.parents):
         if (candidate / REGISTRY_NAME).is_file():
             return candidate
-    raise FileNotFoundError(f"no {REGISTRY_NAME} found at or above {here}")
+    raise SchemaRepoNotFoundError(here)
 
 
 def load_registry(root: str | Path) -> dict[str, str]:
