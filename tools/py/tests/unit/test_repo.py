@@ -35,6 +35,19 @@ def test_discover_picks_up_example(synthetic_repo):
     assert entry.example is not None and entry.example.name == "example.json"
 
 
+def test_discover_picks_up_examples_gallery(synthetic_repo):
+    gallery = synthetic_repo / "widget" / "examples"
+    gallery.mkdir()
+    (gallery / "b.json").write_text("{}")
+    (gallery / "a.json").write_text("{}")
+    entry = discover_schemas(synthetic_repo)[0]
+    assert [p.name for p in entry.examples] == ["a.json", "b.json"]  # sorted
+
+
+def test_discover_examples_gallery_empty_without_dir(synthetic_repo):
+    assert discover_schemas(synthetic_repo)[0].examples == ()
+
+
 def test_find_repo_root_walks_up_from_a_file(synthetic_repo):
     deep = synthetic_repo / "widget" / "widget.schema.json"
     assert find_repo_root(deep) == synthetic_repo

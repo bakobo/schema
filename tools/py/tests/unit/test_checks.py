@@ -80,6 +80,17 @@ def test_examples_passes_valid_instance(synthetic_repo):
     assert checks.check_examples(synthetic_repo) == []
 
 
+def test_examples_gallery_is_validated_per_file(synthetic_repo):
+    # this.i @g4tn7w: <folder>/examples/*.json are validated just like example.json
+    gallery = synthetic_repo / "widget" / "examples"
+    gallery.mkdir()
+    (gallery / "good.json").write_text(json.dumps({"d": "E", "a": {"d": "E", "color": "blue"}}))
+    (gallery / "bad.json").write_text(json.dumps({"d": "E", "a": {"d": "E"}}))  # missing required 'color'
+    wheres = {p.where for p in checks.check_examples(synthetic_repo)}
+    assert "widget/examples/bad.json" in wheres
+    assert "widget/examples/good.json" not in wheres
+
+
 def test_example_refs_catches_stale_s(synthetic_repo):
     (synthetic_repo / "widget" / "example.json").write_text(json.dumps({"s": "E" + "Z" * 43}))
     problems = checks.check_example_refs(synthetic_repo)

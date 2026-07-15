@@ -52,6 +52,21 @@ def _validator(schema: dict) -> Draft202012Validator:
     return Draft202012Validator(schema, format_checker=Draft202012Validator.FORMAT_CHECKER)
 
 
+def _positive_examples(entry) -> list[tuple[str, Path]]:
+    """Every positive example instance of a schema, as ``(where_label, path)``.
+
+    The canonical ``<name>/example.json`` plus any ``<name>/examples/*.json``
+    gallery (this.i @g4tn7w). The three positive checks below validate each the
+    same way, so a didactic gallery example cannot silently rot.
+    """
+    out: list[tuple[str, Path]] = []
+    if entry.example is not None:
+        out.append((f"{entry.name}/example.json", entry.example))
+    for path in entry.examples:
+        out.append((f"{entry.name}/examples/{path.name}", path))
+    return out
+
+
 def check_structure(root: str | Path) -> list[Problem]:
     """Every schema file is valid JSON and a valid Draft 2020-12 schema."""
     problems: list[Problem] = []
@@ -122,25 +137,28 @@ def check_registry(root: str | Path) -> list[Problem]:
 
 
 def check_examples(root: str | Path) -> list[Problem]:
-    """Where present, ``<folder>/example.json`` validates against its schema."""
+    """Every positive example (``example.json`` + the ``examples/`` gallery) validates."""
     problems: list[Problem] = []
     for entry in discover_schemas(root):
-        if entry.example is None:
+        instances = _positive_examples(entry)
+        if not instances:
             continue
         try:
             schema = _load_json(entry.path)
         except json.JSONDecodeError:
             problems.append(Problem("example", entry.rel, "schema unparseable, cannot validate example"))
             continue
-        try:
-            instance = _load_json(entry.example)
-        except json.JSONDecodeError as exc:
-            problems.append(Problem("example", f"{entry.name}/example.json", f"invalid JSON: {exc}"))
-            continue
-        errors = sorted(_validator(schema).iter_errors(instance), key=lambda e: list(e.path))
-        for err in errors:
-            loc = "/".join(str(p) for p in err.absolute_path) or "<root>"
-            problems.append(Problem("example", f"{entry.name}/example.json", f"at {loc}: {err.message[:160]}"))
+        validator = _validator(schema)
+        for where, path in instances:
+            try:
+                instance = _load_json(path)
+            except json.JSONDecodeError as exc:
+                problems.append(Problem("example", where, f"invalid JSON: {exc}"))
+                continue
+            errors = sorted(validator.iter_errors(instance), key=lambda e: list(e.path))
+            for err in errors:
+                loc = "/".join(str(p) for p in err.absolute_path) or "<root>"
+                problems.append(Problem("example", where, f"at {loc}: {err.message[:160]}"))
     return problems
 
 
@@ -153,26 +171,24 @@ def check_example_refs(root: str | Path) -> list[Problem]:
     """
     problems: list[Problem] = []
     for entry in discover_schemas(root):
-        if entry.example is None:
+        instances = _positive_examples(entry)
+        if not instances:
             continue
         try:
             schema = _load_json(entry.path)
         except json.JSONDecodeError:
             continue  # a broken schema is already reported by check_structure
-        try:
-            instance = _load_json(entry.example)
-        except json.JSONDecodeError:
-            continue  # already reported by check_examples
         schema_said = schema.get(SAID_LABEL)
-        instance_s = instance.get("s")
-        if instance_s != schema_said:
-            problems.append(
-                Problem(
-                    "example_ref",
-                    f"{entry.name}/example.json",
-                    f"'s' {instance_s!r} != schema $id {schema_said!r}",
+        for where, path in instances:
+            try:
+                instance = _load_json(path)
+            except json.JSONDecodeError:
+                continue  # already reported by check_examples
+            instance_s = instance.get("s")
+            if instance_s != schema_said:
+                problems.append(
+                    Problem("example_ref", where, f"'s' {instance_s!r} != schema $id {schema_said!r}")
                 )
-            )
     return problems
 
 
@@ -184,26 +200,24 @@ def check_example_saids(root: str | Path) -> list[Problem]:
     """
     problems: list[Problem] = []
     for entry in discover_schemas(root):
-        if entry.example is None:
-            continue
-        try:
-            instance = _load_json(entry.example)
-        except json.JSONDecodeError:
-            continue  # already reported by check_examples
-        if not isinstance(instance, dict) or SAD_LABEL not in instance:
-            continue  # not a self-addressing datum
-        where = f"{entry.name}/example.json"
-        try:
-            resaidified = saidify_sad(instance)
-        except Exception as exc:  # malformed SAD the saidifier can't process
-            problems.append(Problem("example_said", where, f"cannot saidify: {exc}"))
-            continue
-        if resaidified != instance:
-            drifted = sorted(
-                k for k in set(instance) | set(resaidified)
-                if instance.get(k) != resaidified.get(k)
-            )
-            problems.append(Problem("example_said", where, f"SAIDs not self-consistent; drifted: {drifted}"))
+        for where, path in _positive_examples(entry):
+            try:
+                instance = _load_json(path)
+            except json.JSONDecodeError:
+                continue  # already reported by check_examples
+            if not isinstance(instance, dict) or SAD_LABEL not in instance:
+                continue  # not a self-addressing datum
+            try:
+                resaidified = saidify_sad(instance)
+            except Exception as exc:  # malformed SAD the saidifier can't process
+                problems.append(Problem("example_said", where, f"cannot saidify: {exc}"))
+                continue
+            if resaidified != instance:
+                drifted = sorted(
+                    k for k in set(instance) | set(resaidified)
+                    if instance.get(k) != resaidified.get(k)
+                )
+                problems.append(Problem("example_said", where, f"SAIDs not self-consistent; drifted: {drifted}"))
     return problems
 
 

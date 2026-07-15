@@ -66,6 +66,7 @@ class SchemaEntry:
     path: Path         #: absolute path to <name>/<name>.schema.json
     rel: str           #: path relative to the repo root, forward-slashed
     example: Path | None  #: <name>/example.json if it exists, else None
+    examples: tuple[Path, ...] = ()  #: <name>/examples/*.json gallery (this.i @g4tn7w)
 
 
 def discover_schemas(root: str | Path) -> list[SchemaEntry]:
@@ -83,12 +84,15 @@ def discover_schemas(root: str | Path) -> list[SchemaEntry]:
         if not schema_file.is_file():
             continue
         example = child / "example.json"
+        gallery = child / "examples"
+        examples = tuple(sorted(gallery.glob("*.json"))) if gallery.is_dir() else ()
         entries.append(
             SchemaEntry(
                 name=child.name,
                 path=schema_file,
                 rel=f"{child.name}/{child.name}.schema.json",
                 example=example if example.is_file() else None,
+                examples=examples,
             )
         )
     return entries
