@@ -232,3 +232,24 @@ def test_negative_examples_skips_when_schema_unparseable(synthetic_repo):
     _write_invalid(synthetic_repo, "missing-a.json", json.dumps({"d": "x"}))
     _break_schema(synthetic_repo)
     assert checks.check_negative_examples(synthetic_repo) == []
+
+
+# --- intent-tree YAML guard -----------------------------------------------------
+
+
+def test_intent_yaml_absent_is_clean(synthetic_repo):
+    assert not (synthetic_repo / "this.i").exists()
+    assert checks.check_intent_yaml(synthetic_repo) == []
+
+
+def test_intent_yaml_valid_is_clean(synthetic_repo):
+    (synthetic_repo / "this.i").write_text("root = goal:\n  id: abc123\n  why: because\n")
+    assert checks.check_intent_yaml(synthetic_repo) == []
+
+
+def test_intent_yaml_invalid_is_caught(synthetic_repo):
+    # A colon-space inside a node name — the exact recurring bug.
+    (synthetic_repo / "this.i").write_text("Bad: name here = decision:\n  id: abc123\n")
+    problems = checks.check_intent_yaml(synthetic_repo)
+    assert len(problems) == 1 and problems[0].check == "intent_yaml"
+    assert "invalid YAML" in problems[0].message

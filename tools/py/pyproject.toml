@@ -12,6 +12,9 @@ dependencies = [
     # format-nongpl (not [format]) enables date-time/uri format ASSERTION in
     # instance validation without pulling GPL rfc3987 (this.i @f4mt6k).
     "jsonschema[format-nongpl]>=4.21",
+    # this.i is YAML; check_intent_yaml guards it. Declared explicitly rather
+    # than leaned on as a transitive keri dependency.
+    "pyyaml>=6",
 ]
 
 [project.scripts]

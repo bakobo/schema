@@ -19,6 +19,7 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
+import yaml
 from jsonschema import Draft202012Validator
 from jsonschema import exceptions as js_exc
 
@@ -238,6 +239,26 @@ def check_negative_examples(root: str | Path) -> list[Problem]:
     return problems
 
 
+def check_intent_yaml(root: str | Path) -> list[Problem]:
+    """If a ``this.i`` intent tree exists at the repo root, it must be valid YAML.
+
+    Bakobo's intent tree is YAML; a colon-space inside a node *name*
+    (``Name: more = decision:``) silently makes the whole file unparseable — a
+    bug that has recurred repeatedly. A repo without a ``this.i`` skips this
+    check, so the tooling stays generic (this.i @c5tj3p).
+    """
+    problems: list[Problem] = []
+    intent = Path(root) / "this.i"
+    if not intent.is_file():
+        return problems
+    try:
+        yaml.safe_load(intent.read_text())
+    except yaml.YAMLError as exc:
+        detail = " ".join(str(exc).split())[:200]
+        problems.append(Problem("intent_yaml", "this.i", f"invalid YAML: {detail}"))
+    return problems
+
+
 #: All repo-wide checks, in a stable order.
 ALL_CHECKS = (
     check_structure,
@@ -247,6 +268,7 @@ ALL_CHECKS = (
     check_example_refs,
     check_example_saids,
     check_negative_examples,
+    check_intent_yaml,
 )
 
 

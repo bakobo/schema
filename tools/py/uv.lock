@@ -1272,6 +1272,7 @@ source = { editable = "." }
 dependencies = [
     { name = "jsonschema", extra = ["format-nongpl"] },
     { name = "keri" },
+    { name = "pyyaml" },
 ]
 
 [package.dev-dependencies]
@@ -1287,6 +1288,7 @@ docs = [
 requires-dist = [
     { name = "jsonschema", extras = ["format-nongpl"], specifier = ">=4.21" },
     { name = "keri", specifier = "==1.2.13" },
+    { name = "pyyaml", specifier = ">=6" },
 ]
 
 [package.metadata.requires-dev]

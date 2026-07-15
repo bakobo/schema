@@ -31,6 +31,7 @@ _CHECK_NAME = {
     checks.check_example_refs: "example_ref",
     checks.check_example_saids: "example_said",
     checks.check_negative_examples: "negative",
+    checks.check_intent_yaml: "intent_yaml",
 }
 CHECK_FUNCS = {_CHECK_NAME[fn]: fn for fn in checks.ALL_CHECKS}
 
@@ -58,3 +59,10 @@ def test_schema_is_clean(request, problems_by_check, schema_name, check):
         request.applymarker(pytest.mark.xfail(reason=reason, strict=True))
     hits = _problems_for(problems_by_check[check], schema_name)
     assert not hits, "\n".join(str(p) for p in hits)
+
+
+def test_intent_yaml_is_valid():
+    # Repo-global check: the per-schema matrix can't surface a this.i problem
+    # (its `where` is "this.i", matching no schema), so assert it directly.
+    problems = checks.check_intent_yaml(ROOT)
+    assert not problems, "\n".join(str(p) for p in problems)
