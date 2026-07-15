@@ -1,12 +1,12 @@
 {
-  "$id": "EM3kQ1QEU3kJFqV8aZrse-QXs5oNlaFfaiwEUFt4uq4C",
+  "$id": "EIqGVj_kEr0GTBELK6QtALn_sqHExLBDl2gHK82Xl-x3",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Generalized Cooperative Delegation Credential",
-  "description": "Define the authorizations, duties, and constraints of a person who receives delegated authority.",
-  "$comment": "These credentials have no edges. They can be chained by showing that the issuer's identifier is also an identifier associated with another credential of whatever type, but they do not require chaining.",
+  "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 2.0 organizes the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classes duties in the rules block.",
+  "$comment": "These credentials have no required edges. They can be chained by showing that the issuer's identifier is also an identifier associated with another credential of whatever type, but they do not require chaining. The optional e block carries an I2I issuer edge for that purpose.",
   "type": "object",
   "credentialType": "gcd-credential",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "required": [
     "v",
     "d",
@@ -48,7 +48,7 @@
           "type": "string"
         },
         {
-          "$id": "EPLlRCJPjk3jr27r43DSMoz2oeo80KrkPHc0-WukrNL3",
+          "$id": "EBzxcWMgl1yz1N_UOJ1SOeWjkt1VXVpD2EbAkk9Rxh8H",
           "description": "Attributes block",
           "type": "object",
           "required": [
@@ -74,149 +74,278 @@
               "format": "date-time"
             },
             "gfw": {
-              "description": "A SAID that identifies a governance framework that adds richer semantics to the role field and any custom constraints present in this credential. The SAID identifies a JSON rules block that supplements the generic rules in the rules block (r field). The location of this additional rules block is assumed to be published somewhere that stakeholders know. When defined, a verifier MUST NOT impute a delegator's approval of delegated authority to a delegate without understanding and enforcing the rules of thse extra rules.",
+              "description": "A SAID that identifies a governance framework that adds richer semantics to the role field and any custom constraints present in this credential. The SAID identifies a JSON rules block that supplements the generic rules in the rules block (r field). The location of this additional rules block is assumed to be published somewhere that stakeholders know. When defined, a verifier MUST NOT impute a delegator's approval of delegated authority to a delegate without understanding and enforcing the rules of these extra rules.",
               "type": "string",
               "examples": [
                 "EK2r6EnDXre2pecTBO8s99j4OtNaaDIhVyr7uGugDhmp"
               ]
             },
-            "role": {
-              "description": "A string that names a profile of duties and corresponding authorizations that the delegator intends to confer on the delegate. When gfw is defined, if it specifies formal semantics for this role, then the role may supplement or clarify constraints, or add new ones that a GCD credential is otherwise incapable of modeling. When gfw is NOT defined, this field becomes a simple descriptive label, and no party is justified in expecting it to convey any constraints.",
-              "type": "string",
-              "examples": [
-                "realtor",
-                "guardian",
-                "coach"
-              ]
+            "facet": {
+              "description": "The relationship facet: descriptive accountability metadata about the delegation relationship, orthogonal to the enabling constraints. A verifier MAY ignore the facet for the raw authorization decision; only the constraints container gates. Unknown keys here are safe to ignore (forward-compatible), so this container is NOT fail-closed.",
+              "type": "object",
+              "properties": {
+                "role": {
+                  "description": "A string that names a profile of duties and corresponding authorizations that the delegator intends to confer on the delegate. When gfw is defined, if it specifies formal semantics for this role, then the role may supplement or clarify constraints, or add new ones that a GCD credential is otherwise incapable of modeling. When gfw is NOT defined, this field becomes a simple descriptive label, and no party is justified in expecting it to convey any constraints.",
+                  "type": "string",
+                  "examples": [
+                    "realtor",
+                    "guardian",
+                    "coach"
+                  ]
+                },
+                "relationType": {
+                  "description": "Whose interest the delegated act serves, and the subject's standing. delegation: the delegate acts for a self-sovereign delegator. guardianship: the delegate acts for a non-sovereign dependent. controllership: the delegate acts over a thing. stewardship: guardianship's fiduciary posture applied to a domain the steward runs as their own.",
+                  "type": "string",
+                  "enum": [
+                    "delegation",
+                    "guardianship",
+                    "controllership",
+                    "stewardship"
+                  ]
+                },
+                "liableParty": {
+                  "description": "Who answers OUTWARD if an act taken under this delegation goes wrong -- the party the world holds responsible. This is distinct from the grantor (issuer i), the beneficiary (relationType), the actor (the delegate), and the inward accountability expressed by the duties in the r block. It may differ from the actor.",
+                  "type": "string"
+                },
+                "presentsAs": {
+                  "description": "The facet-AID the act is presented under to a counterparty (for example, an 'Office of the CEO' facet an assistant is delegated into). Presenting-as without this granted capability is impersonation. The signer is always the actor's own key; presentsAs governs only the presented identity, not the signature.",
+                  "type": "string"
+                },
+                "exerciseMode": {
+                  "description": "Which of the two independent authorities this credential confers. act: authority-to-act only (the delegate performs gated acts itself). authorize: authority-to-authorize only -- the pure delegator, with an empty set of goals, who may sanction others' gated acts but performs none itself. both: authority-to-act and authority-to-authorize.",
+                  "type": "string",
+                  "enum": [
+                    "act",
+                    "authorize",
+                    "both"
+                  ]
+                }
+              }
             },
-            "c_goal": {
-              "description": "Array of Hyperledger Aries goal codes (https://bit.ly/3ROeww6) that describe purpose-seeking behaviors that are valid for the delegate. Goal codes are matched as if they contained a trailing .* wildcard; that is, the \"sell\" goal code matches \"sell.consumer\" and \"sell.enterprise\". This field is case-insensitive.",
+            "constraints": {
+              "description": "The enabling 'may': the allow-list dimensions that a stranger-verifier gates on. Within a field, values are ORed (any match satisfies that field); across fields they are ANDed (every present field must be satisfied). An absent field is unconstrained in that dimension. This container is FAIL-CLOSED: an unrecognized key here MUST cause the authorization to be denied (additionalProperties is false). Nothing outside this container constrains the exercise of delegated authority.",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "goals": {
+                  "description": "Array of Hyperledger Aries goal codes (https://bit.ly/3ROeww6) that describe purpose-seeking behaviors that are valid for the delegate. Goal codes are matched as if they contained a trailing .* wildcard; that is, the \"sell\" goal code matches \"sell.consumer\" and \"sell.enterprise\". This field is case-insensitive.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "sell.consumer",
+                      "meetupcorp.personal.date",
+                      "employment.check-references",
+                      "cci.healthcare.arrange"
+                    ],
+                    "type": "string",
+                    "pattern": "^([a-z]([a-z0-9]*[-._/]?))+[a-z0-9]+$"
+                  }
+                },
+                "effects": {
+                  "description": "Array of effect codes that constrain how the delegate's acts may change the world along the SDA effect axis. observe: read without change. create: bring a new state into being. modify: change an existing state. preserve: keep a state as it is. destroy: end a state.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "observe",
+                      "create",
+                      "modify",
+                      "preserve",
+                      "destroy"
+                    ]
+                  }
+                },
+                "stateKinds": {
+                  "description": "Array of state-kind codes that constrain what kind of state the delegate's acts may touch. information: raw data. record: an attested datum. commitment: a promise or obligation. authority: a delegation or permission. resource: a consumable or asset. relationship: a standing connection between parties.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "information",
+                      "record",
+                      "commitment",
+                      "authority",
+                      "resource",
+                      "relationship"
+                    ]
+                  }
+                },
+                "domains": {
+                  "description": "Array of authorization-domain identifiers that scope where (in which authorization domain) the delegated authority applies. A domain is an issuer-defined namespace label; it is case-sensitive and compared verbatim.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "examples": [
+                      "payments",
+                      "deploy.prod",
+                      "hr.hiring"
+                    ]
+                  }
+                },
+                "jurisdictions": {
+                  "description": "Array of ISO 3166-1 alpha2 codes for countries and possibly ISO 3166-2 codes for regions or provinces. These codes enumerate legal jurisdictions where the delegator MAY accept a delegate's actions as transferring legal obligations to the delegator. Note the use of the word \"MAY\". Even if all other constraints are met, a delegator is not committing to accept legal responsibility for arbitrary actions of a delegate by enumerating jurisdictions here. Acceptance of legal responsibility needs a custom governance framework. Rather, the delegator is communicating that, if a verifier requires legal recourse, the verifier MUST NOT impute the delegator's approval of delegated authority to the delegate in jurisdictions that do not match this list. Verifiers that do not require legal recourse MAY ignore this field. This field is case-sensitive.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "IN-TN",
+                      "IN-MH",
+                      "BD",
+                      "JP",
+                      "KR-11"
+                    ],
+                    "type": "string",
+                    "pattern": "^([A-Z]{2})([-][A-Za-z0-9]+)?$"
+                  }
+                },
+                "physGeos": {
+                  "description": "Array of ISO 3166-1 alpha2 codes for countries (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) and possibly ISO 3166-2 codes for regions or provinces (https://en.wikipedia.org/wiki/ISO_3166-2). These codes identify where a physically present delegate MAY be located while exercising their delegated authority. Location MUST be determined by a strong test of physical presence (e.g., by a closed-circuit camera, by a human doing identity verification). A verifier MUST NOT impute the delegator's approval of delegated authority to the delegate unless they have solid proof of physical presence in a matching location. This field is case-sensitive.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "US-CA",
+                      "FR",
+                      "CA-BC",
+                      "AD-07",
+                      "AU-NSW"
+                    ],
+                    "type": "string",
+                    "pattern": "^([A-Z]{2})([-][A-Za-z0-9]+)?$"
+                  }
+                },
+                "virtGeos": {
+                  "description": "Array of ISO 3166-1 alpha2 codes for countries and possibly ISO 3166-2 codes for regions or provinces. These codes identify where a possibly remote (virtually present) delegate MAY be located while validly exercising their delegated authority. Location is loosely determined in ways familiar on the web today (e.g., by internet geolocation, by cell phone triangulation). Because such methods often lack strong assurance, this constraint may be weaker than physGeos. This field is case-sensitive.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "US-CA",
+                      "FR",
+                      "CA-BC",
+                      "AD-07",
+                      "AU-NSW"
+                    ],
+                    "type": "string",
+                    "pattern": "^([A-Z]{2})([-][A-Za-z0-9]+)?$"
+                  }
+                },
+                "icals": {
+                  "description": "Array of iCalendar objects or object fragments, as defined in [RFC 5545](https://www.rfc-editor.org/rfc/rfc5545) and its subsequent updates. Each item characterizes (in full, or preferably, in part) an event profile in which the delegate MAY exercise their delegated authority, subject to other constraints. The iCal properties that establish GCD constraints are: DTSTART, DTEND, RRULE, RDATE, EXDATE, and LOCATION. All other properties, including BEGIN and END, SHOULD be suppressed for brevity and MUST be ignored by all parties when evaluating constraints. DTSTART and DTEND establish timing constraints; RRULE and RDATE and EXDATE establish recurrence rules and exceptions. LOCATION is a semicolon-delimited list of URLs that give context to the event -- for example, links to a web meeting or a chat room, and an event is considered to have a matching location if it takes place in one of these locations. When a verifier tests a candidate event against items in the icals array, all constraining properties of the item must match the candidate event to produce a match, except that the candidate event does not have to recur; it only has to occur at a time that the recurrence rule would allow. This field is case-insensitive.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "DTSTART:20240918T143000Z\nDTEND:19960920T220000Z",
+                      "DTSTART;TZID=America/New_York:20230825T094500\nDTEND;TZID=America/New_York:20230825T100000\nRRULE:FREQ=WEEKLY;WKST=SU;UNTIL=20251009T035959Z;BYDAY=MO,WE,FR\nURL:https://zoom.us/12345"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "monetaryLimit": {
+                  "description": "Constrains the financial stakes of the delegated action; the delegate can act only in contexts where a financial value less than this value is at stake. Value is a string containing a magnitude, then a space, then a currency-like unit: an ISO 4217 currency symbol, a cryptocurrency abbreviation, or a brief single-token commodity-value symbol with obvious meaning. This field is money-locked: it is NOT a general 'stakes' quantity. Non-money or unquantifiable stakes route to the governance gate, not here.",
+                  "type": "string",
+                  "pattern": "^[0-9]+(\\.[0-9]+)? +\\S+$",
+                  "examples": [
+                    "25 CHF",
+                    "0.3 BTC",
+                    "4 OZ-XAU"
+                  ]
+                },
+                "protos": {
+                  "description": "Array of strings that each name a protocol followed by one or more formally named roles in that protocol. The delegate is authorized to participate in the named protocols in any of the named roles, subject to other constraints. Protocols that are defined in a formal standard MUST be identified by the standard org and number, if possible (e.g., HTTP/2 is identified by \"rfc7540\", and a credit card protocol \"iso8353\"). In some cases, a semver-style number is used instead of a standard number (as with the EMV credit card protocol, which is represented with \"emv3.0\"). DIDComm protocols use PIURIs (https://bit.ly/474pyRZ). The protocol name is followed by a colon, and then a comma-separated list of role names. This field is case-insensitive. Comparisons of strings in this constraint field MUST ignore whitespace and punctuation except the punctuation in version numbers.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "rfc7540:client,server,gateway",
+                      "emv3.0: Acquirer, Merchant"
+                    ],
+                    "type": "string",
+                    "pattern": "^[^:]+: *.+$"
+                  }
+                },
+                "proofs": {
+                  "description": "Array of SAIDs that each identify an IPEX proof request. The delegate is allowed to exercise delegated authority only if at least one proof request in the array is satisfied (the array is an OR). An AND of proofs is expressed as a single composite proof request, so this array never needs AND semantics.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "EGZ_DdmzryjQOtOdQauTm_YxggbVM7EWelk8IBxsnC-d"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "validFrom": {
+                  "description": "Time after which delegated authority becomes active. Including this constraint allows a delegator to issue a GCD credential before -- possibly long before -- the authority becomes active. This field is somewhat like the icals DTSTART. However, icals SHOULD be used to list multiple valid time ranges; this field SHOULD be used to define a single absolute floor.",
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "validUntil": {
+                  "description": "Time at which delegated authority expires. Including this constraint allows a delegator to issue a GCD credential that lapses naturally without having to be revoked. This field is somewhat like the icals DTEND. However, icals SHOULD be used to list multiple valid time ranges; this field SHOULD be used to define a single absolute ceiling. A GCD that carries terminatingEvents MUST also carry a validUntil, so a never-fired termination signal cannot leave authority alive forever.",
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "humanReview": {
+                  "description": "Instructions for constraints that must be evaluated by a human. Any GCD credential that has this field MUST NOT be verified without human judgment.",
+                  "type": "string"
+                }
+              }
+            },
+            "terminatingEvents": {
+              "description": "Voiding polarity: an array of SAIDs that each identify a proof request for an attested event whose occurrence VOIDS this delegated authority. ANY one firing ends the authority (the array is an OR of termination conditions). These are proof-shaped attested facts, not live predicates, so the credential's meaning stays static and any two verifiers replay to the same result. A credential that carries terminatingEvents MUST also carry constraints.validUntil as a hard backstop.",
               "type": "array",
               "uniqueItems": true,
               "minItems": 1,
               "items": {
-                "examples": [
-                  "sell.consumer",
-                  "meetupcorp.personal.date",
-                  "employment.check-references",
-                  "cci.healthcare.arrange"
-                ],
                 "type": "string",
-                "pattern": "^([a-z]([a-z0-9]*[-._/]?))+[a-z0-9]+$"
-              }
-            },
-            "c_pgeo": {
-              "description": "Array of ISO 3166-1 alpha2 codes for countries (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) and possibly ISO 3166-2 codes for regions or provinces (https://en.wikipedia.org/wiki/ISO_3166-2). These codes identify where a physically present delegate MAY be located while excercising their delegated authority. Location MUST be determined by a strong test of physical presence (e.g., by a closed-circuit camera, by a human doing identity verification). A verifier MUST NOT impute the delegator's approval of delegated authority to the delegate unless they have solid proof of physical presence in a matching location. This field is case-sensitive.",
-              "type": "array",
-              "uniqueItems": true,
-              "minItems": 1,
-              "items": {
-                "examples": [
-                  "US-CA",
-                  "FR",
-                  "CA-BC",
-                  "AD-07",
-                  "AU-NSW"
-                ],
-                "type": "string",
-                "pattern": "^([A-Z]{2})([-][A-Za-z0-9]+)?$"
-              }
-            },
-            "c_rgeo": {
-              "description": "Array of ISO 3166-1 alpha2 codes for countries and possibly ISO 3166-2 codes for regions or provinces. These codes identify where a possibly remote delegate MAY be located while validly excercising their delegated authority. Location is loosely determined in ways familiar on the web today (e.g., by internet geolocation, by cell phone triangulation). Because such methods often lack strong assurance, this constraint may be weaker than c_pgeo. This field is case-sensitive.",
-              "type": "array",
-              "uniqueItems": true,
-              "minItems": 1,
-              "items": {
-                "examples": [
-                  "US-CA",
-                  "FR",
-                  "CA-BC",
-                  "AD-07",
-                  "AU-NSW"
-                ],
-                "type": "string",
-                "pattern": "^([A-Z]{2})([-][A-Za-z0-9]+)?$"
-              }
-            },
-            "c_jur": {
-              "description": "Array of ISO 3166-1 alpha2 codes for countries and possibly ISO 3166-2 codes for regions or provinces. These codes enumerate legal jurisdictions where the delegator MAY accept a delegate's actions as transferring legal obligations to the delegator. Note the use of the word \"MAY\". Even if all other constraints are met, a delegator is not committing to accept legal responsibility for arbitrary actions of a delegate by enumerating jurisdictions here. Acceptance of legal responsibility needs a custom governance framework. Rather, the delegator is communicating that, if a verifier requires legal recourse, the verifier MUST NOT impute the delegator's approval of delegated authority to the delegate in jurisdictions that do not match this list. Verifiers that do not require legal recourse MAY ignore this field. This field is case-sensitive.",
-              "type": "array",
-              "uniqueItems": true,
-              "minItems": 1,
-              "items": {
-                "examples": [
-                  "IN-TN",
-                  "IN-MH",
-                  "BD",
-                  "JP",
-                  "KR-11"
-                ],
-                "type": "string",
-                "pattern": "^([A-Z]{2})([-][A-Za-z0-9]+)?$"
-              }
-            },
-            "c_ical": {
-              "description": "Array of iCalendar objects or object fragments, as defined in [RFC 5545](https://www.rfc-editor.org/rfc/rfc5545 and its subsequent updates. Each item characterizes (in full, or preferably, in part) an event profile in which the delegate MAY excercise their delegated authority, subject to other constraints. The iCal properties that establish GCD constraints are: DTSTART, DTEND, RRULE, RDATE, EXDATE, and LOCATION. All other properties, including BEGIN and END, SHOULD be suppressed for brevity and MUST be ignored by all parties when evaluating constraints. DTSTART and DTEND establish timing constraints; RRULE and RDATE and EXDATE establish recurrence rules and exceptions. LOCATION is a semicolon-delimited list of URLs that give context to the event -- for example, links to a web meeting or a chat room, and an event is considered to have a matching location if it takes place in one of these locations. When a verifier tests a candidate event against items in the c_ical array, all constraining properties of the item must match the candidate event to produce a match, except that the candidate event does not have to recur; it only has to occur at a time that the recurrence rule would allow. This field is case-insensitive.",
-              "type": "array",
-              "uniqueItems": true,
-              "minItems": 1,
-              "items": {
-                "examples": [
-                  "DTSTART:20240918T143000Z\nDTEND:19960920T220000Z",
-                  "DTSTART;TZID=America/New_York:20230825T094500\nDTEND;TZID=America/New_York:20230825T100000\nRRULE:FREQ=WEEKLY;WKST=SU;UNTIL=20251009T035959Z;BYDAY=MO,WE,FR\nURL:https://zoom.us/12345"
-                ],
-                "type": "string"
-              }
-            },
-            "c_upto": {
-              "description": "Constrains the financial stakes of the delegated action; the delegate can act only in contexts where a financial value less than this value is at stake. Value is a string that contains a number followed by a space, then units: an ISO 4217 currency symbol, a three-letter cryptocurrency abbreviation, or a brief single-token symbol with obvious meaning.",
-              "type": "string",
-              "examples": [
-                "25 CHF",
-                "0.3 BTC",
-                "4 OZ-XAU"
-              ]
-            },
-            "c_proto": {
-              "description": "Array of strings that each name a protocol followed by one or more formally named roles in that protocol. The delegate is authorized to participate in the named protocols in any of the named roles, subject to other constraints. Protocols that are defined in a formal standard MUST be identified by the standard org and number, if possible (e.g., HTTP/2 is identified by \"rfc7540\", and a credit card protocol \"iso8353\"). In some cases, a semver-style number is used instead of a standard number (as with the EMV credit card protocol, which is represented with \"emv3.0\"). DIDComm protocols use PIURIs (https://bit.ly/474pyRZ). The protocol name is followed by a colon, and then a comma-separated list of role names. This field is case-insensitive. Comparisons of strings in this constraint field MUST ignore whitespace and punctuation except the punctuation in version numbers.",
-              "type": "array",
-              "uniqueItems": true,
-              "minItems": 1,
-              "items": {
-                "examples": [
-                  "rfc7540:client,server,gateway",
-                  "emv3.0: Acquirer, Merchant"
-                ],
-                "type": "string",
-                "pattern": "^[^:]+: *.+$"
-              }
-            },
-            "c_prove": {
-              "description": "Array of SAIDs that each identify an IPEX proof request. The delegate is allowed to exercise delegated authority only if at least one proof request in the array is satisfied.",
-              "type": "array",
-              "uniqueItems": true,
-              "minItems": 1,
-              "items": {
                 "examples": [
                   "EGZ_DdmzryjQOtOdQauTm_YxggbVM7EWelk8IBxsnC-d"
-                ],
-                "type": "string"
+                ]
               }
             },
-            "c_human": {
-              "description": "Instructions for constraints that must be evaluated by a human. Any GCD credential that has this field MUST NOT be verified without human judgment.",
-              "type": "string"
-            },
-            "c_after": {
-              "description": "Time after which delegated authority becomes active. Including this constraint allows a delegator to issue a GCD credential before -- possibly long before -- the authority becomes active. This field is somewhat like with c_ical DTSTART. However, c_ical SHOULD be used to list multiple valid time ranges; this field SHOULD be used to define a single absolute floor.",
-              "format": "date-time",
-              "type": "string"
-            },
-            "c_before": {
-              "description": "Time at which delegated authority expires. Including this constraint allows a delegator to issue a GCD credential that lapses naurally without having to be revoked. This field is somewhat like with c_ical DTEND. However, c_ical SHOULD be used to list multiple valid time ranges; this field SHOULD be used to define a single absolute ceiling.",
-              "format": "date-time",
-              "type": "string"
+            "disclosables": {
+              "description": "Outbound-disclosure axis: an array of credential-SCHEMA SAIDs that the delegate MAY reveal about its principal while acting under this delegation. Absent means unconstrained; present means an allow-list at schema granularity. Intra-credential selective disclosure remains ACDC's job.",
+              "type": "array",
+              "uniqueItems": true,
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "examples": [
+                  "ENPXp1vQzRF6JwIuS-mp2U8Uf1MoADoP_GqQ62VsDZWY"
+                ]
+              }
+            }
+          },
+          "if": {
+            "required": [
+              "terminatingEvents"
+            ]
+          },
+          "then": {
+            "required": [
+              "constraints"
+            ],
+            "properties": {
+              "constraints": {
+                "required": [
+                  "validUntil"
+                ]
+              }
             }
           }
         }
@@ -278,7 +407,7 @@
           "type": "string"
         },
         {
-          "$id": "EJvjANVzieNsFP3Tok8b-ulGkvNPXzowbzIblmROizvU",
+          "$id": "ELBK7SNF_TdCVg9inSWNwnVo7JWB2RlCX91kuZ2AUWx4",
           "description": "Rules detail",
           "type": "object",
           "properties": {
@@ -336,13 +465,13 @@
                 }
               ]
             },
-            "noConstraintSansPrefix": {
-              "description": "noConstraintSansPrefix Disclaimer",
+            "noConstraintOutsideConstraints": {
+              "description": "noConstraintOutsideConstraints Disclaimer",
               "oneOf": [
                 {
                   "description": "simple compact rule form",
                   "type": "string",
-                  "const": "Issuers agree that constraints exist only in fields with the c_ prefix, or in the role field with gfw defined. This allows verifiers to know with confidence whether all constraints have been satisfied, even if they do not understand some custom fields that lack the prefix."
+                  "const": "All parties agree that enforceable constraints exist only inside the constraints container, or in the role field when gfw is defined. Nothing outside the constraints container constrains the exercise of delegated authority, and an unrecognized key inside the constraints container MUST be treated as fail-closed. This allows verifiers to know with confidence whether all constraints have been satisfied, even if they do not recognize other fields elsewhere in the credential."
                 },
                 {
                   "description": "Rule detail",
@@ -351,7 +480,7 @@
                     "l": {
                       "description": "Associated legal language",
                       "type": "string",
-                      "const": "Issuers agree that constraints exist only in fields with the c_ prefix, or in the role field with gfw defined. This allows verifiers to know with confidence whether all constraints have been satisfied, even if they do not understand some custom fields that lack the prefix."
+                      "const": "All parties agree that enforceable constraints exist only inside the constraints container, or in the role field when gfw is defined. Nothing outside the constraints container constrains the exercise of delegated authority, and an unrecognized key inside the constraints container MUST be treated as fail-closed. This allows verifiers to know with confidence whether all constraints have been satisfied, even if they do not recognize other fields elsewhere in the credential."
                     }
                   },
                   "required": [
@@ -410,6 +539,85 @@
                   "additionalProperties": false
                 }
               ]
+            },
+            "duties": {
+              "description": "First-class structured obligations (the 'must'), distinct from the enabling constraints and from the disclaimer clauses above. Each duty names its bearer. A delegate duty is a machine-structured obligation the delegate MUST perform; an issuer duty names a governance obligation the issuer accepts. Duties are disclosure and accountability -- a stranger-verifier does not gate on them -- so they live here in r, not in a.constraints. This field is optional; the baseline governance ruleset carries the standing issuer duty timelyReviewAndRevoke.",
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "oneOf": [
+                  {
+                    "description": "A duty the delegate MUST perform.",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "bearer",
+                      "effect",
+                      "goal",
+                      "priority"
+                    ],
+                    "properties": {
+                      "bearer": {
+                        "type": "string",
+                        "const": "delegate"
+                      },
+                      "effect": {
+                        "description": "The effect the delegate MUST bring about (same axis as constraints.effects).",
+                        "type": "string",
+                        "enum": [
+                          "observe",
+                          "create",
+                          "modify",
+                          "preserve",
+                          "destroy"
+                        ]
+                      },
+                      "goal": {
+                        "description": "The goal code the duty is directed toward.",
+                        "type": "string",
+                        "pattern": "^([a-z]([a-z0-9]*[-._/]?))+[a-z0-9]+$"
+                      },
+                      "cadence": {
+                        "description": "Optional description of how often the duty must be performed (free text or an iCalendar RRULE fragment).",
+                        "type": "string"
+                      },
+                      "priority": {
+                        "description": "Precedence for fail-loud conflict resolution: a higher-priority duty outranks a lower one; ties escalate rather than being silently dropped.",
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  {
+                    "description": "A duty the issuer MUST perform.",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "bearer",
+                      "rule",
+                      "priority"
+                    ],
+                    "properties": {
+                      "bearer": {
+                        "type": "string",
+                        "const": "issuer"
+                      },
+                      "rule": {
+                        "description": "The name of a governance rule the issuer accepts as an obligation (for example, timelyReviewAndRevoke).",
+                        "type": "string"
+                      },
+                      "l": {
+                        "description": "Optional associated legal language for the named rule.",
+                        "type": "string"
+                      },
+                      "priority": {
+                        "description": "Precedence for fail-loud conflict resolution: a higher-priority duty outranks a lower one; ties escalate rather than being silently dropped.",
+                        "type": "integer"
+                      }
+                    }
+                  }
+                ]
+              }
             }
           },
           "additionalProperties": false,
@@ -417,7 +625,7 @@
             "d",
             "noRoleSemanticsWithoutGfw",
             "issuerNotResponsibleOutsideConstraints",
-            "noConstraintSansPrefix",
+            "noConstraintOutsideConstraints",
             "useStdIfPossible",
             "onlyDelegateHeldAuthority"
           ]

@@ -21,6 +21,7 @@ nav = [
     { "Home" = "index.md" },
     { "Ecosystem" = "ecosystem.md" },
     { "GCD" = "gcd/index.md" },
+    { "GCD 1.0.0 (archived)" = "gcd-1.0.0/index.md" },
     { "AI coder" = "ai-coder/index.md" },
     { "AI user code of conduct" = "ai-user-coca/index.md" },
     { "Attestation" = "attestation/index.md" },

@@ -4,6 +4,7 @@
   "u": "0ADE6oAxBl4E7uKeGUb7BEYi",
   "i": "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL",
   "ri": "EM2YZ78SKE8eO4W1lQOJeer5xKZqLmJV7SPr3Ji5DMBZ",
+  "s": "EIqGVj_kEr0GTBELK6QtALn_sqHExLBDl2gHK82Xl-x3",
   "a": {
     "d": "EAbfD_h2BzkEuMYG55GojlJXXwQprzqzCdTfYt5kDBdb",
     "u": "0AC9kH8q99PTCQNteGyI-F4g",
@@ -51,7 +52,10 @@
         "EGZ_DdmzryjQOtOdQauTm_YxggbVM7EWelk8IBxsnC-d"
       ],
       "validFrom": "2024-12-17T10:39:29.769000+00:00",
-      "validUntil": "2025-12-17T10:39:29.769000+00:00"
+      "validUntil": "2025-12-17T10:39:29.769000+00:00",
+      "c_goal": [
+        "legacy.prefix"
+      ]
     },
     "terminatingEvents": [
       "EIpaOx1NJc0N_Oj5xzWhFQp6EpB847yTex62xQ7uuSQL"
