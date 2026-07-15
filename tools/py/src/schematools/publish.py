@@ -247,6 +247,9 @@ def build_docs(root: str | Path, out: str | Path) -> list[str]:
     # folder and its relative links to the schema JSON and icons resolve; the flat
     # sidebar link per schema comes from the explicit nav in zensical.toml (@z5nc4d).
     # Each page carries a unique <meta description> from its schema (this.i @s6eqk4).
+    # ~325x — the examples/ gallery is only LINKED from the narrative (raw JSON via
+    # the machine site). Future: generate a rich per-example page here embedding the
+    # bakobo/cesrview React component instead of linking to raw JSON.
     for entry in entries:
         schema = json.loads(entry.path.read_text())
         page_dir = out / entry.name
