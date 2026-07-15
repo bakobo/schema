@@ -1,0 +1,93 @@
+{
+  "v": "ACDC10JSON000000_",
+  "d": "",
+  "i": "EDetDVohmE29HcYagvGJv5J2RbPomNsrfLRaqp670a8j",
+  "ri": "EAS-cjMj_2rDH_p04jLS3h9fv-NLJOp5tZsNYVHDXwOX",
+  "s": "EIqGVj_kEr0GTBELK6QtALn_sqHExLBDl2gHK82Xl-x3",
+  "a": {
+    "d": "",
+    "i": "EO8KDlV-eEFbq6IbXGlGtLCP_FeLX1VNriBqp-TIThQ8",
+    "dt": "2026-08-01T09:00:00.000000+00:00",
+    "gfw": "EKoEhpVdN2PzhBv7pmeIyAEKjA8l4fqSO8cyLMTzncBc",
+    "facet": {
+      "role": "deployment-agent",
+      "relationType": "delegation",
+      "liableParty": "EDetDVohmE29HcYagvGJv5J2RbPomNsrfLRaqp670a8j",
+      "presentsAs": "EAxuWpxY5VxubfYFI3lAjCwkuI9gpoGWVNWHWKhirAsO",
+      "exerciseMode": "act"
+    },
+    "constraints": {
+      "goals": [
+        "deploy.staging",
+        "build.ci"
+      ],
+      "effects": [
+        "observe",
+        "create",
+        "modify"
+      ],
+      "stateKinds": [
+        "information",
+        "record"
+      ],
+      "domains": [
+        "deploy.staging"
+      ],
+      "virtGeos": [
+        "US"
+      ],
+      "monetaryLimit": "500 USD",
+      "protos": [
+        "rfc7540:client"
+      ],
+      "proofs": [
+        "EC_sdNkuQkSboA1l0kwgfx0Oy0z5HOPQN5c3OFizjOwD"
+      ],
+      "humanReview": "Any production deployment, and any destroy effect, requires approval by a human on-call engineer at the moment of action.",
+      "validFrom": "2026-08-01T00:00:00.000000+00:00",
+      "validUntil": "2026-08-31T00:00:00.000000+00:00"
+    },
+    "terminatingEvents": [
+      "EDn4u8Ew1IH2Q2iRCE5vkCly1PdHBEt7qPXiBICScXFD"
+    ],
+    "disclosables": [
+      "EDAu-M2MECYZ-XQ0PKzxssBFq_tL2TZVLMdakOiWbU0D"
+    ]
+  },
+  "e": {
+    "d": "",
+    "issuer": {
+      "n": "ECCJH_xpSAtC3lCgsUQ9kOnwufP0e0qK8svzsA5UyaLN",
+      "s": "EKsmvxYc9B4nu4XpkTW_tu8D1vt_HOlkNemC98hBEGZA",
+      "o": "I2I"
+    }
+  },
+  "r": {
+    "d": "",
+    "noRoleSemanticsWithoutGfw": "All parties agree that the role field has no enforceable semantics unless the gfw field is also defined, and its rules formally describe what the role means.",
+    "issuerNotResponsibleOutsideConstraints": "Although verifiers set their own standards for verification, verifiers and issuees/delegates agree that they cannot not use this credential as proof that delegator has the right to exercise delegated authority under conditions when the constraints say otherwise.",
+    "noConstraintOutsideConstraints": "All parties agree that enforceable constraints exist only inside the constraints container, or in the role field when gfw is defined. Nothing outside the constraints container constrains the exercise of delegated authority, and an unrecognized key inside the constraints container MUST be treated as fail-closed. This allows verifiers to know with confidence whether all constraints have been satisfied, even if they do not recognize other fields elsewhere in the credential.",
+    "useStdIfPossible": "Issuers agree that if it is reasonable to express a constraint in one of the pre-defined ways, they will do so, rather than expressing the constraint in a note or in a custom field. This allows verifiers to be confident that when one of the pre-defined constraints is absent, delegated authority is unconstrained in its corresponding dimension.",
+    "onlyDelegateHeldAuthority": "Issuers agree to only delegate authority that they reasonably believe they hold. Whether they do in fact hold that authority is still a matter for verifiers to evaluate (e.g., via edges or separate proving interactions), but this rule creates a modest accountability for data quality.",
+    "duties": [
+      {
+        "bearer": "issuer",
+        "rule": "timelyReviewAndRevoke",
+        "l": "Issuers agree to review each delegation they have issued on a cadence appropriate to its stakes, and to revoke or narrow it promptly once the conditions that justified the grant no longer hold. This duty does not extend authority, since a delegation is valid only while its constraints are met.",
+        "priority": 1
+      },
+      {
+        "bearer": "delegate",
+        "effect": "observe",
+        "goal": "deploy.staging",
+        "cadence": "every action",
+        "priority": 2
+      },
+      {
+        "bearer": "delegate",
+        "goal": "deploy.staging",
+        "priority": 2
+      }
+    ]
+  }
+}

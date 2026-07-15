@@ -71,3 +71,26 @@ In v2.0 the rules block also carries first-class **duties** (the "must"), each n
 
 New governance frameworks can be written that supplement these rules; see the `gfw` field in the schema. It is also possible to modify or override these rules, by placing a different value in the `r` field. The act of issuing or receiving a GCD credential constitutes binding acceptance of the rules.
 
+### Worked examples
+
+The canonical [`example.json`](example.json) is a minimal valid instance. The
+[`examples/`](examples/) gallery shows the v2.0 feature set across five scenarios
+— each is a full, SAID-minted credential that the conformance linter validates
+(schema-validity, `s`-vs-`$id`, and SAID self-consistency), so none can silently
+drift:
+
+| Example | relationType / exerciseMode | Highlights |
+|---|---|---|
+| [real-estate-agent](examples/real-estate-agent.json) | delegation / act | `goals`, `effects`, `jurisdictions` + `physGeos`, `monetaryLimit`, `proofs` (license), a delegate duty |
+| [guardian-of-minor](examples/guardian-of-minor.json) | guardianship / both | `humanReview`, `terminatingEvents` (reached-majority) with its `validUntil` backstop, `disclosables`, `presentsAs` |
+| [ai-deploy-agent](examples/ai-deploy-agent.json) | delegation / act | containment: no-`destroy` `effects`, `domains`, a cloud-spend `monetaryLimit`, a 30-day window, a kill-switch `terminatingEvent`, `humanReview` for prod, a restrictive `disclosables` allow-list |
+| [platform-manager](examples/platform-manager.json) | stewardship / authorize | the pure delegator: **empty `goals`**, `stateKinds: [authority]`, `domains`, issuer-only duties, and no `gfw` (so `role` is a bare label) |
+| [iot-fleet-controller](examples/iot-fleet-controller.json) | controllership / both | authority over a *thing*: `icals` maintenance windows, `virtGeos`, `protos`, a decommission `terminatingEvent` |
+
+The [`invalid/`](invalid/) corpus holds the should-reject fixtures — including
+the new locks in v2.0: a bad `effects`/`stateKinds` enum value, an unknown key
+*inside* `constraints` (fail-closed), `terminatingEvents` without a `validUntil`
+backstop, `exerciseMode: delegated-only` (the rejected pre-reconciliation token),
+a malformed `monetaryLimit`, an unknown duty `bearer`, a delegate duty missing
+its `effect`, and a non-integer duty `priority`.
+

@@ -128,12 +128,21 @@ def _rules_said(schema: dict) -> str | None:
 
 
 def _copy_schema_folder(entry: SchemaEntry, out: Path) -> None:
-    """Copy a schema folder's top-level files (skips the ``invalid/`` corpus)."""
+    """Copy a schema folder's top-level files plus the ``examples/`` gallery.
+
+    The ``invalid/`` should-reject corpus is deliberately NOT published; the
+    ``examples/`` gallery (this.i @g4tn7w) IS, so the worked-example links in the
+    narrative resolve on the site.
+    """
     dst = out / entry.name
     dst.mkdir(parents=True, exist_ok=True)
     for item in sorted(entry.path.parent.iterdir()):
         if item.is_file():
             shutil.copy2(item, dst / item.name)
+    if entry.examples:
+        (dst / "examples").mkdir(exist_ok=True)
+        for example in entry.examples:
+            shutil.copy2(example, dst / "examples" / example.name)
 
 
 def _manifest_entry(entry: SchemaEntry, said: str) -> dict:

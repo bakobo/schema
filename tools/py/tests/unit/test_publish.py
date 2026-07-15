@@ -45,6 +45,14 @@ def test_build_site_excludes_invalid_corpus(synthetic_repo, tmp_path):
     assert not (tmp_path / "site" / "widget" / "invalid").exists()
 
 
+def test_build_site_publishes_examples_gallery(synthetic_repo, tmp_path):
+    gallery = synthetic_repo / "widget" / "examples"
+    gallery.mkdir()
+    (gallery / "scenario.json").write_text("{}")
+    publish.build_site(synthetic_repo, tmp_path / "site")
+    assert (tmp_path / "site" / "widget" / "examples" / "scenario.json").is_file()
+
+
 def test_rules_said_reads_const_else_none():
     assert publish._rules_said({"properties": {"r": {"const": "EAAA"}}}) == "EAAA"
     assert publish._rules_said({"properties": {"r": {"oneOf": [{"type": "string"}]}}}) is None
