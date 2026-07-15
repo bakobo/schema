@@ -88,6 +88,64 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             CONSEQUENCE: every c_ reference in schema/imbu/org prose (and the upstream pap doc) goes stale on
             authoring — tracked in tick ~5hlz (schema docs) and ~44oc (cross-repo); the schema artifact + example +
             registry re-SAIDify per @b6xh4m.
+          children:
+            The v2.0 constraints container is a closed enum-checked gate; facet stays permissive = decision:
+              id: k7wd3m
+              stage-status: in-progress
+              why: >
+                Realizes @h4tqm7's containers with the FINAL v2.0 field set and the fail-closed boundary.
+                constraints{} carries goals, effects, stateKinds, domains, jurisdictions, physGeos, virtGeos, icals,
+                monetaryLimit, protos, proofs, validFrom, validUntil, and humanReview, and sets
+                additionalProperties:false — so an unrecognized key INSIDE constraints fails closed, the
+                subtree-firm restatement of the old noConstraintSansPrefix rule. effects
+                (observe|create|modify|preserve|destroy) and stateKinds
+                (information|record|commitment|authority|resource|relationship) are CLOSED enums, not free strings,
+                because a gate that cannot reject an unknown effect is not a gate; the SDA effect/state axes (imbu
+                @x3ns6p, org record-shape) fix the value sets. facet{} carries role, relationType
+                (delegation|guardianship|controllership|stewardship), liableParty, presentsAs, and exerciseMode, and
+                stays PERMISSIVE (no additionalProperties:false) because ONLY constraints is the fail-closed gate —
+                the facet is descriptive accountability a verifier MAY ignore for the authorization decision, and
+                imbu's facet is still growing (revocability, principal-threshold @nf5rx7), so locking it now would
+                force a version bump on every added field. monetaryLimit is MONEY-LOCKED (a magnitude + a
+                currency-like unit token, currency-first) and is NOT "stakes": stakes is the derived gate quantity,
+                and non-money or unquantifiable stakes route to the gate (@d6mk3g), never to this field. liableParty
+                (renamed from obligationBearer, already propagated to imbu/org/paper) is OUTWARD liability — who the
+                world holds responsible if an act goes wrong — distinct from grantor (issuer i), beneficiary
+                (relationType), actor (delegate), and the inward accountability of the duties in r. Kept minItems:1 +
+                uniqueItems on every array field (an empty allow-list is meaningless; a pure delegator omits goals
+                and sets exerciseMode:authorize rather than carrying an empty goals array). Rejected free-string
+                effect/stateKind (ungateable) and a fail-closed facet (churns on every imbu facet addition).
+            exerciseMode is the enum act|authorize|both; imbu's delegated-only reconciles to authorize = decision:
+              id: x4nq6t
+              stage-status: in-progress
+              why: >
+                exerciseMode encodes which of the two independent authorities (@z6tq4a: authority-to-act vs
+                authority-to-authorize) a GCD confers: act (goals, no authorize), authorize (the pure delegator —
+                authority-to-authorize with empty goals, what imbu writes as delegated-only), or both. Chose to make
+                GCD's clean three-token enum the CANONICAL vocabulary over adopting imbu's delegated-only phrasing,
+                because GCD is the credential interface imbu's decision core enforces — the schema is the contract,
+                imbu the consumer — so the on-the-wire vocabulary should read cleanly and not inherit a consumer's
+                internal label. Consequence: imbu's delegated-only becomes the stale term, reconciled to authorize
+                under the already-tracked cross-repo tick ~44oc. Confirmed with Daniel 2026-07-15. Rejected keeping
+                delegated-only (ties the interface enum to one consumer's phrasing) and a boolean pair
+                canAct/canAuthorize (three states read more clearly as one enum, and "both" is a real, common case).
+            terminatingEvents and disclosables are a-block siblings of constraints, each a distinct polarity = decision:
+              id: v3rk5p
+              stage-status: in-progress
+              why: >
+                @h4tqm7 reserved discloses{} and @v5nq2r introduced the voiding polarity; v2.0 realizes both as
+                a-block SIBLINGS of constraints, NOT keys inside it, because their enforcement semantics differ from
+                the enabling "may". terminatingEvents is an array of proof-request SAIDs for attested VOIDING events
+                (ANY firing voids authority; proof-shaped, not a live predicate, per @v5nq2r) — kept outside
+                constraints so the fail-closed unknown-key rule on constraints never mis-reads a voiding entry as an
+                enabling allow-list. It REQUIRES a constraints.validUntil backstop, enforced in-schema by an if/then
+                (terminatingEvents present -> validUntil required), realizing @v5nq2r's rule that a never-fired
+                "done" signal cannot leave authority alive forever. disclosables is the OUTBOUND axis (@m3xc7d): an
+                array of credential-SCHEMA SAIDs the delegate MAY reveal about its principal — absent = unconstrained,
+                present = allow-list, at schema granularity (intra-credential selective disclosure stays ACDC's job).
+                Rejected folding either into constraints (conflates voiding and outbound-disclosure with the enabling
+                gate, and forces the fail-closed rule to special-case them) and a live untilObserved predicate
+                (deferred @tq5wnh — kept proof-shaped so any two verifiers replay to the same result).
         The reciprocal record IS the GCD r block; the "must" is first-class there, not a second credential = decision:
           id: r5dnk2
           stage-status: planned
@@ -112,6 +170,42 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             as permissions) and extractable later (@c5tj3p logic). This resolves @ot4puqrj and @d5tqm6's open, and
             REQUIRES a paired update to imbu @v2kd7m / @nf5rx7 and org @dwx5twwyh / @ot4puqrj (which still model a
             distinct reciprocal record) — the cross-repo obligation tracked in tick ~44oc.
+          children:
+            The r-block duties are a first-class array keyed by bearer; timelyReviewAndRevoke becomes an issuer duty = decision:
+              id: m6tq4w
+              stage-status: in-progress
+              why: >
+                Realizes @r5dnk2's first-class duties with the FINAL shape. r gains an OPTIONAL duties array whose
+                items are one of two bearer-discriminated objects: a DELEGATE duty {bearer:delegate, effect, goal,
+                cadence?, priority} (a machine-structured "must" — produce this effect toward this goal on this
+                cadence) and an ISSUER duty {bearer:issuer, rule, l?, priority} (a named governance obligation, its
+                legal text optional in l). priority is REQUIRED on both and carries the fail-loud precedence /
+                escalation @v2kd7m demands for conflicting musts. timelyReviewAndRevoke (@k3wm7d) is modeled as an
+                ISSUER DUTY, not the sixth disclaimer it was planned as — correcting the "duty smuggled in as a
+                disclaimer" that @d5tqm6 flagged, and resolving the shape half of tick ~3isv. duties is OPTIONAL (a
+                minimal GCD carries none) while the baseline governance ruleset (rules.json) carries the issuer
+                timelyReviewAndRevoke duty, so the standing obligation ships by default without forcing every
+                credential to enumerate it. Separately the fifth disclaimer noConstraintSansPrefix is RENAMED to
+                noConstraintOutsideConstraints with new const text ("enforceable constraints exist only inside the
+                constraints container ... nothing outside it constrains"), realizing @h4tqm7's restated,
+                subtree-firm safe-ignore rule. Rejected requiring duties (over-taxes a minimal delegation), a single
+                untyped duty object (bearer:delegate and bearer:issuer carry genuinely different fields), and keeping
+                timelyReviewAndRevoke as a disclaimer (it is an obligation, not a liability-scoping clause).
+        GCD 1.0.0 is preserved as a registered versioned directory; gcd/ becomes 2.0.0 = decision:
+          id: r5vk3n
+          stage-status: in-progress
+          why: >
+            @b6xh4m evolves GCD "as a new version, keeping the old"; this fixes HOW. Chose to copy the current gcd/
+            to a sibling gcd-1.0.0/ (its schema at gcd-1.0.0/gcd-1.0.0.schema.json plus its example), keep its
+            unchanged SAID EM3kQ1QEU3kJFqV8aZrse-QXs5oNlaFfaiwEUFt4uq4C in registry.json, and publish it — so 1.0.0
+            stays resolvable by SAID/OOBI — while gcd/gcd.schema.json is rewritten to 2.0.0 with a fresh SAID. Chose
+            the versioned DIRECTORY over the handoff's floated archived-in-place gcd/gcd-1.0.0.schema.json, which
+            FAILS the linter: discover_schemas keys on <folder>/<folder>.schema.json, so a second schema file in the
+            gcd/ folder is never discovered, and check_registry rejects any registry path that is not a discovered
+            folder-schema. Also rejected an unregistered archival copy (1.0.0 would drop out of the registry and lose
+            its OOBI, contradicting "keeping the old" as a resolvable artifact). credentialType stays gcd-credential;
+            the compact/expanded oneOf and the e-block I2I issuer edge are preserved in both versions. Confirmed with
+            Daniel 2026-07-15.
     Schema-authoring tooling is deferred, pending a TypeScript-vs-Python decision = decision:
       id: p4zc7n
       stage-status: planned
