@@ -86,7 +86,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             low-thrash decision to make first. Rejected "just strip c_" (keeps cryptic names, gives duties no home)
             and keeping the flat prefix (cannot carry the may/must enforcement split without a second prefix).
             CONSEQUENCE: every c_ reference in schema/imbu/org prose (and the upstream pap doc) goes stale on
-            authoring — tracked in tick ~5hlz (schema docs) and ~44oc (cross-repo); the schema artifact + example +
+            authoring — tracked in tick 5hlz (schema docs, resolved) and ~44oc (cross-repo); the schema artifact + example +
             registry re-SAIDify per @b6xh4m.
           children:
             The v2.0 constraints container is a closed enum-checked gate; facet stays permissive = decision:
@@ -182,7 +182,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                 legal text optional in l). priority is REQUIRED on both and carries the fail-loud precedence /
                 escalation @v2kd7m demands for conflicting musts. timelyReviewAndRevoke (@k3wm7d) is modeled as an
                 ISSUER DUTY, not the sixth disclaimer it was planned as — correcting the "duty smuggled in as a
-                disclaimer" that @d5tqm6 flagged, and resolving the shape half of tick ~3isv. duties is OPTIONAL (a
+                disclaimer" that @d5tqm6 flagged, and resolving the duty-vs-disclaimer shape that tick 3isv tracked. duties is OPTIONAL (a
                 minimal GCD carries none) while the baseline governance ruleset (rules.json) carries the issuer
                 timelyReviewAndRevoke duty, so the standing obligation ships by default without forcing every
                 credential to enumerate it. Separately the fifth disclaimer noConstraintSansPrefix is RENAMED to

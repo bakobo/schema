@@ -15,9 +15,9 @@ def _acdc() -> dict:
         "v": "ACDC10JSON000000_",
         "d": "",
         "i": "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL",
-        "s": "EM3kQ1QEU3kJFqV8aZrse-QXs5oNlaFfaiwEUFt4uq4C",
-        "a": {"d": "", "role": "example", "c_pgeo": ["US"]},
-        "r": {"d": "", "rule": "some disclaimer text"},
+        "s": "EIqGVj_kEr0GTBELK6QtALn_sqHExLBDl2gHK82Xl-x3",
+        "a": {"d": "", "facet": {"role": "example"}, "constraints": {"physGeos": ["US"]}},
+        "r": {"d": "", "onlyDelegateHeldAuthority": "some disclaimer text"},
     }
 
 
@@ -56,7 +56,7 @@ def test_saidify_sad_does_not_mutate_input():
 def test_content_change_changes_top_said():
     before = saidify_sad(_acdc())["d"]
     changed = _acdc()
-    changed["a"]["role"] = "different"
+    changed["a"]["facet"]["role"] = "different"
     assert saidify_sad(changed)["d"] != before
 
 

@@ -36,17 +36,18 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 
 ## Status
 
-GCD's inherited JSON has been **repaired and re-SAIDified**, its example is now a
-valid, self-consistent ACDC instance, and the whole corpus is validated in CI —
-SAID integrity, registry consistency, JSON-Schema validity, and the validation,
-referential integrity, and SAID integrity of example instances. See
-[`this.i` `@tq5wnh`](this.i).
-
-> **Next (Task 2):** GCD still needs evolving to the model in *The Shape of
-> Delegated Authority* — it lacks `c_effect`, state-kind, target modulators, the
-> relation/obligation facet, the may/must split, and `c_disc`. GCD is imbu's
-> keystone delegation credential; evolving it is the near-term design work
-> ([`this.i` `@b6xh4m`](this.i)).
+GCD's inherited JSON was **repaired and re-SAIDified** (Task 1), and GCD has now
+been **evolved to v2.0** (Task 2). The attributes block is organized into named
+containers — a `facet` (`relationType`, `liableParty`, `presentsAs`,
+`exerciseMode`) and a fail-closed `constraints` gate (`goals`, `effects`,
+`stateKinds`, `domains`, `jurisdictions`, `physGeos`/`virtGeos`, `icals`,
+`monetaryLimit`, `protos`, `proofs`, `validFrom`/`validUntil`, `humanReview`) —
+with sibling `terminatingEvents` (voiding) and `disclosables` (outbound) axes,
+and first-class `duties` in the rules block. Version `1.0.0` is preserved intact
+under [`gcd-1.0.0/`](gcd-1.0.0/). The whole corpus is validated in CI — SAID
+integrity, registry consistency, JSON-Schema validity, example validation,
+referential + example SAID integrity, and a should-reject negative corpus. See
+[`this.i` `@b6xh4m`](this.i) and [`@tq5wnh`](this.i).
 
 ## Tooling
 

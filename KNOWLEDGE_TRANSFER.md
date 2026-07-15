@@ -24,64 +24,61 @@ authority engine (imbu, a separate repo) enforces at runtime: a delegator issues
 a GCD credential to a delegate, and a verifier checks a proposed act against the
 credential's constraints. Everything else here is secondary.
 
-### Your mission, in priority order
+### Mission status — Task 1 and Task 2 are DONE
 
-**Task 1 — repair GCD's JSON and re-SAIDify.** `gcd/gcd.schema.json` was
-inherited **not-valid-JSON**: there is an extra closing brace in/after the
-`c_upto` block (~line 180). It was captured byte-for-byte on purpose (faithful
-provenance), and fixing it is the first job. Because the schema's `$id` is a
-**SAID** (a self-addressing hash over the saidified content), any byte change
-invalidates it — so repair the JSON *and* regenerate the SAID (and the
-`registry.json` entry) with proper tooling; do not just hand-edit the `$id`.
+**Task 1 — repair GCD's JSON and re-SAIDify — DONE.** The inherited
+`gcd/gcd.schema.json` was **not-valid-JSON** (an extra closing brace in/after the
+`c_upto` block). It was captured byte-for-byte for provenance, then repaired and
+re-SAIDified with the committed tooling (never hand-editing the `$id`), and
+`registry.json` brought back into sync.
 
-**Task 2 — evolve GCD to the full delegated-authority model.** The captured GCD
-(`version 1.0.0`) predates the model in *The Shape of Delegated Authority* (the
-canonical theory; on this machine it is typically at `../../papers/sda.md` — read
-it if present). Grow GCD to carry the whole model, as a **new version that keeps
-the old one intact** (don't mutate `1.0.0` in place beyond the Task-1 repair).
+**Task 2 — evolve GCD to the full delegated-authority model — DONE (v2.0).** GCD
+was grown to carry the whole model from *The Shape of Delegated Authority* (on
+this machine typically `../../papers/sda.md`) as a **new version keeping the old**:
+`gcd/gcd.schema.json` is now `2.0.0`, and `1.0.0` is preserved intact and
+registered under `gcd-1.0.0/`. The field-level decisions are in [`this.i`](this.i)
+under `@h4tqm7` (`@k7wd3m`, `@x4nq6t`, `@v3rk5p`), `@r5dnk2` (`@m6tq4w`), and
+`@b6xh4m` (`@r5vk3n`).
 
-#### What GCD already has (keep it)
+#### The v2.0 shape (what to know)
 
-`c_goal` (Aries goal codes, wildcard-matched), `c_jur` (jurisdictions),
-`c_pgeo`/`c_rgeo` (physical/remote geo), `c_ical` (time/URL windows via
-iCalendar), `c_upto` (financial stakes ceiling), `c_proto` (protocol+roles),
-`c_prove` (inbound IPEX proof requests), `c_human` (human-judgment-required),
-`c_after`/`c_before` (validity window), `role` + `gfw` (a governance-framework
-SAID that gives `role` and custom fields their semantics), and a `rules` block of
-disclaimers (`noRoleSemanticsWithoutGfw`, `issuerNotResponsibleOutsideConstraints`,
-`noConstraintSansPrefix`, `useStdIfPossible`, `onlyDelegateHeldAuthority`). The
-convention that *all constraints live in `c_`-prefixed fields* (or in `role` when
-`gfw` is defined) is load-bearing — preserve it.
+The attributes block (`a`) drops the flat `c_` prefix for **named containers**:
 
-#### What GCD is missing (the evolution)
+- **`facet`** — the relationship facet: `role`, `relationType` (delegation /
+  guardianship / controllership / stewardship — whose interest governs),
+  `liableParty` (who answers outward if it goes wrong; renamed from the paper's
+  `obligationBearer`), `presentsAs` (the facet-AID the act is presented under),
+  and `exerciseMode` (`act` / `authorize` / `both` — authority-to-act vs
+  authority-to-authorize as independent axes; a pure delegator is `authorize`
+  with empty goals). Permissive/safe-ignore: only `constraints` gates.
+- **`constraints`** — the enabling "may", **fail-closed**
+  (`additionalProperties: false`): `goals`, `effects`
+  (observe/create/modify/preserve/destroy — a *separate lock* from goals, so a
+  read-only delegate holds `effects: ["observe"]`), `stateKinds`
+  (information/record/commitment/authority/resource/relationship), `domains`,
+  `jurisdictions`, `physGeos`/`virtGeos`, `icals`, `monetaryLimit` (money-locked),
+  `protos`, `proofs`, `validFrom`/`validUntil`, `humanReview`.
+- **`terminatingEvents`** — sibling of `constraints`: the voiding polarity —
+  proof-shaped attested events that end the authority; requires a `validUntil`
+  backstop.
+- **`disclosables`** — sibling of `constraints`: the *outbound* axis — the
+  credential schemas a delegate may reveal about its principal.
 
-From *The Shape of Delegated Authority*, GCD needs these added, each as a distinct
-constraint or facet — MECE and independently matchable, absence = no constraint:
+The rules block (`r`) keeps the five disclaimers (with the third renamed from
+`noConstraintSansPrefix` to `noConstraintOutsideConstraints`) and adds a
+first-class **`duties`** array (the "must"), keyed by `bearer`: a delegate duty
+`{bearer, effect, goal, cadence?, priority}` and an issuer duty
+`{bearer, rule, l?, priority}`. `timelyReviewAndRevoke` ships as the baseline
+issuer duty. The reciprocal-record "must" is the GCD's own `r` block, not a
+second credential (`@r5dnk2`).
 
-- **`c_effect`** — the effect axis: `observe` / `create` / `modify` / `preserve` /
-  `destroy`. A *separate lock* from `c_goal` (telos), so a read-only delegate holds
-  `c_effect: [observe]` and cannot mutate even inside a permitted goal. This is the
-  single most important addition.
-- **state-kind + target modulators** — an act is located over a *named kind of
-  state* (`information` / `record` / `commitment` / `authority` / `resource` /
-  `relationship`), and the gate turns on *target* attributes (externality,
-  reversibility, value, shared-ness). Decide how GCD carries these (on the
-  credential, or as evaluation inputs the credential scopes).
-- **the relation/obligation facet** — `relationType` (delegation / guardianship /
-  controllership / stewardship — whose interest governs), `obligationBearer` (who
-  answers if it goes wrong), `presentsAs` (the identity the act is presented
-  under), and **authority-to-act vs authority-to-authorize** as independent axes
-  (a pure delegator has broad authority-to-authorize and an empty act surface).
-- **may vs must** — today GCD is all `may` (permissions). `must` (duties: obligatory
-  `(effect, goal)` pairings, optionally with a cadence) belongs on the delegator-
-  signed **reciprocal record**. Decide the split between the delegation credential
-  and the reciprocal record — this is genuinely open (the paper flags it).
-- **`c_disc`** — the *outbound* mirror of `c_prove`: what a delegate may reveal
-  about its principal, to whom, unlinkably. Reserve the axis; vocabulary is open.
+Reserved but **not** in v2.0 (recorded in intent, pulled when a real need
+appears): finer disclosure vocabulary (`{schema, to, linkable}`), a live
+`untilObserved` predicate, a redress pointer, and counterparty qualification.
 
-Do the design **intent-first**: record each of these as a decision in `this.i`
-(children of `@b6xh4m`) *before* you change the schema, with a `why` that meets the
-rebuttal-surface standard (see `docs/methodology.md`).
+New design still follows **intent-first**: record each decision in `this.i` in
+its **own commit before** the schema change, with a `why` that meets the
+rebuttal-surface standard (see [`AGENTS.md`](AGENTS.md) → `dev/methodology.md`).
 
 ### Hard facts about ACDC schemas (respect these)
 
@@ -96,27 +93,29 @@ rebuttal-surface standard (see `docs/methodology.md`).
    carries an optional `issuer` edge with the `I2I` operator. Understand it before
    touching it.
 
-### Tooling is PROVISIONAL — do not assume it
+### Tooling
 
-`tools/` is public-schema's **Python** machinery (saidify, registry build, check,
-a serving api), copied as a **reference to replicate in concept, not the committed
-toolchain** (`this.i` `@p4zc7n`). Whether this repo lands on **browser-compatible
-TypeScript** (to enable browser-based schema-design and client-side
-SAIDification/validation tools) or **stays Python** is an **open decision the human
-owns** — surface it, don't silently pick. If you need to SAIDify for Task 1/2, use
-the reference tools *or* propose an approach and get agreement first. The Provenant
-Docker/registry-deployment infra was intentionally not carried over.
+The committed toolchain is the **Python** package [`tools/py`](tools/py)
+(`schematools`: SAID computation, the conformance linter, registry maintenance,
+`publish`/`build-docs`), driven by uv + pytest at 100% branch coverage; keri is
+the pinned SAID oracle (`@xv4m7d`, `@m4vd7s`). The inherited public-schema
+scripts are kept for reference under [`oldtools`](oldtools). A `tools/ts` sibling
+is *reserved* for a possible future browser/TypeScript layer — whether that layer
+gets built, and whether it is TypeScript or stays Python, is still the **open
+decision the human owns** (`@p4zc7n`); the near-term work stays Python
+(`@s6bq2w`). The Provenant Docker/registry-deployment infra was intentionally not
+carried over.
 
 ### Decisions you must NOT make silently — surface to the human
 
-- **TypeScript vs Python** for the toolchain, and whether to build browser-based
-  schema-design tools (`@p4zc7n`).
+- **TypeScript vs Python** for a future browser schema-design / client-side
+  validation layer (`@p4zc7n`) — still open.
 - **Two borderline strips** to reconsider (re-import from public-schema if wanted):
   `brand-owner` (non-OVC sibling of the telco branded-calling pair) and
   `aegis-std-vetting` (telco-vendor vetting) — see `@k5wd2r`.
-- The **delegation-record vs reciprocal-record split** for `may`/`must`, and the
-  **root of the delegation chain** (leaning: a threshold of owners via joint
-  issuance) — both are open in the theory.
+- The **root of the delegation chain** (leaning: a threshold of owners via joint
+  issuance) — open in the theory. (The `may`/`must` split is **resolved**: the
+  "must" is the GCD's own `r`-block duties, not a second credential — `@r5dnk2`.)
 
 ### House rules (from the Bakobo environment)
 
@@ -124,19 +123,23 @@ Docker/registry-deployment infra was intentionally not carried over.
   the code/schema commit they justify (`docs/methodology.md` §5). A decision not in
   `this.i` is not yet made.
 - **DCO:** sign every commit — `git commit -s`.
-- **`tick`** for task/tech-debt tracking — run `tick init` once to connect this
-  clone (Task 1's JSON repair is a natural first `tick`).
+- **`tick`** for task/tech-debt tracking — `tick ls` / `tick grep` to see open
+  work (e.g. `~44oc`, the cross-repo reconcile of imbu/org to the v2.0 container
+  names).
 - **GitHub Actions:** pin node24-runtime action versions (avoid node20).
-- If you add tooling/tests, follow strict TDD and propose CI (the template
-  `AGENTS.md` instructions self-retire as you do).
+- If you add tooling/tests, follow strict TDD (100% branch coverage) — CI runs
+  `uv run pytest` and a fail-closed Pages deploy.
 
 ### First moves
 
-1. Read `this.i` (`@q3nv6t`, `@k5wd2r`, `@b6xh4m`, `@p4zc7n`), `AGENTS.md`,
-   `docs/methodology.md`, and `gcd/index.md`; read `../../papers/sda.md` if present.
-2. `tick init`, then `tick add` the GCD JSON repair.
-3. Do **Task 1** (repair + re-SAIDify GCD, fix `registry.json`) as a clean,
-   test-or-validation-backed change — that alone gets the repo to a valid baseline.
-4. Open the **Task 2** speculative interview with the human (the `may`/`must` split
-   and how state-kind/target are carried are the questions that collapse the most
-   forks), record intent in `this.i`, *then* evolve the schema.
+1. Read `this.i` (`@q3nv6t`, `@k5wd2r`, `@b6xh4m` and its children, `@tq5wnh`,
+   `@p4zc7n`), `AGENTS.md`, `docs/methodology.md`, and `gcd/index.md`; read
+   `../../papers/sda.md` if present.
+2. `cd tools/py && uv sync && uv run pytest` to confirm a green baseline, and
+   `uv run schematools check` to lint the corpus.
+3. Pick up open work from `tick ls` (the v2.0 schema itself is done). The largest
+   is `~44oc`: propagate the `c_*` → container rename into imbu (`@v2kd7m`,
+   `@nf5rx7`) and org (`@dwx5twwyh`, `@ot4puqrj`) plus the upstream `pap`
+   `policy-schema.md`.
+4. For any new design, run the speculative interview, record intent in `this.i`
+   **before** the code, then implement test-first.
