@@ -1,12 +1,12 @@
 {
-  "$id": "EIKBsDes_F_XIlPWUtGMNbP7Gfu-PdUVkSByMETV9FBg",
+  "$id": "EOzVErBz2Mr9Xyz5NDML3Y0x_SYaKwX2Y4KTGvevTs15",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Face-to-Face credential",
   "description": "Assert that an issuer knows the issuee to be a human being, based one or more face-to-face interactions.",
   "$comment": "These credentials have no edges. They can be chained by showing that the issuer's identifier is also an identifier associated with another credential of whatever type, but they do not require chaining.",
   "type": "object",
   "credentialType": "FaceToFaceCredential",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "required": [
     "v",
     "d",
@@ -48,7 +48,7 @@
           "type": "string"
         },
         {
-          "$id": "EIc37FrFFA2T3V-sVljNsH_Pdd0WdkodQVx315UocO0d",
+          "$id": "EI40MnOSGj6vYdUrs13KMECr2tlK5od9mGmDc8ZBTexD",
           "description": "Attributes block",
           "type": "object",
           "required": [
@@ -71,6 +71,15 @@
               "description": "Identifier that issuee controls, according to issuer",
               "type": "string"
             },
+            "knownAs": {
+              "description": "A non-legal label the issuer knew the issuee by during their face-to-face interaction(s). NOT a legal name or a strong identity claim \u2014 a face-to-face credential asserts humanness, not identity. Useful for correlating independent attestations about the same person and for privacy-preserving reference.",
+              "type": "string",
+              "examples": [
+                "Bob",
+                "Alice",
+                "Dr. Chen"
+              ]
+            },
             "dt": {
               "description": "Issuance datetime, ISO-8601 datetime string",
               "type": "string",
@@ -81,10 +90,49 @@
               "format": "date-time",
               "type": "string"
             },
+            "firstMet": {
+              "description": "Date of the issuer's FIRST in-person interaction with the issuee. Together with lastInteraction it bounds how long the issuer has known the issuee in real life; a longer, older acquaintance is harder to fabricate.",
+              "type": "string",
+              "format": "date-time"
+            },
+            "lastInteraction": {
+              "description": "Date of the issuer's MOST RECENT in-person interaction with the issuee. A recent interaction supports the freshness of the humanness assertion; an old one should be weighted lower, since the identifier may since have changed hands.",
+              "type": "string",
+              "format": "date-time"
+            },
+            "ongoing": {
+              "description": "Whether the issuer's real-life relationship with the issuee is ongoing (true) rather than a bounded or one-time interaction (false). An ongoing relationship (family, current colleague) decays more slowly than a single past meeting.",
+              "type": "boolean"
+            },
             "minutes": {
               "description": "At least how many minutes has issuer spent with issuee, face-to-face in real life?",
               "type": "integer",
               "exclusiveMinimum": 0
+            },
+            "modalities": {
+              "description": "The human-specific channels through which the issuer observed the issuee \u2014 the ones an embodied AI cannot currently fake \u2014 so a verifier can weight how android-resistant the observation was, not merely how long it lasted. visual: saw the face/body clearly. tactile: physical contact such as a handshake or embrace. conversational: spontaneous, unscripted, real-time dialogue. movement: natural gait, posture, or motion. sharedActivity: a meal, exercise, travel, or work done together. multiSession: interaction across multiple separate occasions.",
+              "type": "array",
+              "uniqueItems": true,
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "visual",
+                  "tactile",
+                  "conversational",
+                  "movement",
+                  "sharedActivity",
+                  "multiSession"
+                ]
+              }
+            },
+            "keyControl": {
+              "description": "How, if at all, the issuer observed the issuee DEMONSTRATE control of the identifier (a.i) during the face-to-face interaction \u2014 binding the human to the key, not merely to the person. signedChallenge: the issuee signed a fresh challenge with the identifier's key in the issuer's presence (strongest). deviceControl: the issuer watched the issuee operate the device or wallet holding the key. Absence means key control was not demonstrated in person, not that it is false.",
+              "type": "string",
+              "enum": [
+                "signedChallenge",
+                "deviceControl"
+              ]
             },
             "biometricHashes": {
               "description": "Hashes of photos, voiceprints, or biometric enrollments that the issuer attests characterized the issuee accurately, when they interacted face-to-face",
@@ -95,6 +143,14 @@
                 "format": "cesr",
                 "type": "string"
               }
+            },
+            "biometricProtocol": {
+              "description": "Names the canonicalization-and-hash protocol used to compute every entry in biometricHashes, so hashes can be compared ACROSS credentials. Two independent credentials' biometric hashes are comparable only if they cite the same protocol; matching hashes are privacy-preserving evidence that they describe the same human (an optional, decentralized uniqueness / dedup signal). Omit when biometricHashes is absent.",
+              "type": "string",
+              "examples": [
+                "bakobo:biohash:face:v1",
+                "bakobo:biohash:voice:v1"
+              ]
             },
             "basis": {
               "description": "Strongest reason that issuer wants to cite as proof that they have accurate knowledge of the issuee as a human being",

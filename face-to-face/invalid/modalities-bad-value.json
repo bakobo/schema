@@ -16,8 +16,7 @@
     "ongoing": false,
     "minutes": 10,
     "modalities": [
-      "visual",
-      "tactile"
+      "telepathy"
     ],
     "keyControl": "signedChallenge",
     "biometricHashes": [

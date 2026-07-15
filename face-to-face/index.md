@@ -19,6 +19,18 @@ As with any credential, the trust that a verifier places in an individual face-t
 
 In most situations, face-to-face interactions are reciprocal; each party can achieve similar confidence in the other party's humanness. Reciprocal issuance is encouraged whenever conditions permit.
 
+### What a verifier is trusting (and the v1.2.0 fields)
+
+A face-to-face credential proves **humanness** — not identity, and not **uniqueness**. One person may hold many identifiers, each vouched by different people, so a single credential (or even several) does not prove *one-human-one-account*. Where uniqueness matters, see the biometric note under [Privacy](#privacy).
+
+For contexts where **AI participation is proscribed**, a verifier is really asking three questions, and v1.2.0 adds optional fields so the issuer can speak to each:
+
+* **Is the subject human?** `minutes`, `basis`, and especially `modalities` — the human-specific channels the issuer observed (`visual`, `tactile`, `conversational`, `movement`, `sharedActivity`, `multiSession`). These are the cues an embodied AI cannot currently fake, so a verifier can weight *android-resistance*, not merely duration.
+* **Is the human bound to *this* key?** `keyControl` records whether the issuer watched the issuee demonstrate control of the identifier in person — `signedChallenge` (signed a fresh challenge with the key, strongest) or `deviceControl` (operated the device holding it). This defends against the "get vouched, then hand your keys to an AI" attack.
+* **Is the binding still fresh?** `firstMet` / `lastInteraction` bound how long and how recently the issuer has known the issuee in real life, and `ongoing` distinguishes a living relationship from a one-time meeting — so a verifier can decay a stale attestation.
+
+`knownAs` records the non-legal label the issuer knew the issuee by (it is not an identity claim). All of these fields are **optional**; absence means "not attested," never "false." They are covered by the existing `noOverstatement` and `fairBiometric` rules, so the governance framework is unchanged.
+
 ### Schema
 See [face-to-face.schema.json](face-to-face.schema.json) and also [rules.json](rules.json).
 
@@ -29,6 +41,8 @@ Face-to-face credentials allow (but do not require) the issuer to endorse the ha
 Issuing and later disclosing this information are both optional. Face-to-face credentials support contractually protected and graduated disclosure. Best practice for privacy would be to disclose no more than is strictly required.
 
 By design, face-to-face credentials do not protect the privacy of the issuer. This means they should be issued by a public persona of the issuer, not a highly private one. Issuers and issuees should carefully consider the tradeoff between assurance and privacy that's associated with disclosing the nature of their face-to-face interactions in a face-to-face credential's `basis` field.
+
+When present, `biometricProtocol` names the canonicalization-and-hash protocol used for every `biometricHashes` entry, so hashes are comparable **across** credentials. This turns the biometric hashes into an optional, decentralized **uniqueness** signal: the same hash appearing in independent issuers' credentials is privacy-preserving evidence of the *same* human, without revealing the underlying biometric. This correlatability is a deliberate tradeoff — it is exactly what enables uniqueness/dedup, but it also links a person's credentials — so treat biometric disclosure as you would any correlatable identifier, and disclose no more than the context requires. (A binding governance clause requiring explicit correlation consent is a candidate for a future rules revision.)
 
 ### Governance Framework
 

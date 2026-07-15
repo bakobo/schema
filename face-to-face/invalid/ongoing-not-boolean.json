@@ -13,7 +13,7 @@
     "assertDate": "2023-03-13T16:15:07.686737+00:00",
     "firstMet": "2023-03-13T15:00:00.000000+00:00",
     "lastInteraction": "2023-03-13T16:00:00.000000+00:00",
-    "ongoing": false,
+    "ongoing": "yes",
     "minutes": 10,
     "modalities": [
       "visual",
