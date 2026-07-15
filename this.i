@@ -290,6 +290,25 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             anyway, while negative corpora, semantic rules, and regression are pulled in as GCD's evolution
             requires them. The browser editor and CD-publish are consumers of this contract, not part of it.
           children:
+            The positive axis extends to an examples/ gallery the linter validates, not just one example.json = decision:
+              id: g4tn7w
+              stage-status: done
+              why: >
+                @n7xk4r's positive axis was realized as a single per-schema example.json (validated for
+                schema-validity, s-vs-$id reference, and SAID self-consistency). GCD v2.0 has enough distinct
+                features (four relationTypes, three exerciseModes, the voiding/outbound sibling axes, duties) that
+                one example cannot show them; a set of scenario examples (guardianship, AI delegation, a pure
+                delegator, ...) is worth shipping as documentation. Chose to let a schema ALSO carry a
+                <folder>/examples/ gallery of full, valid instances and to GENERALIZE the three positive checks
+                (check_examples, check_example_refs, check_example_saids) to validate every gallery file exactly as
+                they validate example.json — so a didactic example that drifts (an invalidated instance, a stale s,
+                a broken SAID) fails CI like any other, keeping the human showcase and the machine gate the same
+                list (the repo's standing generated-vs-hand-written discipline, @f7dr3k/@z5nc4d/@c5nq7d). Chose a
+                validated gallery over illustrative fenced code blocks in index.md (which carry placeholder SAIDs
+                and rot silently) and over a bespoke per-gallery check (the existing positive checks already
+                express the contract; generalizing them avoids a second source of truth). example.json stays the
+                ONE canonical instance; the gallery is additive and optional, so schemas without one are
+                unaffected. Prompted by a request for feature-showcase examples.
             The negative axis lands as a per-schema invalid/ corpus that a check proves is rejected = decision:
               id: n6dqw2
               why: >
