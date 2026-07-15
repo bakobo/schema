@@ -163,6 +163,60 @@ def test_build_docs_no_ecosystem_without_federation(synthetic_repo, tmp_path):
     assert "ecosystem/" not in (out / "index.md").read_text()
 
 
+# --- output escaping / URL sanitization (review SEC-F1, HSX-F3) -----------------
+
+
+def test_safe_url_allows_http_and_relative_drops_others():
+    assert publish._safe_url("https://x.example/") == "https://x.example/"
+    assert publish._safe_url("http://x.example") == "http://x.example"
+    assert publish._safe_url("/registry.json") == "/registry.json"
+    assert publish._safe_url("javascript:alert(1)") is None  # active-content scheme dropped
+    assert publish._safe_url("data:text/html,x") is None
+    assert publish._safe_url(None) is None
+    assert publish._safe_url("") is None
+
+
+def test_esc_html_handles_none_and_specials():
+    assert publish._esc_html(None) == ""
+    assert publish._esc_html('<b>&"x</b>') == "&lt;b&gt;&amp;&quot;x&lt;/b&gt;"
+
+
+def test_esc_md_neutralizes_html_table_and_link_syntax():
+    assert publish._esc_md(None) == ""
+    out = publish._esc_md("<script>|a[b]`c`\nd")
+    assert "<script>" not in out and "\n" not in out
+    assert "\\|" in out and "\\[" in out and "\\]" in out and "\\`" in out
+
+
+def test_md_link_sanitizes_unsafe_scheme():
+    assert publish._md_link("x", "javascript:alert(1)") == "—"
+    assert publish._md_link("x", "https://ok.example") == "[x](https://ok.example)"
+
+
+def test_render_index_escapes_untrusted_and_declares_lang():
+    rows = [{"name": "<img src=x onerror=alert(1)>", "title": "<b>t</b>", "version": "1&2",
+             "said": "E" + "z" * 43, "schema": "a/a.json", "oobi": "oobi/x.json"}]
+    html = publish._render_index("https://x.example", rows)
+    assert '<html lang="en">' in html
+    assert "<img src=x onerror=alert(1)>" not in html  # escaped
+    assert "&lt;img" in html and 'scope="col"' in html
+
+
+def test_render_ecosystem_escapes_injection_and_drops_bad_homepage():
+    federation = {
+        "registries": [
+            {"name": "<script>x</script>", "operator": "a|b", "resolution": "static",
+             "homepage": "javascript:alert(1)", "notes": "n[e](u)"},
+        ],
+        "specifications": [{"name": "Spec", "url": "javascript:alert(2)"}],
+    }
+    md = publish._render_ecosystem(federation)
+    assert "<script>x</script>" not in md  # raw HTML neutralized
+    assert "javascript:alert(1)" not in md  # unsafe homepage dropped, not a link target
+    assert "javascript:alert(2)" not in md  # unsafe spec url dropped
+    assert "a\\|b" in md  # table-cell break escaped
+
+
 # --- SEO (this.i @s6eqk4) -------------------------------------------------------
 
 

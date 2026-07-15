@@ -18,6 +18,7 @@ The output is complete and deployable WITHOUT any HTML generator; Zensical
 
 from __future__ import annotations
 
+import html
 import json
 import shutil
 from pathlib import Path
@@ -55,9 +56,51 @@ def load_federation(root: str | Path) -> dict | None:
     return json.loads(path.read_text())
 
 
+# Untrusted content — schema title/name/version and, above all, third-party
+# federation.json entries (name/operator/notes/homepage/…, contributable by PR) —
+# is interpolated into generated HTML and Markdown. Escape it so the trusted
+# resolver domain cannot carry stored injection (this.i @o6bw3k; review SEC-F1).
+_SAFE_URL_SCHEMES = ("http://", "https://")
+
+
+def _safe_url(url: str | None) -> str | None:
+    """A URL safe to use as a link target, else ``None``.
+
+    Only absolute http(s) URLs and site-relative paths are allowed; anything
+    else (``javascript:``, ``data:``, …) is dropped so a federation entry cannot
+    inject an active-content link into the published site.
+    """
+    if not url:
+        return None
+    u = url.strip()
+    if u.startswith(_SAFE_URL_SCHEMES) or u.startswith("/"):
+        return u
+    return None
+
+
+def _esc_html(value: object) -> str:
+    """HTML-escape a value for safe interpolation into generated HTML."""
+    return html.escape("" if value is None else str(value))
+
+
+def _esc_md(value: object) -> str:
+    """Escape a value for a Markdown table cell.
+
+    Neutralizes raw-HTML injection (Markdown passes HTML through), table-cell
+    breaks (``|``), and link/image/code syntax, and folds newlines to spaces so
+    a single value cannot restructure the table.
+    """
+    text = html.escape("" if value is None else str(value))
+    text = text.replace("\\", "\\\\")
+    for ch in ("|", "[", "]", "`"):
+        text = text.replace(ch, "\\" + ch)
+    return text.replace("\n", " ").replace("\r", " ")
+
+
 def _md_link(text: str, url: str | None) -> str:
-    """A markdown link, or an em-dash when there is no URL."""
-    return f"[{text}]({url})" if url else "—"
+    """A markdown link to a sanitized URL, or an em-dash when there is none/unsafe."""
+    safe = _safe_url(url)
+    return f"[{_esc_md(text)}]({safe})" if safe else "—"
 
 
 def _front_matter(description: str) -> str:
@@ -109,12 +152,14 @@ def _manifest_entry(entry: SchemaEntry, said: str) -> dict:
 
 def _render_index(base_url: str, schemas: list[dict]) -> str:
     rows = "\n".join(
-        f'      <tr><td><a href="{s["schema"]}">{s["name"]}</a></td>'
-        f'<td>{s["title"] or ""}</td><td><code>{s["version"] or ""}</code></td>'
-        f'<td><a href="{s["oobi"]}"><code>{s["said"][:12]}…</code></a></td></tr>'
+        f'      <tr><td><a href="{_esc_html(s["schema"])}">{_esc_html(s["name"])}</a></td>'
+        f'<td>{_esc_html(s["title"] or "")}</td><td><code>{_esc_html(s["version"] or "")}</code></td>'
+        f'<td><a href="{_esc_html(s["oobi"])}" aria-label="OOBI for {_esc_html(s["name"])}">'
+        f'<code>{_esc_html(s["said"][:12])}…</code></a></td></tr>'
         for s in schemas
     )
     return f"""<!doctype html>
+<html lang="en">
 <meta charset="utf-8">
 <title>Bakobo ACDC schema registry</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -129,13 +174,14 @@ credential schemas, each addressed by its SAID. Machine index:
 <a href="{MANIFEST_PATH}">discovery manifest</a> · <a href="registry.json">registry.json</a>.
 Source: <a href="https://github.com/bakobo/schema">github.com/bakobo/schema</a>.</p>
 <table>
-  <thead><tr><th>Schema</th><th>Asserts</th><th>Version</th><th>OOBI (SAID)</th></tr></thead>
+  <thead><tr><th scope="col">Schema</th><th scope="col">Asserts</th><th scope="col">Version</th><th scope="col">OOBI (SAID)</th></tr></thead>
   <tbody>
 {rows}
   </tbody>
 </table>
-<p><em>Each schema also resolves as a SAID-addressed OOBI under <code>{base_url}/oobi/&lt;said&gt;.json</code>.
+<p><em>Each schema also resolves as a SAID-addressed OOBI under <code>{_esc_html(base_url)}/oobi/&lt;said&gt;.json</code>.
 A richer browsable site is in progress.</em></p>
+</html>
 """
 
 
@@ -214,16 +260,16 @@ def _render_ecosystem(federation: dict) -> str:
     """The 'Ecosystem' page: a table of known ACDC schema registries + specs."""
     reg_rows = []
     for r in federation.get("registries", []):
-        label = r["name"] + (" *(this site)*" if r.get("self") else "")
-        home = r.get("homepage")
+        label = _esc_md(r["name"]) + (" *(this site)*" if r.get("self") else "")
+        home = _safe_url(r.get("homepage"))
         name_cell = f"[{label}]({home})" if home else label
         reg_rows.append(
-            f"| {name_cell} | {r.get('operator', '')} "
-            f"| `{r.get('resolution', '')}` "
+            f"| {name_cell} | {_esc_md(r.get('operator', ''))} "
+            f"| `{_esc_md(r.get('resolution', ''))}` "
             f"| {_md_link('repo', r.get('sourceRepo'))} · {_md_link('registry', r.get('registry'))} "
-            f"| {r.get('notes', '')} |"
+            f"| {_esc_md(r.get('notes', ''))} |"
         )
-    spec_rows = [f"- [{s['name']}]({s['url']})" for s in federation.get("specifications", [])]
+    spec_rows = [f"- {_md_link(s['name'], s['url'])}" for s in federation.get("specifications", [])]
     return (
         "# Ecosystem — other ACDC schema registries\n\n"
         f"[ACDC]({ACDC_SPEC_URL}) (Authentic Chained Data Container) credential schemas are published "
