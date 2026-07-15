@@ -124,8 +124,7 @@ carried over.
   `this.i` is not yet made.
 - **DCO:** sign every commit — `git commit -s`.
 - **`tick`** for task/tech-debt tracking — `tick ls` / `tick grep` to see open
-  work (e.g. `~44oc`, the cross-repo reconcile of imbu/org to the v2.0 container
-  names).
+  work (e.g. `~5epr`, the publication-readiness gate).
 - **GitHub Actions:** pin node24-runtime action versions (avoid node20).
 - If you add tooling/tests, follow strict TDD (100% branch coverage) — CI runs
   `uv run pytest` and a fail-closed Pages deploy.
@@ -137,9 +136,9 @@ carried over.
    `../../papers/sda.md` if present.
 2. `cd tools/py && uv sync && uv run pytest` to confirm a green baseline, and
    `uv run schematools check` to lint the corpus.
-3. Pick up open work from `tick ls` (the v2.0 schema itself is done). The largest
-   is `~44oc`: propagate the `c_*` → container rename into imbu (`@v2kd7m`,
-   `@nf5rx7`) and org (`@dwx5twwyh`, `@ot4puqrj`) plus the upstream `pap`
-   `policy-schema.md`.
+3. Pick up open work from `tick ls` (the v2.0 schema itself is done; the `44oc`
+   cross-repo reconcile of imbu/org is done and the upstream `pap` half is
+   proposed as provenant-dev/pap#5). The next concrete piece is `~5epr`, the
+   publication-readiness gate.
 4. For any new design, run the speculative interview, record intent in `this.i`
    **before** the code, then implement test-first.

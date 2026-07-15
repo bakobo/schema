@@ -86,7 +86,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             low-thrash decision to make first. Rejected "just strip c_" (keeps cryptic names, gives duties no home)
             and keeping the flat prefix (cannot carry the may/must enforcement split without a second prefix).
             CONSEQUENCE: every c_ reference in schema/imbu/org prose (and the upstream pap doc) goes stale on
-            authoring — tracked in tick 5hlz (schema docs, resolved) and ~44oc (cross-repo); the schema artifact + example +
+            authoring — tracked in tick 5hlz (schema docs, resolved) and 44oc (cross-repo); the schema artifact + example +
             registry re-SAIDify per @b6xh4m.
           children:
             The v2.0 constraints container is a closed enum-checked gate; facet stays permissive = decision:
@@ -126,7 +126,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                 because GCD is the credential interface imbu's decision core enforces — the schema is the contract,
                 imbu the consumer — so the on-the-wire vocabulary should read cleanly and not inherit a consumer's
                 internal label. Consequence: imbu's delegated-only becomes the stale term, reconciled to authorize
-                under the already-tracked cross-repo tick ~44oc. Confirmed with Daniel 2026-07-15. Rejected keeping
+                under the already-tracked cross-repo tick 44oc. Confirmed with Daniel 2026-07-15. Rejected keeping
                 delegated-only (ties the interface enum to one consumer's phrasing) and a boolean pair
                 canAct/canAuthorize (three states read more clearly as one enum, and "both" is a real, common case).
             terminatingEvents and disclosables are a-block siblings of constraints, each a distinct polarity = decision:
@@ -169,7 +169,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             — duties renegotiated far more often than permissions — is YAGNI (SDA duties are role-level, ~as stable
             as permissions) and extractable later (@c5tj3p logic). This resolves @ot4puqrj and @d5tqm6's open, and
             REQUIRES a paired update to imbu @v2kd7m / @nf5rx7 and org @dwx5twwyh / @ot4puqrj (which still model a
-            distinct reciprocal record) — the cross-repo obligation tracked in tick ~44oc.
+            distinct reciprocal record) — the cross-repo obligation tracked in tick 44oc.
           children:
             The r-block duties are a first-class array keyed by bearer; timelyReviewAndRevoke becomes an issuer duty = decision:
               id: m6tq4w
