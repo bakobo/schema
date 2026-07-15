@@ -407,6 +407,22 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             cosmetic upstream SyntaxWarnings, taken in exchange for not shipping tooling pinned to an
             unreasonably old runtime. The pin is EXACT (==), not a range, because "the oracle" must be a single
             reproducible version; any future bump REQUIRES re-running the same SAID-identity check as a gate.
+        schematools surfaces a coded, catchable error at the repo-root boundary, not a raw traceback = decision:
+          id: b3kq7w
+          stage-status: done
+          why: >
+            find_repo_root raised a bare FileNotFoundError with a lowercase fragment, so a user who ran
+            schematools outside a schema repo got a raw Python traceback — the "something went wrong" failure the
+            Bakobo error-handling standard (dev/standards/error-handling.md) forbids: no stable code, no
+            permanent/transient signal, no complete sentence. Introduced SchemaRepoNotFoundError (subclass of
+            FileNotFoundError, so existing callers and tests that catch FileNotFoundError still work) carrying a
+            stable BK_NO_SCHEMA_REPO code and a complete house-voice message that names what failed, states
+            permanence (retrying the same location will not help), and is actionable (run inside a schema repo or
+            pass --root at one). The CLI entry point catches it and prints the message to stderr with a non-zero
+            exit instead of a traceback. Chose to subclass FileNotFoundError over a standalone exception (preserves
+            the existing catch contract) and over merely rewording the message (leaves no stable symbolic code for
+            a caller to branch on — the standard's load-bearing axis 1). This is the first coded error in
+            schematools and sets the pattern for the rest of the toolchain. Prompted by review finding HSX-F1.
         Bakobo-authored schema fields follow a house style — camelCase, obvious-abbrev, plural arrays = decision:
           id: p6mwk4
           why: >
