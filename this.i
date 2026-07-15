@@ -206,6 +206,64 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             its OOBI, contradicting "keeping the old" as a resolvable artifact). credentialType stays gcd-credential;
             the compact/expanded oneOf and the e-block I2I issuer edge are preserved in both versions. Confirmed with
             Daniel 2026-07-15.
+    face-to-face is hardened as a proof-of-personhood primitive for AI-proscribed contexts (v1.2.0) = decision:
+      id: hp4mk7
+      stage-status: done
+      why: >
+        face-to-face attests HUMANNESS from embodied interaction — one human vouching, from real-life
+        contact, that an issuee is a human being and not an AI, org, or device. As AI participation gets
+        actively PROSCRIBED (forums, elections, benefits, creative contests) and embodied AI improves, a
+        verifier needs the credential to answer three distinct questions the v1.1 shape blurred: (1) is the
+        subject human at all; (2) is that human bound to THIS key/AID; (3) is the binding still true now —
+        plus the orthogonal (4) uniqueness. v1.2.0 hardens it with OPTIONAL, additive fields: knownAs (the
+        non-legal label the issuer knew them by — already used in the example and docs but undefined in the
+        schema, now formalized), modalities + keyControl (@ar6vk2), firstMet / lastInteraction / ongoing
+        (freshness and relationship duration, complementing assertDate), and biometricProtocol (@uq5nw3).
+        Chose an ADDITIVE MINOR bump (1.1.0 -> 1.2.0) over a MAJOR restructure: every new field is optional
+        and no existing instance is invalidated (RFC-0430 grading @k3wm7d / @p3rk6d), and the existing
+        noOverstatement / fairBiometric disclaimers already govern the added attestation detail, so the rules
+        block and its SAID are untouched. Deliberately did NOT restructure basis into separate
+        relationship/assurance axes (that would be MAJOR and is a second pass) and did NOT add a binding
+        correlation-consent rule for the biometric uniqueness lever (documented as a privacy tradeoff in
+        index.md; a governance revision deferred). This is the first design intent recorded for a captured
+        (non-GCD) schema — face-to-face earns it because proof-of-personhood is strategically load-bearing.
+      children:
+        f2f proves humanness, not uniqueness; biometricHashes are the optional uniqueness lever = decision:
+          id: uq5nw3
+          stage-status: done
+          why: >
+            A face-to-face credential proves the subject is A human, NOT that they are a UNIQUE human — one
+            person can hold many AIDs, each vouched by different friends, so f2f alone is Sybil-permeable. For
+            "no AI allowed" that is often enough (we care that no AI participates, not that a human has one
+            account); for one-human-one-vote / UBI it is not. Rather than bolt a uniqueness protocol onto f2f,
+            the schema leans into the affordance it already has: biometricHashes. The SAME biometric hash
+            appearing across many independent issuers' credentials is privacy-preserving evidence of ONE human
+            — a decentralized dedup signal a verifier MAY use where uniqueness matters. The gap that blocked
+            this was comparability: an unlabelled hash cannot be compared across credentials without knowing
+            how it was computed. v1.2.0 adds the OPTIONAL biometricProtocol field naming the canonicalization +
+            hash protocol, so two credentials' hashes are comparable iff they cite the same protocol. Chose a
+            protocol pointer (additive, MINOR) over restructuring biometricHashes into typed objects (MAJOR,
+            breaks existing string-array instances) — the protocol string carries the comparability
+            information without changing the field's type. Accepted tradeoff: correlatable biometrics are a
+            privacy cost (documented in index.md); a binding correlation-consent governance clause is deferred.
+        Observation richness and in-person key-control are the android-resistance and human-key-binding levers = decision:
+          id: ar6vk2
+          stage-status: done
+          why: >
+            v1.1 captured the strength of the humanness observation only as minutes + a free-text basis, but
+            the model rests on "ordinary human observation can tell a human from an artifact" — an assumption
+            that DECAYS as embodied AI improves. Two additive fields make what a verifier is trusting explicit
+            and weightable. modalities (array enum: visual, tactile, conversational, movement, sharedActivity,
+            multiSession) records WHICH human-specific channels the issuer observed — the ones current AI
+            embodiments cannot fake (a handshake, spontaneous unscripted conversation, a shared meal, natural
+            gait, corroboration across separate occasions) — so a verifier can weight android-resistance, not
+            just duration. keyControl (enum: signedChallenge | deviceControl) records whether the issuer
+            watched the issuee DEMONSTRATE control of the AID in person — signing a fresh challenge with the
+            key (strongest), or operating the device that holds it — upgrading "this person is human" to "this
+            human demonstrably controlled this key in my presence," the strongest available defence against the
+            "get vouched, then hand your keys to an AI" attack. Both optional; absence means "not attested,"
+            never "false." Chose closed enums over free text so aggregators can reason over them, and kept them
+            descriptive attestation detail (governed by noOverstatement) rather than minting new rules.
     Schema-authoring tooling is deferred, pending a TypeScript-vs-Python decision = decision:
       id: p4zc7n
       stage-status: planned
