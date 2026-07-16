@@ -29,24 +29,24 @@ Delegated authority may need to be constrained in many ways. For example, the ta
 * The agent may only have authority to represent the diva in a particular geography or language or market.
 * The agent's authority may be contingent on the agent remaining licensed by the industry.
 
-GCD credentials allow the issuer to express analogous constraints. As of v2.0
-these live inside the **`constraints` container** in the attributes block (the
+GCD credentials allow the issuer to express analogous constraints. These
+live inside the **`constraints` container** in the attributes block (the
 enabling "may"). Each field is optional; an absent field means that dimension is
 unconstrained. For example:
 
-* `goals` constrains the goal-driven behaviors in which the delegate can engage on behalf of the delegator (e.g., to sign SMS messages, to buy, to sell, to schedule appointments...). *(v1 `c_goal`.)*
+* `goals` constrains the goal-driven behaviors in which the delegate can engage on behalf of the delegator (e.g., to sign SMS messages, to buy, to sell, to schedule appointments...).
 * `effects` constrains how an act may change the world — `observe`, `create`, `modify`, `preserve`, `destroy`. This is a *separate lock* from `goals`, so a read-only delegate holds `effects: ["observe"]` and cannot mutate even inside a permitted goal.
 * `stateKinds` constrains what kind of state an act may touch — `information`, `record`, `commitment`, `authority`, `resource`, `relationship`.
 * `domains` names the authorization domain(s) in which the delegated authority applies.
-* `physGeos` constrains the locations in which a physically present delegate can exercise their delegated authority. *(v1 `c_pgeo`.)*
-* `virtGeos` constrains where a potentially remote (virtually present) delegate can be located while exercising their delegated authority. *(v1 `c_rgeo`.)*
-* `jurisdictions` constrains the legal jurisdictions in which the delegate can undertake actions with their delegated authority that legally bind the delegator (e.g., to sign a contract on the delegator's behalf). *(v1 `c_jur`.)*
-* `icals` constrains the days and times, and possibly the URLs, in which the delegate can exercise their delegated authority (e.g., only when, in India's timezone, it is a Saturday or Sunday between midnight and noon, and only in a particular slack channel). *(v1 `c_ical`.)*
-* `monetaryLimit` creates a ceiling for the financial stakes of the delegated action; that is, the delegate can act only in contexts where a financial value < N is at stake. Value is a string that contains a number followed by a space, then units: an ISO 4217 currency symbol, a three-letter cryptocurrency abbreviation, or another brief single-token symbol with obvious meaning: "25 CHF", "0.3 BTC", "4 OZ-XAU". This field is money-locked — it is not a general "stakes" quantity. *(v1 `c_upto`.)*
-* `protos` constrains protocol+role combinations in which the delegate can exercise their delegated authority (e.g., the delegate is allowed to play the `getter` role in the `vtp` protocol). *(v1 `c_proto`.)*
-* `proofs` identifies schemas for proof requests in the IPEX protocol; the delegate's authority depends on their ability to prove what the schema demands (e.g., a chauffeur is allowed to drive the delegator's limousine as long as they can prove they have a valid driver's license). *This constraint should not be confused with ACDC edges (chained credentials), which justify the delegator's status in the first place, and which are the SAIDs of concrete credentials rather than identifiers of schemas which could satisfy a constraint.* *(v1 `c_prove`.)*
-* `validFrom` / `validUntil` bound the validity window as single absolute floor / ceiling. *(v1 `c_after` / `c_before`.)*
-* `humanReview` carries free-text instructions that force human judgment; any GCD with this field MUST NOT be verified without a human. *(v1 `c_human`.)*
+* `physGeos` constrains the locations in which a physically present delegate can exercise their delegated authority.
+* `virtGeos` constrains where a potentially remote (virtually present) delegate can be located while exercising their delegated authority.
+* `jurisdictions` constrains the legal jurisdictions in which the delegate can undertake actions with their delegated authority that legally bind the delegator (e.g., to sign a contract on the delegator's behalf).
+* `icals` constrains the days and times, and possibly the URLs, in which the delegate can exercise their delegated authority (e.g., only when, in India's timezone, it is a Saturday or Sunday between midnight and noon, and only in a particular slack channel).
+* `monetaryLimit` creates a ceiling for the financial stakes of the delegated action; that is, the delegate can act only in contexts where a financial value < N is at stake. Value is a string that contains a number followed by a space, then units: an ISO 4217 currency symbol, a three-letter cryptocurrency abbreviation, or another brief single-token symbol with obvious meaning: "25 CHF", "0.3 BTC", "4 OZ-XAU". This field is money-locked — it is not a general "stakes" quantity.
+* `protos` constrains protocol+role combinations in which the delegate can exercise their delegated authority (e.g., the delegate is allowed to play the `getter` role in the `vtp` protocol).
+* `proofs` identifies schemas for proof requests in the IPEX protocol; the delegate's authority depends on their ability to prove what the schema demands (e.g., a chauffeur is allowed to drive the delegator's limousine as long as they can prove they have a valid driver's license). *This constraint should not be confused with ACDC edges (chained credentials), which justify the delegator's status in the first place, and which are the SAIDs of concrete credentials rather than identifiers of schemas which could satisfy a constraint.*
+* `validFrom` / `validUntil` bound the validity window as single absolute floor / ceiling.
+* `humanReview` carries free-text instructions that force human judgment; any GCD with this field MUST NOT be verified without a human.
 
 Two sibling axes sit alongside `constraints` in the attributes block:
 
@@ -57,7 +57,7 @@ The **`facet`** container carries relationship metadata — `role`, `relationTyp
 
 All fields inside `constraints` share these semantic rules:
 
-1. Enforceable constraints live only inside the `constraints` container (or in the `role` field when `gfw` is defined). **Nothing outside `constraints` constrains**, and an unrecognized key *inside* `constraints` is **fail-closed** — a verifier that does not recognize it MUST deny. (This replaces v1's `c_`-prefix convention with a firmer subtree boundary; see the `noConstraintOutsideConstraints` rule.)
+1. Enforceable constraints live only inside the `constraints` container (or in the `role` field when `gfw` is defined). **Nothing outside `constraints` constrains**, and an unrecognized key *inside* `constraints` is **fail-closed** — a verifier that does not recognize it MUST deny. (See the `noConstraintOutsideConstraints` rule.)
 2. Each field MUST identify one or more values that are allowed (e.g., with a regex or an allow list). *Within a single field*, values are effectively ORed, meaning that any match is enough to satisfy that field. If the `jurisdictions` field says that valid jurisdictions are `["FR", "DE", "IN"]`, then the delegator authorizes the delegate to take legally binding actions if they are enforceable in France OR Germany OR India.
 3. *Across all fields*, matches are ANDed, meaning that all of the constraints must be satisfied. Building on the previous example of `jurisdictions`, if the `virtGeos` field also says that valid locations for the remote delegate are `["FR", "DE", "IN"]`, then the delegate's actions are valid if they are legally enforceable in one of the 3 legal jurisdictions (first field), AND if the delegate appears to be operating from one of those same 3 countries (second field).
 
