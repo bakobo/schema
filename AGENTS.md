@@ -27,6 +27,16 @@ If this repo has no `this.i` yet and warrants one, see [`dev/methodology.md`](..
 §2 and the shipped `this.i.seed`. A trivial repo (pure content/assets/config, where no one will
 later need to know *why*) may skip intent entirely — just delete `this.i.seed`.
 
+## Design notes (reusable principles)
+
+Repo-specific decisions live in `this.i`; reusable *design principles* distilled from them live as
+derived docs under [`docs/`](docs) (they also render into the published site). Read these before
+authoring a schema so you don't re-derive them:
+
+- [`docs/choosing-attribute-vs-aggregate.md`](docs/choosing-attribute-vs-aggregate.md) — when to use an
+  attribute (`a`) section vs an aggregate (`A`) section for graduated disclosure.
+- [`docs/style.md`](docs/style.md) — schema field house style.
+
 ## Testing Protocol
 
 This repo follows **strict TDD**. For each requirement, write failing tests that

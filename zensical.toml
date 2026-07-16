@@ -32,7 +32,11 @@ nav = [
     { "Foreign artifact affidavit" = "faa/index.md" },
     { "Org vet" = "org-vet/index.md" },
     { "Proof of control" = "proof-of-control/index.md" },
+    { "SEDI identity" = "sedi-id/index.md" },
+    { "SEDI age" = "sedi-age/index.md" },
+    { "SEDI age-portrait presentation" = "sedi-present-age-portrait/index.md" },
     { "Schema house style" = "style.md" },
+    { "Choosing attribute vs aggregate" = "choosing-attribute-vs-aggregate.md" },
 ]
 
 [project.theme]
