@@ -115,6 +115,41 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                 uniqueItems on every array field (an empty allow-list is meaningless; a pure delegator omits goals
                 and sets exerciseMode:authorize rather than carrying an empty goals array). Rejected free-string
                 effect/stateKind (ungateable) and a fail-closed facet (churns on every imbu facet addition).
+              children:
+                effects+stateKinds were a drift; authority is a set of (effect,state-kind) POINTS in acts = decision:
+                  id: k4pv7n
+                  stage-status: done
+                  why: >
+                    @k7wd3m modeled effect and state-kind as two INDEPENDENT allow-list fields (effects[],
+                    stateKinds[]), ANDed across like the other constraints. That is a drift from the model this schema
+                    serves: SDA §4 / Fig 2 locates an act as a VECTOR of (effect, state-kind) POINTS — the two are the
+                    axes of one coordinate grid, and neither is meaningful alone ("create" is create WHAT; "commitment"
+                    is do WHAT to it). ANDing two independent axes grants their CROSS-PRODUCT: to permit "create a
+                    relationship" and "observe a commitment" you had to list effects [create,observe] and stateKinds
+                    [relationship,commitment], which silently ALSO granted "create a commitment" and "observe a
+                    relationship" — over-granting, and unable to express asymmetric per-kind effects. imbu already
+                    models the act as a coordinate vector (@mq4v7d) with the gate a function of (effect, state-kind,
+                    target) (@d6mk3g); GCD drifted, not imbu. FIX: replace effects + stateKinds with a single field,
+                    constraints.acts — a set of (effect, state-kind) POINTS. Each point is a space-delimited string
+                    "effect state-kind" (verb object, reads as a phrase: "create commitment"), with a ONE-SIDED brace
+                    enumeration to name several kinds for an effect ("observe {info, record}") or several effects for a
+                    kind ("{create, modify} record"); brace-internal items separate on one or more commas/spaces.
+                    Two-sided braces (a rectangle in one token) and open wildcards are FORBIDDEN — the first
+                    structurally re-admits the cross-product, the second is fail-open on a later-added kind; both are
+                    rejected by the field's pattern regex, so a malformed or unknown token fails closed at the schema
+                    level. state-kind is abbreviated info (house glossary). An act is authorized iff EVERY point it
+                    occupies is covered; the gate (auto/rule/human) it must clear is DERIVED per act from those points
+                    and the target via the gfw (@d6mk3g), NOT enumerated here — so state-kind stays gate-machinery,
+                    present in acts only as the coordinate half of a point. goals (telos) stays a SEPARATE axis, not
+                    folded into the point (SDA: effect is "a separate lock from telos"). A pure delegator has an EMPTY
+                    act surface (SDA §5): it omits acts and sets exerciseMode:authorize. Chose the space-delimited
+                    string DSL over nested {effect,stateKind} objects (keeps every constraint a flat array of strings;
+                    the author can be verbose or use braces) and over spreadsheet cell/range notation (whose whole
+                    advantage is compact rectangles — the very cross-product we are removing — and whose A1-style refs
+                    need a legend, violating the house style). Folded into v2.0 in place because it is unreleased and
+                    imbu's enforcement unbuilt, so no consumer depends on the effects/stateKinds shape yet; the parent
+                    why's effects/stateKinds naming is left as the dated record. Grounded by re-reading SDA Fig 2 with
+                    Daniel, 2026-07-15.
             exerciseMode is the enum act|authorize|both; imbu's delegated-only reconciles to authorize = decision:
               id: x4nq6t
               stage-status: done
