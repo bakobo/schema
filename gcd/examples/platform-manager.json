@@ -1,11 +1,11 @@
 {
-  "v": "ACDC10JSON000c1a_",
-  "d": "ENPcp2FBTebXYZyD-yaIxP_5DC9aWL3MWzRKbY_ZEmd0",
+  "v": "ACDC10JSON000bff_",
+  "d": "EJdEXpxx2FYgXXTru2mh9m_4AxDefMFS3Jm12zq-7YgM",
   "i": "EHP7LTGr_wjt00dK8Fs9zpIdonnpYlcTmVJ_9juy1d1z",
   "ri": "EIIGOntDVK7ALYl7KYqDitpdb1hJhSj_NZ8Mq4gG-Fix",
-  "s": "EIqGVj_kEr0GTBELK6QtALn_sqHExLBDl2gHK82Xl-x3",
+  "s": "EJeBiq_7yuq-J7RrRgNu5OgvUWDOCrIAwq19_w_YxHU7",
   "a": {
-    "d": "EEjh5atuJHhwsHN_SOUJoRi-XrvUFYXsrbfXFI-9DD_n",
+    "d": "EPiHvB7C86FLzM_eMpi8Uvs_skuxSxYPaL6LZVw_2WjJ",
     "i": "EBopcb2_Y2YfgD1LlMyjJRRCLIro8-9s9cltO9s7hfXI",
     "dt": "2026-08-01T09:00:00.000000+00:00",
     "facet": {
@@ -16,9 +16,6 @@
       "exerciseMode": "authorize"
     },
     "constraints": {
-      "stateKinds": [
-        "authority"
-      ],
       "domains": [
         "eng.platform",
         "deploy.prod",

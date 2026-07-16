@@ -1,11 +1,11 @@
 {
-  "v": "ACDC10JSON000d60_",
-  "d": "EOZU1WAsIPls-Ws929UCa0IsxRpLFfMY5bi3WJvfA9au",
+  "v": "ACDC10JSON000d4d_",
+  "d": "ELsabNbq7zG8Nmy7Dcz6poEzEtRl92mZCP495oXDeqlg",
   "i": "EEpjq0jMPWTgAIiusb37rCCwyFVYleJ1dsa9EzfcvEBB",
   "ri": "EAVblgVyCpzGY_8jH1vPOQTkyUb-YNixxwIGynQKfDNE",
-  "s": "EIqGVj_kEr0GTBELK6QtALn_sqHExLBDl2gHK82Xl-x3",
+  "s": "EJeBiq_7yuq-J7RrRgNu5OgvUWDOCrIAwq19_w_YxHU7",
   "a": {
-    "d": "EGADjPXRWaAdc89d1Prryva52x24odWA6otVTG0P8_gp",
+    "d": "ELEpkT9vjvHwp9XbDpU3OIZ7Xeoomy67orJcMWwMlZeV",
     "i": "EAZ_MkqQmJy746IldbNXAB5_lhhyOI8g8ym7EKi8XZZZ",
     "dt": "2026-08-01T09:00:00.000000+00:00",
     "gfw": "EEH0Q14-DKglGj-aYmqRF6HNTOIJwwvWVnMf9VH3o687",
@@ -21,12 +21,8 @@
         "sell.realestate",
         "represent.seller"
       ],
-      "effects": [
-        "create",
-        "modify"
-      ],
-      "stateKinds": [
-        "commitment"
+      "acts": [
+        "{create, modify} commitment"
       ],
       "jurisdictions": [
         "US-CA"

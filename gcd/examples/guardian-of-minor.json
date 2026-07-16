@@ -1,11 +1,11 @@
 {
-  "v": "ACDC10JSON000ea7_",
-  "d": "EIgo8LefnsdadJGXno910Ewhk8K7O-wOj7lpVxiUG9Gj",
+  "v": "ACDC10JSON000f02_",
+  "d": "EJB-zNJ0wR-nMt-ylMafeiwmzfmm91AAKj7rVH6-UwD9",
   "i": "EMVRTCnDB1rX2xHfQSEHmq-2QWJt6z7dOt4mHOZrLCO9",
   "ri": "EHS30vlXk7_NoZMPMU6yiqf1_6zqRyQYZAU6oMyjBuhB",
-  "s": "EIqGVj_kEr0GTBELK6QtALn_sqHExLBDl2gHK82Xl-x3",
+  "s": "EJeBiq_7yuq-J7RrRgNu5OgvUWDOCrIAwq19_w_YxHU7",
   "a": {
-    "d": "EGJE6VmFWcqawx0heqjcbK0mkTUEpPN1CZMdzV-rCdc4",
+    "d": "EIgSl8_QtDHHPwBifaviFPttKIPmhqXeURzE-veYipO9",
     "i": "EEAq2oRYKymMNKnRJF_Fb2lAMcqr-6scGxJQRq3kPOsH",
     "dt": "2026-08-01T09:00:00.000000+00:00",
     "gfw": "EPuKongCyb6j6jh8tQ1iVya26rXSy-XDFEA7PCa2I1kU",
@@ -22,16 +22,11 @@
         "care.education",
         "manage.finances"
       ],
-      "effects": [
-        "observe",
-        "create",
-        "modify",
-        "preserve"
-      ],
-      "stateKinds": [
-        "commitment",
-        "resource",
-        "relationship"
+      "acts": [
+        "observe {commitment, resource, relationship}",
+        "create {commitment, resource, relationship}",
+        "modify {commitment, resource, relationship}",
+        "preserve {commitment, resource, relationship}"
       ],
       "jurisdictions": [
         "US-CA"

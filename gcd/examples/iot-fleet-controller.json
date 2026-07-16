@@ -1,11 +1,11 @@
 {
-  "v": "ACDC10JSON000de8_",
-  "d": "EO0DvKrwFBHaHBgy9ZElq2LxQnMOtALSOO2fD3wh1dqs",
+  "v": "ACDC10JSON000df0_",
+  "d": "EG3xAu3EPJd31NvFDkm_kOTKWjBrc4vhOQJlug_HmiKP",
   "i": "EO208tzf2dCxspgkL427V3GtLp0S1JbxCeYRMOrSWDS8",
   "ri": "EN5b7q6dMXIC9L0jzZFB7DiHBq0JrvU6ASWeJ0pnogK0",
-  "s": "EIqGVj_kEr0GTBELK6QtALn_sqHExLBDl2gHK82Xl-x3",
+  "s": "EJeBiq_7yuq-J7RrRgNu5OgvUWDOCrIAwq19_w_YxHU7",
   "a": {
-    "d": "EKW6_F04ygtNrYQoUXRSCTY8kWKFipmShxPCGiT7vFpf",
+    "d": "EJxNFCzEw8N3dLYAPGLvPMxTk4pu1Dm_0MfL9B8zsPEg",
     "i": "ECs3P_4LYTH8DZ8EPaJclUBR8f_VzfN6XIF07Cp9ZloU",
     "dt": "2026-08-01T09:00:00.000000+00:00",
     "gfw": "EOri-GbJjnMy8Qkk7DL2UwAp0HK84olXu8If6VqRYVAi",
@@ -21,14 +21,10 @@
         "operate.hvac",
         "maintain.devices"
       ],
-      "effects": [
-        "observe",
-        "modify",
-        "preserve"
-      ],
-      "stateKinds": [
-        "resource",
-        "information"
+      "acts": [
+        "observe {info, resource}",
+        "modify {info, resource}",
+        "preserve {info, resource}"
       ],
       "virtGeos": [
         "US",

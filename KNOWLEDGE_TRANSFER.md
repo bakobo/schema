@@ -52,10 +52,13 @@ The attributes block (`a`) drops the flat `c_` prefix for **named containers**:
   authority-to-authorize as independent axes; a pure delegator is `authorize`
   with empty goals). Permissive/safe-ignore: only `constraints` gates.
 - **`constraints`** — the enabling "may", **fail-closed**
-  (`additionalProperties: false`): `goals`, `effects`
-  (observe/create/modify/preserve/destroy — a *separate lock* from goals, so a
-  read-only delegate holds `effects: ["observe"]`), `stateKinds`
-  (information/record/commitment/authority/resource/relationship), `domains`,
+  (`additionalProperties: false`): `goals`; `acts` — the set of
+  **(effect, state-kind) points** the delegate may act on (SDA Fig 2), each a
+  string `effect state-kind` (`create commitment`) or a one-sided brace
+  enumeration (`observe {info, record}`), effect ∈
+  observe/create/modify/preserve/destroy, state-kind ∈
+  info/record/commitment/authority/resource/relationship — the two axes of one
+  coordinate, so state-kind is never a standalone field (`@k4pv7n`); `domains`,
   `jurisdictions`, `physGeos`/`virtGeos`, `icals`, `monetaryLimit` (money-locked),
   `protos`, `proofs`, `validFrom`/`validUntil`, `humanReview`.
 - **`terminatingEvents`** — sibling of `constraints`: the voiding polarity —

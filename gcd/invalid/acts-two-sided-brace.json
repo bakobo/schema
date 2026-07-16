@@ -1,12 +1,12 @@
 {
-  "v": "ACDC10JSON000f06_",
-  "d": "EJkUGOSoUZlAaA501-ep1IWxaxMlRxUfVcEhJZ8QLqyI",
+  "v": "ACDC10JSON000ef3_",
+  "d": "EKAJdp5dIJd8d3a4Z6fzDMVGAMRTh6ro7yDLn1BchKJ4",
   "u": "0ADE6oAxBl4E7uKeGUb7BEYi",
   "i": "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL",
   "ri": "EM2YZ78SKE8eO4W1lQOJeer5xKZqLmJV7SPr3Ji5DMBZ",
-  "s": "EIqGVj_kEr0GTBELK6QtALn_sqHExLBDl2gHK82Xl-x3",
+  "s": "EJeBiq_7yuq-J7RrRgNu5OgvUWDOCrIAwq19_w_YxHU7",
   "a": {
-    "d": "EAbfD_h2BzkEuMYG55GojlJXXwQprzqzCdTfYt5kDBdb",
+    "d": "EMNT7mJ9X9qiIWQF9iQDwmWt0_DdioQnROMwEwsKhGYx",
     "u": "0AC9kH8q99PTCQNteGyI-F4g",
     "i": "EIkxoE8eYnPLCydPcyc_lhQgwOdBHwzkSe36e2gqEH-5",
     "dt": "2024-12-27T13:11:29.062000+00:00",
@@ -22,11 +22,8 @@
       "goals": [
         "meetupcorp.personal.date"
       ],
-      "effects": [
-        "teleport"
-      ],
-      "stateKinds": [
-        "commitment"
+      "acts": [
+        "{create, modify} {record, commitment}"
       ],
       "domains": [
         "payments"

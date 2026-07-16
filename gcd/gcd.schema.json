@@ -1,5 +1,5 @@
 {
-  "$id": "EIqGVj_kEr0GTBELK6QtALn_sqHExLBDl2gHK82Xl-x3",
+  "$id": "EJeBiq_7yuq-J7RrRgNu5OgvUWDOCrIAwq19_w_YxHU7",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Generalized Cooperative Delegation Credential",
   "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 2.0 organizes the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classes duties in the rules block.",
@@ -48,7 +48,7 @@
           "type": "string"
         },
         {
-          "$id": "EBzxcWMgl1yz1N_UOJ1SOeWjkt1VXVpD2EbAkk9Rxh8H",
+          "$id": "EFns6gD3GjjM-HUqS714QgRwUV6HirVp1gyj4vCnxZ7E",
           "description": "Attributes block",
           "type": "object",
           "required": [
@@ -143,36 +143,18 @@
                     "pattern": "^([a-z]([a-z0-9]*[-._/]?))+[a-z0-9]+$"
                   }
                 },
-                "effects": {
-                  "description": "Array of effect codes that constrain how the delegate's acts may change the world along the SDA effect axis. observe: read without change. create: bring a new state into being. modify: change an existing state. preserve: keep a state as it is. destroy: end a state.",
+                "acts": {
+                  "description": "The set of (effect, state-kind) POINTS this delegate may act on \u2014 the enabling 'may' over the act grid. Each entry is one point, written 'effect state-kind' (e.g. 'create commitment'), or a one-sided brace enumeration naming several kinds for one effect ('observe {info, record}') or several effects for one kind ('{create, modify} record'); items inside braces separate on one or more commas or spaces. effect is one of observe, create, modify, preserve, destroy; state-kind is one of info, record, commitment, authority, resource, relationship \u2014 the two axes of one coordinate, neither meaningful alone. An act is authorized only if EVERY (effect, state-kind) point it occupies is covered here. The gate (auto/rule/human) an act must clear is DERIVED per act from its points and its target via the governance framework (gfw), not enumerated here. A pure delegator (exerciseMode authorize) omits this field, having an empty act surface. Two-sided braces and wildcards are intentionally not allowed.",
                   "type": "array",
                   "uniqueItems": true,
                   "minItems": 1,
                   "items": {
                     "type": "string",
-                    "enum": [
-                      "observe",
-                      "create",
-                      "modify",
-                      "preserve",
-                      "destroy"
-                    ]
-                  }
-                },
-                "stateKinds": {
-                  "description": "Array of state-kind codes that constrain what kind of state the delegate's acts may touch. information: raw data. record: an attested datum. commitment: a promise or obligation. authority: a delegation or permission. resource: a consumable or asset. relationship: a standing connection between parties.",
-                  "type": "array",
-                  "uniqueItems": true,
-                  "minItems": 1,
-                  "items": {
-                    "type": "string",
-                    "enum": [
-                      "information",
-                      "record",
-                      "commitment",
-                      "authority",
-                      "resource",
-                      "relationship"
+                    "pattern": "^(?:(?:observe|create|modify|preserve|destroy) (?:info|record|commitment|authority|resource|relationship|\\{(?:info|record|commitment|authority|resource|relationship)(?:[ ,]+(?:info|record|commitment|authority|resource|relationship))*\\})|\\{(?:observe|create|modify|preserve|destroy)(?:[ ,]+(?:observe|create|modify|preserve|destroy))*\\} (?:info|record|commitment|authority|resource|relationship))$",
+                    "examples": [
+                      "create commitment",
+                      "observe {info, record, commitment}",
+                      "{create, modify} record"
                     ]
                   }
                 },

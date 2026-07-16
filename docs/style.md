@@ -13,10 +13,10 @@ schemas adopt it when they next get a version bump; it is not a repo-wide rename
    - ✅ `phys`, `virt`, `val`, `proto`, `geo` — obvious.
    - ❌ `dom` for domain — collides with the HTML DOM → use `domain`.
 3. **Abbreviate freely; amputate never.** An abbreviation shortens a *word*
-   (`jurisdiction`→`juris`); it must not drop a word. `stateKind` stays — `kind`
-   alone loses the load-bearing "state".
+   (`information`→`info`); it must not drop a word. `liableParty` stays — `party`
+   alone loses the load-bearing "liable".
 4. **Array-valued fields are plural.** Pluralize the English word, *then*
-   abbreviate: `goals`, `effects`, `stateKinds`, `protos`, `proofs`, `physGeos`,
+   abbreviate: `goals`, `protos`, `proofs`, `physGeos`,
    `virtGeos`. An abbreviation whose plural is not *itself* clearly plural is
    rejected: `jurisdiction` stays `jurisdictions`, never `juris` (a bare `juris`
    does not read as a plural). Format-label plurals are the accepted exception —
@@ -55,8 +55,7 @@ In v2.0 these all live inside the `constraints` container (this.i `@h4tqm7`,
 | v1 | v2 (`a.constraints.*`) | array? |
 |---|---|---|
 | `c_goal` | `goals` | ✓ |
-| *(new)* | `effects` | ✓ |
-| *(new)* | `stateKinds` | ✓ |
+| *(new)* | `acts` | ✓ |
 | *(new)* | `domains` | ✓ |
 | `c_jur` | `jurisdictions` | ✓ |
 | `c_pgeo` | `physGeos` | ✓ |
