@@ -938,3 +938,168 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             counterparty-qualification constraint pre-commits part of it, and because a mutual-proof handshake
             edges toward the interaction complexity GCD has so far avoided. Revisit when c_disc is opened for
             design.
+    The SEDI credential family models Utah's State-Endorsed Digital Identity = goal:
+      id: sd4rkp
+      why: >
+        Utah's SEDI law (Utah Code Title 63A Ch. 20, enacted by SB 275, effective 2026-05-06) creates a
+        rights-and-standards framework whose §301 requirements — a holder-created identifier that is
+        "mathematically provable to be under a holder's control", compromise detection/recovery,
+        cross-context-correlation protection, no state phone-home, offline presentation, selective
+        disclosure, prove-age-without-birthdate, and open standards "free from licensing fees and patent
+        restrictions" — in combination only KERI/ACDC cleanly satisfy. Bakobo was invited to help pioneer
+        SEDI use cases with Daniel Hardman's KERI leadership as the anchor, so modeling the SEDI credentials
+        as ACDC schemas belongs here alongside GCD (delegation is first-class in SEDI via the statutory
+        digital guardian, §201(3)). Chose to model SEDI as a small FAMILY rooted at a minimal state-endorsed
+        identity credential, not one fat credential, because the statute endorses exactly four attributes
+        (name, birth date, image, Utah residence address — §301(2)(f)) and forbids collecting more
+        (§302(7)); everything richer (age thresholds, presentations, guardianship, foreign-credential
+        bridging) chains to that root as a separate credential. Full research + synthesis lives in the sedi
+        knowledge repo (artifacts/sedi-schema-synthesis.md); the load-bearing decisions are recorded below
+        and vendored into each credential's index.md. Note SEDI is Utah-specific where the rest of this repo
+        is general-purpose (see @k5wd2r) — accepted because the ACDC PRIMITIVES it exercises (the v2
+        Aggregate section, selective disclosure, I2I presentation chaining) are exactly the general
+        machinery this repo exists to demonstrate, and SEDI is the most credible real-world beachhead for
+        them.
+      children:
+        sedi-id carries the four endorsed attributes as a v2 Aggregate section = decision:
+          id: sd7mwq
+          why: >
+            sedi-id is the state-endorsed root: an ACDC v2 Aggregate ('acg', 'A' section) credential whose
+            every identity attribute is an individually-blinded, self-addressing block, with element 0 the
+            AGID committing to the set. Chose the Aggregate section over an ordinary attribute ('a') section
+            because the statute MANDATES selective disclosure and prove-age-without-birthdate (§301(1)(e))
+            and bans presentation tracking (§301(3)): the aggregate lets a holder reveal an arbitrary subset
+            of blocks in full while the rest travel as bare, per-block-blinded SAIDs, and a verifier
+            recomputes the AGID to confirm authenticity — offline, with no issuer callback. The governing
+            design constraint is the atomicity rule (all fields in one block disclose together), so block
+            granularity IS disclosure granularity. Issuer = the State (DGO); the holder AID is carried in its
+            own Issuee block (an aggregate ACDC has no top-level a.i), which is what an I2I presentation chain
+            checks. Grounded in the worked keripy example tests/acdc/test_clc_disclosure.py, which runs this
+            exact credential shape through selective disclosure + chain-link-confidentiality.
+        Name and residence decompose into sibling blocks; residence is the load-bearing case = decision:
+          id: sd3vnx
+          why: >
+            Both name (given/family) and the residence address are split into SEPARATE aggregate blocks, not
+            carried as one lump or one nested object — and decomposed is the SOLE production shape (an earlier
+            "coarse baseline + fine opt-in" hedge was retracted). Rationale: because a block discloses
+            atomically, a single residence block would force over-disclosure on every verifier who only needs
+            jurisdiction, making the statute's minimization duty (§501 "minimum attributes", §701 duty of
+            loyalty) un-satisfiable at the schema level; "prove Utah resident" (voter eligibility, in-state
+            tuition, tax/jurisdiction, alcohol) is the most common residence predicate; withholding the street
+            line protects exactly the Title-20A withheld/at-risk-voter classes (DV victims, LEOs, protected
+            persons); and NOT decomposing would make SEDI a privacy regression from the ISO 18013-5 mDL it
+            replaces (which already splits resident_address/city/state/postal). Decomposed strictly dominates
+            (a holder can always disclose every component to reconstruct the coarse view), so the single-block
+            form buys nothing and two profiles is itself a cost. Grain: keep the street LINE whole
+            (residenceStreet) rather than parse it (PO boxes, rural routes, non-US formats are brittle; the
+            useful predicates live in the clean jurisdiction fields); split only city/state/postal/county; go
+            no finer. Naming is SEMANTIC interop not field-name interop: use Utah's statutory term "residence"
+            (residenceCity, residenceState, ...), not mDL's "resident" — align the component semantics with
+            18013-5 so the bridge crosswalk is mechanical, but keep the statute's vocabulary. Labels are flat
+            and DOT-FREE on purpose: a dotted key (residence.street) signals a nesting the data model
+            deliberately lacks and is a cross-tooling footgun (jq/JSONPath treat the dot as a path; JS
+            obj.residence.street traverses; MongoDB reinterprets dotted keys).
+        The endorsed image is committed by digest and holder-carried, never a URL or inline blob = decision:
+          id: sd6tzc
+          why: >
+            The image block carries a content DIGEST plus minimal metadata (format, dim, captured); the actual
+            portrait bytes are holder-carried and attached to a presentation under chain-link confidentiality,
+            verified against the digest. Rejected a DOWNLOAD LOCATOR because it fails three statutory tests at
+            once — it breaks mandatory offline presentation (§301(1)(d)); it is phone-home by another name
+            (whoever hosts/observes the fetch learns presentation events, §301(3)/§701); and it creates an
+            availability/denial chokepoint incompatible with a self-sovereign credential. Rejected INLINING
+            raw bytes into the aggregate block (as the keripy demo does) as bloat: a registry-anchored
+            credential would re-hash tens of KB on every block-SAID computation. One canonical portrait
+            (ISO/IEC 19794-5-grade, matching DMV/mDL) — no resolution ladder (multiplies correlation surfaces;
+            a wallet can downscale for display, though a locally-derived thumbnail is not state-verifiable).
+            The second biometric artifact is NOT a resolution but a separate optional faceTemplate block: a
+            cancelable/biohashed ISO/IEC 24745-style template for consented 1:N dedup (a plain photo hash is
+            useless for matching), carrying a named biometricProtocol and disclosed only under a
+            correlation-consent rule since a shared protocol is a cross-credential linkage key. Data URLs are
+            tolerated only as a presentation-edge convenience; the digested artifact is always the canonical
+            raw bytes, never the data-URL string (its MIME/base64/charset params make the digest brittle).
+        Age is a derived boolean attestation (sedi-age), not a ZK predicate or an edge from the root = decision:
+          id: sd5hjb
+          why: >
+            prove-age-without-birthdate (§301(1)(e)) is served by a small derived credential, sedi-age, that
+            asserts a boolean over a named threshold (ageThreshold/ageOver/asOf), one schema serving every
+            threshold like the mDL age_over_NN element. Chose a pre-derived boolean (the plan-of-record
+            default) over a zero-knowledge predicate proof for the near term: it keeps the birth date out of
+            the transaction with no exotic cryptography, and covers the alcohol/tobacco use case (§204(2)(a)).
+            sedi-age carries NO edge to sedi-id: an I2I edge would hold only if age's issuer equalled sedi-id's
+            issuee (the holder), i.e. only if the holder self-issued age — which carries no state endorsement.
+            The same-holder binding is instead established at PRESENTATION time by a holder-issued bespoke
+            credential whose I2I edges point at both source credentials (the holder is issuer there, and the
+            issuee of both). A ZK-predicate variant is a possible future profile the statute explicitly
+            permits.
+        The v1-pinned SAID oracle cannot stamp v2 aggregate ACDCs; aggregate examples are unversioned = constraint:
+          id: sd2qfw
+          why: >
+            This repo's SAID oracle is pinned to keri 1.2.13 (@m4vd7s, @xv4m7d), which predates the ACDC v2
+            Aggregate section. Empirically (probed 2026-07-16): keri 1.2.13's SerderACDC REJECTS a versioned
+            aggregate SAD (it disallows even the v2 'rd' field, let alone 'A'), but the generic Saider path
+            round-trips an UNVERSIONED aggregate SAD cleanly as a fixed point, treating 'A' opaquely; and
+            schema saidification works for an 'A'-section schema (the top-level $id is generic over the JSON).
+            Consequences, recorded so they are not mistaken for defects: (1) sedi-id's 'v' is OPTIONAL and its
+            illustrative examples omit it — a production credential carries a v2 version string a v2 stack
+            stamps; (2) a v2 credential's top-level SAID is computed over the COMPACT form (A = AGID) and is
+            disclosure-invariant, but the v1 oracle computes 'd' over literal content, so each example is a
+            fixed point over its own expanded form and the two sedi-id examples do not share one 'd' (under v2
+            they would); (3) the AGID and per-block SAIDs are authentic — computed with the v2 keri Aggor (the
+            keripy test) — but this repo's linter does NOT recompute the AGID; it checks top-level SAID
+            consistency, schema validity, and the negative corpus. Chose to keep the pin and document the
+            limitation over bumping keri to a v2 dev build, because @m4vd7s makes the pin load-bearing for
+            every existing SAID in the corpus and a dev build would risk silent SAID drift; revisit when a
+            released keri v2 can be pinned and differentially verified.
+        The rest of the family and a SEDI governance framework are roadmap = decision:
+          id: sdc7xn
+          stage-status: planned
+          why: >
+            Built now: sedi-id (the aggregate root) and sedi-age (derived boolean age). On the roadmap, tracked
+            in tick and named in sedi-id/index.md: SEDI presentations (see @sdp3wk — a presentation-base plus
+            per-verifier-pattern specializations over a referenced governance framework, NOT a monolithic
+            'bespoke' type); sedi-guardian (a GCD-style delegation for the statutory digital guardian,
+            §201(3)); and sedi-bridge (a reissuer / foreign-artifact wrapper re-anchoring an ephemeral foreign
+            credential — EUDI, another state's mDL, a DHS W3C VC — into a durable holder-controlled ACDC for
+            Olympic-scale interop). The SEDI governance framework (sedi-id/rules.json) and the first
+            presentation pattern are now authored (see @sdgv7k). The presentation and guardian work lean on the
+            GCD/delegation model already in this repo.
+        SEDI presentations are a base plus per-pattern specializations, not a bespoke type = decision:
+          id: sdp3wk
+          stage-status: planned
+          why: >
+            Reconsidered the earlier "sedi-bespoke" roadmap item and rejected it (DHH agreed 2026-07-16).
+            "Bespoke" (the ACDC spec's term for a holder self-issued, disclosure-specific presentation ACDC)
+            names an ISSUANCE PATTERN, not a credential TYPE — a schema is a type, so "a reusable schema for the
+            thing defined by being one-off" is a category error, and the name misleads. Decomposing what it
+            conflated: (1) the VERIFIER'S REQUEST ("prove over-21 and show the state-endorsed photo under
+            governance framework G") is an IPEX apply QUERY that names wanted source-credential types and
+            predicates — not a credential schema, and not necessarily a repo artifact; (2) the reusable
+            PRESENTATION SHAPE — I2I edges to one or more source credentials, an 'r' referencing the governance
+            framework, and a minimal interaction-attribute block — is worth at most ONE published base schema
+            (analogous to dossier-base) that named verifier-pattern schemas (e.g. age-portrait admittance, KYC
+            identity, voter-eligibility) specialize; the club's accepted-shape and the holder's issued
+            presentation conform to that ONE schema viewed from two sides, so there is no separate "request
+            schema" vs "response schema"; (3) the CLC TERMS live in the SEDI governance framework rules.json
+            (referenced by SAID), not authored per presentation. The genuinely one-off case (a holder authoring
+            a novel disclosure shape for a single interaction) needs NO repo artifact — the schema travels
+            inline. Naming lesson: presentation schemas are named by PATTERN, never "bespoke." Whether the
+            presentation-base itself earns a place (vs. leaving each verifier to author its own pattern schema)
+            is to be settled from a sketch before building (tick ~5c35).
+        The SEDI governance framework is authored and the first presentation pattern is built = decision:
+          id: sdgv7k
+          why: >
+            Authored the SEDI governance framework as sedi-id/rules.json (the root credential's folder is the
+            family-wide home, mirroring face-to-face's rules.json) and minted its SAID; sedi-id, sedi-age, and
+            the presentation now reference it from 'r', replacing the earlier placeholder. Its clauses ground
+            chain-link confidentiality, data minimization, duty of loyalty (63A-20-701), anti-surveillance
+            (63A-20-301(3)), guardian acceptance, no device surrender, consent/notice, revocation respect, and
+            the 63A-20-701 safe harbor. Also built the FIRST concrete presentation pattern,
+            sedi-present-age-portrait — the "prove over-21 and show the state-endorsed photo" admittance case
+            (63A-20-204(2)(a)): a holder-issued, unregistered v1 ACDC (issuer = holder, issuee = verifier) with
+            I2I edges to sedi-id and sedi-age and 'r' referencing the framework, the photo reached by selective
+            disclosure of just the sedi-id image block. Per @sdp3wk it is named by PATTERN, not "bespoke," and
+            the schema enforces the pattern's teeth: every edge operator pinned to const "I2I" (the same-holder
+            binding), 'r' required, and 'rd' disallowed (additionalProperties:false — unregistered, not logged).
+            The general presentation-base remains deferred until a SECOND pattern exists to prove the shared
+            shape (tick ~5c35).
