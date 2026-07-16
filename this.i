@@ -961,9 +961,13 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         machinery this repo exists to demonstrate, and SEDI is the most credible real-world beachhead for
         them.
       children:
-        sedi-id carries the four endorsed attributes as a v2 Aggregate section = decision:
+        sedi-id section choice — SUPERSEDED by @sdav5t (was aggregate, now attributive) = decision:
           id: sd7mwq
           why: >
+            SUPERSEDED by @sdav5t (2026-07-16): sedi-id was reworked from an aggregate to an ATTRIBUTIVE ('a')
+            ACDC after Sam Smith's first-principles reversal in PR WebOfTrust/keripy#1505 — a fixed set of
+            meaningfully-labeled fields wants labels, not a blinded array. The original aggregate rationale is
+            kept below for history.
             sedi-id is the state-endorsed root: an ACDC v2 Aggregate ('acg', 'A' section) credential whose
             every identity attribute is an individually-blinded, self-addressing block, with element 0 the
             AGID committing to the set. Chose the Aggregate section over an ordinary attribute ('a') section
@@ -1021,6 +1025,10 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         Age is a derived boolean attestation (sedi-age), not a ZK predicate or an edge from the root = decision:
           id: sd5hjb
           why: >
+            REFINED by @sdav5t (2026-07-16): sedi-age is now an AGGREGATE ('A') of boolean threshold flags
+            (ageOver13/16/18/21/55/65) plus issuee and as-of blocks — the holder discloses just the needed
+            threshold(s) — rather than the single-threshold attribute credential described below. The
+            derived-boolean-not-ZK and no-edge-to-sedi-id decisions below still hold.
             prove-age-without-birthdate (§301(1)(e)) is served by a small derived credential, sedi-age, that
             asserts a boolean over a named threshold (ageThreshold/ageOver/asOf), one schema serving every
             threshold like the mDL age_over_NN element. Chose a pre-derived boolean (the plan-of-record
@@ -1040,12 +1048,16 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             aggregate SAD (it disallows even the v2 'rd' field, let alone 'A'), but the generic Saider path
             round-trips an UNVERSIONED aggregate SAD cleanly as a fixed point, treating 'A' opaquely; and
             schema saidification works for an 'A'-section schema (the top-level $id is generic over the JSON).
-            Consequences, recorded so they are not mistaken for defects: (1) sedi-id's 'v' is OPTIONAL and its
-            illustrative examples omit it — a production credential carries a v2 version string a v2 stack
+            NARROWED by @sdav5t (2026-07-16): sedi-id is now ATTRIBUTIVE — a plain v1 ACDC the oracle
+            version-stamps fully — so this constraint applies only to the AGGREGATE sedi-age. Consequences for
+            sedi-age, recorded so they are not mistaken for defects: (1) sedi-age's 'v' is OPTIONAL and its
+            examples omit it — a production credential carries a v2 version string a v2 stack
             stamps; (2) a v2 credential's top-level SAID is computed over the COMPACT form (A = AGID) and is
-            disclosure-invariant, but the v1 oracle computes 'd' over literal content, so each example is a
-            fixed point over its own expanded form and the two sedi-id examples do not share one 'd' (under v2
-            they would); (3) the AGID and per-block SAIDs are authentic — computed with the v2 keri Aggor (the
+            disclosure-invariant, but the v1 oracle computes 'd' over literal content, so each sedi-age example
+            (full + over-21 disclosure) is a fixed point over its own content and they do not share one 'd'
+            (under v2 they would); a related residual applies to ANY nested partial disclosure — keri 1.2.13
+            does not compact nested blocks, so sedi-id's partial-disclosure forms are shown illustratively in
+            prose rather than as SAID-checked files; (3) the AGID and per-block SAIDs are authentic — computed with the v2 keri Aggor (the
             keripy test) — but this repo's linter does NOT recompute the AGID; it checks top-level SAID
             consistency, schema validity, and the negative corpus. Chose to keep the pin and document the
             limitation over bumping keri to a v2 dev build, because @m4vd7s makes the pin load-bearing for
@@ -1103,3 +1115,39 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             binding), 'r' required, and 'rd' disallowed (additionalProperties:false — unregistered, not logged).
             The general presentation-base remains deferred until a SECOND pattern exists to prove the shared
             shape (tick ~5c35).
+        Section choice A-vs-a — sedi-id is attributive, sedi-age is an aggregate boolean vector = decision:
+          id: sdav5t
+          why: >
+            Reversal of the original section choices (@sd7mwq, @sd5hjb), driven by Sam Smith's
+            first-principles argument in PR WebOfTrust/keripy#1505 (the CLC worked-example PR). Both his
+            initial answer and mine had modeled the core SEDI identity credential as an aggregate; on
+            reflection he inverted it, and I agree. The principle: the ONE thing an aggregate ('A') section
+            buys over an attribute ('a') section is that its top-level blocks carry NO meaningful labels, so
+            block POSITION in the array can be arranged so as not to leak information. That benefits a
+            credential only when the presence/identity/position of a field is itself sensitive or the field
+            set is variable. It carries a definite COST: you can no longer path to a field by label, so
+            graduated-disclosure negotiation (apply/offer path lists, e.g. via keri Pather) needs a
+            label->index reverse-lookup table, and if you put the index in the path you defeat the very
+            unlinkability the array was for. Applying this: (1) the CORE IDENTITY credential is a fixed set of
+            heterogeneous, meaningfully-labeled fields (name, dob, image, residence components) — nothing
+            benefits from label/position hiding, and it is the most-used credential, so paying the pathing
+            cost is a poor trade. => ATTRIBUTIVE 'a', each attribute a nested, partially-disclosable block
+            (own d/u), issuee at a.i, label-based pathing. (2) the AGE credential is a HOMOGENEOUS boolean
+            vector (ageOver13/16/18/21/55/65) where you disclose a SUBSET — the thresholds are really an
+            indexed numeric series, and treating them as an unordered blinded set matches the ISO mDL
+            age_over_NN element and leaves room for the planned sparse-Merkle-tree upgrade with no schema
+            change ("a poor man's sparse Merkle tree"). => AGGREGATE 'A' array of boolean blocks.
+            Two honest caveats: for age the correlation win is modest with all thresholds always present (the
+            drivers are mdoc parity, natural fit, and forward-compat, not a large delta; Sam's optional
+            decoy/position-randomization is overkill and skipped); and attribute-form partial disclosure
+            FORCES the issuee (a.i) and a-section metadata to be revealed on any disclosure, where an
+            aggregate could disclose one element with no issuee — acceptable for SEDI since the holder binding
+            is normally wanted. Happy side effect: as a plain v1 ACDC, sedi-id is now fully VERSION-STAMPED and
+            SAIDified by the pinned keri 1.2.13 oracle, so the aggregate-can't-be-versioned limitation (@sd2qfw)
+            no longer applies to it and now burdens only the rarely-presented sedi-age — better placement, and
+            aligned with "don't add complexity to the most-used credential." (Residual, general to nested
+            partial disclosure under keri 1.2.13: it does not compact nested blocks, so a partial-disclosure
+            form's a.d/top-d differ from the full form's; the "prove Utah residence without the street line"
+            case is therefore shown illustratively in sedi-id/index.md rather than as a SAID-checked gallery
+            file, and the machine-validated selective-disclosure gallery lives on sedi-age, where the AGID is
+            stable across disclosures.)
