@@ -1,5 +1,5 @@
 {
-  "d": "EIQ3kaZqehFqb6aMapkkrvpRxlKU9qDlxa8hxG8eyP3h",
+  "d": "ENRwKc2BSlPl3wyPe2TLfgpnLGD3sqhZaP_kHauo-hMc",
   "u": "0ABsediagetopnonce00x",
   "i": "EP6GqGCzbQ2oI8lk0FryCvP7x1So8LWltKgQJn4Utccv",
   "rd": "EAeSuhKi8glYgZ4vBwKIYneudKj0hkvWhebriwk5eEIQ",
@@ -16,36 +16,16 @@
       "u": "0ABzZWRpYWdldmVjbm9uYzAy",
       "asOf": "2026-07-14"
     },
-    {
-      "d": "EMgsdoBGihVB9LK3m3TBuCWxVP8g8abI1NFMkj2ccabf",
-      "u": "0ABzZWRpYWdldmVjbm9uYzAz",
-      "ageOver13": true
-    },
-    {
-      "d": "EC0ys7IS31GBQc_QqV9KjOngb6DyM3_JlZr0gnmIf6jg",
-      "u": "0ABzZWRpYWdldmVjbm9uYzA0",
-      "ageOver16": true
-    },
-    {
-      "d": "EG7nx_dUC_72X7IJV56RHAiKJTyc34EULoH8hYgw8NcD",
-      "u": "0ABzZWRpYWdldmVjbm9uYzA1",
-      "ageOver18": true
-    },
+    "EMgsdoBGihVB9LK3m3TBuCWxVP8g8abI1NFMkj2ccabf",
+    "EC0ys7IS31GBQc_QqV9KjOngb6DyM3_JlZr0gnmIf6jg",
+    "EG7nx_dUC_72X7IJV56RHAiKJTyc34EULoH8hYgw8NcD",
     {
       "d": "EACK9gOPNTLgnw3aizpmOQmakra5t4PPgGItZtimqtF2",
       "u": "0ABzZWRpYWdldmVjbm9uYzA2",
       "ageOver21": true
     },
-    {
-      "d": "EHVZZHFcY1PdByPlbLAcjzpD7Rg6eg-AOEdfDfc2tOjY",
-      "u": "0ABzZWRpYWdldmVjbm9uYzA3",
-      "ageOver55": false
-    },
-    {
-      "d": "EMRl0dtNUFJaAKf826S390oDe2vlQtTaPMtjmczfZdWF",
-      "u": "0ABzZWRpYWdldmVjbm9uYzA4",
-      "ageOver65": false
-    }
+    "EHVZZHFcY1PdByPlbLAcjzpD7Rg6eg-AOEdfDfc2tOjY",
+    "EMRl0dtNUFJaAKf826S390oDe2vlQtTaPMtjmczfZdWF"
   ],
   "r": "EA5O9z0TB932sm8kJIVdAIpwLpEWRWC5--VNS5r69frn"
 }

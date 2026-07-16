@@ -8,7 +8,6 @@
   "a": {
     "d": "ECt2K870SJ-o69fntnAH0bI8FbsX-YTOopX9iWv7Mwjj",
     "u": "0ABzZWRpaWRhdHRybm9uYzAx",
-    "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC",
     "nameGiven": {
       "d": "EA2NOON7bRirXBBah2PWNaJfRnB3-eqVQvL85OS5uWOM",
       "u": "0ABzZWRpaWRhdHRybm9uYzAy",
@@ -55,7 +54,7 @@
     "residenceState": {
       "d": "EGUyzZEHNNwuHFiy1z5Z1lkj2lZisnm2532-1hVOzP1j",
       "u": "0ABzZWRpaWRhdHRybm9uYzA5",
-      "residenceState": 49
+      "residenceState": "UT"
     },
     "residencePostal": {
       "d": "EHeGeHhjoW8N3eWJmDru4gHrsAgoHvYWj9mCsG4CBylv",

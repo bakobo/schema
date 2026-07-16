@@ -58,8 +58,9 @@ the `sedi-age` credential, not from the holder's say-so.
 In use, this runs as a gated IPEX exchange (`apply → offer → agree → grant → admit`): the verifier
 accepts the governance terms (a signed `agree` referencing the presentation's SAID) **before** any PII
 — the state-endorsed photo — crosses the wire, and a decline never opens the gate. The photo itself is
-delivered as a selective disclosure of just the `image` block of `sedi-id`, verified against that
-credential's committed aggregate. The executable reference for the full exchange is keripy's
+delivered as a partial disclosure of just the `image` block of `sedi-id` (an attributive credential),
+verified against that credential's committed `a` section, while the over-21 flag is a selective
+disclosure of just the `ageOver21` block of the aggregate `sedi-age`. The executable reference is keripy's
 `tests/acdc/test_clc_disclosure.py`.
 
 ### Schema and example

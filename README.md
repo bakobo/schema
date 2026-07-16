@@ -33,8 +33,8 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 | [face-to-face](face-to-face/) | issuer knows the issuee to be a human, from in-person contact |
 | [org-vet](org-vet/) | authenticate an org at an explicit level of assurance |
 | [proof-of-control](proof-of-control/) | issuee demonstrated control of a digital resource |
-| [sedi-id](sedi-id/) | Utah State-Endorsed Digital Identity root (name, birth date, image, residence) as a selectively disclosable aggregate |
-| [sedi-age](sedi-age/) | derived state-endorsed age-threshold attestation (prove over-21 without the birth date) |
+| [sedi-id](sedi-id/) | Utah State-Endorsed Digital Identity root (name, birth date, image, residence) as a partially-disclosable attribute section |
+| [sedi-age](sedi-age/) | derived state-endorsed aggregate age-threshold vector (ageOver13/16/18/21/55/65; prove over-21 without the birth date) |
 | [sedi-present-age-portrait](sedi-present-age-portrait/) | holder-issued SEDI presentation: prove over-21 and show the state-endorsed photo (I2I edges to sedi-id + sedi-age) |
 
 ## Status

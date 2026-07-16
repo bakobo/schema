@@ -1,34 +1,32 @@
 {
-  "d": "ENsfR87jMIhiJ1rurnCeauF5NNBGfdLjV7_RAer6RRj6",
-  "u": "0ABzZWRpdG9wbm9uY2UwcmF3",
+  "v": "ACDC10JSON00075b_",
+  "d": "EOr_wpH9t5uXrodF_pltJESml7H9TDWozeHQ1TKULm5P",
+  "u": "0ABzZWRpaWRhdHRybm9uYzAw",
   "i": "EP6GqGCzbQ2oI8lk0FryCvP7x1So8LWltKgQJn4Utccv",
-  "rd": "EMIRP9uHuZOFV6LVWPTgsAZ0i7xyUTOkN0H6fXMy57lc",
-  "s": "EBRFKJujEjr785Rk8UMWPlhlehHhZP9fdh3pJPPPqHBk",
-  "A": [
-    "ENiO5skIYz59AQhkhMrevS-RgHhhop-C15DkPOUX6bv9",
-    {
-      "d": "EDFngijuzpgrTn0aF2CI-armlFLB6iEHPvidY9GgNdEc",
-      "u": "0ABzZWRpZXhub25jZXJhdzAx",
-      "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC"
-    },
-    {
-      "d": "EMgMioe1IFz26RkZUVBRGaL-3jW4x_hKDLQqnEPHw_jO",
-      "u": "0ABzZWRpZXhub25jZXJhdzAy",
+  "ri": "EMIRP9uHuZOFV6LVWPTgsAZ0i7xyUTOkN0H6fXMy57lc",
+  "s": "EE2VI0j6cttlC4nqu7HwlHfc0Et6xicoaFjvO41w27qN",
+  "a": {
+    "d": "ECt2K870SJ-o69fntnAH0bI8FbsX-YTOopX9iWv7Mwjj",
+    "u": "0ABzZWRpaWRhdHRybm9uYzAx",
+    "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC",
+    "nameGiven": {
+      "d": "EA2NOON7bRirXBBah2PWNaJfRnB3-eqVQvL85OS5uWOM",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAy",
       "nameGiven": "Alice"
     },
-    {
-      "d": "EBzSX3Q8ukTwn5t3XvJ4pwngBycj47q7faw31huq3L7M",
-      "u": "0ABzZWRpZXhub25jZXJhdzAz",
+    "nameFamily": {
+      "d": "EMOFw7KM2U4ouaBAE0zQ2X6yEUXjNOR4h8_PmbTMblDD",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAz",
       "nameFamily": "Anders"
     },
-    {
-      "d": "ELnKKaW08zM7Qs4cG8TWpDyhAiZBG4snfuq2Da1Wyl9C",
-      "u": "0ABzZWRpZXhub25jZXJhdzA0",
+    "dob": {
+      "d": "EHyyyL7Ha0iQ2MVxShLnLIklVGHpD4jZFNH3cmYCD3zj",
+      "u": "0ABzZWRpaWRhdHRybm9uYzA0",
       "dob": "2000-03-15"
     },
-    {
-      "d": "EASPacmtyPGurvDlyJUwvIjatm9HRnXLN_sTH2BrmAGc",
-      "u": "0ABzZWRpZXhub25jZXJhdzA1",
+    "image": {
+      "d": "EILp3HmVsLx-nW4iYOybZGyXbIyyZ6WdEV1pFmN7ChzV",
+      "u": "0ABzZWRpaWRhdHRybm9uYzA1",
       "image": {
         "digest": "EFUio2WoYbqlzROJ4S1f-dq0QUgvpaEutL2Kol-1Av61",
         "format": "image/jpeg",
@@ -36,39 +34,39 @@
         "captured": "2024-11-03"
       }
     },
-    {
-      "d": "EJNqOrhOLeq22uTJBylWKKEr-QQN9qWra7o5cJFHxHI6",
-      "u": "0ABzZWRpZXhub25jZXJhdzA2",
+    "faceTemplate": {
+      "d": "ELBGrvts_EKVm6jw-hiPYsP-wwAL9J56ySLg8Dyt5OQX",
+      "u": "0ABzZWRpaWRhdHRybm9uYzA2",
       "faceTemplate": {
         "digest": "EIqN--FwM38xT9wosH0_ObB-xVN-EeZ56fYnP8pCihAX",
         "protocol": "bakobo:biohash:face:v1"
       }
     },
-    {
-      "d": "EFINn2FoOyPg6OW2iK0ZLTA0XM_klKe8tXzB6DI7hDS7",
-      "u": "0ABzZWRpZXhub25jZXJhdzA3",
+    "residenceStreet": {
+      "d": "EMhaZqOWRkS-1ECA8Z7sC4ek_TEcayUesZ-7ajE2-zHm",
+      "u": "0ABzZWRpaWRhdHRybm9uYzA3",
       "residenceStreet": "742 Evergreen Terrace"
     },
-    {
-      "d": "EEgmmmi0bXfJpeKuYavMloPWw23MeQFM4wX0xQYx18SV",
-      "u": "0ABzZWRpZXhub25jZXJhdzA4",
+    "residenceCity": {
+      "d": "EOzj_fn_FZNuRAqWJS0RAUnlyhE_suPRnLCTreT3OMYP",
+      "u": "0ABzZWRpaWRhdHRybm9uYzA4",
       "residenceCity": "Salt Lake City"
     },
-    {
-      "d": "EAzjwEYQVksHXEgqODO1ParD3LaRrj4WPIDkzNABLfpt",
-      "u": "0ABzZWRpZXhub25jZXJhdzA5",
+    "residenceState": {
+      "d": "EGUyzZEHNNwuHFiy1z5Z1lkj2lZisnm2532-1hVOzP1j",
+      "u": "0ABzZWRpaWRhdHRybm9uYzA5",
       "residenceState": "UT"
     },
-    {
-      "d": "EGo4QgULBt8hkbtZd5KLBnvw_9KHY8igbp0zUSdk-j71",
-      "u": "0ABzZWRpZXhub25jZXJhdzBh",
+    "residencePostal": {
+      "d": "EHeGeHhjoW8N3eWJmDru4gHrsAgoHvYWj9mCsG4CBylv",
+      "u": "0ABzZWRpaWRhdHRybm9uYzEw",
       "residencePostal": "84101"
     },
-    {
-      "d": "EIfF0aRM_U8Yl7Xfvd99_NkBBUYKmzqicSWPNO6-nCpe",
-      "u": "0ABzZWRpZXhub25jZXJhdzBi",
+    "residenceCounty": {
+      "d": "EGOxDxxYv3jzSQhQ6Oo1KfXiiq3hbrNhMeodlMpvDMCw",
+      "u": "0ABzZWRpaWRhdHRybm9uYzEx",
       "residenceCounty": "Salt Lake"
     }
-  ],
+  },
   "r": "EA5O9z0TB932sm8kJIVdAIpwLpEWRWC5--VNS5r69frn"
 }

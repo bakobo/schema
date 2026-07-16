@@ -1,23 +1,23 @@
 {
-  "$id": "ENDoa1SF3_9CJqXYCHecDGyrhh43PDUSaD7bI5Yt6awI",
+  "$id": "EO6RR2KsPCPfUjBaF5onVLCqoSem_GAf9tc_BYUtEvlX",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Age Attestation",
-  "description": "A derived, state-endorsed age-threshold attestation for Utah's State-Endorsed Digital Identity (Utah Code 63A-20). Satisfies the statutory 'prove a minimum age without disclosing age or birth date' requirement (63A-20-301(1)(e)) by asserting a boolean over/under a named threshold, so a relying party (e.g. an alcohol vendor, 63A-20-204(2)(a)) never receives the birth date. One schema serves every threshold (18, 21, ...) via the ageThreshold field, mirroring the mDL age_over_NN element. The same-holder binding to the sedi-id root is established at presentation time (a bespoke presentation's I2I edges to both credentials), not by an edge here.",
-  "$comment": "A v1-style attribute ('acm') ACDC: unlike sedi-id (a v2 Aggregate credential), this carries a single attribute block and is fully version-stamped and SAIDified by this repo's keri 1.2.13 oracle.",
+  "description": "Derived, state-endorsed age attestation for Utah's SEDI (Utah Code 63A-20). A selectively disclosable Aggregate ('A') section of individually-blinded boolean flags -- ageOver13/16/18/21/55/65 -- plus the holder (issuee) and an as-of date. The holder discloses only the threshold(s) a verifier needs (e.g. ageOver21 for alcohol, 63A-20-204(2)(a)) and the birth date is never involved (63A-20-301(1)(e)). An aggregate (not an attribute) section is correct for a homogeneous boolean vector: it treats the thresholds as an unordered blinded set, matching the ISO mDL age_over_NN element and leaving room for a sparse-Merkle-tree upgrade (PR WebOfTrust/keripy#1505; this.i @sdav5t).",
+  "$comment": "ACDC v2 Aggregate credential (ilk 'acg'). The v1-pinned oracle (keri 1.2.13) cannot stamp a v2 version string, so 'v' is optional and examples omit it; the AGID and per-block SAIDs are computed by the v2 Aggor and are not recomputed by this repo's linter (this.i @sd2qfw).",
   "credentialType": "SEDI_Age",
   "version": "1.0.0",
   "type": "object",
   "required": [
-    "v",
     "d",
     "i",
-    "ri",
+    "rd",
     "s",
-    "a"
+    "A",
+    "r"
   ],
   "properties": {
     "v": {
-      "description": "ACDC version string",
+      "description": "ACDC version string (v2 in production; omitted under this repo's v1 oracle)",
       "type": "string"
     },
     "d": {
@@ -32,65 +32,291 @@
       "description": "AID of the issuer (the State, via the Department of Government Operations)",
       "type": "string"
     },
-    "ri": {
-      "description": "Registry for the issuer's credential status (revocation)",
+    "rd": {
+      "description": "Registry SAID: binds the credential to the State's revocation registry (TEL)",
       "type": "string"
     },
     "s": {
       "description": "SAID of this schema",
       "type": "string"
     },
-    "a": {
+    "A": {
+      "description": "Selectively disclosable aggregate of age-threshold flags. Compact form is the AGID string; expanded form is a list with the AGID at index 0, then blinded blocks (issuee, as-of, and one per threshold), each disclosed or left as a bare SAID.",
       "oneOf": [
         {
-          "description": "SAID of the attribute block",
+          "description": "Aggregate section AGID (compact form)",
           "type": "string"
         },
         {
-          "$id": "EEgmR-YmfOLxgYZt_WXuLPCLwwBOwsfF_ug5aJC_zZim",
-          "description": "Attribute block",
-          "type": "object",
-          "required": [
-            "d",
-            "u",
-            "i",
-            "ageThreshold",
-            "ageOver"
-          ],
-          "properties": {
-            "d": {
-              "description": "SAID of the attribute block",
-              "type": "string"
-            },
-            "u": {
-              "description": "Attribute-block blinding nonce (salty)",
-              "type": "string"
-            },
-            "i": {
-              "description": "Issuee: the holder's AID",
-              "type": "string"
-            },
-            "ageThreshold": {
-              "description": "The age threshold in years being attested (e.g. 18, 21)",
-              "type": "integer",
-              "minimum": 1
-            },
-            "ageOver": {
-              "description": "True iff, as of asOf, the holder's age is at or above ageThreshold",
-              "type": "boolean"
-            },
-            "asOf": {
-              "description": "Date at which the age comparison was evaluated (a point-in-time attestation; 63A-20-303 does not require continuous monitoring)",
-              "type": "string",
-              "format": "date"
-            }
-          },
-          "additionalProperties": false
+          "description": "Uncompacted aggregate: AGID at index 0, then blinded blocks",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "anyOf": [
+              {
+                "description": "Issuee block",
+                "oneOf": [
+                  {
+                    "description": "Issuee block SAID (withheld)",
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "i"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "i": {
+                        "description": "Issuee: the holder's AID",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "As-of-date block",
+                "oneOf": [
+                  {
+                    "description": "As-of-date block SAID (withheld)",
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "asOf"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "asOf": {
+                        "description": "Date the age comparison was evaluated (point-in-time; 63A-20-303 requires no continuous monitoring)",
+                        "type": "string",
+                        "format": "date"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Age-over-13 block",
+                "oneOf": [
+                  {
+                    "description": "Age-over-13 block SAID (withheld)",
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "ageOver13"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "ageOver13": {
+                        "description": "True iff, as of asOf, the holder is at or above 13",
+                        "type": "boolean"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Age-over-16 block",
+                "oneOf": [
+                  {
+                    "description": "Age-over-16 block SAID (withheld)",
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "ageOver16"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "ageOver16": {
+                        "description": "True iff, as of asOf, the holder is at or above 16",
+                        "type": "boolean"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Age-over-18 block",
+                "oneOf": [
+                  {
+                    "description": "Age-over-18 block SAID (withheld)",
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "ageOver18"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "ageOver18": {
+                        "description": "True iff, as of asOf, the holder is at or above 18",
+                        "type": "boolean"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Age-over-21 block",
+                "oneOf": [
+                  {
+                    "description": "Age-over-21 block SAID (withheld)",
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "ageOver21"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "ageOver21": {
+                        "description": "True iff, as of asOf, the holder is at or above 21",
+                        "type": "boolean"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Age-over-55 block",
+                "oneOf": [
+                  {
+                    "description": "Age-over-55 block SAID (withheld)",
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "ageOver55"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "ageOver55": {
+                        "description": "True iff, as of asOf, the holder is at or above 55",
+                        "type": "boolean"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Age-over-65 block",
+                "oneOf": [
+                  {
+                    "description": "Age-over-65 block SAID (withheld)",
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "ageOver65"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "ageOver65": {
+                        "description": "True iff, as of asOf, the holder is at or above 65",
+                        "type": "boolean"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            ]
+          }
         }
       ]
     },
     "r": {
-      "description": "SAID of the governing SEDI governance framework (rules)",
+      "description": "SAID of the governing SEDI governance framework (sedi-id/rules.json)",
       "type": "string"
     }
   },
