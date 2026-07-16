@@ -1,0 +1,204 @@
+{
+  "$id": "EKuNBOYhBbcPys7N27lCNsMhOFVKtaY9IuyX8ABVo1_E",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SEDI Age-and-Portrait Presentation",
+  "description": "A holder-issued SEDI presentation for the common 'prove over-21 and show the state-endorsed photo' verification pattern (e.g. venue/alcohol admittance, Utah Code 63A-20-204(2)(a)). Issuer = the holder (Discloser); issuee = the verifier (Disclosee). It combines the holder's two source credentials by reference via I2I edges -- the sedi-id identity root (for the state-endorsed portrait, disclosed by selective disclosure of just that block) and a sedi-age attestation (for the over-21 boolean) -- and binds the verifier to the SEDI governance framework referenced in 'r'. It is deliberately NOT registry-bound (no 'rd'): a one-time presentation is not logged. This is the first concrete verifier-pattern schema; a general presentation-base would be extracted once a second pattern exists (this.i @sdp3wk).",
+  "$comment": "A v1 attribute+edges+rules ('acm') ACDC, fully version-stamped and SAIDified by this repo's keri 1.2.13 oracle. The schema ENFORCES the pattern's teeth: every edge operator is pinned to const 'I2I' (the same-holder binding), the governance reference 'r' is required, and 'rd' is disallowed (additionalProperties:false), so a registry-bound or non-I2I presentation is rejected.",
+  "credentialType": "SEDI_AgePortraitPresentation",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "v",
+    "d",
+    "i",
+    "s",
+    "a",
+    "e",
+    "r"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "d": {
+      "description": "SAID of the presentation",
+      "type": "string"
+    },
+    "u": {
+      "description": "Top-level blinding nonce; present => private variant",
+      "type": "string"
+    },
+    "i": {
+      "description": "Issuer = the holder (Discloser) AID",
+      "type": "string"
+    },
+    "s": {
+      "description": "SAID of this schema",
+      "type": "string"
+    },
+    "a": {
+      "oneOf": [
+        {
+          "description": "SAID of the attribute block",
+          "type": "string"
+        },
+        {
+          "$id": "EP9rl6lgwg72Jh-Jx_Fadb5GvX-QORDPoNzsvwQhdmld",
+          "description": "Attribute block: the interaction facts",
+          "type": "object",
+          "required": [
+            "d",
+            "u",
+            "i",
+            "ageOver21"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of the attribute block",
+              "type": "string"
+            },
+            "u": {
+              "description": "Attribute-block blinding nonce (salty)",
+              "type": "string"
+            },
+            "i": {
+              "description": "Issuee = the verifier (Disclosee) AID",
+              "type": "string"
+            },
+            "ageOver21": {
+              "description": "The holder's asserted over-21 summary; authoritatively backed by the 'age' I2I edge to a sedi-age credential",
+              "type": "boolean"
+            },
+            "venue": {
+              "description": "Where the presentation is made (free text)",
+              "type": "string"
+            },
+            "occurredAt": {
+              "description": "When the presentation is made",
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "e": {
+      "oneOf": [
+        {
+          "description": "SAID of the edge block",
+          "type": "string"
+        },
+        {
+          "$id": "EDAVm-e-xkQaZNTHYMoNlxc-77VPTGp8b9QYhv7YVU-e",
+          "description": "Edge block: I2I edges to the two source credentials",
+          "type": "object",
+          "required": [
+            "d",
+            "identity",
+            "age"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of the edge block",
+              "type": "string"
+            },
+            "u": {
+              "description": "Edge-block blinding nonce (salty)",
+              "type": "string"
+            },
+            "identity": {
+              "description": "I2I edge to the holder's sedi-id identity root",
+              "oneOf": [
+                {
+                  "description": "SAID of the edge",
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "SAID of this edge",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge blinding nonce (salty)",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "SAID of the far node (the sedi-id credential)",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "SAID of the far node's schema",
+                      "type": "string"
+                    },
+                    "o": {
+                      "description": "Edge operator: I2I asserts the issuer of this presentation is the issuee of the far node (same holder)",
+                      "const": "I2I"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "age": {
+              "description": "I2I edge to the holder's sedi-age attestation",
+              "oneOf": [
+                {
+                  "description": "SAID of the edge",
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "SAID of this edge",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge blinding nonce (salty)",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "SAID of the far node (the sedi-age credential)",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "SAID of the far node's schema",
+                      "type": "string"
+                    },
+                    "o": {
+                      "description": "Edge operator: I2I asserts the issuer of this presentation is the issuee of the far node (same holder)",
+                      "const": "I2I"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "description": "SAID of the governing SEDI governance framework (sedi-id/rules.json); carries the chain-link-confidentiality and duty-of-loyalty terms the verifier accepts",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

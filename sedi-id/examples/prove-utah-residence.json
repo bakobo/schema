@@ -1,0 +1,38 @@
+{
+  "d": "EOUMagIQEf8DLqLHRlZKmCQ-CAxXh3C5cnwZEFIeh1Kp",
+  "u": "0ABzZWRpdG9wbm9uY2UwcmF3",
+  "i": "EP6GqGCzbQ2oI8lk0FryCvP7x1So8LWltKgQJn4Utccv",
+  "rd": "EMIRP9uHuZOFV6LVWPTgsAZ0i7xyUTOkN0H6fXMy57lc",
+  "s": "EBRFKJujEjr785Rk8UMWPlhlehHhZP9fdh3pJPPPqHBk",
+  "A": [
+    "ENiO5skIYz59AQhkhMrevS-RgHhhop-C15DkPOUX6bv9",
+    {
+      "d": "EDFngijuzpgrTn0aF2CI-armlFLB6iEHPvidY9GgNdEc",
+      "u": "0ABzZWRpZXhub25jZXJhdzAx",
+      "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC"
+    },
+    "EMgMioe1IFz26RkZUVBRGaL-3jW4x_hKDLQqnEPHw_jO",
+    "EBzSX3Q8ukTwn5t3XvJ4pwngBycj47q7faw31huq3L7M",
+    "ELnKKaW08zM7Qs4cG8TWpDyhAiZBG4snfuq2Da1Wyl9C",
+    "EASPacmtyPGurvDlyJUwvIjatm9HRnXLN_sTH2BrmAGc",
+    "EJNqOrhOLeq22uTJBylWKKEr-QQN9qWra7o5cJFHxHI6",
+    "EFINn2FoOyPg6OW2iK0ZLTA0XM_klKe8tXzB6DI7hDS7",
+    {
+      "d": "EEgmmmi0bXfJpeKuYavMloPWw23MeQFM4wX0xQYx18SV",
+      "u": "0ABzZWRpZXhub25jZXJhdzA4",
+      "residenceCity": "Salt Lake City"
+    },
+    {
+      "d": "EAzjwEYQVksHXEgqODO1ParD3LaRrj4WPIDkzNABLfpt",
+      "u": "0ABzZWRpZXhub25jZXJhdzA5",
+      "residenceState": "UT"
+    },
+    {
+      "d": "EGo4QgULBt8hkbtZd5KLBnvw_9KHY8igbp0zUSdk-j71",
+      "u": "0ABzZWRpZXhub25jZXJhdzBh",
+      "residencePostal": "84101"
+    },
+    "EIfF0aRM_U8Yl7Xfvd99_NkBBUYKmzqicSWPNO6-nCpe"
+  ],
+  "r": "EA5O9z0TB932sm8kJIVdAIpwLpEWRWC5--VNS5r69frn"
+}

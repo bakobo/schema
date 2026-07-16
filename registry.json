@@ -10,5 +10,8 @@
   "EJeBiq_7yuq-J7RrRgNu5OgvUWDOCrIAwq19_w_YxHU7": "gcd/gcd.schema.json",
   "EM3kQ1QEU3kJFqV8aZrse-QXs5oNlaFfaiwEUFt4uq4C": "gcd-1.0.0/gcd-1.0.0.schema.json",
   "EJvwY9n7EsJ4ZejUBHFrnrNammC8BkGI9YaW1Wnp5c22": "org-vet/org-vet.schema.json",
-  "EO6WbKaHwNOalVVY5oHi4NaZWG5yynFIDCHpQACVPCw7": "proof-of-control/proof-of-control.schema.json"
+  "EO6WbKaHwNOalVVY5oHi4NaZWG5yynFIDCHpQACVPCw7": "proof-of-control/proof-of-control.schema.json",
+  "ENDoa1SF3_9CJqXYCHecDGyrhh43PDUSaD7bI5Yt6awI": "sedi-age/sedi-age.schema.json",
+  "EBRFKJujEjr785Rk8UMWPlhlehHhZP9fdh3pJPPPqHBk": "sedi-id/sedi-id.schema.json",
+  "EKuNBOYhBbcPys7N27lCNsMhOFVKtaY9IuyX8ABVo1_E": "sedi-present-age-portrait/sedi-present-age-portrait.schema.json"
 }

@@ -1,0 +1,98 @@
+{
+  "$id": "ENDoa1SF3_9CJqXYCHecDGyrhh43PDUSaD7bI5Yt6awI",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SEDI Age Attestation",
+  "description": "A derived, state-endorsed age-threshold attestation for Utah's State-Endorsed Digital Identity (Utah Code 63A-20). Satisfies the statutory 'prove a minimum age without disclosing age or birth date' requirement (63A-20-301(1)(e)) by asserting a boolean over/under a named threshold, so a relying party (e.g. an alcohol vendor, 63A-20-204(2)(a)) never receives the birth date. One schema serves every threshold (18, 21, ...) via the ageThreshold field, mirroring the mDL age_over_NN element. The same-holder binding to the sedi-id root is established at presentation time (a bespoke presentation's I2I edges to both credentials), not by an edge here.",
+  "$comment": "A v1-style attribute ('acm') ACDC: unlike sedi-id (a v2 Aggregate credential), this carries a single attribute block and is fully version-stamped and SAIDified by this repo's keri 1.2.13 oracle.",
+  "credentialType": "SEDI_Age",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "v",
+    "d",
+    "i",
+    "ri",
+    "s",
+    "a"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "d": {
+      "description": "SAID of the credential",
+      "type": "string"
+    },
+    "u": {
+      "description": "Top-level blinding nonce; present => private variant",
+      "type": "string"
+    },
+    "i": {
+      "description": "AID of the issuer (the State, via the Department of Government Operations)",
+      "type": "string"
+    },
+    "ri": {
+      "description": "Registry for the issuer's credential status (revocation)",
+      "type": "string"
+    },
+    "s": {
+      "description": "SAID of this schema",
+      "type": "string"
+    },
+    "a": {
+      "oneOf": [
+        {
+          "description": "SAID of the attribute block",
+          "type": "string"
+        },
+        {
+          "$id": "EEgmR-YmfOLxgYZt_WXuLPCLwwBOwsfF_ug5aJC_zZim",
+          "description": "Attribute block",
+          "type": "object",
+          "required": [
+            "d",
+            "u",
+            "i",
+            "ageThreshold",
+            "ageOver"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of the attribute block",
+              "type": "string"
+            },
+            "u": {
+              "description": "Attribute-block blinding nonce (salty)",
+              "type": "string"
+            },
+            "i": {
+              "description": "Issuee: the holder's AID",
+              "type": "string"
+            },
+            "ageThreshold": {
+              "description": "The age threshold in years being attested (e.g. 18, 21)",
+              "type": "integer",
+              "minimum": 1
+            },
+            "ageOver": {
+              "description": "True iff, as of asOf, the holder's age is at or above ageThreshold",
+              "type": "boolean"
+            },
+            "asOf": {
+              "description": "Date at which the age comparison was evaluated (a point-in-time attestation; 63A-20-303 does not require continuous monitoring)",
+              "type": "string",
+              "format": "date"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "description": "SAID of the governing SEDI governance framework (rules)",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

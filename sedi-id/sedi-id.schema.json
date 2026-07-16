@@ -1,0 +1,468 @@
+{
+  "$id": "EBRFKJujEjr785Rk8UMWPlhlehHhZP9fdh3pJPPPqHBk",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SEDI Identity Credential",
+  "description": "State-Endorsed Digital Identity (Utah Code 63A-20) root credential. The department verifies and endorses exactly the statutory attribute set -- name, birth date, image, Utah residence address (63A-20-301(2)(f)) -- carried as a selectively disclosable Aggregate ('A') section of individually-blinded blocks, so a holder discloses an arbitrary subset (e.g. prove Utah residence without the street line) and a verifier recomputes the aggregate digest (AGID) to confirm authenticity.",
+  "$comment": "ACDC v2 Aggregate credential (ilk 'acg'). Production credentials carry a v2 version string in 'v'; this repo's SAID oracle is pinned to keri 1.2.13 (v1), which cannot stamp or verify a v2 version string, so 'v' is optional here and the illustrative example omits it. The AGID and per-block SAIDs are computed by a v2 Aggor (see keripy test_clc_disclosure.py); this repo's linter checks top-level SAID consistency and schema validity, not AGID recomputation. See this.i @sedi and index.md.",
+  "credentialType": "SEDI_Identity",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "d",
+    "i",
+    "rd",
+    "s",
+    "A"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version string (v2 in production; omitted under this repo's v1 oracle)",
+      "type": "string"
+    },
+    "d": {
+      "description": "SAID of the credential",
+      "type": "string"
+    },
+    "u": {
+      "description": "Top-level blinding nonce; present => private variant",
+      "type": "string"
+    },
+    "i": {
+      "description": "AID of the issuer (the State, via the Department of Government Operations)",
+      "type": "string"
+    },
+    "rd": {
+      "description": "Registry SAID: binds the credential to the State's revocation registry (TEL)",
+      "type": "string"
+    },
+    "s": {
+      "description": "SAID of this schema",
+      "type": "string"
+    },
+    "A": {
+      "description": "Selectively disclosable attribute aggregate. Compact form is the AGID string; expanded form is a list whose zeroth element is the AGID and whose other elements are blinded attribute blocks (each disclosed in full or left as a bare SAID).",
+      "oneOf": [
+        {
+          "description": "Aggregate section AGID (compact form)",
+          "type": "string"
+        },
+        {
+          "description": "Uncompacted aggregate: AGID at index 0, then blinded blocks",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "anyOf": [
+              {
+                "description": "Issuee block -- one selectively disclosable element",
+                "oneOf": [
+                  {
+                    "description": "Issuee block SAID (withheld: disclosed as a bare digest)",
+                    "type": "string"
+                  },
+                  {
+                    "description": "Issuee block detail (disclosed in full)",
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "i"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "i": {
+                        "description": "Issuee: the holder's AID; binds the credential to the holder",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Given-name block -- one selectively disclosable element",
+                "oneOf": [
+                  {
+                    "description": "Given-name block SAID (withheld: disclosed as a bare digest)",
+                    "type": "string"
+                  },
+                  {
+                    "description": "Given-name block detail (disclosed in full)",
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "nameGiven"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "nameGiven": {
+                        "description": "Given (first) name(s)",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Family-name block -- one selectively disclosable element",
+                "oneOf": [
+                  {
+                    "description": "Family-name block SAID (withheld: disclosed as a bare digest)",
+                    "type": "string"
+                  },
+                  {
+                    "description": "Family-name block detail (disclosed in full)",
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "nameFamily"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "nameFamily": {
+                        "description": "Family (last) name",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Date-of-birth block -- one selectively disclosable element",
+                "oneOf": [
+                  {
+                    "description": "Date-of-birth block SAID (withheld: disclosed as a bare digest)",
+                    "type": "string"
+                  },
+                  {
+                    "description": "Date-of-birth block detail (disclosed in full)",
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "dob"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "dob": {
+                        "description": "Date of birth",
+                        "type": "string",
+                        "format": "date"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Image block -- one selectively disclosable element",
+                "oneOf": [
+                  {
+                    "description": "Image block SAID (withheld: disclosed as a bare digest)",
+                    "type": "string"
+                  },
+                  {
+                    "description": "Image block detail (disclosed in full)",
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "image"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "image": {
+                        "description": "State-endorsed portrait, committed by digest; the bytes are holder-carried and shown under CLC, verified against this digest",
+                        "type": "object",
+                        "required": [
+                          "digest"
+                        ],
+                        "properties": {
+                          "digest": {
+                            "description": "SAID/multibase digest of the canonical raw image bytes",
+                            "type": "string"
+                          },
+                          "format": {
+                            "description": "IANA media type of the canonical bytes, e.g. image/jpeg",
+                            "type": "string"
+                          },
+                          "dim": {
+                            "description": "Pixel dimensions of the canonical image, e.g. 480x600",
+                            "type": "string"
+                          },
+                          "captured": {
+                            "description": "Date the portrait was captured",
+                            "type": "string",
+                            "format": "date"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Face-template block -- one selectively disclosable element",
+                "oneOf": [
+                  {
+                    "description": "Face-template block SAID (withheld: disclosed as a bare digest)",
+                    "type": "string"
+                  },
+                  {
+                    "description": "Face-template block detail (disclosed in full)",
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "faceTemplate"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "faceTemplate": {
+                        "description": "Cancelable/biohashed face template (ISO/IEC 24745-style: irreversible, revocable) for consented 1:N dedup -- a distinct artifact from the portrait, disclosed only when uniqueness is the purpose",
+                        "type": "object",
+                        "required": [
+                          "digest",
+                          "protocol"
+                        ],
+                        "properties": {
+                          "digest": {
+                            "description": "Digest of the protected template",
+                            "type": "string"
+                          },
+                          "protocol": {
+                            "description": "Named canonicalize-and-transform protocol, so templates are comparable across credentials (e.g. bakobo:biohash:face:v1)",
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Residence-street block -- one selectively disclosable element",
+                "oneOf": [
+                  {
+                    "description": "Residence-street block SAID (withheld: disclosed as a bare digest)",
+                    "type": "string"
+                  },
+                  {
+                    "description": "Residence-street block detail (disclosed in full)",
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "residenceStreet"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "residenceStreet": {
+                        "description": "Full street address line (kept whole; not parsed)",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Residence-city block -- one selectively disclosable element",
+                "oneOf": [
+                  {
+                    "description": "Residence-city block SAID (withheld: disclosed as a bare digest)",
+                    "type": "string"
+                  },
+                  {
+                    "description": "Residence-city block detail (disclosed in full)",
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "residenceCity"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "residenceCity": {
+                        "description": "Residence city",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Residence-state block -- one selectively disclosable element",
+                "oneOf": [
+                  {
+                    "description": "Residence-state block SAID (withheld: disclosed as a bare digest)",
+                    "type": "string"
+                  },
+                  {
+                    "description": "Residence-state block detail (disclosed in full)",
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "residenceState"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "residenceState": {
+                        "description": "Residence state/subdivision, e.g. UT",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Residence-postal block -- one selectively disclosable element",
+                "oneOf": [
+                  {
+                    "description": "Residence-postal block SAID (withheld: disclosed as a bare digest)",
+                    "type": "string"
+                  },
+                  {
+                    "description": "Residence-postal block detail (disclosed in full)",
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "residencePostal"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "residencePostal": {
+                        "description": "Residence postal (ZIP) code",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              {
+                "description": "Residence-county block -- one selectively disclosable element",
+                "oneOf": [
+                  {
+                    "description": "Residence-county block SAID (withheld: disclosed as a bare digest)",
+                    "type": "string"
+                  },
+                  {
+                    "description": "Residence-county block detail (disclosed in full)",
+                    "type": "object",
+                    "required": [
+                      "d",
+                      "u",
+                      "residenceCounty"
+                    ],
+                    "properties": {
+                      "d": {
+                        "description": "SAID of this block",
+                        "type": "string"
+                      },
+                      "u": {
+                        "description": "Per-block blinding nonce (salty)",
+                        "type": "string"
+                      },
+                      "residenceCounty": {
+                        "description": "Residence county",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "r": {
+      "description": "SAID of the governing SEDI governance framework (rules)",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}
