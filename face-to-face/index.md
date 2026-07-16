@@ -34,6 +34,19 @@ For contexts where **AI participation is proscribed**, a verifier is really aski
 ### Schema
 See [face-to-face.schema.json](face-to-face.schema.json) and also [rules.json](rules.json).
 
+### Worked examples
+
+The canonical [`example.json`](example.json) is a brief-acquaintance instance. The [`examples/`](examples/) gallery shows the v1.2.0 field set across attestations of different strength — each a full, SAID-minted credential the conformance linter validates:
+
+| Example | basis | Highlights |
+|---|---|---|
+| [colleague-longterm](examples/colleague-longterm.json) | colleague | ongoing multi-year relationship — `multiSession`, high `minutes`, `deviceControl`, a face biometric |
+| [family-member](examples/family-member.json) | family | strongest humanness, privacy-lean — all six `modalities`, `signedChallenge`, biometric hashing **declined** |
+| [personhood-registry](examples/personhood-registry.json) | acquaintance | uniqueness-forward — a one-time verification event with face + voice `biometricHashes` and a shared `biometricProtocol` for cross-issuer dedup |
+| [friend-reciprocal](examples/friend-reciprocal.json) | friend | an ongoing friendship with a reciprocal counterpart credential — `sharedActivity`, `deviceControl` |
+
+The [`invalid/`](invalid/) corpus holds the should-reject fixtures, including the v1.2.0 locks: a bad `modalities` or `keyControl` enum value, an empty `modalities`, a malformed `firstMet` date, and a non-boolean `ongoing`.
+
 ### Privacy
 
 Face-to-face credentials allow (but do not require) the issuer to endorse the hashes of biometrics (e.g., photos, a voice print) that they feel characterized the issuee as they observed them in real life interactions (`biometricHashes` field). The issuee can carry the actual biometric data and present it to verifiers, thus allowing a verifier to confirm that they are interacting with the same human that the issuer knew.

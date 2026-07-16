@@ -1,0 +1,33 @@
+{
+  "v": "ACDC10JSON00037b_",
+  "d": "EE2A7rZSSpr_DSkPlWKW1DCP19Aix6f8RaBE4gvi25pf",
+  "i": "EFS9oYjTdI-0JBlXYwFzxzq7wQTHVg-zqFRCPobnXQt3",
+  "ri": "ED337MPmqbEJojqT1vLoRI8jJX6UiOaAl-mJFA7m-pCy",
+  "s": "EOzVErBz2Mr9Xyz5NDML3Y0x_SYaKwX2Y4KTGvevTs15",
+  "a": {
+    "d": "EKNfQl0vjE4cEuK_Q6efKFkzUbL4Wvs6RDLIrslATzwP",
+    "u": "0AC7Pt2NBjQeImb3XHPVYikU",
+    "i": "EJkVsli3DM6OszCDFXA_2TwW5RRpuV7sMQXyAS1edrFc",
+    "knownAs": "Sam",
+    "dt": "2026-07-15T12:00:00.000000+00:00",
+    "assertDate": "2026-07-15T12:00:00.000000+00:00",
+    "firstMet": "2019-09-01T09:00:00.000000+00:00",
+    "lastInteraction": "2026-07-10T17:00:00.000000+00:00",
+    "ongoing": true,
+    "minutes": 9600,
+    "modalities": [
+      "visual",
+      "conversational",
+      "tactile",
+      "movement",
+      "multiSession"
+    ],
+    "keyControl": "deviceControl",
+    "biometricHashes": [
+      "EBY6Ewd6NPUHcRylIszD1UO1RQ1cBF-sgezBqGDiXtKJ"
+    ],
+    "biometricProtocol": "bakobo:biohash:face:v1",
+    "basis": "colleague"
+  },
+  "r": "EGhkNqT1LbfYlimCBMsorDt7PpeGKYdOdj6hKpUjrqtB"
+}

@@ -1,0 +1,28 @@
+{
+  "v": "ACDC10JSON00032b_",
+  "d": "EDKiCX3caKpPcYqCk1AhgpDyCjbvfWJrS-YLxxF9vKwT",
+  "i": "EMxbp_VvI16AZb6MFKY8FtNL3C358vDn6K1u8cCyxNBh",
+  "ri": "EMo-n270ExD6FYYpxgHUiX6_KwdDcan96R230wr62pZE",
+  "s": "EOzVErBz2Mr9Xyz5NDML3Y0x_SYaKwX2Y4KTGvevTs15",
+  "a": {
+    "d": "EE9h_W9zmOvj-4LnF1HAfc9N7gET0s9HhJX-qxUa0pXM",
+    "u": "0ABBYB9vCAHpsM-MkU6VkzC2",
+    "i": "EB-91xUTMto7y-6T65uLyaNEmohuDPtLuQQoJQmgdhiA",
+    "knownAs": "Jordan",
+    "dt": "2026-07-15T12:00:00.000000+00:00",
+    "firstMet": "2021-02-20T00:00:00.000000+00:00",
+    "lastInteraction": "2026-06-30T00:00:00.000000+00:00",
+    "ongoing": true,
+    "minutes": 3000,
+    "modalities": [
+      "visual",
+      "tactile",
+      "conversational",
+      "sharedActivity"
+    ],
+    "keyControl": "deviceControl",
+    "basis": "friend",
+    "caveats": "Reciprocal: Jordan also holds a face-to-face credential I issued about them."
+  },
+  "r": "EGhkNqT1LbfYlimCBMsorDt7PpeGKYdOdj6hKpUjrqtB"
+}

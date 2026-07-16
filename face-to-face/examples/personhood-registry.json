@@ -1,0 +1,31 @@
+{
+  "v": "ACDC10JSON000401_",
+  "d": "ECx13_FSCRReg8fXs_dsnQQPth4_btnkoArZ9pOC6bIp",
+  "i": "ELd-wJa4brn_W3XLSwiXQeH4TdvDRziIA2xR3Njvec2e",
+  "ri": "EKItbn-bg5EEKOYZeRL_jcXdoBHavYizRNOStaCIG3lc",
+  "s": "EOzVErBz2Mr9Xyz5NDML3Y0x_SYaKwX2Y4KTGvevTs15",
+  "a": {
+    "d": "EHSR_A5FeZ_sPRlmV4pfW557EjX_8Iikqt-QnisLlp8r",
+    "u": "0ABsFev_Pe-uuUEOdIej9j6u",
+    "i": "EHDpHlTNpfso66vcPdMW8v6NqOiERxAStHXP2SB48Pox",
+    "dt": "2026-07-15T10:35:00.000000+00:00",
+    "assertDate": "2026-07-15T10:35:00.000000+00:00",
+    "firstMet": "2026-07-15T10:00:00.000000+00:00",
+    "lastInteraction": "2026-07-15T10:30:00.000000+00:00",
+    "ongoing": false,
+    "minutes": 30,
+    "modalities": [
+      "visual",
+      "conversational"
+    ],
+    "keyControl": "signedChallenge",
+    "biometricHashes": [
+      "ENM8qcJL3Vc3W8Owso54fGUPzfZlD0vJtSsKdSgHA017",
+      "EEIw0NTSZOb8ZsNDu3CGvB91HVE9Z6a-jH3dySde2XS3"
+    ],
+    "biometricProtocol": "bakobo:biohash:multimodal:v1",
+    "basis": "acquaintance",
+    "caveats": "Issued at a community proof-of-personhood event; biometric hashes provided to support cross-issuer uniqueness/dedup."
+  },
+  "r": "EGhkNqT1LbfYlimCBMsorDt7PpeGKYdOdj6hKpUjrqtB"
+}

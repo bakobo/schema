@@ -1,0 +1,30 @@
+{
+  "v": "ACDC10JSON000338_",
+  "d": "EGExMt1DM_p6rLYGqYiZgMYR47Mn5ZRTQLWzioa_LW6q",
+  "i": "EMdQSrAwIpvV9aF0abPwSgsgQcb4gzfIAfBM08GQY9V0",
+  "ri": "EOafZp7bT04_mKNJqvass9r-badzjR-ELH1KbBoNc9wV",
+  "s": "EOzVErBz2Mr9Xyz5NDML3Y0x_SYaKwX2Y4KTGvevTs15",
+  "a": {
+    "d": "EFSTjf18mcCS9_Bk6UWJODlr9njQkpHitpYXC6JGf-ql",
+    "u": "0AC-stfRQmADxnBTMH0AgkPq",
+    "i": "EP3DPoUaM2lyCOHOEXDOOC5RAIplavR-6B1ZBA481Dpn",
+    "knownAs": "Mom",
+    "dt": "2026-07-15T12:00:00.000000+00:00",
+    "firstMet": "1985-04-12T00:00:00.000000+00:00",
+    "lastInteraction": "2026-07-14T00:00:00.000000+00:00",
+    "ongoing": true,
+    "minutes": 500000,
+    "modalities": [
+      "visual",
+      "tactile",
+      "conversational",
+      "movement",
+      "sharedActivity",
+      "multiSession"
+    ],
+    "keyControl": "signedChallenge",
+    "basis": "family",
+    "caveats": "Lifelong relationship; biometric hashing declined for privacy."
+  },
+  "r": "EGhkNqT1LbfYlimCBMsorDt7PpeGKYdOdj6hKpUjrqtB"
+}
