@@ -1151,3 +1151,49 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             case is therefore shown illustratively in sedi-id/index.md rather than as a SAID-checked gallery
             file, and the machine-validated selective-disclosure gallery lives on sedi-age, where the AGID is
             stable across disclosures.)
+        SEDI digital guardian — a thin legal-recognition layer over GCD, first of a family = decision:
+          id: sdlg3n
+          why: >
+            sedi-guardian attests recognized legal authority to act on behalf of a ward (Utah Code
+            63A-20-201(3); acceptance mandated by Parts 4-6). Grounded in the Sovrin "Guardianship in SSI V2"
+            whitepaper, Aries RFC 0103 "Indirect Identity Control", Utah Title 75 Ch. 5 (guardianship) and
+            Ch. 5b (UAGPPJA cross-state recognition), and the delegated-authority model in papers/sda.md.
+            KEY DESIGN: GCD already carries the generic guardianship machinery (relationType=guardianship,
+            presentsAs = the holder!=subject transparency invariant, duties, terminatingEvents, the act grid).
+            Unlike the bespoke case, though, guardianship has STABLE, statutorily-enumerated, verifier-critical
+            structure a GCD's fail-closed constraints cannot hold: the four bases (designatedRepresentative,
+            custodialParent, courtGuardianMinor 75-5-202, courtGuardianIncapacitated 75-5-301), the scope of
+            powers (Utah prefers LIMITED, so scope must be explicit and machine-checkable), and the
+            appointment/registration. So a schema IS warranted — but as a THIN legal-recognition layer that
+            COMPOSES with GCD, not a re-implementation. sedi-guardian carries only what Utah law makes
+            relationship- and jurisdiction-specific (basis, powers, and a clustered 'recognition' block:
+            court/case/order or self-executed instrument, appointingState, UAGPPJA registrationStatus), is
+            registry-bound (guardianship terminates dynamically -> verifiers MUST check status), holds the
+            HOLDER!=SUBJECT invariant structurally (issuee = guardian; ward named by a 'subject' edge to the
+            ward's sedi-id), and reaches the generic act-constraints via an optional 'scope' edge to a GCD
+            (relationType=guardianship). Scope carrier: self-contained powers[] + optional GCD edge (DHH's
+            accepted lean) over always-edging-to-GCD.
+            GENERALIZATION HYPOTHESIS: this is the first of a likely sedi-legal-authority family. The two-layer
+            principle -- GCD for the GENERIC relationship (delegation/controllership/stewardship/simple
+            delegation need nothing more); a thin SEDI legal-recognition layer only for relationships the law
+            SPECIALLY recognizes and appoints (guardianship, conservatorship, POA-agency) and that a verifier
+            must check. Extract a shared sedi-legal-authority base at the SECOND concrete instance
+            (conservatorship is the obvious one -- it shares ~80% of the recognition layer), NOT speculatively
+            now (same extract-at-second-pattern discipline as @sdp3wk). Boundary: person-fiduciary authority
+            (guardian/conservator/POA -- acting in a vulnerable person's best interest) stays distinct from
+            thing-controllership (a drone has no interest or rights); controllership stays GCD's territory,
+            never folded under the guardianship family with a discriminator flag.
+            EXCLUSIONS: SEDI's guardian is of the PERSON, not a conservator of property (a separate Utah
+            appointment, not one of the four bases). And supported-decision-making supporters (Utah 2025 Part
+            7) are EXCLUDED: a supporter assists but cannot decide FOR the principal, so fails the statutory
+            "act on behalf of" test, and categorically transfers no authority (it is not delegation,
+            guardianship, controllership, or stewardship). If SEDI ever needs SDM it is a distinct sedi-support
+            artifact (likely a consent/accompaniment attestation, not an authority credential), evaluated for a
+            shared base only as a second person-relationship pattern.
+            RULE (reusable) -- the security-boundary bit: when the single attribute distinguishing two
+            credential shapes IS the security boundary (here: does the holder have authority to ACT FOR the
+            subject?), make them DISTINCT schemas, never one schema with a discriminator flag. A one-bit
+            difference that inverts the verifier's safe default must not be optional/fail-openable -- distinct
+            types make each credential's default reading safe without a flag check (the same instinct as not
+            putting isAdmin on the ordinary-user schema). This is why SDM is not a basis value on sedi-guardian
+            and why thing-controllership is not folded into the person-fiduciary family.
