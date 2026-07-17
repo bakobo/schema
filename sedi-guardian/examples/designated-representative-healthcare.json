@@ -1,0 +1,46 @@
+{
+  "v": "ACDC10JSON00051c_",
+  "d": "EPBncDfd6uTAHdIbj2voeVD_1FWrUMb7jndA4zITLHR2",
+  "u": "0ABkZXNpZ250c2FsdHBhZDAw",
+  "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC",
+  "ri": "EC-DlJTW3_34SsV5PSG0-U7hxR3uVj8JfCoC5e-8pCBB",
+  "s": "EHrwoAIbvhpvUZFN3wQiNKanUzZ_uPtbz3AQGWtopMtc",
+  "a": {
+    "d": "EFZF9a2_9STEJ4_blQbCqBaGOWN7LHzrNPXOKlkebuhE",
+    "u": "0ABkZXNpZ25hc2FsdHBhZDAw",
+    "i": "EBDslNQxKa8JNUt8c_H19Jnl001e_5s345L5427IkDk2",
+    "basis": "designatedRepresentative",
+    "subtype": "healthCareAgent",
+    "powers": [
+      "healthCare"
+    ],
+    "fiduciary": "substitutedJudgment",
+    "capacityConditioned": true,
+    "recognition": {
+      "authorityType": "selfExecuted",
+      "instrumentReference": "Utah Advance Health Care Directive 2026-01-15",
+      "appointingState": "US-UT",
+      "registrationStatus": "native"
+    },
+    "effectiveDate": "2026-01-15"
+  },
+  "e": {
+    "d": "EPeqsESbp2gN3l3sSSSF3gi4d98sgWn1OBuIPO-VWW1t",
+    "u": "0ABkZXNpZ25lc2FsdHBhZDAw",
+    "subject": {
+      "d": "EA3stCt8cL6xDmsw_cdXLRMByrYsbW9jCGZ8FJHicKyA",
+      "u": "0ABnNHNzYWx0cGFkMDAwMDAw",
+      "n": "EOr_wpH9t5uXrodF_pltJESml7H9TDWozeHQ1TKULm5P",
+      "s": "EE2VI0j6cttlC4nqu7HwlHfc0Et6xicoaFjvO41w27qN",
+      "o": "I2I"
+    },
+    "authorization": {
+      "d": "EIXyneEobquN0pLOo5f7F2SQRB21hTAxz6yEYBdu92iw",
+      "u": "0ABnNGFzYWx0cGFkMDAwMDAw",
+      "n": "EK3wMuDAlB1UrG_j6vZlDClD_hp71nYyedWxcVwcMBZ1",
+      "s": "EJvd1ns0KVsbB4Ji1MEv4cdq8WOSQezILlluN63K_JOH",
+      "o": "NI2I"
+    }
+  },
+  "r": "EOW7nnASAYoY72gJ7brJwE0V2Hm8o6RfZvN2gNeyKmO0"
+}

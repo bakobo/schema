@@ -1,0 +1,31 @@
+{
+  "v": "ACDC10JSON000627_",
+  "d": "EDQtmw78o3N0atekiCEJ1XerNi6miIQ_Zmt4qL7Hkwkd",
+  "u": "0ABpbmNhcHRzYWx0cGFkMDAw",
+  "i": "EGA-48IbFJLG0nG0nv2eJoevtvNpElOqnSM_HBDZNNgc",
+  "ri": "EC-DlJTW3_34SsV5PSG0-U7hxR3uVj8JfCoC5e-8pCBB",
+  "s": "EHrwoAIbvhpvUZFN3wQiNKanUzZ_uPtbz3AQGWtopMtc",
+  "a": {
+    "d": "ECup0cpIxGo4HXvrRx_IJL4Hiif6mOze0rwsFJWipuMu",
+    "u": "0ABpbmNhcGFzYWx0cGFkMDAw",
+    "i": "EC1tsDmWsQ50ubsCcqVRntpZev6WsMcA2NY76nSsqP5Q",
+    "basis": "courtGuardianIncapacitated",
+    "powers": [
+      "healthCare",
+      "residence"
+    ],
+    "fiduciary": "bestInterest",
+    "recognition": {
+      "authorityType": "court",
+      "court": "Third District Court, Salt Lake County",
+      "caseNumber": "234500123",
+      "orderDate": "2026-03-10",
+      "lettersReference": "Letters of Guardianship 234500123-LG",
+      "appointingState": "US-UT",
+      "registrationStatus": "native"
+    },
+    "effectiveDate": "2026-03-10",
+    "reviewDueDate": "2027-03-10"
+  },
+  "r": "EOW7nnASAYoY72gJ7brJwE0V2Hm8o6RfZvN2gNeyKmO0"
+}

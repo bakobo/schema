@@ -1,0 +1,44 @@
+{
+  "v": "ACDC10JSON0004ab_",
+  "d": "EJacq5SeDpdepAb1xu9wQBbQswG60-tDpbYaxbAoBLQJ",
+  "u": "0ABwYXJlbnR0c2FsdHBhZDAw",
+  "i": "EP6GqGCzbQ2oI8lk0FryCvP7x1So8LWltKgQJn4Utccv",
+  "ri": "EC-DlJTW3_34SsV5PSG0-U7hxR3uVj8JfCoC5e-8pCBB",
+  "s": "EHrwoAIbvhpvUZFN3wQiNKanUzZ_uPtbz3AQGWtopMtc",
+  "a": {
+    "d": "EHp2RNFL18Z13W-_GhWevZcKysY7X-Rc1-bAViTxPBQ_",
+    "u": "0ABwYXJlbnRhc2FsdHBhZDAw",
+    "i": "EC1tsDmWsQ50ubsCcqVRntpZev6WsMcA2NY76nSsqP5Q",
+    "basis": "custodialParent",
+    "powers": [
+      "plenary"
+    ],
+    "fiduciary": "bestInterest",
+    "recognition": {
+      "authorityType": "inherentParental",
+      "appointingState": "US-UT",
+      "registrationStatus": "native"
+    },
+    "effectiveDate": "2020-06-15",
+    "expiryDate": "2035-06-15"
+  },
+  "e": {
+    "d": "EDKqd8cc-_Ii3_W9twmZGSlCdF6Kuvq5A9XNDW80V-7C",
+    "u": "0ABwYXJlbnRlc2FsdHBhZDAw",
+    "subject": {
+      "d": "EDF2ZatIF51RAPRMX8Pp_ucb1E2IeTI36mYv8S-AMjIz",
+      "u": "0ABnM3NzYWx0cGFkMDAwMDAw",
+      "n": "ENcmpr7DUmOGCnTYh3GYhXWQnGb2UzVzA88968ndCfTT",
+      "s": "EE2VI0j6cttlC4nqu7HwlHfc0Et6xicoaFjvO41w27qN",
+      "o": "NI2I"
+    },
+    "authorization": {
+      "d": "EGWhass8FKvVtvvXdgoclQ0BcOkBMZTguexQUtVZ2vUi",
+      "u": "0ABnM2FzYWx0cGFkMDAwMDAw",
+      "n": "EP5bkCiblLbRjgSVCbQ5n9qrgT5-4S8RPN_fXcZe8HQV",
+      "s": "EJvd1ns0KVsbB4Ji1MEv4cdq8WOSQezILlluN63K_JOH",
+      "o": "NI2I"
+    }
+  },
+  "r": "EOW7nnASAYoY72gJ7brJwE0V2Hm8o6RfZvN2gNeyKmO0"
+}

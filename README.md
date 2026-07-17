@@ -36,6 +36,7 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 | [sedi-id](sedi-id/) | Utah State-Endorsed Digital Identity root (name, birth date, image, residence) as a partially-disclosable attribute section |
 | [sedi-age](sedi-age/) | derived state-endorsed aggregate age-threshold vector (ageOver13/16/18/21/55/65; prove over-21 without the birth date) |
 | [sedi-present-age-portrait](sedi-present-age-portrait/) | holder-issued SEDI presentation: prove over-21 and show the state-endorsed photo (I2I edges to sedi-id + sedi-age) |
+| [sedi-guardian](sedi-guardian/) | SEDI digital guardian: recognized legal authority to act for a ward (four statutory bases; composes with GCD) |
 
 ## Status
 

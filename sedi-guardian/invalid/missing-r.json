@@ -1,0 +1,55 @@
+{
+  "v": "ACDC10JSON000627_",
+  "d": "EDQtmw78o3N0atekiCEJ1XerNi6miIQ_Zmt4qL7Hkwkd",
+  "u": "0ABpbmNhcHRzYWx0cGFkMDAw",
+  "i": "EGA-48IbFJLG0nG0nv2eJoevtvNpElOqnSM_HBDZNNgc",
+  "ri": "EC-DlJTW3_34SsV5PSG0-U7hxR3uVj8JfCoC5e-8pCBB",
+  "s": "EHrwoAIbvhpvUZFN3wQiNKanUzZ_uPtbz3AQGWtopMtc",
+  "a": {
+    "d": "ECup0cpIxGo4HXvrRx_IJL4Hiif6mOze0rwsFJWipuMu",
+    "u": "0ABpbmNhcGFzYWx0cGFkMDAw",
+    "i": "EC1tsDmWsQ50ubsCcqVRntpZev6WsMcA2NY76nSsqP5Q",
+    "basis": "courtGuardianIncapacitated",
+    "powers": [
+      "healthCare",
+      "residence"
+    ],
+    "fiduciary": "bestInterest",
+    "recognition": {
+      "authorityType": "court",
+      "court": "Third District Court, Salt Lake County",
+      "caseNumber": "234500123",
+      "orderDate": "2026-03-10",
+      "lettersReference": "Letters of Guardianship 234500123-LG",
+      "appointingState": "US-UT",
+      "registrationStatus": "native"
+    },
+    "effectiveDate": "2026-03-10",
+    "reviewDueDate": "2027-03-10"
+  },
+  "e": {
+    "d": "EGStSUe-jikYP5eS4T7tHzpZGicXwYbIEyJZ3wB-LkO2",
+    "u": "0ABpbmNhcGVzYWx0cGFkMDAw",
+    "subject": {
+      "d": "EEs0o0f5C1B8vRSyve3dci2IFpccnu5nQd5zbXJT5Y2k",
+      "u": "0ABnMXNzYWx0cGFkMDAwMDAw",
+      "n": "EOr_wpH9t5uXrodF_pltJESml7H9TDWozeHQ1TKULm5P",
+      "s": "EE2VI0j6cttlC4nqu7HwlHfc0Et6xicoaFjvO41w27qN",
+      "o": "NI2I"
+    },
+    "authorization": {
+      "d": "ENPTkPT_C3A6lnIoGVucogptdBhFFZ_ahZYqg_qMMX1Y",
+      "u": "0ABnMWFzYWx0cGFkMDAwMDAw",
+      "n": "EKmtHAgr5r1GNppGJs-GqskGxB4YG4lmfpFYLhZsJW1U",
+      "s": "EJvd1ns0KVsbB4Ji1MEv4cdq8WOSQezILlluN63K_JOH",
+      "o": "NI2I"
+    },
+    "scope": {
+      "d": "EKZaNRrLgpZgKJVO803C0i8gomwqjfqLdtYfvb65lzBS",
+      "u": "0ABnMWNzYWx0cGFkMDAwMDAw",
+      "n": "EHhi7OwRq3PqMM3pT6CGBtIgwyNAmoggiI0qQIN73FBs",
+      "s": "EJeBiq_7yuq-J7RrRgNu5OgvUWDOCrIAwq19_w_YxHU7",
+      "o": "NI2I"
+    }
+  }
+}

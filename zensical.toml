@@ -35,6 +35,7 @@ nav = [
     { "SEDI identity" = "sedi-id/index.md" },
     { "SEDI age" = "sedi-age/index.md" },
     { "SEDI age-portrait presentation" = "sedi-present-age-portrait/index.md" },
+    { "SEDI digital guardian" = "sedi-guardian/index.md" },
     { "Schema house style" = "style.md" },
     { "Choosing attribute vs aggregate" = "choosing-attribute-vs-aggregate.md" },
 ]

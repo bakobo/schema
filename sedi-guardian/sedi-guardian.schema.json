@@ -1,0 +1,371 @@
+{
+  "$id": "EHrwoAIbvhpvUZFN3wQiNKanUzZ_uPtbz3AQGWtopMtc",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SEDI Digital Guardian",
+  "description": "The SEDI legal-recognition layer for a digital guardian (Utah Code 63A-20-201(3), Parts 4-6). It attests, in machine-checkable form a verifier can evaluate under the acceptance mandate, that a guardian holds recognized authority to act on behalf of a ward: the statutory basis, the scope of powers (Utah prefers LIMITED guardianship, so scope must be explicit), and the appointment/registration. The credential is HELD BY THE GUARDIAN (issuee) and names the WARD by edge -- the holder-not-subject invariant that keeps guardianship transparent, never impersonation (Sovrin Guardianship V2; Aries RFC 0103). It is registry-bound: guardianship terminates dynamically (majority, restored capacity, death, court order), so a verifier MUST check current status. The generic act/duty/termination machinery lives in GCD (relationType: guardianship), reachable via the optional scope edge; this schema carries only what Utah law makes relationship- and jurisdiction-specific. This is the first of a likely sedi-legal-authority family (conservatorship, POA-agency); see this.i @sdlg3n.",
+  "$comment": "A v1 attribute+edges+rules ('acm') ACDC, fully version-stamped by keri 1.2.13. Authority credentials are disclosed whole (like GCD), not selectively -- a verifier must see basis+scope+validity together -- so the attribute section is flat.",
+  "credentialType": "SEDI_Guardian",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "v",
+    "d",
+    "i",
+    "ri",
+    "s",
+    "a",
+    "e",
+    "r"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "d": {
+      "description": "SAID of the credential",
+      "type": "string"
+    },
+    "u": {
+      "description": "Top-level blinding nonce; present => private variant",
+      "type": "string"
+    },
+    "i": {
+      "description": "Issuer = the appointing authority (court/DGO for court bases; the individual for a self-executed designation; DGO for a parental attestation)",
+      "type": "string"
+    },
+    "ri": {
+      "description": "Registry for credential status -- MANDATORY; guardianship terminates dynamically",
+      "type": "string"
+    },
+    "s": {
+      "description": "SAID of this schema",
+      "type": "string"
+    },
+    "a": {
+      "oneOf": [
+        {
+          "description": "SAID of the attribute section",
+          "type": "string"
+        },
+        {
+          "$id": "EOMVzfo7HXXxhuaJ2B8ovV3Yh9QzE0Y-3qAqFDEe7-aE",
+          "description": "Attribute section: the recognized guardianship",
+          "type": "object",
+          "required": [
+            "d",
+            "u",
+            "i",
+            "basis",
+            "powers",
+            "fiduciary",
+            "recognition",
+            "effectiveDate"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of the attribute section",
+              "type": "string"
+            },
+            "u": {
+              "description": "Attribute-section blinding nonce",
+              "type": "string"
+            },
+            "i": {
+              "description": "Issuee = the GUARDIAN's AID (holder != subject)",
+              "type": "string"
+            },
+            "basis": {
+              "description": "Which of the four SEDI statutory bases (63A-20-201(3))",
+              "enum": [
+                "designatedRepresentative",
+                "custodialParent",
+                "courtGuardianMinor",
+                "courtGuardianIncapacitated"
+              ]
+            },
+            "subtype": {
+              "description": "Sub-type of a designated representative",
+              "enum": [
+                "financialPOA",
+                "healthCareAgent"
+              ]
+            },
+            "powers": {
+              "description": "Scope of authority -- 'plenary' or an explicit limited set of guardian-of-the-person powers (Utah prefers limited)",
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "plenary",
+                  "healthCare",
+                  "residence",
+                  "education",
+                  "personalRecords",
+                  "socialBenefits",
+                  "digitalIdentity",
+                  "contracts"
+                ]
+              }
+            },
+            "fiduciary": {
+              "description": "Governing standard",
+              "enum": [
+                "bestInterest",
+                "substitutedJudgment"
+              ]
+            },
+            "capacityConditioned": {
+              "description": "Authority active only after a capacity determination (health-care agent)",
+              "type": "boolean"
+            },
+            "residualParentalRights": {
+              "description": "A parent retains residual rights (minor guardianship)",
+              "type": "boolean"
+            },
+            "recognition": {
+              "description": "Legal-recognition block: how this authority is recognized and appointed. Deliberately relationship-agnostic and clustered so a future sedi-legal-authority base can lift it verbatim (this.i @sdlg3n).",
+              "type": "object",
+              "required": [
+                "authorityType",
+                "appointingState",
+                "registrationStatus"
+              ],
+              "properties": {
+                "authorityType": {
+                  "description": "How the authority arises",
+                  "enum": [
+                    "court",
+                    "selfExecuted",
+                    "inherentParental"
+                  ]
+                },
+                "court": {
+                  "description": "Appointing court name (court authorityType)",
+                  "type": "string"
+                },
+                "caseNumber": {
+                  "description": "Court case/docket number (court authorityType)",
+                  "type": "string"
+                },
+                "orderDate": {
+                  "description": "Date of the appointing order",
+                  "type": "string",
+                  "format": "date"
+                },
+                "lettersReference": {
+                  "description": "Reference to the Letters of Guardianship (court authorityType)",
+                  "type": "string"
+                },
+                "instrumentReference": {
+                  "description": "Reference to the self-executed instrument -- POA or advance directive (selfExecuted authorityType)",
+                  "type": "string"
+                },
+                "appointingState": {
+                  "description": "ISO 3166-2 subdivision of the appointing jurisdiction, e.g. US-UT",
+                  "type": "string"
+                },
+                "registrationStatus": {
+                  "description": "Utah recognition status under UAGPPJA (Title 75 Ch. 5b)",
+                  "enum": [
+                    "native",
+                    "registeredForeign",
+                    "transferred"
+                  ]
+                },
+                "utahRegistrationReference": {
+                  "description": "Utah Ch. 5b registration reference (registeredForeign/transferred)",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "effectiveDate": {
+              "description": "Date the authority takes effect",
+              "type": "string",
+              "format": "date"
+            },
+            "reviewDueDate": {
+              "description": "Date a periodic review is due (Utah requires review of incapacitated-person guardianships)",
+              "type": "string",
+              "format": "date"
+            },
+            "expiryDate": {
+              "description": "Date the authority expires (e.g. the minor's 18th birthday); dynamic termination is via the registry",
+              "type": "string",
+              "format": "date"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "e": {
+      "oneOf": [
+        {
+          "description": "SAID of the edge section",
+          "type": "string"
+        },
+        {
+          "$id": "EKtUsQCGjy1riNW_P4kqWAleHUWALyXr7fIK_eCXwZne",
+          "description": "Edge section",
+          "type": "object",
+          "required": [
+            "d",
+            "subject",
+            "authorization"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of the edge section",
+              "type": "string"
+            },
+            "u": {
+              "description": "Edge-section blinding nonce",
+              "type": "string"
+            },
+            "subject": {
+              "description": "Edge to the ward/principal's sedi-id (the subject of the authority; I2I when a principal self-designates, else NI2I)",
+              "oneOf": [
+                {
+                  "description": "SAID of the edge",
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "SAID of this edge",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge blinding nonce",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "SAID of the far node (credential)",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "SAID of the far node's schema",
+                      "type": "string"
+                    },
+                    "o": {
+                      "description": "Edge operator",
+                      "enum": [
+                        "I2I",
+                        "NI2I"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "authorization": {
+              "description": "Edge to the authorizing instrument -- the court order or Letters (often FAA-wrapped), the POA, or the advance directive",
+              "oneOf": [
+                {
+                  "description": "SAID of the edge",
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "SAID of this edge",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge blinding nonce",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "SAID of the far node (credential)",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "SAID of the far node's schema",
+                      "type": "string"
+                    },
+                    "o": {
+                      "description": "Edge operator",
+                      "enum": [
+                        "I2I",
+                        "NI2I"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "scope": {
+              "description": "Optional edge to a GCD (relationType: guardianship) carrying the rich act-constraints, duties, and terminating events",
+              "oneOf": [
+                {
+                  "description": "SAID of the edge",
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "SAID of this edge",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge blinding nonce",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "SAID of the far node (credential)",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "SAID of the far node's schema",
+                      "type": "string"
+                    },
+                    "o": {
+                      "description": "Edge operator",
+                      "enum": [
+                        "I2I",
+                        "NI2I"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "description": "SAID of the governing SEDI guardianship governance framework (sedi-guardian/rules.json)",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}
