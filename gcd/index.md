@@ -2,11 +2,13 @@
 
 ### Purpose
 
-These credentials document the specifics of a KERI-style cooperative delegation.
+These credentials document the authorizations, constraints, and duties of **delegated authority** — what a delegate is empowered to do on behalf of a delegator, and under what limits.
 
-The delegation relationship itself is not embodied in a credential, but rather in a special delegate AID that's bound to the delegator's AID via an inception event on the delegate side, and an interaction event in the KEL on the delegator side. See section 2.3.4 in [version 2.6 of the KERI whitepaper](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/KERI_WP_2.x.web.pdf). This interlocking two-way binding is what gives rise to the term "cooperative delegation", and it is significantly more secure and flexible than many other delegation mechanisms.
+The paradigmatic and strongest way to bind a delegate to a delegator is a KERI-style **cooperative delegation**: a special delegate AID bound to the delegator's AID via an inception event (`dip`) on the delegate side, and an interaction event (`ixn`) in the KEL on the delegator side. See section 2.3.4 in [version 2.6 of the KERI whitepaper](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/KERI_WP_2.x.web.pdf). This interlocking two-way binding is what gives rise to the term "cooperative delegation", and it is significantly more secure and flexible than many other delegation mechanisms. It remains fully supported and is the exemplar these credentials were named for.
 
-However, the binding between AIDs only proves the state of the delegation relationship, and defines how it is controlled. It does not specify which specific actions are expected of the delegate, or what constraints govern the exercise of the authority they receive. That is the purpose of the Generalized Cooperative Delegation (GCD) credentials described here. 
+**But it is not a precondition.** A GCD credential is a standard targeted ACDC; its authorization and constraint mechanics do not depend on the issuee being KEL-anchored to the issuer. It is usable whenever an issuer grants constrained authority to a delegate AID, whether or not that delegate is cooperatively delegated from the issuer — for example, an organization authorizing an independently-controlled role AID to act on its behalf. (This is what "**Generalized** Cooperative Delegation" implies.)
+
+Whichever binding is used, it only proves the *state* of the delegation relationship and defines how it is controlled. It does not specify which specific actions are expected of the delegate, or what constraints govern the exercise of the authority they receive. That is the purpose of the Generalized Cooperative Delegation (GCD) credentials described here. 
 
 ![suggested gcd visual](gcd-256.png)<br>
 Suggested visual: [svg](gcd.svg) | [256 px](gcd-256.png) | [64 px](gcd-64.png) | [32 px](gcd-32.png)

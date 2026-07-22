@@ -1,12 +1,12 @@
 {
-  "$id": "EJeBiq_7yuq-J7RrRgNu5OgvUWDOCrIAwq19_w_YxHU7",
+  "$id": "EAqOeo_YMHDEMZ-dIJTYd72nsoUS-C1RdXtOdfAj7ZxR",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Generalized Cooperative Delegation Credential",
   "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 2.0 organizes the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classes duties in the rules block.",
   "$comment": "These credentials have no required edges. They can be chained by showing that the issuer's identifier is also an identifier associated with another credential of whatever type, but they do not require chaining. The optional e block carries an I2I issuer edge for that purpose.",
   "type": "object",
   "credentialType": "gcd-credential",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "required": [
     "v",
     "d",
@@ -48,7 +48,7 @@
           "type": "string"
         },
         {
-          "$id": "EFns6gD3GjjM-HUqS714QgRwUV6HirVp1gyj4vCnxZ7E",
+          "$id": "ELHMx5avT3aSuO3CF_tfYzf-eu_o4b0Y-dWXQmHZJLvJ",
           "description": "Attributes block",
           "type": "object",
           "required": [
@@ -65,7 +65,7 @@
               "type": "string"
             },
             "i": {
-              "description": "AID of delegate, as it appears in delegator's interaction event",
+              "description": "AID of the delegate (the issuee) who receives the delegated authority. When the delegate is also a KERI cooperative-delegated AID of the issuer, this is the AID as it appears in the delegator's interaction event \u2014 but GCD does not require a KERI cooperative-delegation binding; it documents delegated authority for any issuer-to-delegate relationship.",
               "type": "string"
             },
             "dt": {
