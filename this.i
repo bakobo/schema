@@ -241,6 +241,48 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             its OOBI, contradicting "keeping the old" as a resolvable artifact). credentialType stays gcd-credential;
             the compact/expanded oneOf and the e-block I2I issuer edge are preserved in both versions. Confirmed with
             Daniel 2026-07-15.
+        GCD documents delegated authority, not a required KERI cooperative-delegation binding = decision:
+          id: n8wq3d
+          why: >
+            GCD's issuee field carried the description "AID of delegate, as it appears in delegator's interaction
+            event", and gcd/index.md framed the whole credential as documenting "a KERI-style cooperative
+            delegation". Both hard-coded a PRECONDITION that GCD never actually enforced: that the issuee be a KERI
+            cooperative-delegated AID — one whose inception (dip) is anchored in the delegator's KEL via an
+            interaction event (ixn). Re-verified before editing that no this.i node ever DECIDED that precondition:
+            the wording is inherited verbatim from the captured 1.0.0 schema (@b6xh4m), and the GCD design nodes
+            (@b6xh4m / @h4tqm7 / @k7wd3m / @k4pv7n) are all about constraints, duties, and facet modeling; the
+            onlyDelegateHeldAuthority disclaimer is about no-privilege-escalation, not a KEL binding. So this is a
+            description CORRECTION, not relitigating a recorded decision. A GCD credential is a standard targeted
+            ACDC whose authorization/constraint mechanics do not depend on the issuee being KEL-anchored to the
+            issuer — an issuer routinely issues a credential to an AID it does not control — so the "as it appears
+            in delegator's interaction event" clause over-specified. THE PRECISION THAT KEEPS THIS CLEAN: GCD stays
+            legitimately ABOUT delegated authority; what is decoupled is "delegated AUTHORITY" (which GCD documents,
+            no KEL anchoring required) from "KERI COOPERATIVE-DELEGATION KEL binding" (a stronger, optional fact).
+            GCD is NOT weakened into a generic bearer credential; onlyDelegateHeldAuthority is unaffected; the
+            cooperative-delegation dip+ixn two-way binding remains the paradigmatic and strongest way to bind a
+            delegate to a delegator and stays fully supported — it is now the EXEMPLAR, not the gate. EXTERNAL
+            DRIVER: the Principal Action Protocol (provenant-dev/pap). PAP's Phase-4 trust chain (pap @k4tnpw)
+            needs, on a governed request, evidence that the user-held signer was authorized by an established
+            authority, expiry-bounded (PAP tension e3vmqk, "Delegation Evidence Form"); a GCD v2 credential is the
+            leading candidate (KERI-native, TEL-revocable, validUntil-bounded; constraints.goals + validUntil
+            express "authorized for this action, until expiry"). But PAP's signer is an INDEPENDENT role AID
+            (firstname-as-employee-at-org, authorized by the org's AID), NOT a cooperative-delegate of the authorizer
+            (PAP decision a6peer: incepted AIDs are independent peers), so PAP issues a GCD with issuer = authorizing
+            AID and issuee = the independent signer with no dip/ixn between them — a valid grant the old wording
+            wrongly excluded. Decoupling unblocks PAP without abusing GCD semantics and matches what "GENERALIZED"
+            Cooperative Delegation already implies. GRADING & CASCADE: description-only, changing no validation
+            semantics and invalidating no instance, so PATCH per RFC-0430 grading (@k3wm7d): 2.0.0 -> 2.0.1. Chose
+            to land the schema edit NOW with the full re-SAIDify cascade over the split the handoff floated (prose
+            now / schema next bump), because prose-only would leave gcd/index.md ("not required") contradicting the
+            schema's own a.i ("as it appears in delegator's interaction event") and would leave PAP's actual blocker
+            (the wording it quotes) in place; the tooling makes the cascade mechanical and the linter (@n7xk4r)
+            verifies consistency. Blast radius was WIDER than the handoff described: beyond gcd/ (schema $id + nested
+            a-block $id, registry.json, example.json, the five examples/ gallery instances, and the three acts-*
+            invalid fixtures' top s), sedi-guardian's optional scope edge (@sdlg3n) pins the GCD schema SAID at
+            e.scope.s in its example.json and all twelve invalid fixtures, so those edge refs were repointed to the
+            new SAID (positive examples re-saidified; should-reject fixtures only repointed, their intended defects
+            untouched and still rejected). Cross-repo (external to this repo, tracked as the 44oc item): PAP's
+            pap/docs/pap-vs-ipex/gcd-v2-for-delegation-evidence.md and any other consumer pinning the old GCD SAID.
     face-to-face is hardened as a proof-of-personhood primitive for AI-proscribed contexts (v1.2.0) = decision:
       id: hp4mk7
       stage-status: done
