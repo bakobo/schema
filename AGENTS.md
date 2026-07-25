@@ -15,6 +15,11 @@ work: `git clone --depth 1 https://github.com/bakobo/dev`. Always on:
   files (`README`, `LICENSE`, `CONTRIBUTING`), the instruction/config files, build manifests, and
   `this.i` at the root as the source of truth. Don't leave `design.md` loose at the root. Full
   standard, including the content-repo nuance: [`dev/standards/repo-layout.md`](../dev/standards/repo-layout.md).
+- **Terminology.** Bakobo's architecture has a precise vocabulary (`core`, `steward`, `mint`, …). Its
+  single source of truth is [`bakobo/glossary`](https://github.com/bakobo/glossary), reached via the
+  `glossary` MCP server. Consult a term before using it, reconcile prose to the glossary (not the
+  reverse), mint/amend terms in-band through the MCP (never hand-edit), and don't let a general word
+  masquerade as a formal term. Full standard: [`dev/standards/terminology.md`](../dev/standards/terminology.md).
 - **Tasks and tech debt in `tick`** — see the tick stanza below, not an external tracker.
 
 ## Intent methodology
