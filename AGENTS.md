@@ -1,12 +1,3 @@
-## Repository layout — standing convention
-
-Architecture and developer/consumer docs live in **`docs/`** (`design.md`, architecture notes,
-handoffs). The repository root holds only repo-level files — `README.md`, `LICENSE`,
-`CONTRIBUTING.md` — plus the instruction/config files (`AGENTS.md`/`CLAUDE.md`/`GEMINI.md`,
-`.cursorrules`, `.gitignore`, `this.i`/`this.i.seed`) and build manifests (`pyproject.toml`,
-`package.json`, …). `this.i` (the intent tree) stays at the root as the source of truth. Do **not**
-leave `design.md` or other design/architecture docs at the root — put them under `docs/`.
-
 ## Bakobo engineering standards
 
 How every Bakobo repo builds is governed by cross-cutting standards, canonical in the sibling
@@ -20,6 +11,10 @@ work: `git clone --depth 1 https://github.com/bakobo/dev`. Always on:
 - **High-quality errors.** Every error carries a stable symbolic code, says whether retrying could
   help (permanent vs. transient), and reads as complete, plain sentences in the house voice — never
   "something went wrong." Full standard: [`dev/standards/error-handling.md`](../dev/standards/error-handling.md).
+- **Repo layout.** Architecture and developer docs live in `docs/`; the root holds only repo-level
+  files (`README`, `LICENSE`, `CONTRIBUTING`), the instruction/config files, build manifests, and
+  `this.i` at the root as the source of truth. Don't leave `design.md` loose at the root. Full
+  standard, including the content-repo nuance: [`dev/standards/repo-layout.md`](../dev/standards/repo-layout.md).
 - **Tasks and tech debt in `tick`** — see the tick stanza below, not an external tracker.
 
 ## Intent methodology
