@@ -1,3 +1,12 @@
+## Repository layout — standing convention
+
+Architecture and developer/consumer docs live in **`docs/`** (`design.md`, architecture notes,
+handoffs). The repository root holds only repo-level files — `README.md`, `LICENSE`,
+`CONTRIBUTING.md` — plus the instruction/config files (`AGENTS.md`/`CLAUDE.md`/`GEMINI.md`,
+`.cursorrules`, `.gitignore`, `this.i`/`this.i.seed`) and build manifests (`pyproject.toml`,
+`package.json`, …). `this.i` (the intent tree) stays at the root as the source of truth. Do **not**
+leave `design.md` or other design/architecture docs at the root — put them under `docs/`.
+
 ## Bakobo engineering standards
 
 How every Bakobo repo builds is governed by cross-cutting standards, canonical in the sibling
