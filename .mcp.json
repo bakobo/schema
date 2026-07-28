@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "glossary": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "glossary-mcp==0.1.0"
+      ],
+      "env": {
+        "GLOSSARY_PATH": "${CLAUDE_PROJECT_DIR:-.}/../glossary"
+      }
+    }
+  }
+}
