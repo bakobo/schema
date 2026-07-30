@@ -4,10 +4,10 @@
       "type": "stdio",
       "command": "uvx",
       "args": [
-        "glossary-mcp==0.2.0"
+        "glossary-mcp==${GLOSSARY_MCP_VERSION}"
       ],
       "env": {
-        "GLOSSARY_PATH": "${CLAUDE_PROJECT_DIR:-.}/../glossary"
+        "GLOSSARY_PATH": "${BAKOBO_GLOSSARY}"
       }
     }
   }
