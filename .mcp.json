@@ -4,7 +4,7 @@
       "type": "stdio",
       "command": "uvx",
       "args": [
-        "glossary-mcp==0.1.0"
+        "glossary-mcp==0.2.0"
       ],
       "env": {
         "GLOSSARY_PATH": "${CLAUDE_PROJECT_DIR:-.}/../glossary"
