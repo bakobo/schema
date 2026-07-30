@@ -20,6 +20,11 @@ work: `git clone --depth 1 https://github.com/bakobo/dev`. Always on:
   `glossary` MCP server. Consult a term before using it, reconcile prose to the glossary (not the
   reverse), mint/amend terms in-band through the MCP (never hand-edit), and don't let a general word
   masquerade as a formal term. Full standard: [`dev/standards/terminology.md`](../dev/standards/terminology.md).
+- **Reviews are permanent.** `reviews/` is tracked, never gitignored, one directory per run named
+  `<YYYY-MM-DD>-<milestone>`, and never deleted or pruned on triage — it is the evidence behind what
+  `this.i` decided, not a worklist. Open findings become **ticks**; a synthesis carries a `status:`
+  header line naming what is still open. Full standard:
+  [`dev/standards/reviews.md`](../dev/standards/reviews.md).
 - **Tasks and tech debt in `tick`** — see the tick stanza below, not an external tracker.
 
 ## Intent methodology
