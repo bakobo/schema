@@ -1239,3 +1239,28 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             types make each credential's default reading safe without a flag check (the same instinct as not
             putting isAdmin on the ordinary-user schema). This is why SDM is not a basis value on sedi-guardian
             and why thing-controllership is not folded into the person-fiduciary family.
+            REVISED (2026-08-04) -- the GCD composition is withdrawn. The State of Utah has said it does not
+            want SEDI guardianship to depend on a separate credential, so the optional 'scope' edge to a GCD is
+            DELETED from the schema and a new invalid/scope-edge-not-allowed.json asserts that it is rejected.
+            What survives: the thin-legal-recognition-layer framing, the four bases, the explicit powers scope,
+            the recognition block, registry-binding, HOLDER!=SUBJECT, and the whole generalization hypothesis
+            for a sedi-legal-authority family. What is withdrawn is only the second half of "COMPOSES with GCD"
+            -- sedi-guardian is now self-contained, and powers[] is the entire scope vocabulary it carries.
+            The consequence, stated plainly because it is a real loss: powers[] is coarse. It can say a
+            guardian holds authority over the ward's digital identity; it cannot say which platforms, which
+            hours, or under what conditions -- which is exactly the granularity Utah's own social-media case
+            (13-18, a parent modulating access) needs. A deployment needing it must now carry the constraints
+            INLINE rather than by edge. The upstream shape for that is @SmithSamuelM's 'AuthZ' attribute and
+            the EVAC resource-capabilities sketch in WebOfTrust/keripy discussion #1550, worked in that repo's
+            tests/acdc/test_ward_authz_presentation.py. If that syntax settles, revisit whether it belongs in
+            this family as an attribute rather than reinstating the edge.
+            Note the RULE above cuts BOTH ways here and it is worth being honest about it. Keeping the edge
+            optional was the reversible choice and was recommended on that ground; deleting it was chosen
+            instead, and deleting does satisfy the RULE more cleanly, since an optional edge that narrows
+            authority is precisely a one-bit difference a verifier can fail open on. The cost paid for that is
+            that a guardianship wanting gated act-constraints can no longer express them in this schema at all.
+            Version: deliberately NOT bumped. sedi-guardian stays at 1.0.0 and the family is edited in place,
+            unlike GCD, which went to 2.0 with gcd-1.0.0/ preserved. Removing a property IS a breaking change
+            and the schema $id has moved (EHrwoAIb... -> EMBokQlC...), so anyone who fetched the old one cannot
+            resolve it. Accepted on the judgment that sedi-guardian is still a first-cut draft with no known
+            consumer. If one appears, this is the decision to revisit first.
