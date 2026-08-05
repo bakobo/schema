@@ -45,7 +45,7 @@ of property — a separate Utah appointment not among the four bases. And a **su
 supporter** (2025 Part 7) is deliberately *excluded*: a supporter cannot decide *for* the principal, so
 they are not "authorized to act on behalf of" and are not a digital guardian (see `this.i` `@sdlg3n`).
 
-### The legal-recognition layer, and composition with GCD
+### The legal-recognition layer
 
 `sedi-guardian` carries only what Utah law makes **relationship- and jurisdiction-specific**: the
 `basis`, the `powers` scope, and a clustered **`recognition`** block (appointing court/case/order or
@@ -54,12 +54,13 @@ self-executed instrument, `appointingState`, and cross-state `registrationStatus
 guardianship terminates dynamically (majority, restored capacity, death, court order), so a verifier MUST
 check current status, not just the signature and dates.
 
-The **generic** delegated-authority machinery — the act grid, fine-grained constraints, duties, and
-terminating events — is **not re-implemented here**. It lives in [GCD](../gcd)
-(`relationType: guardianship`), reachable through the optional `scope` edge. So a simple guardianship
-stands on `sedi-guardian` alone (with a `powers` list); one needing rich, gated act-constraints edges to
-a GCD. This is the deliberate two-layer factoring: **GCD for the generic relationship, `sedi-guardian`
-for the legal specifics.**
+A guardianship **stands on `sedi-guardian` alone**. `basis`, `powers`, and `recognition` are the whole of
+what a verifier evaluates, and the schema **does not compose with [GCD](../gcd)**: there is no edge to a
+GCD and the edge section rejects one. Authority is bounded by `powers` and by nothing else, so a verifier
+that has read the credential has read all of it — no second fetch can widen or narrow what it grants, and
+a verifier that cannot reach the wider graph is not thereby over-granting. A deployment wanting the
+generic act grid, fine-grained constraints, duties, and terminating events uses GCD directly
+(`relationType: guardianship`), as its own credential.
 
 This is the **first of a likely `sedi-legal-authority` family** — conservatorship and POA-agency share
 most of the `recognition` layer. Per this repo's extract-at-the-second-pattern discipline, a shared base
@@ -72,21 +73,22 @@ protect), which remains GCD's territory. See `this.i` `@sdlg3n`.
 See [`sedi-guardian.schema.json`](sedi-guardian.schema.json) — a v1 attribute+edges+rules ACDC. Like
 GCD, an authority credential is disclosed **whole** (a verifier needs basis + scope + validity together),
 so the attribute section is flat, not selectively disclosable. Edges: `subject` (→ ward's `sedi-id`;
-`I2I` when a principal self-designates, else `NI2I`), `authorization` (→ the court order / Letters /
-instrument, often FAA-wrapped), and the optional `scope` (→ a GCD).
+`I2I` when a principal self-designates, else `NI2I`) and `authorization` (→ the court order / Letters /
+instrument, often FAA-wrapped). The edge section is closed: those two are the only edges a
+`sedi-guardian` may carry.
 
 The gallery covers all four bases:
 
 | Example | basis | highlights |
 |---|---|---|
-| [`example.json`](example.json) | `courtGuardianIncapacitated` | limited `healthCare`+`residence`, court `recognition`, `reviewDueDate`, GCD `scope` edge |
+| [`example.json`](example.json) | `courtGuardianIncapacitated` | limited `healthCare`+`residence`, court `recognition`, `reviewDueDate` |
 | [`court-guardian-minor`](examples/court-guardian-minor.json) | `courtGuardianMinor` | `plenary`, `residualParentalRights`, `expiryDate` at majority |
 | [`custodial-parent`](examples/custodial-parent.json) | `custodialParent` | `inherentParental` (no court/case), birth-certificate authorization |
 | [`designated-representative-healthcare`](examples/designated-representative-healthcare.json) | `designatedRepresentative` | `healthCareAgent`, `selfExecuted`, `capacityConditioned`, `substitutedJudgment`, `subject` edge is `I2I` |
 
 The [`invalid/`](invalid) corpus rejects a missing/mistyped `basis`, empty or bad `powers`, a
-`recognition` missing a required field or with a bad `authorityType`, a bad edge operator, a malformed
-date, and the structural omissions.
+`recognition` missing a required field or with a bad `authorityType`, a bad edge operator, a `scope` edge
+to a GCD, a malformed date, and the structural omissions.
 
 ### Governance
 

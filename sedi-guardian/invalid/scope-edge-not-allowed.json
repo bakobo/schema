@@ -1,6 +1,6 @@
 {
   "v": "ACDC10JSON000627_",
-  "d": "EDQtmw78o3N0atekiCEJ1XerNi6miIQ_Zmt4qL7Hkwkd",
+  "d": "EPu6coP320Btc-jOB6wTE2TAzzh0ccGjgCVgTIIQTa0t",
   "u": "0ABpbmNhcHRzYWx0cGFkMDAw",
   "i": "EGA-48IbFJLG0nG0nv2eJoevtvNpElOqnSM_HBDZNNgc",
   "ri": "EC-DlJTW3_34SsV5PSG0-U7hxR3uVj8JfCoC5e-8pCBB",
@@ -11,7 +11,8 @@
     "i": "EC1tsDmWsQ50ubsCcqVRntpZev6WsMcA2NY76nSsqP5Q",
     "basis": "courtGuardianIncapacitated",
     "powers": [
-      "fly"
+      "healthCare",
+      "residence"
     ],
     "fiduciary": "bestInterest",
     "recognition": {
@@ -27,7 +28,7 @@
     "reviewDueDate": "2027-03-10"
   },
   "e": {
-    "d": "EGStSUe-jikYP5eS4T7tHzpZGicXwYbIEyJZ3wB-LkO2",
+    "d": "EPLJ0g35j0PMpd0eIrfgwl947kd5QWPKHMsjMf5Kt_TV",
     "u": "0ABpbmNhcGVzYWx0cGFkMDAw",
     "subject": {
       "d": "EEs0o0f5C1B8vRSyve3dci2IFpccnu5nQd5zbXJT5Y2k",
@@ -41,6 +42,13 @@
       "u": "0ABnMWFzYWx0cGFkMDAwMDAw",
       "n": "EKmtHAgr5r1GNppGJs-GqskGxB4YG4lmfpFYLhZsJW1U",
       "s": "EJvd1ns0KVsbB4Ji1MEv4cdq8WOSQezILlluN63K_JOH",
+      "o": "NI2I"
+    },
+    "scope": {
+      "d": "EInPm_13acxlC53m-20jZtateWsVDnzTtCtX-w2vK-7h",
+      "u": "0ABnMWNzYWx0cGFkMDAwMDAw",
+      "n": "EHhi7OwRq3PqMM3pT6CGBtIgwyNAmoggiI0qQIN73FBs",
+      "s": "EAqOeo_YMHDEMZ-dIJTYd72nsoUS-C1RdXtOdfAj7ZxR",
       "o": "NI2I"
     }
   },
