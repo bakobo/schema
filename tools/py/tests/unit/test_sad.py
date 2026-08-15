@@ -65,3 +65,54 @@ def test_saidify_sad_without_top_label_only_saidifies_children():
     out = saidify_sad({"a": {"d": "", "x": "y"}})
     assert "d" not in out
     assert out["a"]["d"].startswith("E")
+
+
+def _acdc_v2() -> dict:
+    """A minimal expanded ACDC v2 ``acm`` instance (this.i @h3or4x, @enr3eg).
+
+    The shape the fork's ``acdcmap`` map form emits: ``rd`` present, the
+    attribute section carrying no ``d`` (a non-SAIDed block, fully expanded in
+    most-compact computation), the rule section carrying one.
+    """
+    return {
+        "v": "ACDCCAACAAJSONAAAA.",
+        "t": "acm",
+        "d": "",
+        "i": "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL",
+        "rd": "EJl5EUxL23p_pqgN3IyM-pzru89Nb7NzOM8ijH644xSU",
+        "s": "EIqGVj_kEr0GTBELK6QtALn_sqHExLBDl2gHK82Xl-x3",
+        "a": {
+            "i": "EIkxoE8eYnPLCydPcyc_lhQgwOdBHwzkSe36e2gqEH-5",
+            "facet": {"role": "example"},
+            "constraints": {"physGeos": ["US"]},
+        },
+        "r": {"d": "", "onlyDelegateHeldAuthority": "some disclaimer text"},
+    }
+
+
+def test_saidify_sad_v2_acm_is_a_fixed_point():
+    out = saidify_sad(_acdc_v2())
+    assert saidify_sad(out) == out
+    # Re-makifying an already-saidified v2 ACDC via the oracle changes nothing.
+    remade = SerderACDC(sad=copy.deepcopy(out), makify=True)
+    assert out == remade.sad
+
+
+def test_saidify_sad_v2_fills_rule_said_top_said_and_version():
+    out = saidify_sad(_acdc_v2())
+    assert out["r"]["d"].startswith("E")
+    assert out["d"].startswith("E")
+    assert out["v"].startswith("ACDCCAACAAJSON")
+    assert out["v"] != "ACDCCAACAAJSONAAAA."  # size was filled in
+    assert "d" not in out["a"]  # a d-less attribute section stays d-less
+
+
+def test_saidify_sad_v2_top_said_is_most_compact():
+    # The top-level 'd' of the expanded form must equal the 'd' of the compact
+    # form in which the SAIDed rule section is replaced by its SAID — the
+    # most-compact-form invariant (spec-body.md §"Most compact form SAID").
+    out = saidify_sad(_acdc_v2())
+    compact = copy.deepcopy(out)
+    compact["r"] = out["r"]["d"]
+    remade = SerderACDC(sad=compact, makify=True)
+    assert remade.sad["d"] == out["d"]
