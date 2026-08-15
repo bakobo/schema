@@ -23,6 +23,20 @@ In the digital world, authority may be asserted in many ways, but it is always p
 
 See [gcd.schema.json](gcd.schema.json) and also [rules.json](rules.json).
 
+Version 3.0 adopts the **ACDC v2 envelope** (this.i `@enr3eg`): credentials are
+`acm`/JSON messages whose top-level fields appear in the order
+`[v, t, d, u, i, rd, s, a, e, r]`, with SAIDs computed by the v2
+most-compact-form algorithm. `rd` (the SAID of the issuer's credential-status
+registry inception) replaces v1's `ri` and is **required** — the ACDC spec makes
+`rd` optional for correlation minimization, but a GCD is authority evidence, so
+secure discovery of its revocation registry wins here. `t` is optional (a JSON
+ACDC without it is of type `acm`), and the attribute block's `d` is optional
+(the reference v2 builder emits none; a `d`-less attribute section simply cannot
+be compacted). Earlier versions remain published and resolvable by their
+original SAIDs: [gcd-2.0.1](../gcd-2.0.1/gcd-2.0.1.schema.json) (the same
+semantic content on the v1 envelope) and
+[gcd-1.0.0](../gcd-1.0.0/gcd-1.0.0.schema.json) (the pre-SDA `c_*` model).
+
 ### Constraints
 
 Delegated authority may need to be constrained in many ways. For example, the talent agent for a famous rock 'n roll diva may be able to represent her, subject to constraints like these:
@@ -75,23 +89,26 @@ New governance frameworks can be written that supplement these rules; see the `g
 ### Worked examples
 
 The canonical [`example.json`](example.json) is a minimal valid instance. The
-[`examples/`](examples/) gallery shows the v2.0 feature set across five scenarios
+[`examples/`](examples/) gallery shows the GCD feature set across five scenarios
 — each is a full, SAID-minted credential that the conformance linter validates
 (schema-validity, `s`-vs-`$id`, and SAID self-consistency), so none can silently
 drift:
 
 | Example | relationType / exerciseMode | Highlights |
 |---|---|---|
-| [real-estate-agent](examples/real-estate-agent.json) | delegation / act | `goals`, `effects`, `jurisdictions` + `physGeos`, `monetaryLimit`, `proofs` (license), a delegate duty |
+| [real-estate-agent](examples/real-estate-agent.json) | delegation / act | `goals`, `acts`, `jurisdictions` + `physGeos`, `monetaryLimit`, `proofs` (license), a delegate duty |
 | [guardian-of-minor](examples/guardian-of-minor.json) | guardianship / both | `humanReview`, `terminatingEvents` (reached-majority) with its `validUntil` backstop, `disclosables`, `presentsAs` |
-| [ai-deploy-agent](examples/ai-deploy-agent.json) | delegation / act | containment: no-`destroy` `effects`, `domains`, a cloud-spend `monetaryLimit`, a 30-day window, a kill-switch `terminatingEvent`, `humanReview` for prod, a restrictive `disclosables` allow-list |
-| [platform-manager](examples/platform-manager.json) | stewardship / authorize | the pure delegator: **empty `goals`**, `stateKinds: [authority]`, `domains`, issuer-only duties, and no `gfw` (so `role` is a bare label) |
+| [ai-deploy-agent](examples/ai-deploy-agent.json) | delegation / act | containment: no-`destroy` `acts`, `domains`, a cloud-spend `monetaryLimit`, a 30-day window, a kill-switch `terminatingEvent`, `humanReview` for prod, a restrictive `disclosables` allow-list |
+| [platform-manager](examples/platform-manager.json) | stewardship / authorize | the pure delegator: omits `goals` and `acts` entirely (an empty act surface), `domains`, issuer-only duties, and no `gfw` (so `role` is a bare label) |
 | [iot-fleet-controller](examples/iot-fleet-controller.json) | controllership / both | authority over a *thing*: `icals` maintenance windows, `virtGeos`, `protos`, a decommission `terminatingEvent` |
 
-The [`invalid/`](invalid/) corpus holds the should-reject fixtures — including
-the new locks in v2.0: a bad `effects`/`stateKinds` enum value, an unknown key
-*inside* `constraints` (fail-closed), `terminatingEvents` without a `validUntil`
-backstop, `exerciseMode: delegated-only` (the rejected pre-reconciliation token),
-a malformed `monetaryLimit`, an unknown duty `bearer`, a delegate duty missing
-its `effect`, and a non-integer duty `priority`.
+The [`invalid/`](invalid/) corpus holds the should-reject fixtures. Each is the
+canonical example one mutation away from valid: a missing `rd` (the v2
+envelope's required registry binding), a missing issuee (`a.i`), a missing
+top-level `s`, a non-string top-level `d`, an `acts` point missing its
+state-kind, a two-sided brace, an unknown `acts` token, an unknown key *inside*
+`constraints` (fail-closed), `terminatingEvents` without a `validUntil`
+backstop, `exerciseMode: delegated-only` (the rejected pre-reconciliation
+token), a malformed `monetaryLimit`, an unknown duty `bearer`, a delegate duty
+missing its `effect`, and a non-integer duty `priority`.
 

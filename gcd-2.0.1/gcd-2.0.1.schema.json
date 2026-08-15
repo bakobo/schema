@@ -1,28 +1,24 @@
 {
-  "$id": "EMxJ4BrRJ2zFpJ0yl4MP4MG9OXnoKT_Ehho_fHxRmzXM",
+  "$id": "EAqOeo_YMHDEMZ-dIJTYd72nsoUS-C1RdXtOdfAj7ZxR",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Generalized Cooperative Delegation Credential",
-  "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 3.0 adopts the ACDC v2 envelope (acm/JSON: rd replaces ri, message type t, most-compact-form SAIDs). Version 2.0 organized the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classed duties in the rules block.",
+  "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 2.0 organizes the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classes duties in the rules block.",
   "$comment": "These credentials have no required edges. They can be chained by showing that the issuer's identifier is also an identifier associated with another credential of whatever type, but they do not require chaining. The optional e block carries an I2I issuer edge for that purpose.",
   "type": "object",
   "credentialType": "gcd-credential",
-  "version": "3.0.0",
+  "version": "2.0.1",
   "required": [
     "v",
     "d",
     "i",
-    "rd",
+    "ri",
     "s",
     "a",
     "r"
   ],
   "properties": {
     "v": {
-      "description": "ACDC version string",
-      "type": "string"
-    },
-    "t": {
-      "description": "Message type. Optional; an ACDC JSON message without it is of type acm.",
+      "description": "Version string using ACDC conventions",
       "type": "string"
     },
     "d": {
@@ -37,8 +33,8 @@
       "description": "AID of the issuer (the delegator)",
       "type": "string"
     },
-    "rd": {
-      "description": "Registry SAID: the SAID of the registry inception (rip) event of the issuer's credential-status registry. Required: a GCD is authority evidence, and secure discovery of its revocation registry outweighs correlation minimization here.",
+    "ri": {
+      "description": "Registry for issuer's credential status",
       "type": "string"
     },
     "s": {
@@ -52,9 +48,11 @@
           "type": "string"
         },
         {
+          "$id": "ELHMx5avT3aSuO3CF_tfYzf-eu_o4b0Y-dWXQmHZJLvJ",
           "description": "Attributes block",
           "type": "object",
           "required": [
+            "d",
             "i"
           ],
           "properties": {
@@ -342,6 +340,7 @@
           "type": "string"
         },
         {
+          "$id": "EKk5ejftEjNwjRhw2lYQAwKwvRWapqCNEOx3gUR7WW7n",
           "description": "Edges detail",
           "type": "object",
           "required": [
@@ -390,6 +389,7 @@
           "type": "string"
         },
         {
+          "$id": "ELBK7SNF_TdCVg9inSWNwnVo7JWB2RlCX91kuZ2AUWx4",
           "description": "Rules detail",
           "type": "object",
           "properties": {

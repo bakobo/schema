@@ -1,11 +1,12 @@
 {
-  "v": "ACDC10JSON000f06_",
-  "d": "EJkUGOSoUZlAaA501-ep1IWxaxMlRxUfVcEhJZ8QLqyI",
+  "v": "ACDCCAACAAJSONAA7_.",
+  "t": "acm",
+  "d": "ECWBJzBsTkSkUUFbL_zr05LYVI_dkF68TCdRhLIobOys",
   "u": "0ADE6oAxBl4E7uKeGUb7BEYi",
   "i": "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL",
-  "ri": "EM2YZ78SKE8eO4W1lQOJeer5xKZqLmJV7SPr3Ji5DMBZ",
+  "rd": "EM2YZ78SKE8eO4W1lQOJeer5xKZqLmJV7SPr3Ji5DMBZ",
   "a": {
-    "d": "EAbfD_h2BzkEuMYG55GojlJXXwQprzqzCdTfYt5kDBdb",
+    "d": "EFSYtX23kKdRryp-q6pYpAL-8463P0df5N2ei9LdGI19",
     "u": "0AC9kH8q99PTCQNteGyI-F4g",
     "i": "EIkxoE8eYnPLCydPcyc_lhQgwOdBHwzkSe36e2gqEH-5",
     "dt": "2024-12-27T13:11:29.062000+00:00",
@@ -21,12 +22,8 @@
       "goals": [
         "meetupcorp.personal.date"
       ],
-      "effects": [
-        "observe",
-        "create"
-      ],
-      "stateKinds": [
-        "commitment"
+      "acts": [
+        "{observe, create} commitment"
       ],
       "domains": [
         "payments"
@@ -54,10 +51,10 @@
       "validUntil": "2025-12-17T10:39:29.769000+00:00"
     },
     "terminatingEvents": [
-      "EIpaOx1NJc0N_Oj5xzWhFQp6EpB847yTex62xQ7uuSQL"
+      "ELwZATxnfjVKZHo6cwShlFCy1pFEWJHHpYcRenzLLTOK"
     ],
     "disclosables": [
-      "ENPXp1vQzRF6JwIuS-mp2U8Uf1MoADoP_GqQ62VsDZWY"
+      "EPUEWatIUsS0ONbdz-rPaSP4t21FU6lG35QXMo24C2RS"
     ]
   },
   "e": {
