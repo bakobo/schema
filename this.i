@@ -283,6 +283,59 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             new SAID (positive examples re-saidified; should-reject fixtures only repointed, their intended defects
             untouched and still rejected). Cross-repo (external to this repo, tracked as the 44oc item): PAP's
             pap/docs/pap-vs-ipex/gcd-v2-for-delegation-evidence.md and any other consumer pinning the old GCD SAID.
+        GCD 3.0.0 adopts the ACDC v2 envelope; 2.0.1 is archived as gcd-2.0.1/ = decision:
+          id: enr3eg
+          why: >
+            Driver: heti is v2-first by recorded decision (heti this.i @0nx0p6gd) — its facets mint KERI v2
+            KELs and it issues acm/JSON ACDCs against rip/upd registries, never a v1 wire artifact — so no
+            credential heti can issue will ever validate against the v1-enveloped 2.0.1 schema ('ri', v1
+            ordering). heti's end-to-end suite runs on a GCD-shaped stand-in awaiting this schema (heti tick
+            3qtb; this repo's 25ra). The revision keeps the v2.0 semantic content unchanged (facet,
+            constraints, terminatingEvents, disclosables, duties, the five clauses, the if/then validUntil
+            backstop) and changes the ENVELOPE, following the v2 spec's worked examples
+            (kswg-acdc-specification branch fix-worked-examples-schema-1520, the branch that matches keripy):
+            top-level order [v, t, d, u, i, rd, s, a, e, r]; 't' optional in the schema (absent means acm in
+            JSON, and the builder emits t=acm); dialect stays Draft 2020-12 ($schema is an identifier, never
+            dereferenced); the compact SAID-string arm stays FIRST in every oneOf, which the most-compact-form
+            SAID algorithm keys on (spec-body.md §"Most compact form SAID"); and the v1-era inner $id fields
+            on the expanded a/e/r arms are DROPPED — the v2 idiom carries none, and the saidify tooling skips
+            absent inner ids, so nothing recomputes them. THE ONE PLACE THIS OVERRIDES A SPEC DEFAULT: 'rd'
+            (replacing 'ri') is REQUIRED. The spec makes rd optional for correlation minimization
+            (spec-body.md :2019); a GCD is authority evidence — its issuer is already public, secure registry
+            discovery is exactly what a stranger-verifier needs, heti-issued ACDCs always carry rd (heti
+            @89kk7cft), and requiring it answers, for GCD, the rd-inclusion policy heti's review flagged as
+            undecided (heti reviews/2026-08-14-acdc-plan PRV-F4: an rd-less ACDC verifies with only
+            one-directional registry binding). Correlation-minimized delegation is not a GCD use case, and a
+            schema that let rd be omitted would fail open on the discovery a verifier gates on. Required set
+            [v, d, i, rd, s, a, r]; 'u' stays optional (the private variant remains expressible). a.d becomes
+            OPTIONAL (was required): measured against the fork's acdcmap 2026-08-15 — the map form emits NO
+            a.d; a d-less a section is fully expanded during most-compact computation while a d-bearing one
+            compacts (both valid, distinct top-level d), and requiring d would reject every heti-built GCD.
+            r.d stays REQUIRED: a d-less rules section cannot be compacted or SAID-addressed, and the GCD
+            ruleset is SAID-referenced (gfw). The e block (I2I issuer edge) is carried over and stays
+            OPTIONAL: heti refuses edge-bearing ACDCs by name until a real consumer needs chains (heti tick
+            2esz), so a GCD that required its issuer edge could not be verified through heti today — edges
+            remain the exemplar chaining mechanism, not the gate. Nothing in the schema depends on registry
+            form (heti issues unblinded upd registries this tranche, heti @895yr58n). Versioning and layout:
+            renaming required 'ri' to 'rd' invalidates every conceivable prior instance, so the change is
+            MAJOR per RFC-0430 grading (@k3wm7d) — 2.0.1 -> 3.0.0 (the 25ra handoff guessed "a new
+            gcd-2.0.0/" from a stale 1.x premise; the tree's current version is 2.0.1). Per @r5vk3n's
+            convention the current schema, example, and rules are archived byte-identical at gcd-2.0.1/ with
+            the old SAID EAqOeo_YMHDEMZ-dIJTYd72nsoUS-C1RdXtOdfAj7ZxR kept in registry.json, while gcd/ is
+            rewritten with a fresh SAID. sedi-guardian is deliberately UNTOUCHED even though its example and
+            fixtures pin the old GCD SAID at e.scope.s: that SAID stays registered and resolvable via the
+            archive, and the pending sedi-guardian-no-gcd branch (unmerged) withdraws the GCD composition and
+            deletes that edge anyway — repointing those refs on main would manufacture conflicts with a
+            recorded withdrawal. Examples: example.json and the five-scenario gallery are re-authored as
+            AUTHENTIC v2 instances (real v2 version strings, most-compact top-level d, verified by the fork
+            oracle @h3or4x), which also discharges tick 62ws (the voiding and outbound axes get distinct
+            illustrative SAIDs instead of reusing the edge's). The negative corpus is re-based on the v2
+            valid instance, one mutation each, plus a new missing-rd fixture so the require-rd decision has
+            a positive oracle that would fail if it regressed. ACCEPTANCE ORACLE: a credential built by the
+            fork's acdcmap(israid, regid, schema=<new $id>, attribute={'i': ...}, rule={...}) validates
+            against the schema (Schemer + Draft 2020-12 with format assertion), and heti's
+            tests/produce/test_end_to_end.py Z1-Z4 pass with this schema's raw JSON swapped into
+            GCD_SHAPED_RAW — closing heti tick 3qtb and this repo's 25ra.
     face-to-face is hardened as a proof-of-personhood primitive for AI-proscribed contexts (v1.2.0) = decision:
       id: hp4mk7
       stage-status: done
@@ -561,6 +614,35 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             cosmetic upstream SyntaxWarnings, taken in exchange for not shipping tooling pinned to an
             unreasonably old runtime. The pin is EXACT (==), not a range, because "the oracle" must be a single
             reproducible version; any future bump REQUIRES re-running the same SAID-identity check as a gate.
+          children:
+            The oracle pin moves to the bakobo/keripy fork at heti's exact commit, re-gated differentially = decision:
+              id: h3or4x
+              why: >
+                GCD's ACDC-v2 revision (tick 25ra, @enr3eg) needs an oracle that can stamp v2 instances, and
+                keri 1.2.13 cannot: it rejects the v2 'rd' field and version strings outright, and v2 computes
+                the top-level 'd' over the MOST-COMPACT form where 1.2.13 digests literal content (@sd2qfw).
+                Reimplementing most-compact SAIDs inside schematools would be exactly the consensus-critical
+                reimplementation @xv4m7d forbids without a differential oracle. Chose to move the pin
+                keri==1.2.13 -> keri @ git+https://github.com/bakobo/keripy@a3118956 (keri 2.0.0.dev6, the
+                EXACT commit bakobo/heti pins), after running the gate @m4vd7s itself prescribes (2026-08-15):
+                the full check suite under the fork over the whole corpus — schema $ids byte-identical, every
+                v1 example still a saidify_sad fixed point — plus the entire 218-test schematools suite at
+                100% branch coverage, zero failures. Also measured before deciding: under the fork,
+                saidify_sad is ALREADY a correct fixed point on v2 acm instances (the fork's SerderACDC makify
+                does most-compact computation, and the top-level 'd' is invariant to whether r.d carries its
+                real SAID or the dummy) — so the bump is a dependency change, not a code change. Rejected
+                waiting for a RELEASED keri v2 (tick 2nd5's trigger): it blocks 25ra indefinitely while heti
+                already ships on this fork, and pinning heti's own commit keeps one oracle lineage across
+                bakobo repos. Rejected extending the @sd2qfw dodge to GCD (make 'v' optional, ship unversioned
+                examples): it would publish the FLAGSHIP's reference artifacts as not-actually-v2 (no version
+                string, 'd' not most-compact) in a repo whose whole point is SAID-verified reference
+                artifacts, and it contradicts the heti-measured silhouette, which requires 'v'. The pin stays
+                EXACT in the sense that matters — a git commit is a single reproducible version; any future
+                move re-runs this same gate. Consequences accepted: requires-python rises to >=3.14,<3.15
+                (keri 2.0.0.dev6's floor), uv.lock regenerates, CI fetches 3.14 via uv; the fork is public,
+                so CI needs no credential (no PAT, no App). Deliberately NOT done here: lifting @sd2qfw for
+                sedi-age — its examples stay as authored and tick 2nd5 stays open (now unblocked in
+                principle) — because that is sedi scope, not 25ra.
         schematools surfaces a coded, catchable error at the repo-root boundary, not a raw traceback = decision:
           id: b3kq7w
           stage-status: done
