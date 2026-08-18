@@ -23,6 +23,13 @@ In the digital world, authority may be asserted in many ways, but it is always p
 
 See [gcd.schema.json](gcd.schema.json) and also [rules.json](rules.json).
 
+Version 3.1 admits **custom keys** inside the `constraints` container and inside
+a duty (this.i `@vy7qoj`), so an issuer can express a constraint or an obligation
+the standard fields do not cover. The fail-closed rule on an unrecognized
+constraint key is unchanged in substance — it is now an obligation on the
+verifier rather than something schema validation enforces. See
+[Constraints](#constraints) below.
+
 Version 3.0 adopts the **ACDC v2 envelope** (this.i `@enr3eg`): credentials are
 `acm`/JSON messages whose top-level fields appear in the order
 `[v, t, d, u, i, rd, s, a, e, r]`, with SAIDs computed by the v2
@@ -72,17 +79,39 @@ The **`facet`** container carries relationship metadata — `role`, `relationTyp
 
 All fields inside `constraints` share these semantic rules:
 
-1. Enforceable constraints live only inside the `constraints` container (or in the `role` field when `gfw` is defined). **Nothing outside `constraints` constrains**, and an unrecognized key *inside* `constraints` is **fail-closed** — a verifier that does not recognize it MUST deny. (See the `noConstraintOutsideConstraints` rule.)
+1. Enforceable constraints live only inside the `constraints` container (or in the `role` field when `gfw` is defined). **Nothing outside `constraints` constrains**, and an unrecognized key *inside* `constraints` is **fail-closed** — a verifier that does not recognize it MUST assume that constraint is unmet and MUST deny. (See the `noConstraintOutsideConstraints` rule.)
 2. Each field MUST identify one or more values that are allowed (e.g., with a regex or an allow list). *Within a single field*, values are effectively ORed, meaning that any match is enough to satisfy that field. If the `jurisdictions` field says that valid jurisdictions are `["FR", "DE", "IN"]`, then the delegator authorizes the delegate to take legally binding actions if they are enforceable in France OR Germany OR India.
 3. *Across all fields*, matches are ANDed, meaning that all of the constraints must be satisfied. Building on the previous example of `jurisdictions`, if the `virtGeos` field also says that valid locations for the remote delegate are `["FR", "DE", "IN"]`, then the delegate's actions are valid if they are legally enforceable in one of the 3 legal jurisdictions (first field), AND if the delegate appears to be operating from one of those same 3 countries (second field).
 
 Because of the third rule, these credentials do not support graduated disclosure. All constraints must be disclosed every time a verifier is evaluating delegated authority.
 
+#### Custom constraints
+
+The fields above are the standard dimensions, but they are not the only ones an
+issuer may use. As of 3.1.0 the `constraints` container accepts **custom keys**
+(`additionalProperties: true`), and so does a duty in the rules block. A custom
+key takes its semantics from the governance framework named in `gfw`, and
+`useStdIfPossible` still obliges an issuer to reach for a standard field wherever
+one fits — an absent standard field must keep meaning "unconstrained in that
+dimension".
+
+What this does *not* change is rule 1 above. A verifier that meets a key here it
+does not understand MUST assume the constraint is unmet and deny. What changed is
+who enforces that: through 3.0.0 the schema itself refused the credential, which
+made a plain JSON Schema validator a stand-in for the gate. It never was one.
+**Validating against this schema is not an authorization decision** — the schema
+admits a custom key without vouching for it, and any verifier that deals in GCD
+credentials owes the fail-closed check in its own code. The reasoning is recorded
+at this.i `@vy7qoj`.
+
+`gfw` and `useStdIfPossible` both presumed custom constraints from the start;
+before 3.1.0 neither could be honored, because there was no way to write one.
+
 ### Governance Framework
 
 These credentials are governed by rules to enhance assurance, discourage abuse, and keep use cases crisp. The current rules are stated in [rules.json](rules.json) and are identified by SAID `ENiUyBCG2MjCHa9djlgHiogd6uZHECc09ZELmQ3fEMzR`. Five are disclaimers (`noRoleSemanticsWithoutGfw`, `issuerNotResponsibleOutsideConstraints`, `noConstraintOutsideConstraints`, `useStdIfPossible`, `onlyDelegateHeldAuthority`).
 
-In v2.0 the rules block also carries first-class **duties** (the "must"), each named by its `bearer`. A `bearer: delegate` duty is a structured obligation `{effect, goal, cadence?, priority}`; a `bearer: issuer` duty names a governance obligation `{rule, l?, priority}`. The baseline ruleset carries `timelyReviewAndRevoke` — the issuer's standing duty to review each delegation on a cadence appropriate to its stakes and to revoke or narrow it promptly once the conditions that justified the grant no longer hold (it does not extend authority; see this.i `@k3wm7d`). Voiding of an authority by an attested event is expressed with the `terminatingEvents` axis in the attributes block (this.i `@v5nq2r`).
+In v2.0 the rules block also carries first-class **duties** (the "must"), each named by its `bearer`. A `bearer: delegate` duty is a structured obligation `{effect, goal, cadence?, priority}`; a `bearer: issuer` duty names a governance obligation `{rule, l?, priority}`. Since 3.1.0 a duty may also carry custom keys, defined by the framework named in `gfw`; `bearer` itself stays closed, so an unknown bearer is still rejected. The baseline ruleset carries `timelyReviewAndRevoke` — the issuer's standing duty to review each delegation on a cadence appropriate to its stakes and to revoke or narrow it promptly once the conditions that justified the grant no longer hold (it does not extend authority; see this.i `@k3wm7d`). Voiding of an authority by an attested event is expressed with the `terminatingEvents` axis in the attributes block (this.i `@v5nq2r`).
 
 New governance frameworks can be written that supplement these rules; see the `gfw` field in the schema. It is also possible to modify or override these rules, by placing a different value in the `r` field. The act of issuing or receiving a GCD credential constitutes binding acceptance of the rules.
 
@@ -98,7 +127,7 @@ drift:
 |---|---|---|
 | [real-estate-agent](examples/real-estate-agent.json) | delegation / act | `goals`, `acts`, `jurisdictions` + `physGeos`, `monetaryLimit`, `proofs` (license), a delegate duty |
 | [guardian-of-minor](examples/guardian-of-minor.json) | guardianship / both | `humanReview`, `terminatingEvents` (reached-majority) with its `validUntil` backstop, `disclosables`, `presentsAs` |
-| [ai-deploy-agent](examples/ai-deploy-agent.json) | delegation / act | containment: no-`destroy` `acts`, `domains`, a cloud-spend `monetaryLimit`, a 30-day window, a kill-switch `terminatingEvent`, `humanReview` for prod, a restrictive `disclosables` allow-list |
+| [ai-deploy-agent](examples/ai-deploy-agent.json) | delegation / act | containment: no-`destroy` `acts`, `domains`, a cloud-spend `monetaryLimit`, a 30-day window, a kill-switch `terminatingEvent`, `humanReview` for prod, a restrictive `disclosables` allow-list; also the **custom constraint** `maxDeploysPerDay` and the custom duty key `escalateTo`, neither of which 3.0.0 could express |
 | [platform-manager](examples/platform-manager.json) | stewardship / authorize | the pure delegator: omits `goals` and `acts` entirely (an empty act surface), `domains`, issuer-only duties, and no `gfw` (so `role` is a bare label) |
 | [iot-fleet-controller](examples/iot-fleet-controller.json) | controllership / both | authority over a *thing*: `icals` maintenance windows, `virtGeos`, `protos`, a decommission `terminatingEvent` |
 
@@ -106,9 +135,16 @@ The [`invalid/`](invalid/) corpus holds the should-reject fixtures. Each is the
 canonical example one mutation away from valid: a missing `rd` (the v2
 envelope's required registry binding), a missing issuee (`a.i`), a missing
 top-level `s`, a non-string top-level `d`, an `acts` point missing its
-state-kind, a two-sided brace, an unknown `acts` token, an unknown key *inside*
-`constraints` (fail-closed), `terminatingEvents` without a `validUntil`
-backstop, `exerciseMode: delegated-only` (the rejected pre-reconciliation
-token), a malformed `monetaryLimit`, an unknown duty `bearer`, a delegate duty
-missing its `effect`, and a non-integer duty `priority`.
+state-kind, a two-sided brace, an unknown `acts` token, `terminatingEvents`
+without a `validUntil` backstop, `exerciseMode: delegated-only` (the rejected
+pre-reconciliation token), a malformed `monetaryLimit`, an unknown duty `bearer`,
+a delegate duty missing its `effect`, and a non-integer duty `priority`.
+
+The corpus lost one fixture at 3.1.0: an unknown key inside `constraints` is now
+*valid*, so `constraints-unknown-key.json` was deleted rather than rewritten. Its
+job — proving the schema does not go quietly on that key — passed to a positive
+oracle, the `maxDeploysPerDay` / `escalateTo` pair in
+[ai-deploy-agent](examples/ai-deploy-agent.json), which 3.0.0 rejected and 3.1.0
+accepts. A regression to a closed container fails the conformance suite on that
+example.
 

@@ -9,7 +9,7 @@ requires-python = ">=3.14,<3.15"
 # different keri could silently change every SAID. This commit — the same one
 # bakobo/heti pins — is differentially verified SAID-identical to the corpus
 # minted under keri 1.2.13, and adds the ACDC v2 (acm / rd / most-compact
-# SAID) support the GCD 3.0.0 examples need (this.i @m4vd7s, @h3or4x).
+# SAID) support the GCD 3.x examples need (this.i @m4vd7s, @h3or4x).
 dependencies = [
     "keri @ git+https://github.com/bakobo/keripy@a3118956638f9bc7d7d6d9b97d5086bdd6ce9a38",
     # format-nongpl (not [format]) enables date-time/uri format ASSERTION in

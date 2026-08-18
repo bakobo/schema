@@ -1,12 +1,12 @@
 {
-  "$id": "EMxJ4BrRJ2zFpJ0yl4MP4MG9OXnoKT_Ehho_fHxRmzXM",
+  "$id": "EDqAod5ZiCNfQziVHjOALNNRabw2iwpAYqqOsEXUcxm5",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Generalized Cooperative Delegation Credential",
-  "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 3.0 adopts the ACDC v2 envelope (acm/JSON: rd replaces ri, message type t, most-compact-form SAIDs). Version 2.0 organized the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classed duties in the rules block.",
+  "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 3.1 admits custom keys inside the constraints container and inside a duty, so an issuer can express a constraint or obligation the standard fields do not cover; the fail-closed rule on an unrecognized constraint key is unchanged, but it is now enforced by the verifier rather than by schema validation. Version 3.0 adopts the ACDC v2 envelope (acm/JSON: rd replaces ri, message type t, most-compact-form SAIDs). Version 2.0 organized the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classed duties in the rules block.",
   "$comment": "These credentials have no required edges. They can be chained by showing that the issuer's identifier is also an identifier associated with another credential of whatever type, but they do not require chaining. The optional e block carries an I2I issuer edge for that purpose.",
   "type": "object",
   "credentialType": "gcd-credential",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "required": [
     "v",
     "d",
@@ -125,9 +125,9 @@
               }
             },
             "constraints": {
-              "description": "The enabling 'may': the allow-list dimensions that a stranger-verifier gates on. Within a field, values are ORed (any match satisfies that field); across fields they are ANDed (every present field must be satisfied). An absent field is unconstrained in that dimension. This container is FAIL-CLOSED: an unrecognized key here MUST cause the authorization to be denied (additionalProperties is false). Nothing outside this container constrains the exercise of delegated authority.",
+              "description": "The enabling 'may': the allow-list dimensions that a stranger-verifier gates on. Within a field, values are ORed (any match satisfies that field); across fields they are ANDed (every present field must be satisfied). An absent field is unconstrained in that dimension. Custom keys are allowed here (additionalProperties is true as of 3.1.0), so an issuer can express a constraint the standard fields do not cover; such a key takes its semantics from the governance framework named in gfw, and useStdIfPossible obliges an issuer to prefer a standard field wherever one fits. This container remains FAIL-CLOSED, but the obligation runs to the verifier, not to schema validation: a verifier that does not understand a key it finds here MUST assume that constraint is unmet and MUST deny. Admitting a key is not vouching for it, and validating against this schema is not an authorization decision. Nothing outside this container constrains the exercise of delegated authority.",
               "type": "object",
-              "additionalProperties": false,
+              "additionalProperties": true,
               "properties": {
                 "goals": {
                   "description": "Array of Hyperledger Aries goal codes (https://bit.ly/3ROeww6) that describe purpose-seeking behaviors that are valid for the delegate. Goal codes are matched as if they contained a trailing .* wildcard; that is, the \"sell\" goal code matches \"sell.consumer\" and \"sell.enterprise\". This field is case-insensitive.",
@@ -523,16 +523,16 @@
               ]
             },
             "duties": {
-              "description": "First-class structured obligations (the 'must'), distinct from the enabling constraints and from the disclaimer clauses above. Each duty names its bearer. A delegate duty is a machine-structured obligation the delegate MUST perform; an issuer duty names a governance obligation the issuer accepts. Duties are disclosure and accountability -- a stranger-verifier does not gate on them -- so they live here in r, not in a.constraints. This field is optional; the baseline governance ruleset carries the standing issuer duty timelyReviewAndRevoke.",
+              "description": "First-class structured obligations (the 'must'), distinct from the enabling constraints and from the disclaimer clauses above. Each duty names its bearer. A delegate duty is a machine-structured obligation the delegate MUST perform; an issuer duty names a governance obligation the issuer accepts. Duties are disclosure and accountability -- a stranger-verifier does not gate on them -- so they live here in r, not in a.constraints. This field is optional; the baseline governance ruleset carries the standing issuer duty timelyReviewAndRevoke. A duty may carry custom keys beyond the ones defined here, whose semantics come from the governance framework named in gfw.",
               "type": "array",
               "minItems": 1,
               "uniqueItems": true,
               "items": {
                 "oneOf": [
                   {
-                    "description": "A duty the delegate MUST perform.",
+                    "description": "A duty the delegate MUST perform. Custom keys are allowed (additionalProperties is true as of 3.1.0), taking their semantics from the governance framework named in gfw; bearer remains a closed const, so an unknown bearer is still rejected.",
                     "type": "object",
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                       "bearer",
                       "effect",
@@ -571,9 +571,9 @@
                     }
                   },
                   {
-                    "description": "A duty the issuer MUST perform.",
+                    "description": "A duty the issuer MUST perform. Custom keys are allowed (additionalProperties is true as of 3.1.0), taking their semantics from the governance framework named in gfw; bearer remains a closed const, so an unknown bearer is still rejected.",
                     "type": "object",
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": [
                       "bearer",
                       "rule",
