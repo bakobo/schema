@@ -336,6 +336,58 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             against the schema (Schemer + Draft 2020-12 with format assertion), and heti's
             tests/produce/test_end_to_end.py Z1-Z4 pass with this schema's raw JSON swapped into
             GCD_SHAPED_RAW — closing heti tick 3qtb and this repo's 25ra.
+        GCD 3.1.0 opens constraints and duties to custom keys; the verifier fails closed, not the schema = decision:
+          id: vy7qoj
+          why: >
+            DRIVER — the schema contradicted itself. gfw's own description promises to add richer semantics
+            to "any CUSTOM CONSTRAINTS present in this credential", and useStdIfPossible asks issuers to
+            prefer a pre-defined field "rather than expressing the constraint in a note or in a CUSTOM
+            FIELD". Both clauses are dead letters while constraints carries additionalProperties:false
+            (@k7wd3m): a custom constraint is unexpressible, so the gfw hook the rules block advertises is
+            unreachable and an issuer with a domain constraint outside the standard fifteen fields has
+            nowhere to put it but a facet key, which by construction does not gate. THE INTENT THAT SETTLES
+            IT (Daniel, 2026-08-18): a verifier MUST fail closed — if it does not understand an additional
+            property, it MUST assume that constraint is unmet — but the credential as an embodied artifact
+            does not have to enforce this; the verifier who chooses to deal with GCD credentials must.
+            @k7wd3m conflated the two, making a JSON-Schema validator's rejection the enforcement mechanism
+            for a rule that was always addressed to verifiers. CHANGE: a.constraints and both duty-item
+            branches under r.duties (@r5dnk2) set additionalProperties:true. No field is added, removed,
+            renamed, or retyped; every enum, const, pattern, required list, and the terminatingEvents ->
+            validUntil if/then are untouched, as is the facet's long-standing permissiveness. The
+            noConstraintOutsideConstraints clause ALREADY carries the obligation in Ricardian text ("an
+            unrecognized key inside the constraints container MUST be treated as fail-closed") and needs no
+            edit, so rules.json and its SAID ENiUyBCG2MjCHa9djlgHiogd6uZHECc09ZELmQ3fEMzR are byte-identical
+            and every gfw reference to them still resolves. TRADEOFF ACCEPTED: a verifier that gates on
+            schema validation ALONE loses a free backstop — an unknown constraint key now validates, and
+            denial depends on that verifier's own code. Judged acceptable, and arguably clarifying, because
+            schema validity was never authorization: a validator that could stand in for the gate invited
+            exactly the confusion of the two that this node separates. REJECTED — namespaced custom keys
+            (patternProperties ^x-[A-Za-z0-9]+$ with additionalProperties still false), which would keep a
+            mechanical backstop and let a verifier tell "custom, consult the gfw" from "standard key I ought
+            to know but do not": rejected because it re-introduces a lexical convention of exactly the kind
+            @h4tqm7 retired the c_ prefix to escape, and the container boundary already says "gate-relevant".
+            REJECTED — requiring gfw whenever a custom key is present (an if/then): a custom constraint that
+            an issuer and delegate both understand is meaningful without a published framework, and the
+            requirement would again be the schema legislating verifier semantics. DUTIES are opened for the
+            same reason and for symmetry: a duty is disclosure and accountability that a stranger-verifier
+            does not gate on at all (@r5dnk2), so a closed duty object was the strictest construct in the
+            schema guarding the least. bearer stays a closed const on each branch, so the oneOf remains
+            mutually exclusive and an unknown bearer still fails. GRADING & CASCADE: adds expressiveness and
+            invalidates no 3.0.0 instance, so MINOR per RFC-0430 grading (@k3wm7d) — 3.0.0 -> 3.1.0.
+            Per the 2.0.0 -> 2.0.1 precedent, a non-MAJOR re-mint rewrites gcd/ IN PLACE with a fresh SAID
+            and does NOT archive its predecessor: @r5vk3n's versioned-directory archive is the MAJOR-bump
+            convention (gcd-1.0.0/, gcd-2.0.1/), so 3.0.0's SAID
+            EMxJ4BrRJ2zFpJ0yl4MP4MG9OXnoKT_Ehho_fHxRmzXM is retired rather than published. Cascade: schema
+            $id, registry.json, example.json, the five gallery instances, and the negative corpus's top-level
+            s. CORPUS: invalid/constraints-unknown-key.json is DELETED — its mutation (a legacy c_goal key
+            inside constraints) is valid under 3.1.0, and it was the schema-level oracle for precisely the
+            enforcement this node hands to the verifier. Its replacement, so the decision keeps an oracle in
+            the corpus, is a POSITIVE one: examples/ai-deploy-agent.json carries a custom constraint
+            (maxDeploysPerDay, a rate limit no standard field expresses) and a custom delegate-duty key
+            (escalateTo), both of which 3.0.0 rejected and 3.1.0 accepts, so a regression to a closed
+            container fails the conformance suite. CROSS-REPO: heti's tests/produce/test_end_to_end.py pins
+            this schema's raw JSON in GCD_SHAPED_RAW (@enr3eg) and any consumer pinning the 3.0.0 SAID must
+            repoint; tracked as tick 2zy3.
     face-to-face is hardened as a proof-of-personhood primitive for AI-proscribed contexts (v1.2.0) = decision:
       id: hp4mk7
       stage-status: done
