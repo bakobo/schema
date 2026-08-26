@@ -1,3 +1,5 @@
+<!-- >>> bakobo standards >>> (managed by dev/sync-tier1) -->
+
 ## Bakobo engineering standards
 
 How every Bakobo repo builds is governed by cross-cutting standards, canonical in the sibling
@@ -11,6 +13,12 @@ work: `git clone --depth 1 https://github.com/bakobo/dev`. Always on:
 - **High-quality errors.** Every error carries a stable symbolic code, says whether retrying could
   help (permanent vs. transient), and reads as complete, plain sentences in the house voice — never
   "something went wrong." Full standard: [`dev/standards/error-handling.md`](../dev/standards/error-handling.md).
+- **Error codes are named, not invented.** A code is `<sorter>.<descriptor>[.<sub>].<disposition>` —
+  `e.state.conflict.r`, `w.feature.deprecated.f` — classified by what the *obstacle* was rather than
+  by which component raised it, with retryability in the trailing token so a caller can prefix-match
+  a whole branch of meaning. Codes are globally unique across Bakobo and declared as module-scope
+  literals. Full standard: [`dev/standards/error-codes.md`](../dev/standards/error-codes.md); the
+  HTTP wire format is [`dev/standards/http-errors.md`](../dev/standards/http-errors.md).
 - **Repo layout.** Architecture and developer docs live in `docs/`; the root holds only repo-level
   files (`README`, `LICENSE`, `CONTRIBUTING`), the instruction/config files, build manifests, and
   `this.i` at the root as the source of truth. Don't leave `design.md` loose at the root. Full
@@ -25,8 +33,17 @@ work: `git clone --depth 1 https://github.com/bakobo/dev`. Always on:
   `this.i` decided, not a worklist. Open findings become **ticks**; a synthesis carries a `status:`
   header line naming what is still open. Full standard:
   [`dev/standards/reviews.md`](../dev/standards/reviews.md).
+- **Input is bounded before it is trusted.** Size, then shape, then meaning — each only
+  trustworthy if the one before it ran. Nothing crosses a boundary unbounded, every input kind
+  enters through a named door, and the set of doors is kept complete by a test rather than by
+  memory. Full standard: [`dev/standards/input-handling.md`](../dev/standards/input-handling.md).
 - **Tasks and tech debt in `tick`** — see the tick stanza below, not an external tracker.
+- **Craftsman working posture.** Development follows the `cc` craftsman methodology — interview at
+  intent level, dispatch briefs to worker sub-agents, verify against oracles, and learn from every
+  failure. It is Daniel Hardman's personal craft (the private `cc` repo), adopted across Bakobo; the
+  operational rules for *this* repo are in [`dev/methodology.md`](../dev/methodology.md).
 
+<!-- <<< bakobo standards <<< -->
 ## Intent methodology
 
 Bakobo develops intent-first. If this repo has design decisions worth explaining, its source of
