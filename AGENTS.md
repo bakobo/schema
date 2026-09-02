@@ -7,7 +7,9 @@ How every Bakobo repo builds is governed by cross-cutting standards, canonical i
 work: `git clone --depth 1 https://github.com/bakobo/dev`. Always on:
 
 - **Intent-first** development and **strict TDD at 100% branch coverage of new code** — see the
-  sections below and [`dev/methodology.md`](../dev/methodology.md).
+  sections below and [`dev/methodology.md`](../dev/methodology.md). A `this.i` node's `id:` is
+  opaque base32 — `^[a-z2-7]{8}$`, from a real random source
+  (`tr -dc 'a-z2-7' < /dev/urandom | head -c 8`), never a semantic label and never hand-typed.
 - **Fail closed.** Untrusted input never carries authority; when something can't be checked, the
   effect does not land ([`org` principle 8](../org/design/purpose-and-principles.md)).
 - **High-quality errors.** Every error carries a stable symbolic code, says whether retrying could
@@ -25,9 +27,13 @@ work: `git clone --depth 1 https://github.com/bakobo/dev`. Always on:
   standard, including the content-repo nuance: [`dev/standards/repo-layout.md`](../dev/standards/repo-layout.md).
 - **Terminology.** Bakobo's architecture has a precise vocabulary (`core`, `steward`, `mint`, …). Its
   single source of truth is [`bakobo/glossary`](https://github.com/bakobo/glossary), reached via the
-  `glossary` MCP server. Consult a term before using it, reconcile prose to the glossary (not the
-  reverse), mint/amend terms in-band through the MCP (never hand-edit), and don't let a general word
-  masquerade as a formal term. Full standard: [`dev/standards/terminology.md`](../dev/standards/terminology.md).
+  `glossary` MCP server. Where a word is doing a Bakobo concept's work, reconcile prose to the
+  glossary (not the reverse), mint/amend terms in-band through the MCP (never hand-edit), and don't
+  let a general word masquerade as a formal term. **Consulting the glossary before using a term is a
+  suggestion, not a requirement** — it is often a good idea and sometimes noise, because plenty of
+  words are ordinary English doing ordinary work, and there is no point defining nouns that generic.
+  A term earns an entry by being load-bearing, not by appearing. Full standard:
+  [`dev/standards/terminology.md`](../dev/standards/terminology.md).
 - **Reviews are permanent.** `reviews/` is tracked, never gitignored, one directory per run named
   `<YYYY-MM-DD>-<milestone>`, and never deleted or pruned on triage — it is the evidence behind what
   `this.i` decided, not a worklist. Open findings become **ticks**; a synthesis carries a `status:`
