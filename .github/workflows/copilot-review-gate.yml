@@ -122,10 +122,17 @@ jobs:
             exit 0
           fi
 
-          gh api --method POST \
+          # A failed call is not a failed assignment, any more than a 200 was an assignment. The
+          # request can lose a race -- another run or a human assigning Copilot between the
+          # pre-check and this POST -- and aborting there would fail a job whose work was already
+          # done by someone else. So let the call fail, and let the timeline decide, which is the
+          # same rule the rest of this step follows.
+          if ! gh api --method POST \
             -H "Accept: application/vnd.github+json" \
             "/repos/$REPO/pulls/$PR_NUMBER/requested_reviewers" \
-            -f "reviewers[]=$REVIEWER" > /dev/null
+            -f "reviewers[]=$REVIEWER" > /dev/null 2>&1; then
+            echo "::notice::The request call failed. Checking whether Copilot ended up requested anyway."
+          fi
 
           # A 200 is not the same as an assignment, which is the whole lesson here -- the bare
           # `Copilot` identifier returned 200 for months and never produced a timeline event.
@@ -160,16 +167,34 @@ jobs:
           # Not assigned is the ordinary case here -- most PRs never had Copilot on them -- so it is
           # checked rather than swallowed, and a real API failure is still allowed to fail. Same
           # timeline caveat as the request step: requested_reviewers does not list this bot.
-          if [ "$(gh api "/repos/$REPO/issues/$PR_NUMBER/timeline" --paginate --slurp \
-                    | jq -r --arg rev "$REVIEWER" '[.[][] | select((.event == "review_requested" or .event == "review_request_removed")
-                                             and (((.requested_reviewer.login // "") | ascii_downcase) as $l | ($l == "copilot" or $l == ($rev | ascii_downcase))))]
-                             | last | (.event // "") == "review_requested"')" != "true" ]; then
+          requested() {
+            gh api "/repos/$REPO/issues/$PR_NUMBER/timeline" --paginate --slurp \
+              | jq -r --arg rev "$REVIEWER" '[.[][] | select((.event == "review_requested" or .event == "review_request_removed")
+                                       and (((.requested_reviewer.login // "") | ascii_downcase) as $l | ($l == "copilot" or $l == ($rev | ascii_downcase))))]
+                       | last | (.event // "") == "review_requested"'
+          }
+
+          if [ "$(requested)" != "true" ]; then
             echo "Copilot is not currently a requested reviewer on this PR. Nothing to remove."
             exit 0
           fi
 
-          gh api --method DELETE \
+          # Same rule as the request step, mirrored: the DELETE can lose the same race, and the
+          # timeline is the arbiter rather than the call's exit status.
+          if ! gh api --method DELETE \
             -H "Accept: application/vnd.github+json" \
             "/repos/$REPO/pulls/$PR_NUMBER/requested_reviewers" \
-            -f "reviewers[]=$REVIEWER" > /dev/null
-          echo "Copilot removed."
+            -f "reviewers[]=$REVIEWER" > /dev/null 2>&1; then
+            echo "::notice::The removal call failed. Checking whether Copilot is still requested."
+          fi
+
+          for _ in 1 2 3 4 5 6; do
+            if [ "$(requested)" != "true" ]; then
+              echo "Copilot removed."
+              exit 0
+            fi
+            sleep 5
+          done
+
+          echo "::error::[e.review.not_removed.f] Copilot is still a requested reviewer after the removal call. The gate decided this PR should not be reviewed and could not make that true, so the decision is not being honoured."
+          exit 1
