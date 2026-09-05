@@ -127,10 +127,15 @@ jobs:
           # pre-check and this POST -- and aborting there would fail a job whose work was already
           # done by someone else. So let the call fail, and let the timeline decide, which is the
           # same rule the rest of this step follows.
+          #
+          # Only stdout is discarded, and only because it is the whole pull request as JSON.
+          # gh writes its diagnostics to stderr, so a real failure -- a permission, a rate limit --
+          # still says why in the log. Swallowing that too would recreate, one level down, the
+          # blindness this whole workflow was rewritten to remove.
           if ! gh api --method POST \
             -H "Accept: application/vnd.github+json" \
             "/repos/$REPO/pulls/$PR_NUMBER/requested_reviewers" \
-            -f "reviewers[]=$REVIEWER" > /dev/null 2>&1; then
+            -f "reviewers[]=$REVIEWER" > /dev/null; then
             echo "::notice::The request call failed. Checking whether Copilot ended up requested anyway."
           fi
 
@@ -151,7 +156,7 @@ jobs:
 
           # Stable symbolic code per dev/standards/error-codes.md, so a failure is greppable across
           # the fleet this workflow is vendored into. Permanent: retrying the same call cannot help.
-          echo "::error::[e.review.not_requested.f] The API accepted the request but no review_requested event ever appeared, so Copilot was not asked. Copilot code review is probably unavailable for this repository. Do not paper over this -- either make it available, or delete this workflow rather than leave a review gate that reports success while asking nobody."
+          echo "::error::[e.review.not_requested.f] No review_requested event ever appeared, so Copilot was not asked -- either the request call failed (its error is above) or it succeeded and assigned nobody. Copilot code review is probably unavailable for this repository. Do not paper over this -- either make it available, or delete this workflow rather than leave a review gate that reports success while asking nobody."
           exit 1
 
       - name: Remove Copilot as reviewer
@@ -184,7 +189,7 @@ jobs:
           if ! gh api --method DELETE \
             -H "Accept: application/vnd.github+json" \
             "/repos/$REPO/pulls/$PR_NUMBER/requested_reviewers" \
-            -f "reviewers[]=$REVIEWER" > /dev/null 2>&1; then
+            -f "reviewers[]=$REVIEWER" > /dev/null; then
             echo "::notice::The removal call failed. Checking whether Copilot is still requested."
           fi
 
