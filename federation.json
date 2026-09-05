@@ -26,10 +26,12 @@
     {
       "name": "vLEI (GLEIF)",
       "operator": "GLEIF / WebOfTrust",
-      "homepage": "https://github.com/WebOfTrust/vLEI",
+      "homepage": "https://gleif-it.github.io/.well-known/",
+      "manifest": "https://gleif-it.github.io/.well-known/oobi/index.json",
+      "oobiPattern": "https://gleif-it.github.io/.well-known/oobi/{said}/index.json",
       "sourceRepo": "https://github.com/GLEIF-IT/vLEI-schema",
-      "resolution": "oobi",
-      "notes": "The vLEI credential family (QVI, LE, OOR/ECR + authorizations, iXBRL attestation). Served via KERI OOBI (vlei-server); production endpoints per GLEIF."
+      "resolution": "static",
+      "notes": "The vLEI credential family (QVI, LE, OOR/ECR + authorizations, iXBRL attestation). No longer OOBI-only: since 2026-08-05 GLEIF publishes a .well-known discovery surface — an RFC 6415 host-meta.json, a generated catalog, and each schema as browsable JSON at a stable per-SAID URL. weboftrust.github.io serves an identical surface from a byte-identical build script, so the two are one implementation published from two origins. The vlei-server OOBI endpoints remain the production resolution path."
     },
     {
       "name": "WebOfTrust schema",
