@@ -10,6 +10,20 @@ name: Copilot Review Gate
 # The [light-ccr] convention is NOT handled here. CCR sees [light-ccr] in the
 # title/body and self-narrows per .github/copilot-instructions.md. So this
 # workflow only distinguishes "review or not" — light-vs-full is CCR's call.
+#
+# Per-repo configuration splits along that same line, and deliberately:
+#
+#   WHETHER it runs   -> the repository variable COPILOT_REVIEW. Set it to `off` and this
+#                        workflow does nothing in that repo. Unset means on, so adding the
+#                        variable is opt-out and no existing repo changes behaviour.
+#                        `gh variable set COPILOT_REVIEW --body off --repo <owner>/<repo>`
+#   WHAT and HOW DEEP -> .github/copilot-instructions.md, which is already per-repo and already
+#                        versioned. A repo wanting light review by default says so there; this
+#                        workflow cannot express it, because only the PR text and that file reach
+#                        Copilot.
+#
+# A variable rather than editing this file is what keeps the 38 vendored copies identical. A
+# fleet whose copies diverge is the problem sync-tier1 exists to solve, one layer up.
 
 on:
   pull_request:
@@ -28,9 +42,16 @@ jobs:
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
           PR_DRAFT: ${{ github.event.pull_request.draft }}
+          COPILOT_REVIEW: ${{ vars.COPILOT_REVIEW }}
         run: |
           set -euo pipefail
           skip=false
+          # Unset resolves to `on`, so a repo that has never heard of this variable behaves exactly
+          # as before. Only an explicit `off` turns the gate off.
+          if [[ "${COPILOT_REVIEW:-on}" == "off" ]]; then
+            echo "COPILOT_REVIEW=off for this repository. Not requesting a review."
+            skip=true
+          fi
           if [[ "$PR_DRAFT" == "true" ]]; then
             skip=true
           fi
@@ -42,19 +63,101 @@ jobs:
           fi
           echo "skip=$skip" >> "$GITHUB_OUTPUT"
 
+      # The identifier is `copilot-pull-request-reviewer[bot]`, not `Copilot`. The bare name was
+      # what this workflow used, and it returns HTTP 200 while assigning nobody; the suffixed form
+      # is the one observed to produce an actual review. Without the [bot] suffix the API answers
+      # 422 "Reviews may only be requested from collaborators", which is at least honest.
+      #
+      # The old `|| echo "... Safe to ignore."` on both steps is gone. It was written for one
+      # benign case -- Copilot already assigned -- and swallowed every other outcome with it, so a
+      # request that assigned nobody reported success. This workflow existed in 38 repos and there
+      # was no way to tell from a green run whether it had ever worked. Handle the benign case by
+      # checking for it, and let everything else fail.
       - name: Request Copilot as reviewer
         if: steps.decide.outputs.skip == 'false'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
+          REVIEWER: "copilot-pull-request-reviewer[bot]"
         run: |
-          gh api \
-            --method POST \
+          set -euo pipefail
+
+          # Verified through the ISSUE TIMELINE, not through requested_reviewers.
+          #
+          # requested_reviewers does not list the Copilot bot -- observed on a PR where Copilot had
+          # been requested and went on to post a full review while that array stayed empty
+          # throughout. Polling it is how this was mis-diagnosed twice as an entitlement problem.
+          # The timeline records a `review_requested` event immediately and keeps it, which is the
+          # evidence that the request actually took.
+          #
+          # But the timeline is APPEND-ONLY, so "has ever been requested" is not "is requested now":
+          # a removal adds a `review_request_removed` event rather than retracting the request. An
+          # earlier form asked only whether a request had ever appeared, which meant that once a PR
+          # went to draft or took a [no-ccr] label, the gate believed Copilot was still assigned and
+          # silently declined to re-request it on the way back -- breaking exactly the flows the
+          # remove step exists to support. Take the LAST event for this reviewer instead.
+          #
+          # Matched against the two forms this bot actually appears as, rather than any login
+          # beginning with "copilot", which would also match a human called copilotfan. The two
+          # forms are NOT interchangeable and both are needed: we POST
+          # `copilot-pull-request-reviewer[bot]`, but the timeline records the event under the bare
+          # login `Copilot` -- verified on infra #5, #16 and bakobo.com #4, all of which record
+          # `Copilot`. Comparing only against $REVIEWER finds zero events, which would make the
+          # gate re-request on every run and then hard-fail on every PR.
+          #
+          # --slurp because --paginate applies --jq per page, so a >100-event timeline would emit
+          # one verdict per page and could answer from a page that predates the removal. The two
+          # flags cannot be combined with --jq, hence the pipe.
+          requested() {
+            gh api "/repos/$REPO/issues/$PR_NUMBER/timeline" --paginate --slurp \
+              | jq -r --arg rev "$REVIEWER" '[.[][] | select((.event == "review_requested" or .event == "review_request_removed")
+                                       and (((.requested_reviewer.login // "") | ascii_downcase) as $l | ($l == "copilot" or $l == ($rev | ascii_downcase))))]
+                       | last | (.event // "") == "review_requested"'
+          }
+
+          # Already assigned is the one outcome the old `|| echo` was actually written for.
+          if [ "$(requested)" = "true" ]; then
+            echo "Copilot is already a requested reviewer. Nothing to do."
+            exit 0
+          fi
+
+          # A failed call is not a failed assignment, any more than a 200 was an assignment. The
+          # request can lose a race -- another run or a human assigning Copilot between the
+          # pre-check and this POST -- and aborting there would fail a job whose work was already
+          # done by someone else. So let the call fail, and let the timeline decide, which is the
+          # same rule the rest of this step follows.
+          #
+          # Only stdout is discarded, and only because it is the whole pull request as JSON.
+          # gh writes its diagnostics to stderr, so a real failure -- a permission, a rate limit --
+          # still says why in the log. Swallowing that too would recreate, one level down, the
+          # blindness this whole workflow was rewritten to remove.
+          if ! gh api --method POST \
             -H "Accept: application/vnd.github+json" \
             "/repos/$REPO/pulls/$PR_NUMBER/requested_reviewers" \
-            -f 'reviewers[]=Copilot' \
-            || echo "Note: request_reviewers returned non-zero; Copilot may already be assigned. Safe to ignore."
+            -f "reviewers[]=$REVIEWER" > /dev/null; then
+            echo "::notice::The request call failed. Checking whether Copilot ended up requested anyway."
+          fi
+
+          # A 200 is not the same as an assignment, which is the whole lesson here -- the bare
+          # `Copilot` identifier returned 200 for months and never produced a timeline event.
+          # Poll briefly, because the event lands a beat after the call rather than with it.
+          #
+          # This does NOT wait for the review. Whether Copilot has anything to say, and how long it
+          # takes to say it, is Copilot's business; this step's job is to establish that it was
+          # asked. Waiting on the review would make CI's duration depend on a third party.
+          for _ in 1 2 3 4 5 6; do
+            if [ "$(requested)" = "true" ]; then
+              echo "Copilot requested."
+              exit 0
+            fi
+            sleep 5
+          done
+
+          # Stable symbolic code per dev/standards/error-codes.md, so a failure is greppable across
+          # the fleet this workflow is vendored into. Permanent: retrying the same call cannot help.
+          echo "::error::[e.review.not_requested.f] No review_requested event ever appeared, so Copilot was not asked -- either the request call failed (its error is above) or it succeeded and assigned nobody. Copilot code review is probably unavailable for this repository. Do not paper over this -- either make it available, or delete this workflow rather than leave a review gate that reports success while asking nobody."
+          exit 1
 
       - name: Remove Copilot as reviewer
         if: steps.decide.outputs.skip == 'true'
@@ -62,10 +165,41 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO: ${{ github.repository }}
+          REVIEWER: "copilot-pull-request-reviewer[bot]"
         run: |
-          gh api \
-            --method DELETE \
+          set -euo pipefail
+
+          # Not assigned is the ordinary case here -- most PRs never had Copilot on them -- so it is
+          # checked rather than swallowed, and a real API failure is still allowed to fail. Same
+          # timeline caveat as the request step: requested_reviewers does not list this bot.
+          requested() {
+            gh api "/repos/$REPO/issues/$PR_NUMBER/timeline" --paginate --slurp \
+              | jq -r --arg rev "$REVIEWER" '[.[][] | select((.event == "review_requested" or .event == "review_request_removed")
+                                       and (((.requested_reviewer.login // "") | ascii_downcase) as $l | ($l == "copilot" or $l == ($rev | ascii_downcase))))]
+                       | last | (.event // "") == "review_requested"'
+          }
+
+          if [ "$(requested)" != "true" ]; then
+            echo "Copilot is not currently a requested reviewer on this PR. Nothing to remove."
+            exit 0
+          fi
+
+          # Same rule as the request step, mirrored: the DELETE can lose the same race, and the
+          # timeline is the arbiter rather than the call's exit status.
+          if ! gh api --method DELETE \
             -H "Accept: application/vnd.github+json" \
             "/repos/$REPO/pulls/$PR_NUMBER/requested_reviewers" \
-            -f 'reviewers[]=Copilot' \
-            || echo "Note: removal returned non-zero; Copilot may not have been assigned. Safe to ignore."
+            -f "reviewers[]=$REVIEWER" > /dev/null; then
+            echo "::notice::The removal call failed. Checking whether Copilot is still requested."
+          fi
+
+          for _ in 1 2 3 4 5 6; do
+            if [ "$(requested)" != "true" ]; then
+              echo "Copilot removed."
+              exit 0
+            fi
+            sleep 5
+          done
+
+          echo "::error::[e.review.not_removed.f] Copilot is still a requested reviewer after the removal call. The gate decided this PR should not be reviewed and could not make that true, so the decision is not being honoured."
+          exit 1
