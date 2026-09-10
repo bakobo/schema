@@ -34,10 +34,13 @@ work: `git clone --depth 1 https://github.com/bakobo/dev`. Always on:
   words are ordinary English doing ordinary work, and there is no point defining nouns that generic.
   A term earns an entry by being load-bearing, not by appearing. Full standard:
   [`dev/standards/terminology.md`](../dev/standards/terminology.md).
-- **Reviews are permanent.** `reviews/` is tracked, never gitignored, one directory per run named
-  `<YYYY-MM-DD>-<milestone>`, and never deleted or pruned on triage — it is the evidence behind what
-  `this.i` decided, not a worklist. Open findings become **ticks**; a synthesis carries a `status:`
-  header line naming what is still open. Full standard:
+- **Reviews are permanent, which is not the same as published.** `reviews/` is tracked, never
+  gitignored, one directory per run named `<YYYY-MM-DD>-<milestone>`, and never deleted or pruned on
+  triage — it is the evidence behind what `this.i` decided, not a worklist. Open findings become
+  **ticks**; a synthesis carries a `status:` header line naming what is still open. A repo that goes
+  **public** moves its tree to the private `bakobo/reviews` and purges it from history in the same
+  change — a security review is a map of a running system's weak points, and untracking at the tip
+  leaves it one `git log` away. Full standard:
   [`dev/standards/reviews.md`](../dev/standards/reviews.md).
 - **Input is bounded before it is trusted.** Size, then shape, then meaning — each only
   trustworthy if the one before it ran. Nothing crosses a boundary unbounded, every input kind
