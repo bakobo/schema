@@ -42,6 +42,14 @@ work: `git clone --depth 1 https://github.com/bakobo/dev`. Always on:
   change — a security review is a map of a running system's weak points, and untracking at the tip
   leaves it one `git log` away. Full standard:
   [`dev/standards/reviews.md`](../dev/standards/reviews.md).
+- **Going public is a checklist, not a toggle.** If this repo is public — or you are about to make it
+  one — it owes a posture: `LICENSE`, `CONTRIBUTING.md`, `SECURITY.md` and `CODE_OF_CONDUCT.md`
+  (copy from `bakobo/template`'s `oss-*` files and drop the prefix), private vulnerability reporting,
+  Dependabot, secret scanning **with push protection**, CodeQL, a default-branch ruleset requiring a
+  PR, the `reviews/` tree moved to the private `bakobo/reviews` **and purged from history**, and a
+  dependency closure a stranger can resolve with no credential. GitHub announces none of this when
+  visibility flips, so assume it was missed and check. Full standard:
+  [`dev/standards/oss-posture.md`](../dev/standards/oss-posture.md); audit with `dev/oss-posture`.
 - **Input is bounded before it is trusted.** Size, then shape, then meaning — each only
   trustworthy if the one before it ran. Nothing crosses a boundary unbounded, every input kind
   enters through a named door, and the set of doors is kept complete by a test rather than by
