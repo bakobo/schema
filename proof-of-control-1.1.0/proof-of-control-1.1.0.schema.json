@@ -1,25 +1,22 @@
 {
-  "$id": "EL8UCysa2vrg3pe1dg9UAe3mC3-C57DarB1vJVE38j0Y",
+  "$id": "EO6WbKaHwNOalVVY5oHi4NaZWG5yynFIDCHpQACVPCw7",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Proof-of-Control Credential",
   "description": "Assert the issuee has demonstrated to the issuer the ability to control a digital resource like a web site, social media handle, or email address.",
   "type": "object",
   "credentialType": "ProofOfControlCredential",
-  "version": "2.0.0",
+  "version": "1.1.0",
   "required": [
     "v",
     "d",
     "i",
+    "ri",
     "s",
     "a"
   ],
   "properties": {
     "v": {
       "description": "Version string using ACDC conventions",
-      "type": "string"
-    },
-    "t": {
-      "description": "Message type",
       "type": "string"
     },
     "d": {
@@ -34,8 +31,8 @@
       "description": "AID of the issuer",
       "type": "string"
     },
-    "rd": {
-      "description": "SAID of the registry holding this credential's status",
+    "ri": {
+      "description": "Registry for issuer's credential status",
       "type": "string"
     },
     "s": {
@@ -49,9 +46,12 @@
           "type": "string"
         },
         {
+          "$id": "EARUVVTwcioAsrTaNy5TwdluBlpQUlRXuzFfoPyp-dQn",
           "description": "Attributes block",
           "type": "object",
           "required": [
+            "d",
+            "u",
             "i",
             "res",
             "assertDate",
@@ -110,6 +110,7 @@
           "type": "string"
         },
         {
+          "$id": "EGFgHT7Xrzy9YLdQNXnNTYVBu9_Q0O7K5A2VCWjg93t3",
           "description": "Rules detail",
           "type": "object",
           "properties": {
