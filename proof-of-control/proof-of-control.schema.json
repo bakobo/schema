@@ -1,11 +1,11 @@
 {
-  "$id": "EL8UCysa2vrg3pe1dg9UAe3mC3-C57DarB1vJVE38j0Y",
+  "$id": "EP7Ef1-gpddGtdIE3EM8HSCuXiWLi9KYL1pvnRayfkRP",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Proof-of-Control Credential",
   "description": "Assert the issuee has demonstrated to the issuer the ability to control a digital resource like a web site, social media handle, or email address.",
   "type": "object",
   "credentialType": "ProofOfControlCredential",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "required": [
     "v",
     "d",
@@ -96,6 +96,11 @@
             },
             "assertDate": {
               "description": "Time as of which the issuer asserts the control of the resource to be fresh. This may be before the time of issuance.",
+              "format": "date-time",
+              "type": "string"
+            },
+            "validUntil": {
+              "description": "Time after which the issuer no longer asserts this proof. A short window is how a proof-of-control credential tells the truth about a control that decays; an issuer using one can let a wrong issuance expire instead of revoking it.",
               "format": "date-time",
               "type": "string"
             }
