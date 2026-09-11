@@ -27,7 +27,17 @@ name: Copilot Review Gate
 
 on:
   pull_request:
-    types: [opened, edited, reopened, ready_for_review, labeled, unlabeled, synchronize, converted_to_draft]
+    # `synchronize` IS ABSENT AND EVERYTHING ELSE STAYS. Requesting a review is idempotent -- the
+    # reviewer is already assigned after the first run -- so firing on every push bought nothing and
+    # cost a job each time: 97 gate runs against about 20 pull requests in September 2026, each
+    # billed rounded up to a whole minute.
+    #
+    # The others are NOT interchangeable with it, which an earlier version of this change got wrong
+    # by dropping them too. This job does not only ADD Copilot, it REMOVES an existing assignment
+    # when the title gains `[no-ccr]`, when the `no-ccr` label is applied, or when the pull request
+    # goes to draft. Without `edited`, `labeled`, `unlabeled` and `converted_to_draft` no event
+    # fires for any of those, so Copilot stays assigned and the opt-out silently stops working.
+    types: [opened, edited, reopened, ready_for_review, labeled, unlabeled, converted_to_draft]
 
 permissions:
   pull-requests: write
