@@ -489,6 +489,33 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         Deliberately NOT done here: example.json and a positive gallery. 1.1.0 shipped without either,
         so adding them is a separate improvement and not part of an envelope migration.
 
+    proof-of-control 2.1.0 gains an optional validUntil, because expiry IS its revocation story = decision:
+      id: 3j5lwc7w
+      why: >
+        1.1.0 and 2.0.0 carried `assertDate` — when the issuer asserts the control was fresh — and
+        nothing saying when the assertion stops. For the credential's first real issuer that gap is
+        not cosmetic: merti's @pxfdnc chose SHORT-LIVED AND REGISTRY-FREE precisely so that expiry
+        substitutes for revocation ("if merti learns an issuance was wrong, the remedy is to wait out
+        the expiry and refuse the renewal"), and merti's Issuer port already takes an `expires`
+        argument it had nowhere to put. A schema whose only issuer cannot express its central design
+        decision is the schema that is wrong. Found while writing that issuer's adapter, which is the
+        second thing in two days that reading the schema did not surface and exercising it did.
+        OPTIONAL, not required, and the corpus reason outranks the convenience: this repo serves any
+        issuer's schema repo (@c5tj3p), and a proof-of-control that never expires is a coherent thing
+        for a different issuer to assert. Absence means "the issuer set no horizon", never "valid
+        forever" — the same absence-is-not-false discipline @ar6vk2 applies to f2f's optional levers.
+        merti always sets it; that is merti's policy and belongs in merti's governance framework
+        rather than in the shape everyone shares.
+        Placed as a sibling of `assertDate` in the attribute block rather than inside a container.
+        GCD reaches validUntil through `a.constraints.validUntil` with an if/then backstop (@enr3eg),
+        but `constraints` is GCD's authority vocabulary and proof-of-control has no such container;
+        borrowing the path without the structure would imply a kinship that does not exist.
+        MINOR per @k3wm7d: adding an optional property invalidates no prior instance, so 2.0.0 ->
+        2.1.0 and no archive is warranted. 2.0.0 existed for one commit and was never published or
+        issued against, so it is superseded in place rather than preserved — @r5vk3n's archiving
+        convention protects SAIDs somebody might hold, and nobody ever held this one.
+        Oracle: the same end-to-end issuance as @2n2vtee3, now carrying validUntil, still passing.
+
     Schema-authoring tooling is deferred, pending a TypeScript-vs-Python decision = decision:
       id: p4zc7n
       stage-status: planned
