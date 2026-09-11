@@ -1,0 +1,54 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Weekly, because a scanner that only runs on your commits never finds the vulnerability that
+    # was disclosed after you stopped touching the file. Monday early, off the hour: GitHub drops
+    # scheduled jobs under load at popular times, and :17 is not a popular time.
+    - cron: "17 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      # The whole point: without this the analysis runs and has nowhere to publish a finding.
+      security-events: write
+      contents: read
+    strategy:
+      # One language's failure should not hide another's findings.
+      fail-fast: false
+      matrix:
+        language: [python]
+
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@977e6ceaea7361825998245d787fa3b4d6b9e5df # codeql-bundle-v2.27.0
+        with:
+          languages: ${{ matrix.language }}
+          # security-and-quality over the default security-extended: these are small codebases
+          # where the maintenance cost of the extra quality queries is low and the signal is real.
+          # Drop to security-extended if a repo starts drowning in style findings.
+          queries: security-and-quality
+
+      # Compiled languages need a build before analysis. Autobuild handles the common cases; if it
+      # fails for a repo, replace this step with that repo's real build command rather than
+      # deleting it, because analysis of a half-built tree quietly finds less.
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@977e6ceaea7361825998245d787fa3b4d6b9e5df # codeql-bundle-v2.27.0
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@977e6ceaea7361825998245d787fa3b4d6b9e5df # codeql-bundle-v2.27.0
+        with:
+          category: "/language:${{ matrix.language }}"
