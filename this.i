@@ -446,6 +446,49 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             "get vouched, then hand your keys to an AI" attack. Both optional; absence means "not attested,"
             never "false." Chose closed enums over free text so aggregators can reason over them, and kept them
             descriptive attestation detail (governed by noOverstatement) rather than minting new rules.
+    proof-of-control 2.0.0 adopts the ACDC v2 envelope; 1.1.0 is archived = decision:
+      id: 2n2vtee3
+      why: >
+        The same migration @enr3eg made for GCD, for the same driver and with the same mechanics, now
+        that proof-of-control has an actual issuer. bakobo/merti issues email proof-of-control through
+        heti, which is v2-first by recorded decision (heti @0nx0p6gd) and builds every ACDC as an
+        acm/JSON field map carrying `rd`. The 1.1.0 schema required v1's `ri`, so NO credential heti
+        can issue would ever have validated against it — verified by running heti's issuance path
+        against it (2026-09-11): it failed on `ri`, then on a required `u` heti deliberately never
+        mints, then on a required `a.d`. That is not a defect discovered by review; it is a schema no
+        issuer had ever exercised, which is the cost of a corpus authored ahead of its first consumer.
+        Envelope follows @enr3eg exactly: top-level order [v, t, d, u, i, rd, s, a, r]; `t` optional;
+        the compact SAID-string arm stays FIRST in every oneOf, which the most-compact-form SAID
+        algorithm keys on; the v1-era inner `$id` on the expanded a/r arms is dropped, since the v2
+        idiom carries none. `a.d` becomes OPTIONAL for the reason @enr3eg measured and this work
+        rediscovered independently before finding that node — the fork's `acdcmap` emits no `a.d`, so
+        requiring it rejects every heti-built credential. `u` drops out of a.required for the parallel
+        reason: heti mints no privacy nonce (@895yr58n), so a required nonce is unsatisfiable by the
+        only issuer there is.
+        THE ONE PLACE THIS DIVERGES FROM @enr3eg, deliberately: `rd` is OPTIONAL here, where GCD made
+        it REQUIRED. That was not an oversight and the two are not inconsistent — @enr3eg's argument
+        is specific to what a GCD is ("a GCD is authority evidence — its issuer is already public,
+        secure registry discovery is exactly what a stranger-verifier needs", and "correlation-
+        minimized delegation is not a GCD use case"). For proof-of-control every clause inverts.
+        merti's @pxfdnc wants short-lived registry-free issuance as the DEFAULT, and its @g3lxeo
+        treats a self-serve issuing site as a correlation honeypot to be designed against. So
+        correlation minimization is precisely the use case, and the spec's own default (rd optional,
+        spec-body.md :2019) is the right one to keep. This also means merti's tension @3y4oko can
+        resolve toward rd-less issuance later without a third schema.
+        MAJOR per @k3wm7d's RFC-0430 grading, since renaming `ri` invalidates every conceivable prior
+        instance: 1.1.0 -> 2.0.0. Per @r5vk3n the old schema is archived byte-identical at
+        proof-of-control-1.1.0/ with its SAID EO6WbKaHwNOalVVY5oHi4NaZWG5yynFIDCHpQACVPCw7 still
+        resolvable in registry.json, and proof-of-control/ is rewritten with a fresh SAID
+        EL8UCysa2vrg3pe1dg9UAe3mC3-C57DarB1vJVE38j0Y. Nothing external pinned the old one: it 404s at
+        schema.bakobo.com, and Bakobo's OOBI catalog states it has incepted no organisational AIDs,
+        so no credential anywhere references it. The negative corpus is repointed at the new SAID and
+        each fixture re-verified to fail for the defect it is NAMED after rather than for the envelope
+        — without that check the five fixtures would have kept passing while testing nothing.
+        ACCEPTANCE ORACLE, run and passing: heti mints a facet, opens a registry, and issues against
+        this schema end to end, producing a 470-byte genus-pinned acm ACDC and a 2095-byte IPEX grant.
+        Deliberately NOT done here: example.json and a positive gallery. 1.1.0 shipped without either,
+        so adding them is a separate improvement and not part of an envelope migration.
+
     Schema-authoring tooling is deferred, pending a TypeScript-vs-Python decision = decision:
       id: p4zc7n
       stage-status: planned
