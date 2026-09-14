@@ -277,8 +277,8 @@ wheels = [
 
 [[package]]
 name = "hio"
-version = "0.7.19"
-source = { registry = "https://pypi.org/simple" }
+version = "0.7.20"
+source = { git = "https://github.com/bakobo/hio?rev=7b0350eab3115f42cd6be5dee2b203d052a320aa#7b0350eab3115f42cd6be5dee2b203d052a320aa" }
 dependencies = [
     { name = "blake3" },
     { name = "cbor2" },
@@ -288,8 +288,8 @@ dependencies = [
     { name = "multidict" },
     { name = "ordered-set" },
     { name = "pysodium" },
+    { name = "sortedcontainers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/34/6c/c6a36e2debeaa7fdc4ac050e6d883a1476268b233dd0b1b830eb920bc049/hio-0.7.19.tar.gz", hash = "sha256:16ed60e77041c24b1baca8978daff3b840ed17789d77922f50274c4745e3b785", size = 195482, upload-time = "2026-01-21T02:41:37.274Z" }
 
 [[package]]
 name = "hjson"
@@ -405,8 +405,8 @@ wheels = [
 
 [[package]]
 name = "keri"
-version = "2.0.0.dev6"
-source = { git = "https://github.com/bakobo/keripy?rev=a3118956638f9bc7d7d6d9b97d5086bdd6ce9a38#a3118956638f9bc7d7d6d9b97d5086bdd6ce9a38" }
+version = "2.1.0.dev0"
+source = { git = "https://github.com/bakobo/keripy?rev=a1f2f32bcf710b99878fa8457b8884ea6c3e2f5e#a1f2f32bcf710b99878fa8457b8884ea6c3e2f5e" }
 dependencies = [
     { name = "apispec" },
     { name = "blake3" },
@@ -849,7 +849,7 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "jsonschema", extras = ["format-nongpl"], specifier = ">=4.21" },
-    { name = "keri", git = "https://github.com/bakobo/keripy?rev=a3118956638f9bc7d7d6d9b97d5086bdd6ce9a38" },
+    { name = "keri", git = "https://github.com/bakobo/keripy?rev=a1f2f32bcf710b99878fa8457b8884ea6c3e2f5e" },
     { name = "pyyaml", specifier = ">=6" },
 ]
 

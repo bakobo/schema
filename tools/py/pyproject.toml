@@ -3,7 +3,7 @@ name = "schematools"
 version = "0.1.0"
 description = "ACDC / JSON-Schema authoring and conformance tooling for a schema repo"
 readme = "README.md"
-# keri 2.0.0.dev6 (the pinned fork commit) requires >=3.14,<3.15.
+# keri 2.1.0-dev0 (the pinned fork commit) requires >=3.14,<3.15.
 requires-python = ">=3.14,<3.15"
 # keri is the SAID conformance oracle (this.i @xv4m7d). The pin is EXACT: a
 # different keri could silently change every SAID. This commit — the same one
@@ -11,7 +11,7 @@ requires-python = ">=3.14,<3.15"
 # minted under keri 1.2.13, and adds the ACDC v2 (acm / rd / most-compact
 # SAID) support the GCD 3.x examples need (this.i @m4vd7s, @h3or4x).
 dependencies = [
-    "keri @ git+https://github.com/bakobo/keripy@a3118956638f9bc7d7d6d9b97d5086bdd6ce9a38",
+    "keri @ git+https://github.com/bakobo/keripy@a1f2f32bcf710b99878fa8457b8884ea6c3e2f5e",
     # format-nongpl (not [format]) enables date-time/uri format ASSERTION in
     # instance validation without pulling GPL rfc3987 (this.i @f4mt6k).
     "jsonschema[format-nongpl]>=4.21",
