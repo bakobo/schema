@@ -1,0 +1,4 @@
+# sedi-age's A arm does not pin position: it uses items/anyOf with no prefixItems and no minItems, so the AGID is not fixed at index 0 and the issuee block is not required at index 1 — every block's oneOf permits the bare withheld-SAID string. Per heti @u75gb3uv, SerderACDC.iseaid reads only sad['A'][1]['i'] and returns None for a WITHHELD issuee block exactly as for a credential that never had one, so a holder (or a thief) can withhold element 1 and present a targeted credential as an untargeted affidavit. The authored examples already put AGID at 0 and issuee at 1, so this is unenforced convention, not a data defect. Fix with prefixItems + minItems:2 + a required-object issuee arm (heti's handoff gives the shape). MAJOR per @k3wm7d — a prior instance lacking the issuee block becomes invalid. Fold into the same unit as tick 2nd5's v2 version stamp and AGID recomputation.
+kind: debt
+created: 2026-09-14T21:52Z
+
