@@ -765,6 +765,14 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
                 so CI needs no credential (no PAT, no App). Deliberately NOT done here: lifting @sd2qfw for
                 sedi-age — its examples stay as authored and tick 2nd5 stays open (now unblocked in
                 principle) — because that is sedi scope, not 25ra.
+                RE-GATED 2026-09-13: the pin moves a3118956 -> a1f2f32b (keri 2.1.0-dev0), again following
+                heti's own commit, and again through the gate this node's last sentence demands rather than
+                as a bare version bump. Results: `schematools check` reports 0 problems across all 18 schemas,
+                so every $id is byte-identical under the new fork, and the schematools suite is 237 passed at
+                100% branch coverage. The old commit is an ancestor of the new one, so this is movement along
+                one lineage rather than a change of oracle. Occasioned by heti answering bakobo/schema's
+                nonce-and-aggregate handoff, where a stale pin reference would have sent the corpus's
+                disclosure design against an oracle heti no longer runs.
         schematools surfaces a coded, catchable error at the repo-root boundary, not a raw traceback = decision:
           id: b3kq7w
           stage-status: done
