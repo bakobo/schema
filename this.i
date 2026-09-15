@@ -557,6 +557,17 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         added with the eleven failures marked xfail(strict=True) against their tick ids, the mechanism
         @n7xk4r's conformance suite already uses, so CI stays green and each migration flips one marker to
         XPASS and forces its removal.
+        THE ENVELOPE CHECK IS A CONFORMANCE INVARIANT, NOT A PUBLICATION GATE. 'schematools publish' fails
+        closed on any problem run_all reports, so adding the envelope check to that set would refuse to
+        publish the whole site until the last of the eleven migrated — and would be wrong on the merits, not
+        merely inconvenient. @r5vk3n keeps every superseded schema published BYTE-IDENTICAL AND FOREVER, so
+        that a SAID somebody holds stays resolvable; gcd-1.0.0, gcd-2.0.1 and proof-of-control-1.1.0 are v1
+        by design and must go on being served. A v1 envelope is therefore not a defect in the artifact being
+        published — the schema is valid, SAID-correct, registered and resolvable — it is a statement about
+        which issuer can mint against it. So the publication gate keeps the invariants that make a published
+        artifact trustworthy (structure, SAID, registry, examples, the negative corpus) and the envelope
+        check runs in 'schematools check' and the conformance suite, where the audience is a maintainer
+        deciding what to work on rather than a stranger resolving a SAID.
         ORDER is by design load rather than field count, easiest first, because the early schemas are where
         the defaults below get tested against reality: attestation, bindkey, org-vet, citation, then
         ai-user-coca and ai-coder TOGETHER (ai-coder pins ai-user-coca's SAID as a const, so migrating one
