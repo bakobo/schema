@@ -40,11 +40,26 @@ Verifiers MUST also remember that even when a citation exists for the simple pur
 
 To guarantee that all of these assumptions remain explicit, every Citation ACDC includes a [rules](rules.json) section that binds all parties to terms and conditions based on proper assumptions. 
 
+### Governance framework
+
+Every citation carries four Ricardian clauses, in [`rules.json`](rules.json) and embedded in the schema's `r` block, so the assumptions above travel with each instance rather than living only on this page.
+
+`onlyCommitToPoint` says the citation, in and of itself, commits the issuer only to pointing at content in a way that makes the issuer and the target verifiable — never that the issuer owns, endorses, or agrees with it. `useViaEdges` says a citation is not meant to be used in isolation; the intended semantics come from a referencing ACDC. `undefinedVerification` says evaluating the authenticity or veracity of the referenced content is outside standard ACDC verification and belongs to the verifier. `undefinedRevocation` says there is no defined relationship between a citation's revocation status and that of the cited data: either may be withdrawn without the other.
+
+An issuer that wants different terms places a different ruleset SAID in `r`.
+
+### Field names
+
+Version 2.0.0 spells the attribute names out, per the house style in [`../docs/style.md`](../docs/style.md): `des` → `description`, `typ` → `contentType`, `lbl` → `label`, `siz` → `sizeBytes`, `loc` → `locationHint`, `sdt` → `snapshotDt`. `dt` stays, because the style's own abbreviation glossary carries it. Two of the old names had collisions rather than mere terseness (`des` reads as the cipher, `loc` as lines-of-code or locale), and three dropped a load-bearing word rather than shortening one — a content type is not a type, a size in bytes is not a size, and a location *hint* is emphatically not a location, which is the point the field's own description spends a paragraph making.
+
+### Privacy
+
+The `content` block has always carried a salty nonce, and 2.0.0 makes it required: `cargo` is often a digest of content the observer may already hold, so an unblinded block is confirmable by exactly the party most likely to see it. The attributes block gains its own required nonce for the same reason, and the credential may carry an optional top-level one.
+
+`rd` is optional here, unlike most of the corpus. That is not an oversight: this credential's own `undefinedRevocation` clause declines to give a citation's revocation any defined relationship to the cited data, so requiring a registry would compel machinery whose meaning the governance deliberately refuses to fix.
+
 ### Schema
 
-See [citation.schema.json](citation.schema.json) and also [rules.json](rules.json).
+The schema is in [`citation.schema.json`](citation.schema.json), its governance framework in [`rules.json`](rules.json), a SAID-verified instance in [`example.json`](example.json), and the social-media-post case in [`examples/`](examples). The [`invalid/`](invalid) directory holds the should-reject corpus, one fixture per defect.
 
-### Governance Framework
-
-These credentials are governed by rules to enhance assurance, discourage abuse, and keep use cases crisp. The current rules are stated in [rules.json](rules.json) and are identified by SAID `EFthNcTE20MLMaCOoXlSmNtdooGEbZF8uGmO5G85eMSF`. New governance frameworks can be written that supplement these rules; see the `gfw` field in the schema. It is also possible to modify or override these rules, by placing a different value in the `r` field. The act of issuing or receiving a GCD credential constitutes binding acceptance of the rules.
-
+Version 1.0.0 is preserved at [`citation-1.0.0/`](../citation-1.0.0) and stays resolvable under its original SAID. The ruleset is unchanged across the bump, so its SAID `EM6kWxMNL9BFm0ReegqQfNJLw8OZAfn2ZxcjWs4Ceifh` still resolves for both versions.

@@ -1,0 +1,6 @@
+{
+  "d": "EJaMEDp0_WMMVV-32nQAR4qVWJqcc7SeIFXoHp5lhEKs",
+  "commitmentNotCompliance": "The issuer declares an intention to abide by the named code of conduct. This credential is not evidence that the issuer has abided by it, and a verifier MUST NOT read compliance, audit or enforcement into a declaration of intent.",
+  "referencedCodeMayChange": "Where coc holds an ordinary URL rather than a SAID or a data URL, the issuer commits to whatever is published at that location, which can change after issuance. A verifier relying on such a declaration MUST fetch the code of conduct and judge it for itself, and MUST NOT assume the content it sees is the content the issuer saw.",
+  "selfAsserted": "This is a self-issued public declaration, not a credential granted by a third party. It carries no vetting, and whatever weight it has comes from the issuer being publicly accountable for having made it."
+}

@@ -1,0 +1,7 @@
+{
+  "d": "ENdLVPKyANKUdHgTkkTud9nKTH6SHL7pqIYKpdDH1tSo",
+  "keyNotAssertedSound": "The issuer declares that it uses this key. It does not assert that the key is uncompromised, well managed, generated soundly, or held only by the issuer, and a verifier MUST NOT read any of those into this credential.",
+  "usesAreDeclarative": "The uses field says what the issuer intends the key for. It confers no authority and creates no obligation on anyone: a verifier that treats a declared use as permission has granted that permission itself.",
+  "bindingEndsOnHorizonOrRevocation": "The binding holds from validFrom, or from issuance when none is stated, until validUntil or revocation, whichever comes first. An absent validUntil means the issuer set no horizon, never that the binding is perpetual, and a verifier MUST check the registry before relying on one.",
+  "unknownFormatFailsClosed": "A verifier that does not recognize a credential's keyFormat MUST refuse to use the key rather than guess at its encoding. A later version of this schema may name a format this one does not, and a key parsed under the wrong assumption is worse than a key not parsed at all."
+}

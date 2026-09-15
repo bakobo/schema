@@ -1,0 +1,29 @@
+{
+  "v": "ACDCCAACAAJSONAAeT.",
+  "t": "acm",
+  "d": "EF0cRpQRP0IFunhKz3CNQlKizWOUCjYvgsUfx9w6TxMr",
+  "u": "0ABcnxp31SwzE-zynptb2AEc",
+  "i": "EIw_fe9e7TTGUL5nrXfjuzqzGWq7iHc4mzmGiqb_CCGK",
+  "rd": "EAEBPOD8GzIYVKlElExZroScFvGbiKdLjbcJ4XuYeOQv",
+  "s": "EKzRBzCdp2t0iKuHMSNAa-EaJdULjmEJTJ6zR1DlzuQq",
+  "a": {
+    "u": "0AChDpl0foehVkGw-v6NR-kN",
+    "dt": "2026-09-15T14:23:16.000000+00:00",
+    "snapshotDt": "2023-07-20T00:00:00+07:00",
+    "description": "Daniel's post about cousins",
+    "contentType": "text/html",
+    "label": "Post on Facebook, 20 July 2023",
+    "content": {
+      "u": "0ADo70gyvvy-leLTyF3ygCNV",
+      "cargo": "EHWJD8CM506b93XPX-ml0Ipis70TcWEmgphliN0DsJg8"
+    },
+    "locationHint": "https://www.facebook.com/sivaneaman/posts/pfbid0RZCCCYdsnTxdjCHz81Nj9T3r1vc1joktFPDoaVuHb46rXFNA8Bj4dRheYUAuQDTql"
+  },
+  "r": {
+    "d": "EM6kWxMNL9BFm0ReegqQfNJLw8OZAfn2ZxcjWs4Ceifh",
+    "onlyCommitToPoint": "All parties agree that the citation, in and of itself, only commits the issuer to point at content in a way that makes the issuer and the target verifiable. Unless or until context, governance, or other actions prove intent, the citation does NOT imply that the issuer owns, endorses, or agrees with the content.",
+    "useViaEdges": "All parties acknowledge that the citation is not intended to be used in isolation. Rather, the intended semantics for the citation should be communicated via a referencing ACDC that clarifies its issuer's intention.",
+    "undefinedVerification": "All parties agree that procedures for evaluating the authenticity and/or veracity of the referenced content are beyond the scope of standard ACDC verification, and that the verifier is responsible for evaluating in whatever way satisfies their requirements.",
+    "undefinedRevocation": "Unless or until governance specifies otherwise, all parties agree that there is no defined relationship between the revocation status of a citation and that of cited data. Cited data may be disavowed or revoked by its creator without a citation being revoked, and vice versa."
+  }
+}

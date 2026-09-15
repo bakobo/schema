@@ -264,3 +264,136 @@ def test_intent_yaml_invalid_is_caught(synthetic_repo):
     problems = checks.check_intent_yaml(synthetic_repo)
     assert len(problems) == 1 and problems[0].check == "intent_yaml"
     assert "invalid YAML" in problems[0].message
+
+
+# --- ACDC v2 envelope (this.i @jruwvxnt) ----------------------------------------
+
+
+def _schema_of(root, name="widget") -> dict:
+    return json.loads((root / name / f"{name}.schema.json").read_text())
+
+
+def _rewrite(root, schema, name="widget") -> None:
+    """Write ``schema`` back unsaidified — envelope checks never read the SAID."""
+    (root / name / f"{name}.schema.json").write_text(json.dumps(schema, indent=2))
+
+
+def test_envelope_clean_v2_schema_is_quiet(synthetic_repo):
+    assert checks.check_envelope(synthetic_repo) == []
+
+
+def test_envelope_catches_v1_registry_field(synthetic_repo):
+    schema = _schema_of(synthetic_repo)
+    props = schema["properties"]
+    props["ri"] = props.pop("rd")
+    _rewrite(synthetic_repo, schema)
+    problems = checks.check_envelope(synthetic_repo)
+    assert [p.check for p in problems] == ["envelope", "envelope"]
+    assert any("v1 'ri'" in p.message for p in problems)
+    assert any("'rd'" in p.message for p in problems)
+
+
+def test_envelope_catches_missing_message_type(synthetic_repo):
+    schema = _schema_of(synthetic_repo)
+    del schema["properties"]["t"]
+    _rewrite(synthetic_repo, schema)
+    problems = checks.check_envelope(synthetic_repo)
+    assert len(problems) == 1 and "'t'" in problems[0].message
+
+
+def test_envelope_catches_out_of_order_fields(synthetic_repo):
+    schema = _schema_of(synthetic_repo)
+    props = schema["properties"]
+    schema["properties"] = {"d": props["d"], "v": props["v"], **{k: v for k, v in props.items() if k not in ("d", "v")}}
+    _rewrite(synthetic_repo, schema)
+    problems = checks.check_envelope(synthetic_repo)
+    assert len(problems) == 1 and "v2 order" in problems[0].message
+
+
+def test_envelope_catches_v1_inner_id(synthetic_repo):
+    schema = _schema_of(synthetic_repo)
+    schema["properties"]["a"]["oneOf"][1]["$id"] = ""
+    _rewrite(synthetic_repo, schema)
+    problems = checks.check_envelope(synthetic_repo)
+    assert len(problems) == 1 and "inner '$id'" in problems[0].message
+    assert "a/oneOf[1]" in problems[0].message
+
+
+def test_envelope_catches_compact_arm_not_first(synthetic_repo):
+    schema = _schema_of(synthetic_repo)
+    arms = schema["properties"]["a"]["oneOf"]
+    arms.reverse()  # expanded object first, compact string second
+    _rewrite(synthetic_repo, schema)
+    problems = checks.check_envelope(synthetic_repo)
+    assert len(problems) == 1 and "compact string arm" in problems[0].message
+
+
+def test_envelope_accepts_a_oneOf_with_no_compact_arm(synthetic_repo):
+    # A oneOf that offers no string arm at all has no ordering to get wrong.
+    schema = _schema_of(synthetic_repo)
+    arms = schema["properties"]["a"]["oneOf"]
+    schema["properties"]["a"]["oneOf"] = [arms[1], {"type": "object", "properties": {}}]
+    _rewrite(synthetic_repo, schema)
+    assert checks.check_envelope(synthetic_repo) == []
+
+
+def test_envelope_walks_nested_lists(synthetic_repo):
+    # prefixItems is a LIST of schemas: a defect inside one must still surface.
+    schema = _schema_of(synthetic_repo)
+    schema["properties"]["A"] = {
+        "type": "array",
+        "prefixItems": [{"type": "string"}, {"$id": "", "type": "object"}],
+    }
+    _rewrite(synthetic_repo, schema)
+    problems = checks.check_envelope(synthetic_repo)
+    assert len(problems) == 1 and "A/prefixItems[1]" in problems[0].message
+
+
+def test_envelope_skips_archived_version_directories(synthetic_repo):
+    # @r5vk3n freezes <family>-<semver>/ byte-identical; migrating one would
+    # change its SAID and break the OOBI that keeps it resolvable.
+    v1 = minimal_schema("Widget", "color")
+    v1["properties"]["ri"] = v1["properties"].pop("rd")
+    write_schema(synthetic_repo, "widget-1.0.0", v1)
+    write_registry(synthetic_repo)
+    assert checks.check_envelope(synthetic_repo) == []
+
+
+def test_envelope_skips_non_acdc_schemas(synthetic_repo):
+    # A manifest schema (no 'd', no attribute section) is not a credential.
+    write_schema(synthetic_repo, "manifest", {
+        "$id": "", "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object", "properties": {"baseUrl": {"type": "string"}},
+    })
+    write_registry(synthetic_repo)
+    assert checks.check_envelope(synthetic_repo) == []
+
+
+def test_envelope_skips_schema_without_properties(synthetic_repo):
+    write_schema(synthetic_repo, "empty", {
+        "$id": "", "$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object",
+    })
+    write_registry(synthetic_repo)
+    assert checks.check_envelope(synthetic_repo) == []
+
+
+def test_envelope_skips_unparseable_schema(synthetic_repo):
+    _break_schema(synthetic_repo)
+    assert checks.check_envelope(synthetic_repo) == []
+
+
+def test_publish_gate_excludes_the_envelope_check(synthetic_repo):
+    # @jruwvxnt: @r5vk3n keeps superseded v1 schemas published forever, so a v1
+    # envelope must be reportable without stopping the site from deploying.
+    schema = _schema_of(synthetic_repo)
+    props = schema["properties"]
+    props["ri"] = props.pop("rd")
+    write_schema(synthetic_repo, "widget", schema)  # re-saidify: only the envelope is at issue
+    write_registry(synthetic_repo)
+    assert any(p.check == "envelope" for p in checks.run_all(synthetic_repo))
+    assert checks.run_publish_gate(synthetic_repo) == []
+
+
+def test_publish_gate_still_catches_a_publication_defect(synthetic_repo):
+    (synthetic_repo / "widget" / "widget.schema.json").write_text("{ not json")
+    assert [p.check for p in checks.run_publish_gate(synthetic_repo)] == ["structure", "said", "registry"]

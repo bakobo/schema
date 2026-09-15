@@ -1,76 +1,208 @@
 {
-  "$id": "EBCnd7qk82wLBOgFukdmsdkksAuPpmzt5-eg9YKWWP3j",
+  "$id": "EHReayB8hE1jqYEr418Hxh_najdMS8UExEG4G6Ris3MO",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "AI user code of conduct attestation",
-  "description": "Attest that the issuer is committed to follow a particular code of conduct with respect to their personal use of AI.",
+  "description": "Attest that the issuer is committed to follow a particular code of conduct with respect to their personal use of AI. A public, self-issued declaration: it names no issuee, because the issuer is declaring something about itself.",
   "type": "object",
   "credentialType": "ai-user-coca",
-  "version": "1.0.0",
+  "version": "2.0.0",
+  "$comment": "Public by design, like bindkey: a declaration nobody can see does no work, so no privacy nonce is declared in either slot and heti mints none.",
   "required": [
     "v",
     "d",
     "i",
-    "ri",
+    "rd",
     "s",
-    "a"
+    "a",
+    "r"
   ],
   "properties": {
     "v": {
-      "description": "Version string using ACDC conventions",
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type. Optional; an ACDC JSON message without it is of type acm.",
       "type": "string"
     },
     "d": {
-      "description": "Credential SAID",
-      "type": "string"
+      "description": "SAID of this credential",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "i": {
-      "description": "Identifier of the issuer (the one giving the award)",
-      "type": "string"
+      "description": "AID of the issuer making the declaration",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
-    "ri": {
-      "description": "Registry for issuer's assertion status",
-      "type": "string"
+    "rd": {
+      "description": "SAID of the registry whose TEL carries this credential's issuance and revocation. Required: a public commitment that cannot be withdrawn is worse than none, because it outlives the issuer's willingness to stand behind it.",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "s": {
-      "description": "Schema SAID",
-      "type": "string"
+      "description": "SAID of this schema",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "a": {
-      "$id": "EAW5GnX6EEoSPYkOQPlF-uLs-IKPTaI1rkK1fHy0zwAw",
-      "description": "Attributes block",
-      "type": "object",
-      "required": [
-        "d",
-        "i",
-        "dt",
-        "coc"
-      ],
-      "properties": {
-        "d": {
-          "description": "Attributes block SAID",
-          "type": "string"
-        },
-        "i": {
-          "description": "AID of issuee (award recipient)",
-          "type": "string"
-        },
-        "dt": {
-          "description": "Issuance datetime, ISO-8601 datetime string",
+      "oneOf": [
+        {
+          "description": "Attributes block SAID (compact form)",
           "type": "string",
-          "format": "date-time"
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
         },
-        "effective_dt": {
-          "description": "Time at which the award becomes public. This may be before or after the time of issuance.",
-          "type": "string",
-          "format": "date-time"
-        },
-        "coc": {
-          "description": "The code of conduct to which the issuer commits. SHOULD hold the SAID of a document published elsewhere, OR HTML encoded as a data URL. MAY also contain an ordinary URL. In the latter case, the issuer is asserting a commitment to whatever is published at that location, but not to specific content (since the content can change after the issuance date). This may or may not justify the trust of the verifier.",
-          "type": "string"
+        {
+          "description": "Attributes detail",
+          "type": "object",
+          "required": [
+            "dt",
+            "coc"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this attributes block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "dt": {
+              "description": "When the issuer made this declaration, as an ISO-8601 datetime",
+              "type": "string",
+              "format": "date-time",
+              "examples": [
+                "2026-09-15T14:23:16+00:00"
+              ]
+            },
+            "validFrom": {
+              "description": "When the commitment takes effect, as an ISO-8601 datetime. Absent means it takes effect on issuance.",
+              "type": "string",
+              "format": "date-time",
+              "examples": [
+                "2026-09-15T14:23:16+00:00"
+              ]
+            },
+            "validUntil": {
+              "description": "When the commitment stops, as an ISO-8601 datetime. Absent means the issuer set no horizon, so it stands until revoked \u2014 never that it is perpetual.",
+              "type": "string",
+              "format": "date-time",
+              "examples": [
+                "2027-09-15T14:23:16+00:00"
+              ]
+            },
+            "coc": {
+              "description": "The code of conduct the issuer commits to. SHOULD hold the SAID of a document published elsewhere, or HTML encoded as a data URL. MAY hold an ordinary URL, in which case the issuer commits to whatever is published there rather than to specific content \u2014 see the referencedCodeMayChange rule.",
+              "type": "string",
+              "examples": [
+                "EMwE-XevWy8DkCf2oXSsDRjAUuQOXeuVSdKx8BRpCH-g"
+              ]
+            }
+          },
+          "additionalProperties": false
         }
-      },
-      "additionalProperties": false
+      ]
+    },
+    "r": {
+      "oneOf": [
+        {
+          "description": "Rules section SAID (compact form)",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+        },
+        {
+          "description": "Rules detail",
+          "type": "object",
+          "required": [
+            "d",
+            "commitmentNotCompliance",
+            "referencedCodeMayChange",
+            "selfAsserted"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this rules block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "commitmentNotCompliance": {
+              "description": "commitmentNotCompliance Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The issuer declares an intention to abide by the named code of conduct. This credential is not evidence that the issuer has abided by it, and a verifier MUST NOT read compliance, audit or enforcement into a declaration of intent."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The issuer declares an intention to abide by the named code of conduct. This credential is not evidence that the issuer has abided by it, and a verifier MUST NOT read compliance, audit or enforcement into a declaration of intent."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "referencedCodeMayChange": {
+              "description": "referencedCodeMayChange Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Where coc holds an ordinary URL rather than a SAID or a data URL, the issuer commits to whatever is published at that location, which can change after issuance. A verifier relying on such a declaration MUST fetch the code of conduct and judge it for itself, and MUST NOT assume the content it sees is the content the issuer saw."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Where coc holds an ordinary URL rather than a SAID or a data URL, the issuer commits to whatever is published at that location, which can change after issuance. A verifier relying on such a declaration MUST fetch the code of conduct and judge it for itself, and MUST NOT assume the content it sees is the content the issuer saw."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "selfAsserted": {
+              "description": "selfAsserted Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "This is a self-issued public declaration, not a credential granted by a third party. It carries no vetting, and whatever weight it has comes from the issuer being publicly accountable for having made it."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "This is a self-issued public declaration, not a credential granted by a third party. It carries no vetting, and whatever weight it has comes from the issuer being publicly accountable for having made it."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }

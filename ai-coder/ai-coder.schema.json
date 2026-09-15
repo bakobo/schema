@@ -1,96 +1,122 @@
 {
-  "$id": "EPhWFgeOy8g7yRy-Xtyvbdieqvl_3YVXNHMgTEZuJOWh",
+  "$id": "ELIEUVwNAk1z-_jJJ9BuUtQw-c3TY-RvcQyYw5dI4_JK",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "AI coder license",
-  "description": "Certify that a software developer is committed to and capable of using AI coding tools with appropriate guard rails, according to the governance in the rules section.",
+  "description": "Certify that a software developer has the training and experience to use AI tools safely while writing code.",
   "type": "object",
-  "credentialType": "ai-coder-license",
-  "version": "1.0.0",
+  "credentialType": "ai-coder",
+  "version": "2.0.0",
   "required": [
     "v",
     "d",
     "i",
-    "ri",
+    "rd",
     "s",
-    "a"
+    "a",
+    "r"
   ],
   "properties": {
     "v": {
-      "description": "Version string using ACDC conventions",
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type. Optional; an ACDC JSON message without it is of type acm.",
       "type": "string"
     },
     "d": {
-      "description": "SAID of the credential",
-      "type": "string"
+      "description": "SAID of this credential",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "u": {
-      "description": "A salty nonce",
+      "description": "Salty nonce that blinds this credential's SAID. Optional; ordinarily wanted, since the attribute block names a person.",
       "type": "string"
     },
     "i": {
-      "description": "Identifier of the issuer",
-      "type": "string"
+      "description": "AID of the issuer granting the license",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
-    "ri": {
-      "description": "Registry for issuer's credential status",
-      "type": "string"
+    "rd": {
+      "description": "SAID of the registry whose TEL carries this credential's issuance and revocation. Required: a license the issuer cannot revoke confers privileges it can no longer stand behind.",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "s": {
       "description": "SAID of this schema",
-      "type": "string"
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "a": {
       "oneOf": [
         {
-          "description": "SAID of attributes block",
-          "type": "string"
+          "description": "Attributes block SAID (compact form)",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
         },
         {
-          "$id": "EIQrvXDSt5ikFLbaen_9iCmSBVB2-B1S5LQxRXmXrGs7",
-          "description": "Attributes block",
+          "description": "Attributes detail",
           "type": "object",
           "required": [
-            "d",
+            "u",
             "i",
             "dt",
-            "effective_dt",
-            "issuer_name"
+            "validFrom",
+            "issuerName"
           ],
           "properties": {
             "d": {
-              "description": "Attributes block SAID",
-              "type": "string"
+              "description": "SAID of this attributes block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
             },
             "u": {
-              "description": "A salty nonce",
+              "description": "Salty nonce that blinds this block. Required: the block names a person, and an unblinded block lets anyone watching the registry confirm a guess about who was licensed.",
               "type": "string"
             },
             "i": {
-              "description": "AID of issuee",
-              "type": "string"
+              "description": "Issuee: the AID of the licensed developer",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
             },
             "dt": {
-              "description": "Issuance datetime, ISO-8601 datetime string",
+              "description": "When the license was issued, as an ISO-8601 datetime",
               "type": "string",
-              "format": "date-time"
-            },
-            "effective_dt": {
-              "description": "Time at which the license should begin conferring privileges. This may be before or after the time of issuance.",
-              "type": "string",
-              "format": "date-time"
-            },
-            "expire_dt": {
-              "description": "Time at which license should stop conferring privileges. Issuer stops managing revocation on this date.",
               "format": "date-time",
-              "type": "string"
+              "examples": [
+                "2026-09-15T14:23:16+00:00"
+              ]
             },
-            "issuer_name": {
-              "description": "Self-asserted name of the issuer. This field exists for convenience, and may be empty. It should only be trusted if it can be tied to some formal proof of the issuer's identity.",
-              "type": "string"
+            "validFrom": {
+              "description": "When the license begins conferring privileges, as an ISO-8601 datetime. May be before or after issuance.",
+              "type": "string",
+              "format": "date-time",
+              "examples": [
+                "2026-09-15T14:23:16+00:00"
+              ]
             },
-            "issuee_name": {
-              "description": "Name of the issuee, as asserted by issuer. This field exists for convenience, and may be empty. It should only be trusted if it can be tied to some formal proof of the issuee's identity.",
-              "type": "string"
+            "validUntil": {
+              "description": "When the license stops conferring privileges, as an ISO-8601 datetime. After it the issuer stops managing revocation. Absent means the issuer set no horizon.",
+              "type": "string",
+              "format": "date-time",
+              "examples": [
+                "2027-09-15T14:23:16+00:00"
+              ]
+            },
+            "issuerName": {
+              "description": "Self-asserted name of the issuer, for human readers. Carries no verification weight; the issuer is its AID.",
+              "type": "string",
+              "examples": [
+                "Acme AI Certification Authority"
+              ]
+            },
+            "issueeName": {
+              "description": "Name of the issuee as asserted by the issuer, for human readers. Carries no verification weight; the issuee is its AID.",
+              "type": "string",
+              "examples": [
+                "Alice Example"
+              ]
             }
           },
           "additionalProperties": false
@@ -100,49 +126,49 @@
     "e": {
       "oneOf": [
         {
-          "description": "Edges section SAID",
-          "type": "string"
+          "description": "Edges block SAID (compact form)",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
         },
         {
-          "$id": "EP9TkdxfBqH0N1wW5onc2N71TAEfBmUMy3qaBSVq5efL",
           "description": "Edges detail",
           "type": "object",
-          "required": [
-            "d",
-            "issuer"
-          ],
+          "minProperties": 1,
           "properties": {
             "d": {
-              "description": "Edges section SAID",
-              "type": "string"
+              "description": "SAID of this edges block. Optional for the reason @enr3eg made a.d optional: the fork's acdcmap emits no block SAID, so requiring one would reject every edge-bearing credential an issuer can actually build.",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
             },
             "issuer": {
-              "description": "Edge credential that proves the identity of the issuer.",
+              "description": "Edge to a credential that establishes who the issuer is",
               "type": "object",
-              "properties": {
-                "n": {
-                  "description": "SAID of a credential that proves the identity of the issuer",
-                  "type": "string"
-                },
-                "s": {
-                  "description": "SAID of credential schema that proves the identity of the issuer",
-                  "type": "string"
-                },
-                "o": {
-                  "description": "Operator indicating issuer AID of this ACDC MUST be the Issuee AID of the node this Edge points to.",
-                  "type": "string",
-                  "const": "I2I"
-                }
-              },
-              "additionalProperties": false,
               "required": [
                 "n",
                 "s",
                 "o"
-              ]
+              ],
+              "properties": {
+                "n": {
+                  "description": "SAID of a credential that proves the issuer's identity",
+                  "type": "string",
+                  "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+                },
+                "s": {
+                  "description": "SAID of that credential's schema",
+                  "type": "string",
+                  "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+                },
+                "o": {
+                  "description": "Operator: the issuer AID of this ACDC MUST be the issuee AID of the node this edge points to",
+                  "type": "string",
+                  "const": "I2I"
+                }
+              },
+              "additionalProperties": false
             },
             "coca": {
-              "description": "Chain to a code of conduct attestation (coca) by the issuee",
+              "description": "Edge to the issuee's AI user code of conduct attestation",
               "type": "object",
               "required": [
                 "n",
@@ -150,13 +176,14 @@
               ],
               "properties": {
                 "n": {
-                  "description": "SAID of AI user code of conduct attestation (coca)",
-                  "type": "string"
+                  "description": "SAID of the code of conduct attestation",
+                  "type": "string",
+                  "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
                 },
                 "s": {
-                  "description": "SAID of AI user code of conduct attestation schema",
+                  "description": "SAID of the ai-user-coca schema",
                   "type": "string",
-                  "const": "EBCnd7qk82wLBOgFukdmsdkksAuPpmzt5-eg9YKWWP3j"
+                  "const": "EHReayB8hE1jqYEr418Hxh_najdMS8UExEG4G6Ris3MO"
                 }
               },
               "additionalProperties": false
@@ -169,23 +196,102 @@
     "r": {
       "oneOf": [
         {
-          "description": "Rules section SAID",
-          "type": "string"
+          "description": "Rules section SAID (compact form)",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
         },
         {
-          "$id": "EGFgHT7Xrzy9YLdQNXnNTYVBu9_Q0O7K5A2VCWjg93t3",
           "description": "Rules detail",
           "type": "object",
+          "required": [
+            "d",
+            "licenseNotGuarantee",
+            "namesAreConvenience",
+            "privilegesEndAtTheHorizon"
+          ],
           "properties": {
             "d": {
-              "description": "Rule section SAID",
-              "type": "string"
+              "description": "SAID of this rules block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "licenseNotGuarantee": {
+              "description": "licenseNotGuarantee Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The issuer certifies that the issuee met its criteria at the time of issuance. It does not guarantee any particular code, review or outcome, and responsibility for what the issuee writes with an AI's help remains the issuee's."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The issuer certifies that the issuee met its criteria at the time of issuance. It does not guarantee any particular code, review or outcome, and responsibility for what the issuee writes with an AI's help remains the issuee's."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "namesAreConvenience": {
+              "description": "namesAreConvenience Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "issuerName and issueeName are self-asserted conveniences for human readers and carry no verification weight. The parties to this credential are the AIDs, and a verifier that matches on a name rather than an AID has matched on nothing."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "issuerName and issueeName are self-asserted conveniences for human readers and carry no verification weight. The parties to this credential are the AIDs, and a verifier that matches on a name rather than an AID has matched on nothing."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "privilegesEndAtTheHorizon": {
+              "description": "privilegesEndAtTheHorizon Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "After validUntil the issuer stops managing revocation for this license, so an expired credential that has not been revoked is not thereby current. A verifier MUST treat the horizon as binding and MUST NOT infer continued standing from the absence of a revocation."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "After validUntil the issuer stops managing revocation for this license, so an expired credential that has not been revoked is not thereby current. A verifier MUST treat the horizon as binding and MUST NOT infer continued standing from the absence of a revocation."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
             }
           },
-          "additionalProperties": true,
-          "required": [
-            "d"
-          ]
+          "additionalProperties": false
         }
       ]
     }

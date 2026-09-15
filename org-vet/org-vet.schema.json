@@ -1,96 +1,135 @@
 {
-  "$id": "EJvwY9n7EsJ4ZejUBHFrnrNammC8BkGI9YaW1Wnp5c22",
+  "$id": "EJ5HgojIGN2_R9TzhCgnYe9NhNHxfWY0MkENZcs1CRZa",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Org Vet",
-  "description": "Authenticate an org with an explicit level of assurance.",
+  "description": "Authenticate an organization at an explicit level of assurance. The credential is issued to an AID the organization controls, so the organization can authenticate itself by presenting it.",
   "type": "object",
   "credentialType": "orgVet",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "required": [
     "v",
     "d",
     "i",
-    "ri",
+    "rd",
     "s",
     "a",
     "r"
   ],
   "properties": {
     "v": {
-      "description": "Version string using ACDC conventions",
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type. Optional; an ACDC JSON message without it is of type acm.",
       "type": "string"
     },
     "d": {
-      "description": "SAID of the credential",
+      "description": "SAID of this credential",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+    },
+    "u": {
+      "description": "Salty nonce that blinds this credential's SAID. Optional, but ordinarily wanted: the attested content is a short list of public identifiers and a number between 1 and 4, so an observer who can guess it could otherwise confirm the guess against the SAID this credential's registry publishes.",
       "type": "string"
     },
     "i": {
-      "description": "Identifier of the issuer",
-      "type": "string"
+      "description": "AID of the vetting issuer",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
-    "ri": {
-      "description": "Issuer's ACDC status registry",
-      "type": "string"
+    "rd": {
+      "description": "SAID of the registry whose TEL carries this credential's issuance and revocation. Required: an assurance level speaks to a state of affairs that can change, so a vet nobody can withdraw is worse than no vet at all.",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "s": {
       "description": "SAID of this schema",
-      "type": "string"
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "a": {
-      "$id": "ELtdYgSHM9VElQtjd4P19IB24HH8PQZGbEctOjmP69QE",
-      "description": "Attributes block",
-      "type": "object",
-      "required": [
-        "d",
-        "dt"
-      ],
-      "properties": {
-        "d": {
-          "description": "SAID of attributes block",
-          "type": "string"
+      "oneOf": [
+        {
+          "description": "Attributes block SAID (compact form)",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
         },
-        "dt": {
-          "description": "Issuance date (when the ACDC was signed).",
-          "format": "date-time",
-          "type": "string"
-        },
-        "loa": {
-          "description": "Level of assurance.",
-          "type": "number"
-        },
-        "lids": {
-          "description": "Array of linked identifiers (LIDs) that vetter claims were able to act as references for this legal entity when the org was vetted. At least one item in this list should be globally unambigious and portable across jurisdictions (e.g., an LEI). Others may come from national registries, OpenCorporates, EDGAR, Dun & Bradstreet, a stock exchange, a LinkedIn profile, a social media handle, a domain name, etc. The nature of individual item is detectable by regex match.",
-          "type": "array",
-          "uniqueItems": true,
-          "minItems": 1,
-          "items": {
-            "examples": [
-              "5493001KJTIIGC8Y1R12",
-              "gb/01234567",
-              "CHE-123.456.789",
-              "12-345-6789",
-              "acmespacetravel.biz"
-            ],
-            "type": "string"
-          }
+        {
+          "description": "Attributes detail",
+          "type": "object",
+          "required": [
+            "u",
+            "i",
+            "dt",
+            "loa",
+            "lids"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this attributes block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "u": {
+              "description": "Salty nonce that blinds this block against confirmation by recomputation",
+              "type": "string"
+            },
+            "i": {
+              "description": "Issuee: the AID controlled by the organization being vetted. Required, because a vet of nobody in particular cannot be presented by the organization it vets.",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "dt": {
+              "description": "When the vetting was asserted, as an ISO-8601 datetime. The level of assurance speaks as of this moment and not after it.",
+              "type": "string",
+              "format": "date-time",
+              "examples": [
+                "2026-09-15T14:23:16+00:00"
+              ]
+            },
+            "loa": {
+              "description": "Level of assurance: which verification procedures the issuer performed, where larger means more. Integers 1 (bronze), 2 (silver), 3 (gold) and 4 (platinum) are defined in this credential's documentation; a fractional value expresses a nuance within a tier (2.1 < 2.2), so a verifier can set any threshold and accept loa >= it.",
+              "type": "number",
+              "minimum": 1,
+              "maximum": 4,
+              "examples": [
+                1,
+                2.2,
+                3
+              ]
+            },
+            "lids": {
+              "description": "Linked identifiers the vetter was able to use as references for this legal entity. At least one should be globally unambiguous and portable across jurisdictions (e.g. an LEI); others may come from national registries, OpenCorporates, EDGAR, Dun & Bradstreet, a stock exchange, a social media handle, or a domain name. The kind of each item is detectable by regex match rather than declared.",
+              "type": "array",
+              "uniqueItems": true,
+              "minItems": 1,
+              "items": {
+                "description": "One linked identifier",
+                "type": "string",
+                "minLength": 1,
+                "examples": [
+                  "5493001KJTIIGC8Y1R12",
+                  "gb/01234567",
+                  "CHE-123.456.789",
+                  "12-345-6789",
+                  "acmespacetravel.biz"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
         }
-      },
-      "additionalProperties": true
-    },
-    "r": {
-      "description": "SAID of rules block",
-      "type": "string",
-      "const": "EM6kWxMNL9BFm0ReegqQfNJLw8OZAfn2ZxcjWs4Ceifh",
-      "format": "cesr"
+      ]
     },
     "e": {
       "oneOf": [
         {
-          "description": "Edges block SAID",
-          "type": "string"
+          "description": "Edges block SAID (compact form)",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
         },
         {
-          "$id": "EKk5ejftEjNwjRhw2lYQAwKwvRWapqCNEOx3gUR7WW7n",
           "description": "Edges detail",
           "type": "object",
           "required": [
@@ -99,32 +138,163 @@
           ],
           "properties": {
             "d": {
-              "description": "Edges block SAID",
-              "type": "string"
+              "description": "SAID of this edges block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
             },
             "issuer": {
-              "description": "Edge credential that proves the identity of the issuer.",
+              "description": "Edge to a credential that establishes who the vetting issuer is",
               "type": "object",
-              "properties": {
-                "n": {
-                  "description": "SAID of a credential that proves the identity of the issuer",
-                  "type": "string"
-                },
-                "s": {
-                  "description": "SAID of credential schema that proves the identity of the issuer",
-                  "type": "string"
-                },
-                "o": {
-                  "description": "Operator indicating issuer AID of this ACDC MUST be the Issuee AID of the node this Edge points to.",
-                  "type": "string",
-                  "const": "I2I"
-                }
-              },
-              "additionalProperties": false,
               "required": [
                 "n",
                 "s",
                 "o"
+              ],
+              "properties": {
+                "n": {
+                  "description": "SAID of a credential that proves the identity of the issuer",
+                  "type": "string",
+                  "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+                },
+                "s": {
+                  "description": "SAID of the schema of the credential this edge points to",
+                  "type": "string",
+                  "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+                },
+                "o": {
+                  "description": "Operator: the issuer AID of this ACDC MUST be the issuee AID of the node this edge points to",
+                  "type": "string",
+                  "const": "I2I"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "oneOf": [
+        {
+          "description": "Rules section SAID (compact form)",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+        },
+        {
+          "description": "Rules detail",
+          "type": "object",
+          "required": [
+            "d",
+            "loaIsTheIssuersProcedure",
+            "noClaimBeyondTheTier",
+            "lidsAreReferencesNotAssertions",
+            "assuranceIsPointInTime"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this rules block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "loaIsTheIssuersProcedure": {
+              "description": "loaIsTheIssuersProcedure Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The level of assurance states which verification procedures the issuer carried out. It is not a guarantee about the organization, and it transfers no risk to the issuer beyond having performed those procedures. A verifier decides what level satisfies it and accepts loa at or above that threshold."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The level of assurance states which verification procedures the issuer carried out. It is not a guarantee about the organization, and it transfers no risk to the issuer beyond having performed those procedures. A verifier decides what level satisfies it and accepts loa at or above that threshold."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "noClaimBeyondTheTier": {
+              "description": "noClaimBeyondTheTier Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Each tier asserts only what its own procedures establish. In particular, a credential below the tier that checks a thing says nothing about the organization's legal standing, signing authority, governance, tooling, solvency or competence, and a verifier MUST NOT infer any of them from the organization having been vetted at all."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Each tier asserts only what its own procedures establish. In particular, a credential below the tier that checks a thing says nothing about the organization's legal standing, signing authority, governance, tooling, solvency or competence, and a verifier MUST NOT infer any of them from the organization having been vetted at all."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "lidsAreReferencesNotAssertions": {
+              "description": "lidsAreReferencesNotAssertions Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The linked identifiers are the references the vetter was able to use. The issuer does not assert that each registry entry is current, accurate, or exclusively controlled by this organization, and a verifier that relies on one MUST check it at its source."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The linked identifiers are the references the vetter was able to use. The issuer does not assert that each registry entry is current, accurate, or exclusively controlled by this organization, and a verifier that relies on one MUST check it at its source."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "assuranceIsPointInTime": {
+              "description": "assuranceIsPointInTime Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The vetting speaks as of its stated datetime. The issuer agrees to revoke promptly once it believes the tier no longer holds, and a verifier MUST check the registry rather than treat an unexpired credential as current."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The vetting speaks as of its stated datetime. The issuer agrees to revoke promptly once it believes the tier no longer holds, and a verifier MUST check the registry rather than treat an unexpired credential as current."
+                    }
+                  },
+                  "additionalProperties": false
+                }
               ]
             }
           },
@@ -133,5 +303,5 @@
       ]
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }

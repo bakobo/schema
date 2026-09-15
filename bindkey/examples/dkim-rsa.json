@@ -1,0 +1,26 @@
+{
+  "v": "ACDCCAACAAJSONAAeX.",
+  "t": "acm",
+  "d": "EMVMRt8F3xJjQGZY3pm6q8QnW3KgTnv70Dq_A4XjHESw",
+  "i": "EIw_fe9e7TTGUL5nrXfjuzqzGWq7iHc4mzmGiqb_CCGK",
+  "rd": "EAEBPOD8GzIYVKlElExZroScFvGbiKdLjbcJ4XuYeOQv",
+  "s": "EAwWdh1p_JlRUn35GjvueqljM5w-tQCe3XWIc52k0pyC",
+  "a": {
+    "dt": "2026-09-15T14:23:16.000000+00:00",
+    "pubkey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2uHVOcm8eIb1HTdfILqJBl9QmMMeT6pBtv8Lhc6ImkV93w6PD6CrUyFEoXMQ3mnjMMdpk5x+N0GKGPbF3Ti2b66J0T3fhBOS6d3E8D+J/9jBKb7NhBc0dF4UgrZPOhPM44VKWKdCDl1zf/gtO43s+fqSUdE566mL46zU0wtCA7MqeiZSiowsq0nf9GoXx24tO0p1526ljZiM7X+Pct3gMPq/2myILCRh9kJfUks8q4yKrTTak0/W/yunNWPAk0dnOgmNEdmfAP0ViF3qghfbtAXIiQ3SEj69CF3OFOsxxwIUAu8Z6FqeCBtfNmhzWL4lslqs9oG8Kd0WmJI+TAkVrwIDAQAB",
+    "keyFormat": "spki-der-b64",
+    "validFrom": "2026-09-15T14:23:16.000000+00:00",
+    "uses": [
+      "spf",
+      "dkim",
+      "dmarc"
+    ]
+  },
+  "r": {
+    "d": "ENdLVPKyANKUdHgTkkTud9nKTH6SHL7pqIYKpdDH1tSo",
+    "keyNotAssertedSound": "The issuer declares that it uses this key. It does not assert that the key is uncompromised, well managed, generated soundly, or held only by the issuer, and a verifier MUST NOT read any of those into this credential.",
+    "usesAreDeclarative": "The uses field says what the issuer intends the key for. It confers no authority and creates no obligation on anyone: a verifier that treats a declared use as permission has granted that permission itself.",
+    "bindingEndsOnHorizonOrRevocation": "The binding holds from validFrom, or from issuance when none is stated, until validUntil or revocation, whichever comes first. An absent validUntil means the issuer set no horizon, never that the binding is perpetual, and a verifier MUST check the registry before relying on one.",
+    "unknownFormatFailsClosed": "A verifier that does not recognize a credential's keyFormat MUST refuse to use the key rather than guess at its encoding. A later version of this schema may name a format this one does not, and a key parsed under the wrong assumption is worse than a key not parsed at all."
+  }
+}

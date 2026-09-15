@@ -1,0 +1,28 @@
+{
+  "v": "ACDCCAACAAJSONAAba.",
+  "t": "acm",
+  "d": "EFvoA9X-adArQfM9rQvDDGl5IY3SP9mOXdDGaHvGVqH8",
+  "u": "0ACFrfcs62Oy2qgUDMtH8GFo",
+  "i": "EIw_fe9e7TTGUL5nrXfjuzqzGWq7iHc4mzmGiqb_CCGK",
+  "rd": "EAEBPOD8GzIYVKlElExZroScFvGbiKdLjbcJ4XuYeOQv",
+  "s": "EJ5HgojIGN2_R9TzhCgnYe9NhNHxfWY0MkENZcs1CRZa",
+  "a": {
+    "u": "0AA9UmyyoDYUBG6m_A5eR70w",
+    "i": "EIkxoE8eYnPLCydPcyc_lhQgwOdBHwzkSe36e2gqEH-5",
+    "dt": "2026-09-15T14:23:16.000000+00:00",
+    "loa": 2.2,
+    "lids": [
+      "5493001KJTIIGC8Y1R12",
+      "gb/01234567",
+      "acmespacetravel.biz"
+    ]
+  },
+  "r": {
+    "d": "EPFGDcKNXJFuW41EVIac87paJs4FwkMzIMFxHyEBmh_w",
+    "loaIsTheIssuersProcedure": "The level of assurance states which verification procedures the issuer carried out. It is not a guarantee about the organization, and it transfers no risk to the issuer beyond having performed those procedures. A verifier decides what level satisfies it and accepts loa at or above that threshold.",
+    "noClaimBeyondTheTier": "Each tier asserts only what its own procedures establish. In particular, a credential below the tier that checks a thing says nothing about the organization's legal standing, signing authority, governance, tooling, solvency or competence, and a verifier MUST NOT infer any of them from the organization having been vetted at all.",
+    "lidsAreReferencesNotAssertions": "The linked identifiers are the references the vetter was able to use. The issuer does not assert that each registry entry is current, accurate, or exclusively controlled by this organization, and a verifier that relies on one MUST check it at its source.",
+    "assuranceIsPointInTime": "The vetting speaks as of its stated datetime. The issuer agrees to revoke promptly once it believes the tier no longer holds, and a verifier MUST check the registry rather than treat an unexpired credential as current."
+  },
+  "unexpected": "x"
+}

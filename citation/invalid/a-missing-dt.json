@@ -1,19 +1,29 @@
 {
-  "v": "ACDC10JSON0002d4_",
-  "d": "EGnqlwzSNFPcgefJCTa-I93Cqd007F9RKN4UHqpshSJ2",
-  "i": "EMRlhEQK44_V5804rsRvQ99Gtf7uDpYQqZuvrw0LhV3S",
-  "ri": "EKfi58Jiv-NVqr6GOrxgxzhrE5RsDaH4QNwv9rCyZCwZ",
-  "s": "EPO1lEL6zV_EKOKBfeiJTOxg9HDB7s1pQI49SS2ywO7Y",
+  "v": "ACDCCAACAAJSONAAed.",
+  "t": "acm",
+  "d": "EMFiFRrHcTEZS93efhBNfEkJ25YkwvXIcLMmlaClH6fu",
+  "u": "0ADMeXqmZkuefENXSBbHHPQv",
+  "i": "EIw_fe9e7TTGUL5nrXfjuzqzGWq7iHc4mzmGiqb_CCGK",
+  "rd": "EAEBPOD8GzIYVKlElExZroScFvGbiKdLjbcJ4XuYeOQv",
+  "s": "EKzRBzCdp2t0iKuHMSNAa-EaJdULjmEJTJ6zR1DlzuQq",
   "a": {
-    "d": "EAafmNPPSSUsOQUMR7vBUaDEZ8MeMrkVgIFKkvX9DOUy",
-    "sdt": "2023-07-20T00:00:00.0000+07:00",
-    "des": "Daniel's post about cousins",
-    "loc": "https://www.facebook.com/sivaneaman/posts/pfbid0RZCCCYdsnTxdjCHz81Nj9T3r1vc1joktFPDoaVuHb46rXFNA8Bj4dRheYUAuQDTql",
+    "u": "0ACKI8mJjzncDk7bNUMgbL7n",
+    "snapshotDt": "2023-07-20T00:00:00+07:00",
+    "description": "Photo of the left front bumper of vehicle 1 from collision: a 2018 Ford F-150 XLT",
+    "contentType": "image/jpeg",
+    "label": "collision-bumper-front-left.jpg",
     "content": {
-      "d": "EHiYE9GSFptXOzr0A0MTU8BG4BIpbCXzeBMlquVIh-Zk",
-      "u": "0AAt-NwGI1OZzj7e52Jq9JDD",
+      "u": "0AAvjK-oKJEUr4WKqzQW2Yks",
       "cargo": "EyetB5DFr6JifdPnVBhSDR6OS1s3mr321AGkRE1BXuaQ"
-    }
+    },
+    "sizeBytes": 43520,
+    "locationHint": "https://evidence.example.com/claims/4471/photos/3"
   },
-  "r": "EM6kWxMNL9BFm0ReegqQfNJLw8OZAfn2ZxcjWs4Ceifh"
+  "r": {
+    "d": "EM6kWxMNL9BFm0ReegqQfNJLw8OZAfn2ZxcjWs4Ceifh",
+    "onlyCommitToPoint": "All parties agree that the citation, in and of itself, only commits the issuer to point at content in a way that makes the issuer and the target verifiable. Unless or until context, governance, or other actions prove intent, the citation does NOT imply that the issuer owns, endorses, or agrees with the content.",
+    "useViaEdges": "All parties acknowledge that the citation is not intended to be used in isolation. Rather, the intended semantics for the citation should be communicated via a referencing ACDC that clarifies its issuer's intention.",
+    "undefinedVerification": "All parties agree that procedures for evaluating the authenticity and/or veracity of the referenced content are beyond the scope of standard ACDC verification, and that the verifier is responsible for evaluating in whatever way satisfies their requirements.",
+    "undefinedRevocation": "Unless or until governance specifies otherwise, all parties agree that there is no defined relationship between the revocation status of a citation and that of cited data. Cited data may be disavowed or revoked by its creator without a citation being revoked, and vice versa."
+  }
 }

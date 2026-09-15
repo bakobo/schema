@@ -10,22 +10,41 @@ from schematools.said import SAID_LABEL, saidify_schema
 
 
 def minimal_schema(title: str, extra_prop: str) -> dict:
-    """A minimal but valid ACDC-ish JSON Schema with one attribute property."""
+    """A minimal but valid ACDC **v2** JSON Schema with one attribute property.
+
+    v2-shaped deliberately (this.i @jruwvxnt): the synthetic corpus is what the
+    unit suite treats as "a conformant schema", so it has to satisfy the
+    envelope invariant the linter enforces — ``rd`` rather than ``ri``, the
+    canonical top-level order, ``t`` declared, the compact string arm first in
+    every ``oneOf``, and none of the v1-era inner ``$id`` fields.
+
+    ``required`` stays deliberately minimal (``d`` and ``a``). Which envelope
+    fields a schema *requires* is a per-schema decision the corpus makes
+    differently — @enr3eg requires ``rd`` for GCD, @2n2vtee3 leaves it optional
+    for proof-of-control — so the linter never asserts requiredness and neither
+    does this fixture.
+    """
     return {
         "$id": "",
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": title,
         "type": "object",
         "properties": {
+            "v": {"type": "string"},
+            "t": {"type": "string"},
             "d": {"type": "string"},
+            "u": {"type": "string"},
+            "i": {"type": "string"},
+            "rd": {"type": "string"},
+            "s": {"type": "string"},
             "a": {
                 "oneOf": [
                     {"type": "string"},
                     {
-                        "$id": "",
                         "type": "object",
                         "properties": {
                             "d": {"type": "string"},
+                            "u": {"type": "string"},
                             extra_prop: {"type": "string"},
                         },
                         "required": ["d", extra_prop],

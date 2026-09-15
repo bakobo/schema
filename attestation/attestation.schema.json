@@ -1,74 +1,114 @@
 {
-  "$id": "EJxFPpyDRV-W6O2Vtjdy2K90ltWmQK8l1jePw5YOo_Ft",
+  "$id": "EE5FA0uE3ydhSYrG8lqECgR0Ad3NpkQxPw0b3jp-2eDa",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Data Attestation",
-  "description": "Data attestation enables verifiable attestation of the data(cryptographic digest) by the Issuer",
+  "description": "Data attestation enables verifiable attestation of data (by cryptographic digest) by the issuer. The credential is untargeted: it names no issuee, because the issuer attests a fact about content rather than a relationship with a party.",
   "type": "object",
   "credentialType": "DataAttestation",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "required": [
     "v",
     "d",
     "i",
-    "ri",
     "s",
-    "a"
+    "a",
+    "r"
   ],
   "properties": {
     "v": {
-      "description": "Version",
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type. Optional; an ACDC JSON message without it is of type acm.",
       "type": "string"
     },
     "d": {
-      "description": "Credential SAID",
+      "description": "SAID of this credential, computed over its most compact form",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+    },
+    "u": {
+      "description": "Salty nonce that blinds this credential's SAID. An issuer that anchors into a public registry publishes this credential's SAID in the clear, so without a nonce an observer who can guess the attested digest can confirm the guess by recomputing the SAID. Optional: a credential whose identity is meant to be public may omit it.",
       "type": "string"
     },
     "i": {
-      "description": "Issuer AID",
-      "type": "string"
+      "description": "AID of the issuer making the attestation",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
-    "ri": {
-      "description": "Credential status registry",
-      "type": "string"
+    "rd": {
+      "description": "SAID of the registry whose TEL carries this credential's issuance and revocation. Optional: a short-lived attestation may be issued registry-free, in which case validUntil is the whole of its lifetime story.",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "s": {
-      "description": "Schema SAID",
-      "type": "string"
+      "description": "SAID of this schema",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "a": {
-      "$id": "EI8qxQC1_PL25lTLRLwkrijM_VJofc1zsLPjvjqNyuls",
-      "description": "Attributes block",
-      "type": "object",
-      "properties": {
-        "d": {
-          "description": "Attributes block SAID",
-          "type": "string"
-        },
-        "dt": {
-          "description": "Issuance datetime, ISO-8601 datetime string",
-          "format": "date-time",
-          "type": "string"
-        },
-        "digest": {
+      "oneOf": [
+        {
+          "description": "Attributes block SAID (compact form)",
           "type": "string",
-          "description": "CESR-encoded digest of the data."
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+        },
+        {
+          "description": "Attributes detail",
+          "type": "object",
+          "required": [
+            "u",
+            "dt",
+            "digest"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this attributes block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "u": {
+              "description": "Salty nonce that blinds this block. Required: the block's whole content is a digest and a datetime, so an observer holding the content could otherwise confirm it against the published block SAID.",
+              "type": "string"
+            },
+            "dt": {
+              "description": "When the issuer asserts the attestation was made, as an ISO-8601 datetime",
+              "type": "string",
+              "format": "date-time",
+              "examples": [
+                "2026-09-15T14:23:16+00:00"
+              ]
+            },
+            "digest": {
+              "description": "CESR-encoded digest of the attested content. The credential commits to this digest and to nothing else: whoever holds the content proves the match by recomputing it.",
+              "type": "string",
+              "pattern": "^(?:[EFGHI][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$",
+              "examples": [
+                "EGvjHeAo7ZRQYUCb3Xh9TBdLhoMuW4lBSmOeR6gkMhMg"
+              ]
+            },
+            "validUntil": {
+              "description": "When the issuer's attestation stops, as an ISO-8601 datetime. Optional; absence means the issuer set no horizon, never that the attestation is valid forever.",
+              "type": "string",
+              "format": "date-time",
+              "examples": [
+                "2027-09-15T14:23:16+00:00"
+              ]
+            }
+          },
+          "additionalProperties": false
         }
-      },
-      "additionalProperties": false,
-      "required": [
-        "d",
-        "dt",
-        "digest"
       ]
     },
     "e": {
       "oneOf": [
         {
-          "description": "Edges block SAID",
-          "type": "string"
+          "description": "Edges block SAID (compact form)",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
         },
         {
-          "$id": "EMEXQmfeEwDtyTVrF1EtRQWJvM-Wnd6kNzocJA-dbHEA",
           "description": "Edges detail",
           "type": "object",
           "required": [
@@ -77,32 +117,137 @@
           ],
           "properties": {
             "d": {
-              "description": "Edges section SAID",
-              "type": "string"
+              "description": "SAID of this edges block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
             },
             "issuer": {
-              "description": "Edge credential that proves the identity of the issuer.",
+              "description": "Edge to a credential that establishes who the issuer is",
               "type": "object",
-              "properties": {
-                "n": {
-                  "description": "SAID of a credential that proves the identity of the issuer",
-                  "type": "string"
-                },
-                "s": {
-                  "description": "SAID of credential schema that proves the identity of the issuer",
-                  "type": "string"
-                },
-                "o": {
-                  "description": "Operator indicating issuer AID of this ACDC MUST be the Issuee AID of the node this Edge points to.",
-                  "type": "string",
-                  "const": "I2I"
-                }
-              },
-              "additionalProperties": false,
               "required": [
                 "n",
                 "s",
                 "o"
+              ],
+              "properties": {
+                "n": {
+                  "description": "SAID of a credential that proves the identity of the issuer",
+                  "type": "string",
+                  "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+                },
+                "s": {
+                  "description": "SAID of the schema of the credential this edge points to",
+                  "type": "string",
+                  "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+                },
+                "o": {
+                  "description": "Operator: the issuer AID of this ACDC MUST be the issuee AID of the node this edge points to",
+                  "type": "string",
+                  "const": "I2I"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "oneOf": [
+        {
+          "description": "Rules section SAID (compact form)",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+        },
+        {
+          "description": "Rules detail",
+          "type": "object",
+          "required": [
+            "d",
+            "digestOnly",
+            "noContentAssertion",
+            "absenceIsNotFalse"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this rules block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "digestOnly": {
+              "description": "digestOnly Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "This credential commits to a digest and to nothing else. A verifier that has not recomputed the digest over content it holds has verified nothing about that content, however well the credential itself verifies."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "This credential commits to a digest and to nothing else. A verifier that has not recomputed the digest over content it holds has verified nothing about that content, however well the credential itself verifies."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "noContentAssertion": {
+              "description": "noContentAssertion Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The issuer attests only that the digest was computed over content the issuer observed at the stated time. The issuer does not assert that the content is true, lawful, complete, authored by anyone in particular, or fit for any purpose, and a verifier MUST NOT read any of those into this credential."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The issuer attests only that the digest was computed over content the issuer observed at the stated time. The issuer does not assert that the content is true, lawful, complete, authored by anyone in particular, or fit for any purpose, and a verifier MUST NOT read any of those into this credential."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "absenceIsNotFalse": {
+              "description": "absenceIsNotFalse Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "An optional field the issuer did not set means the issuer did not attest it, never that the issuer attested it to be false. In particular, an absent validUntil means the issuer set no horizon, not that the attestation is valid forever."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "An optional field the issuer did not set means the issuer did not attest it, never that the issuer attested it to be false. In particular, an absent validUntil means the issuer set no horizon, not that the attestation is valid forever."
+                    }
+                  },
+                  "additionalProperties": false
+                }
               ]
             }
           },

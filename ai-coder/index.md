@@ -10,14 +10,21 @@ Coding with AI tools can be fast and productive. However, AIs may misunderstand 
 [svg](ai-coder.svg) | [800 px](ai-coder-800.png) | [256 px](ai-coder-256.png) | [64 px](ai-coder-64.png) | [32 px](ai-coder-32.png)
 
 ### Schema
-Individual fields are described in [ai-coder.schema.json](ai-coder.schema.json). Some notable features:
 
-* Awards can have an optional category (e.g., it's a Nobel prize, specifically in the *literature* category).
+The schema is in [`ai-coder.schema.json`](ai-coder.schema.json), its governance framework in [`rules.json`](rules.json), a SAID-verified instance in [`example.json`](example.json), and the chained form in [`examples/chained-to-coca.json`](examples/chained-to-coca.json). The [`invalid/`](invalid) directory holds the should-reject corpus.
 
-* Awards can have an optional timeframe (e.g., it's an employee-of-the-month award, specifically in the July 2026 timeframe).
+The attribute block names both parties by AID and carries the licence window. `issuerName` and `issueeName` are conveniences for human readers: they are self-asserted, carry no verification weight, and the `namesAreConvenience` rule says a verifier that matches on a name rather than an AID has matched on nothing.
 
-* Awards can have an optional citation (e.g., it's a certified world record for the marathon, specifically "For running the 2024 Olympic Marathon in Paris in 2:01:03").
+`validFrom` says when the licence begins conferring privileges, which may be before or after issuance. `validUntil` says when it stops — and after it, the issuer stops managing revocation, so an expired licence that has not been revoked is not thereby current. The `privilegesEndAtTheHorizon` rule makes that binding rather than advisory.
 
-* Awards can have an optional image (e.g., it's a employee recognition that comes with a physical trophy, which is pictured in this image).
+### Edges
 
-* The edges section is optional, meaning that these credentials may or may not chain to anything else. If present, it contains a single field, "issuer", that links to another credential of any type. vLEI credentials are recommended, if available.
+The edges section is optional. It may carry an `issuer` edge, chaining to a credential that establishes who the issuer is (a vLEI credential is a good choice where one exists), and a `coca` edge, chaining to the issuee's [AI user code of conduct attestation](../ai-user-coca/index.md). The `coca` edge pins that schema's SAID as a `const`, which is why the two credentials are versioned together: re-minting one moves the other's constant.
+
+An edge block's own `d` is optional, for the reason `a.d` is: the builder that issuers actually use emits no block SAID, so requiring one would reject every edge-bearing credential anyone could build.
+
+### Governance framework
+
+Three Ricardian clauses travel with every instance. `licenseNotGuarantee` says the issuer certifies the issuee met its criteria at issuance and guarantees no particular code, review or outcome — responsibility for what the issuee writes with an AI's help stays the issuee's. `namesAreConvenience` and `privilegesEndAtTheHorizon` carry the two points above.
+
+Version 1.0.0 is preserved at [`ai-coder-1.0.0/`](../ai-coder-1.0.0) and stays resolvable under its original SAID.

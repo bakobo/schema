@@ -31,12 +31,32 @@ _CHECK_NAME = {
     checks.check_example_refs: "example_ref",
     checks.check_example_saids: "example_said",
     checks.check_negative_examples: "negative",
+    checks.check_envelope: "envelope",
     checks.check_intent_yaml: "intent_yaml",
 }
 CHECK_FUNCS = {_CHECK_NAME[fn]: fn for fn in checks.ALL_CHECKS}
 
-# (schema_name, check_name) -> reason. Empty: the whole corpus is clean.
-KNOWN_XFAIL: dict[tuple[str, str], str] = {}
+# The schemas still short of the ACDC v2 envelope (this.i @jruwvxnt).
+# Each entry names the tick that migrates that schema, so closing the tick
+# XPASSes this row and forces the marker's removal — the ratchet that makes
+# "how much of the corpus is issuable" a fact the suite states rather than an
+# answer someone has to go and measure.
+_V2_MIGRATION = {
+    "faa": "3x2z",
+    "face-to-face": "3n4u",
+    "sedi-guardian": "4224",
+    "sedi-id": "65yn",
+    "sedi-present-age-portrait": "2tyb",
+}
+
+# (schema_name, check_name) -> reason.
+KNOWN_XFAIL: dict[tuple[str, str], str] = {
+    (name, "envelope"): f"v1-enveloped; migrates under tick {tick} (@jruwvxnt)"
+    for name, tick in _V2_MIGRATION.items()
+}
+# sedi-age is already v2 in every respect but one: it declares no 't', so a
+# heti-issued credential carrying t=acm has nothing in the schema to land on.
+KNOWN_XFAIL[("sedi-age", "envelope")] = "declares no 't'; tick 2nd5 (with 6grq)"
 
 SCHEMA_NAMES = [entry.name for entry in discover_schemas(ROOT)]
 

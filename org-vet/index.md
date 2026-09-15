@@ -23,11 +23,17 @@ LoA | intended meaning | verification procedures | mappings
 
 
 
+### Governance framework
+
+These credentials carry four Ricardian clauses, in [`rules.json`](rules.json) and embedded in the schema's `r` block, so they travel with every instance rather than living only on this page.
+
+`loaIsTheIssuersProcedure` says the level of assurance states which procedures the issuer carried out — not a guarantee about the organization, and no transfer of risk beyond having carried them out. `noClaimBeyondTheTier` says each tier asserts only what its own procedures establish, so a credential below the tier that checks a thing says nothing about the organization's legal standing, signing authority, governance, tooling, solvency or competence. `lidsAreReferencesNotAssertions` says the linked identifiers are what the vetter was able to use, not a claim that each registry entry is current or exclusively controlled by this organization. `assuranceIsPointInTime` says the vetting speaks as of its datetime, obliges the issuer to revoke promptly once the tier no longer holds, and requires a verifier to check the registry rather than treat an unexpired credential as current.
+
+An issuer that wants different terms places a different ruleset SAID in `r`.
+
 ### Schema
 
-See [org-vet.schema.json](org-vet.schema.json) and also [rules.json](rules.json).
+The schema is in [`org-vet.schema.json`](org-vet.schema.json), its governance framework in [`rules.json`](rules.json), and a SAID-verified instance in [`example.json`](example.json). The [`invalid/`](invalid) directory holds the should-reject corpus, one fixture per defect.
 
-### Governance Framework
-
-These credentials are governed by rules to enhance assurance, discourage abuse, and keep use cases crisp. The current rules are stated in [rules.json](rules.json) and are identified by SAID `EFthNcTE20MLMaCOoXlSmNtdooGEbZF8uGmO5G85eMSF`. New governance frameworks can be written that supplement these rules; see the `gfw` field in the schema. It is also possible to modify or override these rules, by placing a different value in the `r` field. The act of issuing or receiving a GCD credential constitutes binding acceptance of the rules.
+Version 2.0.0 adopts the ACDC v2 envelope — `rd` replaces v1's `ri` and the top-level order follows the v2 spec — and makes the credential say what this page always said it did. `a.i` is now present and required, so the credential is genuinely issued *to* the organization's AID; `loa` and `lids` are required, because a vet with no assurance level and no references is not a vet; `loa` is bounded to the 1–4 the table above defines; and both `additionalProperties` gates are closed. Version 1.0.0 is preserved at [`org-vet-1.0.0/`](../org-vet-1.0.0) and stays resolvable under its original SAID.
 

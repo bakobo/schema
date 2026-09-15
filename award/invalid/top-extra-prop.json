@@ -1,20 +1,32 @@
 {
-  "v": "ACDC10JSON000279_",
-  "d": "EDI9yRmKgNFaGfXVe-5e6igt9d3aczIMZxkAMXP_fd60",
+  "v": "ACDCCAACAAJSONAAem.",
+  "t": "acm",
+  "d": "EEBh9XxqoVlEHlhO0i_XohYQ3N_W4--bwLxjhValWE0k",
+  "u": "0AAvrt6Sg6szLo4ImlYmsvAI",
   "i": "EMRlhEQK44_V5804rsRvQ99Gtf7uDpYQqZuvrw0LhV3S",
-  "ri": "EKfi58Jiv-NVqr6GOrxgxzhrE5RsDaH4QNwv9rCyZCwZ",
-  "s": "EBxJHMk6MOEUogB6A1rP5x9te7DscPfxFfUGJCkq1Lq5",
+  "rd": "EKfi58Jiv-NVqr6GOrxgxzhrE5RsDaH4QNwv9rCyZCwZ",
+  "s": "EM00uWV5K7YtTt5dDWH2diXCGtDhQlrWHsLPT5WKh-Pc",
   "a": {
-    "d": "EBcJAPMN7jXUVLpukWS32SAQgckSMOCtxY5xyFEbmiEE",
-    "u": "0AAt-NwGI1OZzj7e52Jq9JDD",
+    "u": "0ABUqG-ApQEEhPkwkZ5FZ6oK",
     "i": "EP4CmMn6ZTM3oTq-iI-2TQdlwdMXF6a2WFWaeQQRULsn",
-    "dt": "2024-12-27T13:11:29.062000+00:00",
-    "effective_dt": "2025-01-01T00:00:00.000000+00:00",
-    "issuer_name": "International Widget Society",
-    "award_name": "Widget of the Year",
+    "dt": "2026-09-15T14:23:16.000000+00:00",
+    "validFrom": "2026-09-15T14:23:16.000000+00:00",
+    "issuerName": "International Widget Society",
+    "awardName": "Widget of the Year",
     "category": "engineering",
-    "timeframe": "2024"
+    "timeframe": "2024",
+    "details": {
+      "u": "0ADMJuobhA6yY73ftPAPoUEt",
+      "issueeName": "Alice Example",
+      "citation": "For the year's most elegant widget, and for mentoring three engineers who will build better ones."
+    }
   },
-  "r": "EGhkNqT1LbfYlimCBMsorDt7PpeGKYdOdj6hKpUjrqtB",
-  "extra": "x"
+  "r": {
+    "d": "EJqO4rLZXwb1E7YIBcU7NVvN2VASBBTvEDQ54h2e9vYq",
+    "recognitionNotPrivilege": "An award proves that the issuer formally recognized the issuee, and nothing more. It confers no privilege, entitlement or authority of itself. A verifier that grants something on the strength of an award has granted it on its own judgement, and owns that decision.",
+    "namesAreConvenience": "issuerName and issueeName are self-asserted conveniences for human readers and carry no verification weight. The parties are the AIDs, and a verifier that matches on a name rather than an AID has matched on nothing.",
+    "unrecognizedClauseFailsClosed": "An issuer may add clauses to this ruleset for the award it governs. A verifier that does not understand a clause MUST treat whatever that clause requires as unmet, rather than disregarding it \u2014 an award's terms are set by its issuer, so silence about a clause is not permission.",
+    "imageByReferenceMayChange": "Where an award's image is an ordinary URL rather than a data URL or a digest, the issuer commits to a location and not to specific content, which can change after issuance. A verifier that needs the image to be the one the issuer saw MUST require a data URL or a digest."
+  },
+  "unexpected": "x"
 }
