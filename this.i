@@ -884,6 +884,71 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             defective: the 1.0.0 schema pins that ruleset's SAID as a const, so an archive without it would
             not resolve. Preserving the citation clauses there is not endorsing them; it is keeping a
             published SAID answerable, which is the whole of what @r5vk3n asks.
+        citation 2.0.0 spells its field names out and keeps rd optional, because its own rules say why = decision:
+          id: ydh7zk6r
+          why: >
+            The fourth migration (tick 7bdk), and the first schema that was already well designed — its
+            content block carried a salty nonce years before @jsmu322m argued for one, and its index.md
+            "Semantic precision" section is the most carefully reasoned prose in the corpus. So the work here
+            was naming, the envelope, and two decisions its own governance already implied.
+            THE NAMES. @p6mwk4 retrofits terse fields "when they next get a version bump", which is now:
+            des -> description, typ -> contentType, lbl -> label, siz -> sizeBytes, loc -> locationHint,
+            sdt -> snapshotDt. 'dt' stays, because docs/style.md's abbreviation glossary already carries it.
+            Two of the old names fail @p6mwk4's obviousness test on COLLISION rather than terseness ('des'
+            reads as the cipher, 'loc' as lines-of-code or locale), and three fail its amputation rule rather
+            than its abbreviation rule: a content type is not a type, a size in bytes is not a size, and a
+            location HINT is emphatically not a location — the field's own description spends a paragraph
+            insisting the issuer guarantees nothing about it, and the name now carries that instead of
+            burying it. Nothing was added to the canonical abbreviation list, because this migration removes
+            abbreviations rather than coining them.
+            'rd' STAYS OPTIONAL, and uniquely here the credential's own governance settles it rather than an
+            argument from outside. The undefinedRevocation clause says "there is no defined relationship
+            between the revocation status of a citation and that of cited data" — so requiring a registry
+            would compel machinery whose meaning the ruleset deliberately refuses to fix. Contrast @v5ma6uxn,
+            where bindkey's description SELLS revocability and so requires it. The pattern across four
+            migrations: what a credential says about itself decides this field, not a corpus-wide default.
+            UNTARGETED, like attestation and for a stronger reason: index.md says citations "resemble
+            affidavits more than credentials; they have no issuee, and do not prove entitlement", and
+            useViaEdges makes a citation a node that OTHER ACDCs point at. So it needs no 'e' block of its
+            own either, and none was added.
+            THE RULES BLOCK WAS CORRECT AND STAYS BYTE-IDENTICAL. This is the credential org-vet's ruleset
+            was stolen from (@kdndo6dc), and here the four clauses are about citations because they were
+            written for citations. rules.json is unchanged, so SAID
+            EM6kWxMNL9BFm0ReegqQfNJLw8OZAfn2ZxcjWs4Ceifh resolves for both versions — but the schema now
+            EMBEDS the clause texts as consts in a v2 oneOf 'r' block rather than merely pinning the SAID
+            with a const string, which is the corpus idiom and makes the texts part of the schema's own SAID.
+            The build asserts the embedded texts equal rules.json exactly and that rules.json is a saidify
+            fixed point, so the two cannot drift.
+            index.md's Governance Framework section was the SAME copy-paste defect @kdndo6dc found in
+            org-vet, verbatim: GCD's pre-@k3wm7d rules SAID, a 'gfw' field citation does not have, and "the
+            act of issuing or receiving a GCD credential constitutes binding acceptance". Two schemas is a
+            pattern, so assume the remaining inherited families carry it too and check that paragraph in each.
+            Daniel's own prose above it is untouched.
+            MEASURED AT THE ISSUER, and this one is new: heti does NOT mint a nonce into a NESTED block. It
+            fills the top-level 'u' and the attribute block's 'u' — the two depths its answer named — so
+            citation's required a.content.u must be supplied by the caller. The first issuance attempt failed
+            on exactly that, which is the value of running the oracle rather than reasoning about it. No
+            schema change follows: content.u was required in 1.0.0 too, blinding it is right (cargo is often
+            a digest of content the observer already holds), and a caller that wants a nested blinded block
+            can pass one. Worth heti knowing; it is a gap in reach, not a defect.
+            Field quality otherwise: sizeBytes gains minimum 0, contentType gains faa's house media-type
+            pattern, snapshotDt keeps its format assertion, and an optional validUntil lands per @pp4wv7pw.
+            additionalProperties CLOSED at top level and on both the 'a' and 'content' blocks (@hoag7c7s) —
+            citation's top-level 'true' was another of @p3rk6d's six.
+            ORACLES: the fork-built acm validates; heti issues end to end reporting nonced slots ('u', 'a.u');
+            and examples/social-media-post.json rebuilds the 1.0.0 example's scenario as a real v2 instance in
+            the gallery the linter validates (@g4tn7w). The 1.0.0 example itself is not archived — it is a v1
+            artifact of a schema whose SAID it never matched, the same disposition as @4t5t4yca's.
+            THE NEGATIVE CORPUS EXPOSED A FLAW IN HOW THE PREVIOUS THREE WERE VERIFIED. Fixtures are checked
+            to fail for the defect they are NAMED after (@2n2vtee3), and the checker used for @4t5t4yca,
+            @v5ma6uxn and @kdndo6dc walked only ONE level of oneOf context and matched on the keyword alone,
+            so a nested failure could have matched a coincidental sibling error. Citation's content block is
+            two oneOf levels deep, which surfaced it. The checker now walks the whole error tree and requires
+            keyword AND path; all 53 fixtures across the four migrated schemas were re-verified under it and
+            all 53 still fail for their named reason, so nothing was papered over — but the earlier three were
+            verified more weakly than their nodes claim, and this records that.
+            MAJOR per @k3wm7d: 1.0.0 -> 2.0.0, new SAID EKzRBzCdp2t0iKuHMSNAa-EaJdULjmEJTJ6zR1DlzuQq, old
+            EDH3Q0MW6oCcwyYw2MN39n1YfPs37o1QEv86kB-fBzmh kept resolvable per @r5vk3n.
 
     Schema-authoring tooling is deferred, pending a TypeScript-vs-Python decision = decision:
       id: p4zc7n
