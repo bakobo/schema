@@ -763,6 +763,71 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             2.0.0, new SAID EE5FA0uE3ydhSYrG8lqECgR0Ad3NpkQxPw0b3jp-2eDa, with the old
             EJxFPpyDRV-W6O2Vtjdy2K90ltWmQK8l1jePw5YOo_Ft kept resolvable in registry.json per @r5vk3n.
             Nothing pinned the old SAID: no other schema references it and it has no recorded issuer.
+        bindkey 2.0.0 is public by design, so it takes the nonce default's opposite; pubkey gains keyFormat = decision:
+          id: v5ma6uxn
+          why: >
+            The second migration (tick 4jwa), and the first to depart from a default in the direction of LESS
+            privacy — which is what makes it a useful test of whether @jsmu322m is a rule or a reflex.
+            NO NONCE, IN EITHER SLOT, and no compact arm. Both honor an intent 1.0.0 already recorded in its
+            own $comment ("intentionally public and untargeted ... don't support compaction"), and both
+            invert @jsmu322m's driver rather than ignoring it. That driver is an observer confirming a guess
+            about a credential's contents by recomputing its published SAID; here being confirmable by
+            anyone who knows the issuer and the key IS the function, so blinding would defeat the credential
+            rather than protect it. Rejected adding a compact arm "for consistency with @enr3eg": that rule
+            says a compact arm must come FIRST where one exists, not that every section must have one, and
+            manufacturing a withheld form for a public announcement would invite presenting a bindkey that
+            asserts nothing. MEASURED, not merely intended: heti issues this schema reporting nonced slots
+            (), so the departure is real at the issuer and not just in prose.
+            'rd' is REQUIRED, the opposite of @4t5t4yca's call for attestation, and the schema's own
+            description settles it: "Issuing this ACDC makes key binding provable and REVOKABLE". A key
+            binding nobody can withdraw is a claim that outlives the facts, and a compromised key needs a
+            public retraction as much as it needed a public declaration. The two credentials differ because
+            what they assert differs, which is the shape @2n2vtee3 established for this question.
+            'dt' is REQUIRED, and the reason is MEASURED rather than assumed. heti's schemas.py documents
+            _ENVELOPE = ("d", "u", "i", "dt") as "the attribute-block keys heti fills in itself when it
+            issues", but an issuance omitting dt was REFUSED by heti's own pre-anchor schema validation. That
+            matches heti's credentials.py, which says the issuance datetime is "the credential's own word ...
+            never invented and never read off a clock here" — so the docstring overstates and the ENVELOPE
+            constant is about which keys a caller need not be prompted for, not which heti supplies. The
+            corpus consequence: dt is the issuer's own statement, and the caller provides it.
+            'startDate'/'stopDate' become 'validFrom'/'validUntil' per @pp4wv7pw. 1.0.0's wording already
+            carried the right semantics ("if missing, stops only on revocation"), so this is the corpus
+            converging on one spelling, not a change of meaning.
+            PUBKEY GAINS A keyFormat DISCRIMINATOR — Daniel's decision, 2026-09-15, taken because the
+            migration surfaced a contradiction between the schema and its own documentation. index.md
+            motivates the credential with SPF/DKIM/DMARC, which want RSA keys, while the schema typed pubkey
+            as format "cesr"; the pinned fork's MtrDex carries Ed25519 and ECDSA 256k1/256r1 and NO RSA code
+            (verified against the pin, not recalled). So the schema could not express the case it was
+            designed around. pubkey becomes a plain string and a REQUIRED keyFormat enum
+            (cesr | spki-der-b64 | pem | openssh | jwk) says how to read it, each member answering a use the
+            schema already advertises: spki-der-b64 is literally what DKIM publishes in the DNS p= tag, and
+            openssh answers the 'ssh' the uses examples have always listed.
+            REQUIRED rather than defaulted, which deviates from the sketch the decision was taken on: a JSON
+            Schema 'default' is an annotation that nothing applies, so an absent keyFormat would leave two
+            readers free to parse the same key differently — failing open on precisely the ambiguity the
+            field exists to close. NO PATTERN is asserted on pubkey, and that restraint is deliberate: four
+            of the five encodings cannot be tested here against a real issuer of that format, and @4t5t4yca
+            paid for the general version of this lesson with the privacy nonce, where the SAID pattern would
+            have rejected every nonce heti actually mints. The discriminator's job is to tell a reader how to
+            parse; enforcing the encoding belongs to the parser, failing closed per @vy7qoj.
+            A fifth rules clause, unknownFormatFailsClosed, carries that obligation in Ricardian text — what
+            @hoag7c7s requires wherever meaning can arrive that the schema did not anticipate. The case is
+            not hypothetical: a later version naming a sixth format would otherwise be silently misread by a
+            verifier built against this one.
+            RULES per @jnft7xse, where 1.0.0 declared no 'r' at all: five clauses, 'r' required at top level.
+            additionalProperties CLOSED on the attribute block per @hoag7c7s — bindkey's 'a' was one of the
+            six @p3rk6d left open.
+            ORACLES, both run and passing. The fork's acdcmap builds an acm that validates; and heti mints a
+            facet, opens an upd registry, learns this schema and issues the DKIM case end to end — a real
+            2048-bit RSA public key as spki-der-b64 — reporting nonced slots (). examples/dkim-rsa.json is
+            that same case, carried in the gallery the linter validates (@g4tn7w), so the motivating use is
+            a checked artifact rather than a paragraph.
+            1.0.0's example is NOT archived, for the reason @4t5t4yca established and 1.0.0's own index.md
+            states outright — it was "an informal example (that looks plausible but won't verify)", and it
+            does not: its 'v' is the string "1.0", which is not an ACDC version string, and its SAIDs are
+            decorative. MAJOR per @k3wm7d: 1.0.0 -> 2.0.0, new SAID
+            EAwWdh1p_JlRUn35GjvueqljM5w-tQCe3XWIc52k0pyC, with EFvHYHX0cUx9sdjxZOr9fpPcQKdzRNFH42D8R29p7lAH
+            kept resolvable in registry.json per @r5vk3n.
 
     Schema-authoring tooling is deferred, pending a TypeScript-vs-Python decision = decision:
       id: p4zc7n
