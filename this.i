@@ -1010,6 +1010,67 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             ELIEUVwNAk1z-_jJJ9BuUtQw-c3TY-RvcQyYw5dI4_JK, old EPhWFgeOy8g7yRy-Xtyvbdieqvl_3YVXNHMgTEZuJOWh
             archived. Neither archive keeps its example: coca never had one, and ai-coder's was a v1 artifact
             whose rules pointer was wrong anyway.
+        award 2.0.0 keeps its rules optional and open, and ships its disclosure layers as prose = decision:
+          id: wfr34gwm
+          why: >
+            The sixth migration (tick 272l), and the first schema whose own documentation overrides one of
+            @jruwvxnt's defaults on a reasoned basis rather than a historical accident. Award is also where
+            the corpus's copy-paste trail ends: ai-coder's award-shaped index.md (@xuq4lelk) and its
+            face-to-face rules pointer were both copied FROM here, and award's own prose is the original and
+            is good — the graduated-disclosure section is real design thinking, not boilerplate.
+            THE RULES SECTION STAYS OPTIONAL AND OPEN, against @jnft7xse's default that 'r' is required and
+            enumerates its clauses. Award's index.md states the position and the reason: "Very formal awards
+            like the Oscars, the Nobel prize, or an Olympic medal may have carefully defined rules; casual
+            employee recognitions may have no strong rules about acceptance or usage." An award's terms
+            belong to its ISSUER in a way that an attestation's or a licence's do not, so a schema that
+            enumerated clauses would be legislating for the Oscars and the employee-of-the-month board
+            alike. The expanded 'r' arm therefore requires only 'd' and keeps additionalProperties TRUE.
+            THE COST OF THAT, STATED PLAINLY: @hoag7c7s requires that openness be paired with a Ricardian
+            fail-closed clause, and here the schema CANNOT enforce the pairing, because it deliberately does
+            not own the vocabulary. The mitigation is the coc1.json pattern borrowed from ai-user-coca — a
+            RECOMMENDED baseline ruleset is published at award/rules.json for an issuer to reference by
+            SAID, and it carries unrecognizedClauseFailsClosed along with recognitionNotPrivilege,
+            namesAreConvenience and imageByReferenceMayChange. An issuer that writes its own ruleset takes
+            on stating the fail-closed rule itself, and index.md says so. Rejected requiring 'r' with a
+            fixed vocabulary (legislates for every issuer), and rejected shipping no baseline at all (leaves
+            every issuer to rediscover that an award confers no privilege).
+            recognitionNotPrivilege is index.md's own sentence made binding: "Awards do not necessarily
+            confer privileges ... A particular verifier can decide to confer privileges based on the award,
+            if they wish." A verifier that grants something on the strength of an award owns that decision.
+            GRADUATED DISCLOSURE SHIPS AS PROSE, WITH NO PARTIAL-DISCLOSURE EXAMPLE, and this is the
+            substantive finding of this migration rather than a formatting choice. Award's design puts the
+            identifying material (issueeName, citation, image) in a nested 'details' block with its own
+            nonce, so a holder can prove the award without proving the name — three layers: compact, partial
+            (details as a SAID), full. Attempting to SHIP the partial layer as a checked artifact failed.
+            MEASURED on the pin: an acdcmap-built credential carries no block 'd' (@enr3eg for a.d,
+            @xuq4lelk for e.d), a d-less section is fully expanded during most-compact computation, and
+            replacing 'a', 'r' or 'a.details' with its SAID and re-makifying yields a DIFFERENT top-level
+            SAID — one the issuer never signed and no TEL references. So for credentials built the way the
+            only issuer builds them, compacting a section is not disclosure-invariant. NOT MEASURED, and
+            deliberately left open: whether a d-BEARING section compacts invariantly, because the attempt to
+            construct one through sectattr was refused and that means the right API is unknown here, not
+            that the case fails. Tick 2zqx carries both halves. Award therefore takes @sd2qfw's disposition
+            for sedi-id under the v1 oracle — layers described in prose, not published as files that the
+            oracle would reject — and index.md says outright that the partial layer is a design intent the
+            schema is shaped for rather than a form a holder can present today.
+            THAT FINDING REACHES PAST AWARD. @jsmu322m decided the other ten schemas "stay attributive"
+            partly because attributive graduated disclosure was assumed to work; face-to-face and the whole
+            SEDI family lean on it. It is a question for heti and keripy, not one to reverse-engineer
+            further from this repo.
+            The rest is the defaults applying. Nonce in both slots with a.u required and details.u required
+            (@jsmu322m) — load-bearing here, since the whole design is about withholding a name. 'rd'
+            OPTIONAL, unlike @v5ma6uxn and @kdndo6dc: nothing in award's text promises revocability the way
+            bindkey's description does, and a casual recognition issued registry-free is coherent.
+            award_name/issuer_name -> awardName/issuerName, issuee_name -> issueeName, effective_dt ->
+            validFrom (@p6mwk4, @pp4wv7pw); validFrom also drops OUT of a.required, since @pp4wv7pw's
+            "absent means on issuance" makes requiring it redundant. additionalProperties closed on 'a' and
+            on 'details' (@hoag7c7s) — award's 'a' was another of @p3rk6d's six. The edge block's 'd' is
+            optional per @xuq4lelk's finding.
+            ORACLES: the fork-built acm validates, and heti mints a facet, opens an upd registry and issues
+            end to end reporting nonced slots ('u', 'a.u'). MAJOR per @k3wm7d: 1.0.0 -> 2.0.0, new SAID
+            EM00uWV5K7YtTt5dDWH2diXCGtDhQlrWHsLPT5WKh-Pc, old EBxJHMk6MOEUogB6A1rP5x9te7DscPfxFfUGJCkq1Lq5
+            kept resolvable per @r5vk3n. The 1.0.0 example is not archived: its 'r' pointed at
+            face-to-face's ruleset, the same defect ai-coder's example inherited from it.
 
     Schema-authoring tooling is deferred, pending a TypeScript-vs-Python decision = decision:
       id: p4zc7n
