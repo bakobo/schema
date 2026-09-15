@@ -42,8 +42,6 @@ CHECK_FUNCS = {_CHECK_NAME[fn]: fn for fn in checks.ALL_CHECKS}
 # "how much of the corpus is issuable" a fact the suite states rather than an
 # answer someone has to go and measure.
 _V2_MIGRATION = {
-    "ai-coder": "6e3q",
-    "ai-user-coca": "6e3q",
     "award": "272l",
     "faa": "3x2z",
     "face-to-face": "3n4u",

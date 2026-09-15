@@ -1,18 +1,23 @@
 {
-  "v": "ACDCCAACAAJSONAAWZ.",
+  "v": "ACDCCAACAAJSONAAXe.",
   "t": "acm",
-  "d": "EEC6SZueTWxU9wwJIfufmYc0JUvePySUobxipGnYXh9D",
-  "u": "0ACkpZW83LPGIHtyLy6mCNlY",
+  "d": "ECfDWZPwbMuj6KBsyr6iSerjt0G_3uF97nhGW1cACxbm",
+  "u": "0ACKoNoE_PbV-btx890IJlbf",
   "i": "EMRlhEQK44_V5804rsRvQ99Gtf7uDpYQqZuvrw0LhV3S",
   "rd": "EKfi58Jiv-NVqr6GOrxgxzhrE5RsDaH4QNwv9rCyZCwZ",
+  "s": "ELIEUVwNAk1z-_jJJ9BuUtQw-c3TY-RvcQyYw5dI4_JK",
   "a": {
-    "u": "0ACUYaw-kdNbsu3wTH9UP4wp",
+    "u": "0AAnyIk0ynz5Zy8Ikw0w4dld",
     "i": "EP4CmMn6ZTM3oTq-iI-2TQdlwdMXF6a2WFWaeQQRULsn",
     "dt": "2026-09-15T14:23:16.000000+00:00",
     "validFrom": "2026-09-15T14:23:16.000000+00:00",
-    "validUntil": "2027-09-15T14:23:16.000000+00:00",
     "issuerName": "Acme AI Certification Authority",
     "issueeName": "Alice Example"
+  },
+  "e": {
+    "coca": {
+      "s": "EHReayB8hE1jqYEr418Hxh_najdMS8UExEG4G6Ris3MO"
+    }
   },
   "r": {
     "d": "EBZEbTHl6qaaMzPb5_cGIgXmGKDWMgQgCPZp4ivSxvt-",

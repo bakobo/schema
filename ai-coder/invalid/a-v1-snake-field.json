@@ -5,14 +5,15 @@
   "u": "0ACkpZW83LPGIHtyLy6mCNlY",
   "i": "EMRlhEQK44_V5804rsRvQ99Gtf7uDpYQqZuvrw0LhV3S",
   "rd": "EKfi58Jiv-NVqr6GOrxgxzhrE5RsDaH4QNwv9rCyZCwZ",
+  "s": "ELIEUVwNAk1z-_jJJ9BuUtQw-c3TY-RvcQyYw5dI4_JK",
   "a": {
     "u": "0ACUYaw-kdNbsu3wTH9UP4wp",
     "i": "EP4CmMn6ZTM3oTq-iI-2TQdlwdMXF6a2WFWaeQQRULsn",
     "dt": "2026-09-15T14:23:16.000000+00:00",
-    "validFrom": "2026-09-15T14:23:16.000000+00:00",
     "validUntil": "2027-09-15T14:23:16.000000+00:00",
     "issuerName": "Acme AI Certification Authority",
-    "issueeName": "Alice Example"
+    "issueeName": "Alice Example",
+    "effective_dt": "2026-09-15T14:23:16.000000+00:00"
   },
   "r": {
     "d": "EBZEbTHl6qaaMzPb5_cGIgXmGKDWMgQgCPZp4ivSxvt-",

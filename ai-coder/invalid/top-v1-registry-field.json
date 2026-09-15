@@ -4,7 +4,7 @@
   "d": "EEC6SZueTWxU9wwJIfufmYc0JUvePySUobxipGnYXh9D",
   "u": "0ACkpZW83LPGIHtyLy6mCNlY",
   "i": "EMRlhEQK44_V5804rsRvQ99Gtf7uDpYQqZuvrw0LhV3S",
-  "rd": "EKfi58Jiv-NVqr6GOrxgxzhrE5RsDaH4QNwv9rCyZCwZ",
+  "s": "ELIEUVwNAk1z-_jJJ9BuUtQw-c3TY-RvcQyYw5dI4_JK",
   "a": {
     "u": "0ACUYaw-kdNbsu3wTH9UP4wp",
     "i": "EP4CmMn6ZTM3oTq-iI-2TQdlwdMXF6a2WFWaeQQRULsn",
@@ -19,5 +19,6 @@
     "licenseNotGuarantee": "The issuer certifies that the issuee met its criteria at the time of issuance. It does not guarantee any particular code, review or outcome, and responsibility for what the issuee writes with an AI's help remains the issuee's.",
     "namesAreConvenience": "issuerName and issueeName are self-asserted conveniences for human readers and carry no verification weight. The parties to this credential are the AIDs, and a verifier that matches on a name rather than an AID has matched on nothing.",
     "privilegesEndAtTheHorizon": "After validUntil the issuer stops managing revocation for this license, so an expired credential that has not been revoked is not thereby current. A verifier MUST treat the horizon as binding and MUST NOT infer continued standing from the absence of a revocation."
-  }
+  },
+  "ri": "EKfi58Jiv-NVqr6GOrxgxzhrE5RsDaH4QNwv9rCyZCwZ"
 }
