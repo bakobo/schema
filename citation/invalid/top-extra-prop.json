@@ -8,6 +8,7 @@
   "s": "EKzRBzCdp2t0iKuHMSNAa-EaJdULjmEJTJ6zR1DlzuQq",
   "a": {
     "u": "0ACKI8mJjzncDk7bNUMgbL7n",
+    "dt": "2026-09-15T14:23:16.000000+00:00",
     "snapshotDt": "2023-07-20T00:00:00+07:00",
     "description": "Photo of the left front bumper of vehicle 1 from collision: a 2018 Ford F-150 XLT",
     "contentType": "image/jpeg",
@@ -25,5 +26,6 @@
     "useViaEdges": "All parties acknowledge that the citation is not intended to be used in isolation. Rather, the intended semantics for the citation should be communicated via a referencing ACDC that clarifies its issuer's intention.",
     "undefinedVerification": "All parties agree that procedures for evaluating the authenticity and/or veracity of the referenced content are beyond the scope of standard ACDC verification, and that the verifier is responsible for evaluating in whatever way satisfies their requirements.",
     "undefinedRevocation": "Unless or until governance specifies otherwise, all parties agree that there is no defined relationship between the revocation status of a citation and that of cited data. Cited data may be disavowed or revoked by its creator without a citation being revoked, and vice versa."
-  }
+  },
+  "unexpected": "x"
 }

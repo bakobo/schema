@@ -1,141 +1,309 @@
 {
-  "$id": "EDH3Q0MW6oCcwyYw2MN39n1YfPs37o1QEv86kB-fBzmh",
+  "$id": "EKzRBzCdp2t0iKuHMSNAa-EaJdULjmEJTJ6zR1DlzuQq",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Citation",
-  "description": "Formally reference non-ACDC content.",
+  "description": "Formally reference non-ACDC content. The credential is untargeted: it names no issuee, because the issuer is pointing at content rather than saying something about a party.",
   "type": "object",
   "credentialType": "citation",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "required": [
     "v",
     "d",
     "i",
-    "ri",
     "s",
     "a",
     "r"
   ],
   "properties": {
     "v": {
-      "description": "Version string using ACDC conventions",
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type. Optional; an ACDC JSON message without it is of type acm.",
       "type": "string"
     },
     "d": {
-      "description": "SAID of the citation",
+      "description": "SAID of this citation",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+    },
+    "u": {
+      "description": "Salty nonce that blinds this credential's SAID. Optional: a citation whose identity is meant to be public may omit it.",
       "type": "string"
     },
     "i": {
-      "description": "Identifier of the issuer",
-      "type": "string"
+      "description": "AID of the issuer making the citation",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
-    "ri": {
-      "description": "Issuer's ACDC status registry",
-      "type": "string"
+    "rd": {
+      "description": "SAID of the registry whose TEL carries this credential's issuance and revocation. Optional, and deliberately so: this credential's own undefinedRevocation clause declines to give a citation's revocation any defined relationship to the cited data, so requiring a registry would compel machinery whose meaning the governance refuses to fix.",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "s": {
       "description": "SAID of this schema",
-      "type": "string"
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "a": {
-      "$id": "ENgIQ-1GjPSnc3xcL-UfYDXkCTARdjLW9D3s_8xYWpyw",
-      "description": "Attributes block",
-      "type": "object",
-      "required": [
-        "d",
-        "dt"
-      ],
-      "properties": {
-        "d": {
-          "description": "SAID of attributes block",
-          "type": "string"
-        },
-        "dt": {
-          "description": "Issuance date (when the ACDC was signed).",
-          "format": "date-time",
-          "type": "string"
-        },
-        "sdt": {
-          "description": "Snapshot date: the moment at which the content reference and its associated metadata was published (or, if publication date is indeterminate, the moment when it was captured). This may precede the date of issuance. If omitted, it is assumed that sdt == dt.",
-          "format": "date-time",
-          "type": "string"
-        },
-        "des": {
-          "description": "A human-friendly description of the content.",
+      "oneOf": [
+        {
+          "description": "Attributes block SAID (compact form)",
           "type": "string",
-          "examples": [
-            "Photo of the left front bumper of vehicle 1 from collision: a 2018 Ford F-150 XLT"
-          ]
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
         },
-        "typ": {
-          "description": "The IANA content type of the cited content. This may help a verifier decide whether and how to download and process content.",
-          "type": "string",
-          "examples": [
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "image/jpeg"
-          ]
-        },
-        "lbl": {
-          "description": "A convenient label or recommended filename for the content. This may help a verifier match the cited content to its metadata in an original context, but has no defined meaning with respect to how the ACDC is verified.",
-          "type": "string",
-          "examples": [
-            "invoice-03-25-2022.docx",
-            "Post on X on 25 July 2025"
-          ]
-        },
-        "content": {
-          "oneOf": [
-            {
-              "description": "A SAID for the content section. This is not the same as a SAID for the pure content bytes, because it treats the content as a base64url JSOn string, and includes in the hash input a salty nonce.",
+        {
+          "description": "Attributes detail",
+          "type": "object",
+          "required": [
+            "u",
+            "dt",
+            "content"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this attributes block",
               "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "u": {
+              "description": "Salty nonce that blinds this block against confirmation by recomputation",
+              "type": "string"
+            },
+            "dt": {
+              "description": "When this citation was issued, as an ISO-8601 datetime",
+              "type": "string",
+              "format": "date-time",
               "examples": [
-                "EK2r6EnDXre2pecTBO8s99j4OtNaaDIhVyr7uGugDhmp"
+                "2026-09-15T14:23:16+00:00"
               ]
             },
-            {
-              "$id": "EFSLhiSLGmL-jp0sWcoDh2_05o4tO8dKJXY10EpXPjcT",
-              "description": "content block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "cargo"
-              ],
-              "properties": {
-                "d": {
-                  "description": "SAID of attributes block",
-                  "type": "string"
+            "snapshotDt": {
+              "description": "Snapshot date: the moment at which the content reference and its associated metadata was published (or, if publication date is indeterminate, the moment when it was captured). This may precede the date of issuance. If omitted, it is assumed to equal dt.",
+              "type": "string",
+              "format": "date-time",
+              "examples": [
+                "2023-07-20T00:00:00+07:00"
+              ]
+            },
+            "description": {
+              "description": "A human-friendly description of the cited content",
+              "type": "string",
+              "examples": [
+                "Photo of the left front bumper of vehicle 1 from collision: a 2018 Ford F-150 XLT"
+              ]
+            },
+            "contentType": {
+              "description": "The IANA media type of the cited content. This may help a verifier decide whether and how to download and process it.",
+              "type": "string",
+              "pattern": "^[a-z]+/[a-z0-9][a-z0-9._+-]*$",
+              "examples": [
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "image/jpeg"
+              ]
+            },
+            "label": {
+              "description": "A convenient label or recommended filename for the content. This may help a verifier match the cited content to its metadata in an original context, but has no defined meaning with respect to how the ACDC is verified.",
+              "type": "string",
+              "examples": [
+                "invoice-03-25-2022.docx",
+                "Post on X on 25 July 2025"
+              ]
+            },
+            "content": {
+              "oneOf": [
+                {
+                  "description": "A SAID for the content section. This is not the same as a SAID for the pure content bytes, because it treats the content as a base64url JSOn string, and includes in the hash input a salty nonce.",
+                  "type": "string",
+                  "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$",
+                  "examples": [
+                    "EK2r6EnDXre2pecTBO8s99j4OtNaaDIhVyr7uGugDhmp"
+                  ]
                 },
-                "u": {
-                  "description": "A salty nonce",
-                  "type": "string"
-                },
-                "cargo": {
-                  "description": "Either the content itself, in base64url-encoded form, or a cryptographic identifier that indexes the content in a content-addressable way (e.g., its SAID, CESR-encoded hash, CID, or similar). Directly embedding content as cargo makes an ACDC standalone, which is a nice benefit -- and compact ACDCs can avoid the size/bandwidth penalty of shipping massive cargo. However, some content may already have a cryptographic identifier and a native storage location that's best left alone. In such cases, using the identifier as cargo is recommended.",
-                  "type": "string"
+                {
+                  "description": "Content block",
+                  "type": "object",
+                  "required": [
+                    "u",
+                    "cargo"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "SAID of this content block",
+                      "type": "string",
+                      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+                    },
+                    "u": {
+                      "description": "Salty nonce. Load-bearing here rather than optional: cargo is often a digest of content the observer may already hold, so an unblinded block is confirmable by exactly the party most likely to see it.",
+                      "type": "string"
+                    },
+                    "cargo": {
+                      "description": "Either the content itself, in base64url-encoded form, or a cryptographic identifier that indexes the content in a content-addressable way (e.g., its SAID, CESR-encoded hash, CID, or similar). Directly embedding content as cargo makes an ACDC standalone, which is a nice benefit -- and compact ACDCs can avoid the size/bandwidth penalty of shipping massive cargo. However, some content may already have a cryptographic identifier and a native storage location that's best left alone. In such cases, using the identifier as cargo is recommended.",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              }
+              ]
+            },
+            "sizeBytes": {
+              "description": "The byte count of the cited content. Redundant (but MUST be correct if present) when cargo carries the content itself; when cargo is compacted or holds only a cryptographic identifier, it helps a verifier judge how practical fetching is.",
+              "type": "integer",
+              "minimum": 0,
+              "examples": [
+                43520
+              ]
+            },
+            "locationHint": {
+              "description": "A hint about where and/or how to locate the cited content. The issuer affirms a belief that this hint was useful at the time of issuance, but makes no guarantee that it will continue to locate the referenced content thereafter. If cargo contains only a cryptographic identifier, and this field is used to fetch content, verifiers MUST compare fetched content to the identifier in cargo, and MUST accept the content as what was referenced IFF that identifier and the content match; a discrepancy in such circumstances does not invalidate the ACDC, only the usefulness of this hint. Sharing content via loc is discouraged, as it is unstable and insecure. However, it is not formally deprecated, either, since some content is impractical to share in any other way. Could be a URL; an ISBN; a UPC; a DOI number; a Bluebook legal citation; an bibliographic reference in APA, MLA, Chicago, Harvard, ACM, BibTeX, or similar format; etc.",
+              "type": "string",
+              "examples": [
+                "https://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612"
+              ]
+            },
+            "validUntil": {
+              "description": "When the issuer's citation stops, as an ISO-8601 datetime. Optional; absence means the issuer set no horizon, never that the citation holds forever.",
+              "type": "string",
+              "format": "date-time",
+              "examples": [
+                "2027-09-15T14:23:16+00:00"
+              ]
             }
-          ]
-        },
-        "siz": {
-          "description": "The byte count of the content. Redundant and unnecessary (but MUST be correct if present) if cargo contains actual data. When cargo is compacted or contains only a cryptographic identifier, this may help a verifier evaluate how practical it is to fetch the content.",
-          "type": "integer"
-        },
-        "loc": {
-          "description": "A hint about where and/or how to locate the cited content. The issuer affirms a belief that this hint was useful at the time of issuance, but makes no guarantee that it will continue to locate the referenced content thereafter. If cargo contains only a cryptographic identifier, and this field is used to fetch content, verifiers MUST compare fetched content to the identifier in cargo, and MUST accept the content as what was referenced IFF that identifier and the content match; a discrepancy in such circumstances does not invalidate the ACDC, only the usefulness of this hint. Sharing content via loc is discouraged, as it is unstable and insecure. However, it is not formally deprecated, either, since some content is impractical to share in any other way. Could be a URL; an ISBN; a UPC; a DOI number; a Bluebook legal citation; an bibliographic reference in APA, MLA, Chicago, Harvard, ACM, BibTeX, or similar format; etc.",
-          "type": "string",
-          "examples": [
-            "https://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612"
-          ]
+          },
+          "additionalProperties": false
         }
-      }
+      ]
     },
     "r": {
-      "description": "SAID of rules block",
-      "type": "string",
-      "const": "EM6kWxMNL9BFm0ReegqQfNJLw8OZAfn2ZxcjWs4Ceifh",
-      "format": "cesr"
+      "oneOf": [
+        {
+          "description": "Rules section SAID (compact form)",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+        },
+        {
+          "description": "Rules detail",
+          "type": "object",
+          "required": [
+            "d",
+            "onlyCommitToPoint",
+            "useViaEdges",
+            "undefinedVerification",
+            "undefinedRevocation"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this rules block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "onlyCommitToPoint": {
+              "description": "onlyCommitToPoint Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "All parties agree that the citation, in and of itself, only commits the issuer to point at content in a way that makes the issuer and the target verifiable. Unless or until context, governance, or other actions prove intent, the citation does NOT imply that the issuer owns, endorses, or agrees with the content."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "All parties agree that the citation, in and of itself, only commits the issuer to point at content in a way that makes the issuer and the target verifiable. Unless or until context, governance, or other actions prove intent, the citation does NOT imply that the issuer owns, endorses, or agrees with the content."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "useViaEdges": {
+              "description": "useViaEdges Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "All parties acknowledge that the citation is not intended to be used in isolation. Rather, the intended semantics for the citation should be communicated via a referencing ACDC that clarifies its issuer's intention."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "All parties acknowledge that the citation is not intended to be used in isolation. Rather, the intended semantics for the citation should be communicated via a referencing ACDC that clarifies its issuer's intention."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "undefinedVerification": {
+              "description": "undefinedVerification Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "All parties agree that procedures for evaluating the authenticity and/or veracity of the referenced content are beyond the scope of standard ACDC verification, and that the verifier is responsible for evaluating in whatever way satisfies their requirements."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "All parties agree that procedures for evaluating the authenticity and/or veracity of the referenced content are beyond the scope of standard ACDC verification, and that the verifier is responsible for evaluating in whatever way satisfies their requirements."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "undefinedRevocation": {
+              "description": "undefinedRevocation Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Unless or until governance specifies otherwise, all parties agree that there is no defined relationship between the revocation status of a citation and that of cited data. Cited data may be disavowed or revoked by its creator without a citation being revoked, and vice versa."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Unless or until governance specifies otherwise, all parties agree that there is no defined relationship between the revocation status of a citation and that of cited data. Cited data may be disavowed or revoked by its creator without a citation being revoked, and vice versa."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }

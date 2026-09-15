@@ -8,6 +8,7 @@
   "s": "EKzRBzCdp2t0iKuHMSNAa-EaJdULjmEJTJ6zR1DlzuQq",
   "a": {
     "u": "0ACKI8mJjzncDk7bNUMgbL7n",
+    "dt": "2026-09-15T14:23:16.000000+00:00",
     "snapshotDt": "2023-07-20T00:00:00+07:00",
     "description": "Photo of the left front bumper of vehicle 1 from collision: a 2018 Ford F-150 XLT",
     "contentType": "image/jpeg",
@@ -17,7 +18,8 @@
       "cargo": "EyetB5DFr6JifdPnVBhSDR6OS1s3mr321AGkRE1BXuaQ"
     },
     "sizeBytes": 43520,
-    "locationHint": "https://evidence.example.com/claims/4471/photos/3"
+    "locationHint": "https://evidence.example.com/claims/4471/photos/3",
+    "unexpected": "x"
   },
   "r": {
     "d": "EM6kWxMNL9BFm0ReegqQfNJLw8OZAfn2ZxcjWs4Ceifh",
