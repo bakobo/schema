@@ -515,6 +515,175 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         issued against, so it is superseded in place rather than preserved — @r5vk3n's archiving
         convention protects SAIDs somebody might hold, and nobody ever held this one.
         Oracle: the same end-to-end issuance as @2n2vtee3, now carrying validUntil, still passing.
+    The rest of the v1-enveloped corpus migrates to ACDC v2, carrying the redesign the MAJOR already buys = decision:
+      id: jruwvxnt
+      stage-status: planned
+      why: >
+        DRIVER. Eleven of the sixteen live schemas are still v1-shaped — ai-coder, ai-user-coca,
+        attestation, award, bindkey, citation, faa, face-to-face, org-vet, sedi-guardian, sedi-id — each
+        carrying 'ri' rather than 'rd', v1 top-level ordering, no optional 't', v1-era inner '$id' on the
+        expanded arms, and mostly a required 'a.d'. That is precisely the set of failures @2n2vtee3
+        measured by running heti's issuance path against proof-of-control 1.1.0, so no credential heti or
+        merti can mint validates against any of the eleven. Both prior migrations (@enr3eg for GCD,
+        @2n2vtee3 for proof-of-control) were pulled by one named issuer; what changed on 2026-09-12 is that
+        heti, imbu and merti reached the maturity where credentials can actually be issued, and Daniel
+        chose to offer several of these as working demonstrators. Every schema here is now on a path to
+        being issued rather than merely published, which turns @2n2vtee3's closing lesson — "a schema no
+        issuer had ever exercised, which is the cost of a corpus authored ahead of its first consumer" —
+        into a thing that would otherwise be paid eleven more times.
+        SCOPE OF EACH MIGRATION. The envelope exactly as @enr3eg fixed it: top-level order
+        [v, t, d, u, i, rd, s, a, (A), e, r]; 't' optional; the compact SAID-string arm FIRST in every
+        oneOf, which the most-compact-form SAID algorithm keys on; the v1-era inner '$id' fields dropped.
+        PLUS the four redesign axes decided in the children below, PLUS the house-style debt: @p6mwk4
+        settled camelCase, obvious-abbrev and plural arrays long ago, and the inherited corpus never paid
+        it (effective_dt, expire_dt, issuer_name, issuee_name, award_name, art_digest, art_posture,
+        content_location, content_size, content_type, rev_latency), and citation's des/lbl/loc/sdt/siz/typ
+        are past what "obvious-abbrev" carries. Field declarations are brought up at the same time: every
+        property gets a type, a description that says what a verifier does with the value, a pattern or
+        named format where the value has a shape, and examples where the pattern is not self-evident.
+        WHY ALL OF IT AT ONCE, which is the decision a reviewer should attack. Renaming required 'ri' to
+        'rd' invalidates every conceivable prior instance, so each migration is MAJOR per @k3wm7d's
+        RFC-0430 grading no matter how little else changes. Every other breaking improvement is therefore
+        free at this moment and expensive at any other. REJECTED an envelope-only sweep followed later by a
+        design sweep: @r5vk3n mints an archived versioned directory per MAJOR, so two sweeps means two
+        archive directories per schema and two full re-SAID cascades across registry.json, example.json,
+        the examples/ galleries, the invalid/ corpora and every cross-pinned const — and it asks consumers
+        to absorb two breaking changes where one would do. TRADEOFF ACCEPTED: a bigger blast radius per
+        schema and a longer review per schema, against a corpus that reaches its settled shape in one pass.
+        ENFORCEMENT LANDS FIRST, before any schema moves. 'schematools check' reported "0 problems across
+        18 schemas" on 2026-09-12 with eleven unissuable schemas in the tree, because no check has an
+        opinion about v1 versus v2 — a linter blind to the thing being fixed cannot say when the work is
+        done, and cannot stop the twelfth schema from regressing. The envelope and house-style checks are
+        added with the eleven failures marked xfail(strict=True) against their tick ids, the mechanism
+        @n7xk4r's conformance suite already uses, so CI stays green and each migration flips one marker to
+        XPASS and forces its removal.
+        ORDER is by design load rather than field count, easiest first, because the early schemas are where
+        the defaults below get tested against reality: attestation, bindkey, org-vet, citation, then
+        ai-user-coca and ai-coder TOGETHER (ai-coder pins ai-user-coca's SAID as a const, so migrating one
+        alone forces two re-SAID rounds), then award, faa, face-to-face. The SEDI family follows as its own
+        tranche — sedi-id first, since sedi-guardian and sedi-present-age-portrait both pin its SAID, and
+        sedi-guardian only after the unmerged sedi-guardian-no-gcd branch is settled. faa is held until the
+        sedi-bridge question (tick 3nhn) is answered, because a foreign-artifact affidavit and a
+        foreign-artifact bridge may be one credential and designing both is designing it twice.
+      children:
+        Every migrating schema declares 'u' in both slots; the aggregate section is for genuine subset disclosure only = decision:
+          id: jsmu322m
+          why: >
+            heti's answer of 2026-09-14 (heti @8znj834r, @4trv8p9d, @4wyvymuw, @u75gb3uv) makes this the
+            schema's decision and nobody else's: heti mints a privacy nonce into every slot the named
+            schema DECLARES one for, and nowhere else, because the schema is where a credential's
+            disclosure design already lives. Declaring is therefore the trigger for minting; requiring is a
+            separate axis that governs what a DIFFERENT issuer may omit (@c5tj3p — this repo serves any
+            issuer's schema repo).
+            THE DRIVING CONSTRAINT, measured rather than assumed. heti's registry state is public this
+            tranche (heti @895yr58n, its deferral standing on heti tick 7vhf), so the 'upd' event publishes
+            the credential's SAID as 'td' in the clear. An observer who knows issuer, registry, schema and
+            issuee confirms a guessed attribute by recomputing the SAID — heti has the row in its suite
+            showing a guessed boolean reproducing the published td exactly. For a low-entropy credential
+            that is the whole content. This is not hypothetical for the first two demonstrators: attestation
+            asserts a digest of a document the observer may well hold, and bindkey binds a public key.
+            DECISION. Declare 'u' at top level and in the expanded arm of 'a' on every migrating schema.
+            The attribute-block 'u' goes in a.required; the top-level 'u' stays OPTIONAL, matching @enr3eg
+            and @2n2vtee3. That asymmetry is deliberate and is the thing to disagree with: declaring is
+            what makes heti mint, so an optional-but-declared top-level 'u' is minted anyway, and leaving
+            it optional keeps the public variant expressible for a credential whose identity is meant to be
+            public, without forcing an archive-triggering change on the two schemas already migrated.
+            Requiring the attribute-block one costs the only issuer there is nothing, since heti fills it
+            automatically, and stops a different issuer shipping an unblinded block silently.
+            REJECTED leaving 'u' undeclared and carrying the obligation in a rules clause instead: a nonce
+            is a field, not a promise, and a clause cannot blind a SAID. REJECTED requiring the top-level
+            'u' as well, which buys no measured protection the attribute-block nonce does not already give
+            and contradicts two recorded decisions.
+            THE AGGREGATE SECTION is for credentials where a holder genuinely discloses a subset, and
+            nothing else. Its cost, per heti: element 1 must be the issuee block and the schema MUST
+            require it, expressed with prefixItems plus minItems, because SerderACDC.iseaid reads
+            sad["A"][1]["i"] and returns None for a WITHHELD issuee block exactly as it does for a
+            credential that never had one — so an unpinned schema lets a holder, or a thief holding a
+            stolen copy, present a targeted credential as an untargeted affidavit. No block other than
+            element 1 may carry 'i', since a party named at another index reads as untargeted to every
+            keripy consumer. Every block is nonced unconditionally: in an aggregate the nonce is the
+            structure and not a defence, because a withheld block travels as its bare SAID. sedi-age is the
+            only current aggregate and fails the element-1 requirement today (tick 6grq); face-to-face is
+            the only other candidate worth evaluating, since its biometric hashes and protocol identifiers
+            disclose on a different axis from the meeting facts. The other ten stay attributive — an
+            aggregate bought without a disclosure story is complexity with no holder behind it.
+            ACCEPTED LIMIT, recorded so no schema's prose overstates it: correlation resistance stops at
+            the field level. Issuance timing is public, every credential is its own anchored TEL event, and
+            the issuer-holder pairing is inferable from the anchor sequence however well contents are
+            blinded (heti tick 6zxo). A schema must not promise unlinkability the deployment cannot deliver.
+        additionalProperties closes by default and opens only where a rules clause carries the fail-closed duty = decision:
+          id: hoag7c7s
+          why: >
+            Resolves the posture @p3rk6d explicitly left open ("STILL OPEN ... flipping additionalProperties
+            to false is a genuine MAJOR"), which is exactly the kind of change this migration exists to
+            absorb. Three tiers rather than one rule. The top-level envelope CLOSES: the v2 'alls' set is
+            the spec's vocabulary, not an issuer's, so an unknown top-level field is a protocol error, and a
+            field a future spec version adds arrives with a schema version of its own under @k3wm7d's
+            grading. Blocks with a fixed vocabulary CLOSE — the aggregate issuee block, threshold blocks,
+            enum-gated containers — because an unknown key there is a typo or an attack, and accepting it
+            silently is failing open where the Bakobo standard is fail closed. A block OPENS only where the
+            schema advertises extension, and then only paired with a Ricardian clause carrying the
+            fail-closed obligation on the verifier: the pattern @vy7qoj realized for GCD, whose
+            noConstraintOutsideConstraints says an unrecognized key inside the container MUST be treated as
+            unmet.
+            REJECTED closing everything, which is the reading @k7wd3m made and @vy7qoj overturned on
+            Daniel's own intent: a JSON-Schema validator's rejection is not the enforcement mechanism for a
+            rule addressed to verifiers, and closing a container whose own prose invites extension makes the
+            invitation a dead letter. REJECTED opening everything, which would let an unknown key ride in a
+            block whose whole meaning is its fixed vocabulary.
+            CONCRETELY this closes the six @p3rk6d named — ai-user-coca top-level, citation top-level, and
+            the 'a' blocks of award, bindkey, face-to-face and org-vet. TRADEOFF ACCEPTED: a consumer
+            relying on unknown-key passthrough breaks. Nothing in this corpus does, no released instance
+            install base exists for these nine, and the MAJOR is being paid anyway.
+        Every migrating schema carries a real rules section; a dangling r.d does not survive = decision:
+          id: jnft7xse
+          why: >
+            The corpus is inconsistent here in a way nothing surfaces until you look: three schemas declare
+            no 'r' at all (ai-user-coca, attestation, bindkey); three declare an 'r' whose expanded arm
+            holds only 'd', with no rules.json on disk behind it (ai-coder, award, faa); the rest carry a
+            compact string arm plus a real rules.json. A schema whose 'r' is a SAID slot with nothing behind
+            it advertises governance it does not have, and no existing check catches it, because the linter
+            validates the schema's structure rather than whether a referenced ruleset resolves.
+            DECISION. 'r' is declared on every migrating schema, compact SAID-string arm first per @enr3eg,
+            with a rules.json on disk whose SAID the schema references and which the re-SAID cascade
+            recomputes. Minimum content is one scope clause naming what the credential does NOT assert —
+            the noOverstatement pattern face-to-face and proof-of-control already carry — plus the
+            fail-closed clause @hoag7c7s requires wherever a container is left open. 'r' goes in the
+            top-level required list by default; a schema that omits it records why.
+            THE ISSUER-SIDE DRIVER. heti's Registry.issue takes a rules mapping and every verdict surfaces
+            that block as text, uninterpreted (heti @3pszqp). So the rules section is the only channel by
+            which a credential tells a relying party what it means and what it does not, and a demonstrator
+            with an empty one demonstrates a credential nobody can safely read.
+            REJECTED one shared boilerplate ruleset SAID for the whole corpus, which would be cheaper to
+            author and is wrong on both axes: the clause that matters is per-credential — "a bindkey does
+            not assert the key is uncompromised" is not "an attestation does not assert the document is
+            true" — and a shared SAID would make every schema's governance change together, so amending one
+            credential's terms would re-SAID all of them.
+        validUntil is the corpus's one spelling for a horizon, optional everywhere, with revocation left to the TEL = decision:
+          id: pp4wv7pw
+          why: >
+            The corpus spells one concept four ways or not at all: ai-coder 'expire_dt', bindkey
+            'startDate'/'stopDate', sedi-guardian 'expiryDate', proof-of-control 'validUntil' (@3j5lwc7w),
+            GCD 'a.constraints.validUntil' with an if/then backstop (@enr3eg), and six schemas say nothing
+            about when the assertion stops. One concept, one name — @p6mwk4's house style applied to
+            semantics rather than casing: 'validUntil', with 'validFrom' where a start genuinely matters
+            (bindkey's key lifetime does; ai-coder's effective_dt is the same thing under another name).
+            OPTIONAL, never required, generalizing the reason @3j5lwc7w gave for proof-of-control: this repo
+            serves any issuer (@c5tj3p), and a credential with no horizon is a coherent thing for a
+            different issuer to assert. Absence means "the issuer set no horizon", never "valid forever" —
+            @ar6vk2's absence-is-not-false discipline. An issuer that always sets one states that in its own
+            governance framework rather than in the shape everyone shares.
+            REVOCATION IS DELIBERATELY NOT MODELLED in any schema. heti issues into an 'upd' registry, so
+            every credential it mints is revocable without the schema saying anything, and heti refuses to
+            anchor an aggregate as a bare 'acg' precisely to keep that available (heti @4trv8p9d). Expiry is
+            the complement for the registry-free short-lived case merti chose (merti @pxfdnc), not a
+            substitute for the TEL — a schema field asserting revocation status would be a claim the
+            credential cannot keep current, which is the failure the TEL exists to avoid.
+            GCD IS THE RECORDED DEPARTURE and stays as it is: its horizon lives in a.constraints.validUntil
+            because 'constraints' is GCD's authority vocabulary and the if/then backstop ties it to
+            terminatingEvents. @3j5lwc7w already reasoned that borrowing that path without the structure
+            implies a kinship that does not exist; the same holds in reverse, so GCD is not flattened to
+            match the others.
 
     Schema-authoring tooling is deferred, pending a TypeScript-vs-Python decision = decision:
       id: p4zc7n
