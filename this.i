@@ -949,6 +949,67 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             verified more weakly than their nodes claim, and this records that.
             MAJOR per @k3wm7d: 1.0.0 -> 2.0.0, new SAID EKzRBzCdp2t0iKuHMSNAa-EaJdULjmEJTJ6zR1DlzuQq, old
             EDH3Q0MW6oCcwyYw2MN39n1YfPs37o1QEv86kB-fBzmh kept resolvable per @r5vk3n.
+        ai-user-coca and ai-coder 2.0.0 migrate as one unit, because one pins the other's SAID = decision:
+          id: xuq4lelk
+          why: >
+            The fifth migration (tick 6e3q), and the first that had to move TWO schemas in one re-SAID
+            round: ai-coder's e.coca edge pins ai-user-coca's schema SAID as a const
+            (properties/e/oneOf[1]/properties/coca/properties/s/const), so migrating either alone would
+            leave a dangling constant and force a second cascade. coca is saidified first and ai-coder's
+            const is repointed at the result in the same build.
+            ai-user-coca IS PUBLIC AND SELF-ISSUED, so it takes bindkey's departure from @jsmu322m rather
+            than the default: no nonce in either slot, on the same reasoning @v5ma6uxn recorded — its
+            index.md calls it "a public declaration, not a credential", and a declaration nobody can
+            confirm does no work. Measured: heti issues it reporting nonced slots ().
+            AND IT DROPS a.i, WHICH 1.0.0 REQUIRED. The credential attests that THE ISSUER is committed to a
+            code of conduct "with respect to their personal use of AI" — the issuer declaring something about
+            itself, so there is no issuee and nothing for a.i to name. 1.0.0 described that field as "AID of
+            issuee (award recipient)", which is award's wording, and the top-level i as "Identifier of the
+            issuer (the one giving the award)" — so the field was copy-paste rather than a considered
+            decision, and removing it is the schema finally matching its own first sentence. 'rd' is REQUIRED
+            for @v5ma6uxn's reason: a public commitment that cannot be withdrawn outlives the issuer's
+            willingness to stand behind it.
+            ai-coder TAKES THE DEFAULTS STRAIGHT: nonce declared in both slots with a.u required, because the
+            attribute block names a licensed person and an unblinded block lets anyone watching the registry
+            confirm a guess about who was licensed; 'rd' required, because a licence the issuer cannot revoke
+            confers privileges it can no longer stand behind; effective_dt/expire_dt -> validFrom/validUntil
+            and issuer_name/issuee_name -> issuerName/issueeName per @p6mwk4 and @pp4wv7pw.
+            BOTH RULES SECTIONS ARE NEW, and ai-coder's was the worst case @jnft7xse describes: its 'r'
+            expanded arm declared 'd' alone with additionalProperties true, so it accepted ANY content as a
+            ruleset while advertising governance, and its shipped example pointed 'r' at
+            EGhkNqT1LbfYlimCBMsorDt7PpeGKYdOdj6hKpUjrqtB — FACE-TO-FACE's ruleset. Between this, org-vet
+            carrying citation's ruleset (@kdndo6dc), and the GCD governance paragraph pasted into both
+            org-vet's and citation's index.md (@ydh7zk6r), the inherited corpus's governance was wired
+            essentially at random. ai-coder now carries licenseNotGuarantee, namesAreConvenience and
+            privilegesEndAtTheHorizon; coca carries commitmentNotCompliance, referencedCodeMayChange and
+            selfAsserted. Every clause is grounded in a sentence one of the schemas or its index.md already
+            contained — the privileges clause, for instance, just makes binding what expire_dt's own
+            description always said ("issuer stops managing revocation").
+            ai-coder's index.md WAS ABOUT AWARDS. All five "notable features" bullets described the award
+            credential's optional category, timeframe, citation and image — none of which exist in ai-coder's
+            schema. Rewritten. That is the fourth distinct copy-paste defect in the inherited corpus and the
+            first in a Purpose-adjacent section rather than a boilerplate one.
+            coc1.json IS NOT AN EXAMPLE, which the tick for this work assumed it was. It is the recommended
+            CODE OF CONDUCT itself — a saidified document whose SAID index.md tells issuers to place in
+            'coc'. So coca had no example instance at all, like org-vet, and now has one; coc1.json is
+            untouched and its SAID still resolves.
+            A NEW ENVELOPE FACT, found the same way @ydh7zk6r found the nested-nonce one: the fork's acdcmap
+            emits NO block SAID for an EDGE section, exactly as @enr3eg measured for the attribute section.
+            ai-coder's chained gallery example failed against its own schema until e.d was made optional. GCD
+            has the same shape and still requires e.d, so an edge-bearing GCD built by the only builder there
+            is would fail its own schema — latent, since GCD's 'e' is optional and no example carries one.
+            Recorded as tick 5xm4 rather than fixed here, because GCD is already migrated and a quiet edit to
+            a shipped schema is a re-mint by stealth.
+            ORACLES: fork-built acms validate for both; heti issues both end to end, reporting nonced slots
+            () for coca and ('u', 'a.u') for ai-coder; and ai-coder/examples/chained-to-coca.json carries the
+            e.coca edge into the gallery the linter validates (@g4tn7w), so the pinned const is exercised by
+            an artifact rather than asserted in prose.
+            MAJOR for both per @k3wm7d. ai-user-coca 1.0.0 -> 2.0.0, new SAID
+            EHReayB8hE1jqYEr418Hxh_najdMS8UExEG4G6Ris3MO, old EBCnd7qk82wLBOgFukdmsdkksAuPpmzt5-eg9YKWWP3j
+            archived per @r5vk3n; ai-coder 1.0.0 -> 2.0.0, new SAID
+            ELIEUVwNAk1z-_jJJ9BuUtQw-c3TY-RvcQyYw5dI4_JK, old EPhWFgeOy8g7yRy-Xtyvbdieqvl_3YVXNHMgTEZuJOWh
+            archived. Neither archive keeps its example: coca never had one, and ai-coder's was a v1 artifact
+            whose rules pointer was wrong anyway.
 
     Schema-authoring tooling is deferred, pending a TypeScript-vs-Python decision = decision:
       id: p4zc7n
