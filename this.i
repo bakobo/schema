@@ -1042,14 +1042,22 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             identifying material (issueeName, citation, image) in a nested 'details' block with its own
             nonce, so a holder can prove the award without proving the name — three layers: compact, partial
             (details as a SAID), full. Attempting to SHIP the partial layer as a checked artifact failed.
-            MEASURED on the pin: an acdcmap-built credential carries no block 'd' (@enr3eg for a.d,
-            @xuq4lelk for e.d), a d-less section is fully expanded during most-compact computation, and
-            replacing 'a', 'r' or 'a.details' with its SAID and re-makifying yields a DIFFERENT top-level
-            SAID — one the issuer never signed and no TEL references. So for credentials built the way the
-            only issuer builds them, compacting a section is not disclosure-invariant. NOT MEASURED, and
-            deliberately left open: whether a d-BEARING section compacts invariantly, because the attempt to
-            construct one through sectattr was refused and that means the right API is unknown here, not
-            that the case fails. Tick 2zqx carries both halves. Award therefore takes @sd2qfw's disposition
+            MEASURED on the pin, and CORRECTED the same day after a first reading that was wrong: disclosure
+            invariance DOES hold. acdcmap(compactify=True) on an award whose 'a' and 'a.details' mappings
+            carry a 'd' SLOT yields a credential whose sections collapse to their SAIDs with a top-level
+            SAID identical to the expanded form's. The first probes all omitted that slot, so nothing could
+            compact and the SAID necessarily differed — and @enr3eg had already recorded the governing fact
+            ("a d-less a section is fully expanded during most-compact computation while a d-bearing one
+            compacts"). The mistake was mine, not the fork's, and it is left visible here because the
+            corrected version is the one a later reader needs and the wrong one was briefly acted on.
+            WHAT SURVIVES is the half that decides this migration: heti passes a caller's attributes
+            straight through and supplies no 'd' slot, so a heti-issued credential is NON-COMPACTABLE and
+            cannot be partially disclosed at all. Award's middle layer is therefore unreachable for the only
+            issuer there is, which is a heti question rather than a keripy one. Two narrower things may be
+            defects or may be misuse, and are recorded on tick 2zqx rather than asserted: acdcmap leaves a
+            caller-supplied 'd' slot as the empty string on the wire when compactify is False, and
+            Compactor's said for a block differs from the one the most-compact computation uses for that
+            same block while sectattr refuses any block whose 'd' is not already correct. Award therefore takes @sd2qfw's disposition
             for sedi-id under the v1 oracle — layers described in prose, not published as files that the
             oracle would reject — and index.md says outright that the partial layer is a design intent the
             schema is shaped for rather than a form a holder can present today.

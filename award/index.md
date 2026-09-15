@@ -35,7 +35,7 @@ So the identifying material lives in its own `details` block, separate from the 
 * **partial** — the public facts (`issuerName`, `category`, `timeframe`, `awardName`) with `details` as a SAID
 * **full** — `details` expanded: `issueeName`, `citation`, `image`
 
-These layers are described here rather than shipped as examples, and that is a limitation rather than a preference. On the pinned oracle, a credential built the way an issuer actually builds one carries no block SAIDs, so compacting a section produces a credential with a *different* top-level SAID — one the issuer never signed. Tick `2zqx` records what was measured and what was not. Until that is resolved, treat the partial layer as a design intent the schema is shaped for, not a form you can present today.
+These layers are described here rather than shipped as examples, and the reason is specific. The compaction itself works: a credential whose sections carry a `d` slot compacts to exactly the same top-level SAID it had expanded, which is what makes graduated disclosure safe. But a credential built the way the only issuer builds one today carries no `d` slot at all, and a section without one is fully expanded during most-compact computation — so it cannot be compacted, and the middle layer cannot be produced. Tick `2zqx` records what was measured. Until an issuer emits block SAIDs, treat the partial layer as a design intent the schema is shaped for, not a form you can present.
 
 ### Governance framework
 
