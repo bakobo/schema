@@ -4,16 +4,17 @@
   "d": "EI4W44Y7b2V52AX4L0SDB4z3Z-KueH7Biee-XTl9LKcj",
   "u": "0AARVVHSF6-M9KfedxnJwSDb",
   "i": "EIw_fe9e7TTGUL5nrXfjuzqzGWq7iHc4mzmGiqb_CCGK",
-  "rd": "EAEBPOD8GzIYVKlElExZroScFvGbiKdLjbcJ4XuYeOQv",
   "s": "EE5FA0uE3ydhSYrG8lqECgR0Ad3NpkQxPw0b3jp-2eDa",
   "a": {
     "u": "0AAcmRpEsVWVJBEt1ysCK-fL",
-    "dt": "2026-09-15T14:23:16.000000+00:00"
+    "dt": "2026-09-15T14:23:16.000000+00:00",
+    "digest": "EGvjHeAo7ZRQYUCb3Xh9TBdLhoMuW4lBSmOeR6gkMhMg"
   },
   "r": {
     "d": "EOt3_C6yOMgTFbxdtb5znz-ETWqEm-wCpFzuQjl-60A-",
     "digestOnly": "This credential commits to a digest and to nothing else. A verifier that has not recomputed the digest over content it holds has verified nothing about that content, however well the credential itself verifies.",
     "noContentAssertion": "The issuer attests only that the digest was computed over content the issuer observed at the stated time. The issuer does not assert that the content is true, lawful, complete, authored by anyone in particular, or fit for any purpose, and a verifier MUST NOT read any of those into this credential.",
     "absenceIsNotFalse": "An optional field the issuer did not set means the issuer did not attest it, never that the issuer attested it to be false. In particular, an absent validUntil means the issuer set no horizon, not that the attestation is valid forever."
-  }
+  },
+  "ri": "EAEBPOD8GzIYVKlElExZroScFvGbiKdLjbcJ4XuYeOQv"
 }

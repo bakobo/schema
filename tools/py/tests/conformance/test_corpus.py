@@ -36,7 +36,7 @@ _CHECK_NAME = {
 }
 CHECK_FUNCS = {_CHECK_NAME[fn]: fn for fn in checks.ALL_CHECKS}
 
-# The thirteen schemas still short of the ACDC v2 envelope (this.i @jruwvxnt).
+# The schemas still short of the ACDC v2 envelope (this.i @jruwvxnt).
 # Each entry names the tick that migrates that schema, so closing the tick
 # XPASSes this row and forces the marker's removal — the ratchet that makes
 # "how much of the corpus is issuable" a fact the suite states rather than an
@@ -44,7 +44,6 @@ CHECK_FUNCS = {_CHECK_NAME[fn]: fn for fn in checks.ALL_CHECKS}
 _V2_MIGRATION = {
     "ai-coder": "6e3q",
     "ai-user-coca": "6e3q",
-    "attestation": "5mk3",
     "award": "272l",
     "bindkey": "4jwa",
     "citation": "7bdk",
