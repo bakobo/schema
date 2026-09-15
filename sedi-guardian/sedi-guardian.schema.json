@@ -1,17 +1,18 @@
 {
-  "$id": "EHrwoAIbvhpvUZFN3wQiNKanUzZ_uPtbz3AQGWtopMtc",
+  "$id": "ENzPKrfeHE7Qs247OhF5RQ_QO78iCiJevqIErOY5H94Q",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Digital Guardian",
   "description": "The SEDI legal-recognition layer for a digital guardian (Utah Code 63A-20-201(3), Parts 4-6). It attests, in machine-checkable form a verifier can evaluate under the acceptance mandate, that a guardian holds recognized authority to act on behalf of a ward: the statutory basis, the scope of powers (Utah prefers LIMITED guardianship, so scope must be explicit), and the appointment/registration. The credential is HELD BY THE GUARDIAN (issuee) and names the WARD by edge -- the holder-not-subject invariant that keeps guardianship transparent, never impersonation (Sovrin Guardianship V2; Aries RFC 0103). It is registry-bound: guardianship terminates dynamically (majority, restored capacity, death, court order), so a verifier MUST check current status. The generic act/duty/termination machinery lives in GCD (relationType: guardianship), reachable via the optional scope edge; this schema carries only what Utah law makes relationship- and jurisdiction-specific. This is the first of a likely sedi-legal-authority family (conservatorship, POA-agency); see this.i @sdlg3n.",
-  "$comment": "A v1 attribute+edges+rules ('acm') ACDC, fully version-stamped by keri 1.2.13. Authority credentials are disclosed whole (like GCD), not selectively -- a verifier must see basis+scope+validity together -- so the attribute section is flat.",
+  "$comment": "An ACDC v2 attribute+edges+rules field-map credential (ilk 'acm'). Authority credentials are disclosed whole (like GCD), not selectively -- a verifier must see basis+scope+validity together -- so the attribute section is flat. Migrated off the v1 'ri' to the v2 'rd' by this.i @lkfnoess, so the 'subject' edge into sedi-id no longer crosses a protocol-version boundary.",
   "credentialType": "SEDI_Guardian",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "object",
   "required": [
     "v",
+    "t",
     "d",
     "i",
-    "ri",
+    "rd",
     "s",
     "a",
     "e",
@@ -21,6 +22,10 @@
     "v": {
       "description": "ACDC version string",
       "type": "string"
+    },
+    "t": {
+      "description": "Message type; 'acm' is the field-map ACDC ilk",
+      "const": "acm"
     },
     "d": {
       "description": "SAID of the credential",
@@ -34,8 +39,8 @@
       "description": "Issuer = the appointing authority (court/DGO for court bases; the individual for a self-executed designation; DGO for a parental attestation)",
       "type": "string"
     },
-    "ri": {
-      "description": "Registry for credential status -- MANDATORY; guardianship terminates dynamically",
+    "rd": {
+      "description": "Registry SAID for credential status -- MANDATORY; guardianship terminates dynamically",
       "type": "string"
     },
     "s": {

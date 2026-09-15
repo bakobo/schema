@@ -65,11 +65,19 @@ The [`invalid/`](invalid) corpus rejects: a top-level extra property, a missing 
 block with an extra property, a block missing its blinding nonce, a non-boolean `ageOver21`, and a
 malformed `asOf`.
 
-The AGID and per-block SAIDs are **authentic**, computed with the v2 keri `Aggor` (the same primitive in
-keripy's `tests/acdc/test_clc_disclosure.py`). Because it is a v2 aggregate credential, the repo's pinned
-keri 1.2.13 oracle cannot version-stamp it, so the examples are unversioned and the linter checks
-top-level SAID consistency and schema validity rather than recomputing the AGID (see
-[`this.i` `@sd2qfw`](../this.i)). The attributive [`sedi-id`](../sedi-id) does not have this limitation.
+`sedi-age` is an ACDC v2 **aggregate** credential, ilk `acg`, modeled on the worked example in keripy's
+`tests/acdc/test_clc_disclosure.py`. `acg` is a *fixed-field* ilk with no optional fields, so every
+instance carries all ten top-level fields and the schema requires all ten; the `t` const rejects a
+message of any other ilk. The examples are built with keri's own `Aggor` and `acdcagg`, so the AGID and
+per-block SAIDs are authentic and `Aggor.verifyDisclosure` accepts both the full credential and the
+over-21 disclosure. This repo's linter still treats `A` opaquely — it checks top-level SAID consistency
+and schema validity rather than recomputing the AGID — so that last property is checked outside the
+linter (see [`this.i` `@lkfnoess`](../this.i) and tick `2nd5`).
+
+Each entitlement chains back to the holder's identity root by one **E1E** edge to
+[`sedi-id`](../sedi-id). E1E is an *identity* relation — this credential's issuee is the same subject as
+the far node's issuee — and it leaves the issuer unconstrained, which is why it holds here where `I2I`
+would not (keripy discussion #1515). The operator is pinned by `const`, so a non-E1E edge is rejected.
 
 ### Governance
 

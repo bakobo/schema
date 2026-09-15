@@ -1463,7 +1463,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             and why thing-controllership is not folded into the person-fiduciary family.
         The whole SEDI family moves to the ACDC v2 envelope; sedi-age becomes a true 'acg' with an E1E edge = decision:
           id: lkfnoess
-          stage-status: in-progress
+          stage-status: done
           why: >
             OCCASION: sedi-age refused every ACDC v2 message it exists to describe. It sets
             additionalProperties:false and never listed 't', so a heti-issued credential failed validation on
@@ -1525,3 +1525,24 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             downstream of upstream rather than upstream of it. Sequenced instead as its own unit, starting at
             the source: fix the example in bakobo/keripy, raise a PR there, then contribute it back to
             WebOfTrust/keripy, and only then bring the shape here. Confirmed with Daniel 2026-09-15.
+            DEFECT FOUND AND FIXED IN PASSING — @sd2qfw's claim that sedi-age's "AGID and per-block SAIDs
+            are authentic -- computed with the v2 keri Aggor", which sedi-age/index.md repeated, was NOT
+            TRUE OF THE PUBLISHED ARTIFACTS. Measured: the aggregate's element SAIDs were reproducible with
+            Saider.saidify (this repo's generic saidify_sad path) and not with Aggor, and
+            Aggor.verifyDisclosure returned False on the published 'A'. The corpus was self-consistent
+            against the LINTER's algorithm while failing the PROTOCOL's, and nothing could see it because
+            schematools treats 'A' opaquely — the linter was checking the corpus against itself. Both
+            example.json and the over-21 disclosure are now built with Aggor/acdcagg and verify.
+            NOTE the attributive side was NOT affected, and was wrongly suspected first: a Compactor-based
+            comparison appeared to indict sedi-id, gcd and face-to-face alike, but building with keripy's
+            own acdcmap reproduces their section SAIDs byte-for-byte, because Compactor.said is the SAID
+            over the COMPACTED form while an expanded section legitimately carries the Saider value. The
+            generalisable lesson: compare against the builder the protocol actually uses, not against a
+            primitive that merely looks like it should agree.
+            Also fixed: sedi-age's top-level 'u' was '0ABsediagetopnonce00x' — 21 characters where a '0AB'
+            nonce is 24, so it was not decodable CESR at all. It survived because the schema types 'u' as a
+            bare string and nothing ever parsed it; it had propagated into 9 files.
+            OPEN, DELIBERATELY: @sd2qfw predicted that under v2 a credential and its disclosure "would"
+            share one top-level 'd'. They do not under the pinned oracle — keripy recomputes 'd' over the
+            form it is given. What ties the disclosure to the credential is the AGID they share at A[0],
+            which is what Aggor.verifyDisclosure checks. The prediction is retired, not carried forward.
