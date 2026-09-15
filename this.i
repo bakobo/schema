@@ -695,6 +695,63 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             terminatingEvents. @3j5lwc7w already reasoned that borrowing that path without the structure
             implies a kinship that does not exist; the same holds in reverse, so GCD is not flattened to
             match the others.
+        attestation 2.0.0 is the first migration, and the first test of the defaults; 1.0.0 is archived = decision:
+          id: 4t5t4yca
+          why: >
+            The first schema migrated under @jruwvxnt, and chosen first (tick 5mk3) precisely because it is
+            the smallest — 5 fields, already camelCase, no cross-pinned SAIDs — so the four default nodes
+            would meet a real schema before nine more were designed against them. Everything below either
+            applies a default or records the one place it does not fit.
+            ENVELOPE per @enr3eg: order [v, t, d, u, i, rd, s, a, e, r]; 't' declared and optional; the
+            v1-era inner '$id' dropped from the a and e arms. One addition beyond a rename: 1.0.0's 'a' was a
+            BARE OBJECT with no oneOf at all, so the credential could not compact — there was no
+            SAID-string arm for a most-compact form to collapse to. The compact arm is added, first in the
+            oneOf, for a and e alike.
+            'rd' is OPTIONAL, diverging from @enr3eg's GCD and following @2n2vtee3. @enr3eg's argument for
+            requiring it is specific to authority evidence that a stranger-verifier must discover a registry
+            for; an attestation is a statement about content at a time, the registry-free short-lived variant
+            merti chose (@pxfdnc) is coherent for it, and heti carries 'rd' on every credential it issues
+            anyway (heti @89kk7cft), so requiring it would constrain only the issuers that are not heti.
+            'a.d' is OPTIONAL for the reason @enr3eg measured — the fork's acdcmap emits none — and 'a.u' is
+            REQUIRED per @jsmu322m. That requirement is load-bearing here rather than formulaic: the
+            attributes block's entire content is a digest and a datetime, and an observer of an attestation
+            is very often someone who already HOLDS the attested content, so an unblinded block is
+            confirmable by exactly the party the credential is most likely to be shown to.
+            UNTARGETED, confirmed rather than assumed. 1.0.0's index.md states it outright ("there is no
+            issuee"), so no 'a.i' was added even though heti's Registry.issue can insert one. The consequence
+            is deliberate: a targeted issuance against this schema fails validation, because a data
+            attestation is an affidavit about content and has no party to be about.
+            RULES per @jnft7xse, where 1.0.0 declared no 'r' at all. Three clauses, and 'r' is required at
+            top level: digestOnly (the credential commits to a digest and nothing else — a verifier that has
+            not recomputed it over content it holds has verified nothing about that content);
+            noContentAssertion (the issuer attests the digest was computed over content it observed, not that
+            the content is true, lawful, complete, or fit for anything); absenceIsNotFalse (@ar6vk2's
+            discipline, named here because validUntil makes it concrete). The texts live in ONE place: the
+            build reads the schema's own 'const' values back out to generate rules.json, so the block and
+            the schema cannot drift apart the way a hand-copied clause eventually does.
+            'validUntil' optional per @pp4wv7pw. FIELD QUALITY per @jruwvxnt: faa's house SAID/AID pattern
+            applied to d, i, rd, s and a.d, and its digest pattern to 'digest'. 'u' is deliberately left
+            UNPATTERNED — a salty nonce is a 24-character 0A-coded primitive, and the 44-character SAID
+            pattern would have rejected every nonce heti actually mints. A constraint that cannot be checked
+            against the issuer is worse than none.
+            THE 1.0.0 EXAMPLE IS NOT ARCHIVED, and that is the finding rather than an oversight. Its 's' named
+            EB4AsU1rKGOAf7m4MS324XhanXq8G01sR_bUdUV2TULm — not this schema, and in no registry — so it had
+            never been saidified against the schema it claimed to instantiate. It survived because it was
+            called example-attestation.json, and all three positive checks key on example.json, which is the
+            silent skip @jruwvxnt's rename convention exists to end. Archiving it would preserve a defect, so
+            attestation-1.0.0/ carries the schema and index.md only, following proof-of-control-1.1.0.
+            ACCEPTANCE ORACLE, run and passing: a credential built by the fork's acdcmap(israid, uuid, regid,
+            schema=<new $id>, attribute={u, dt, digest}, rule=<rules>) validates against the schema under
+            Draft 2020-12 with format assertion on. The negative corpus is REBUILT from that instance, one
+            mutation each, and every fixture verified to fail for the defect it is NAMED after rather than
+            for the envelope — the check @2n2vtee3 added after finding repointed fixtures can keep passing
+            while testing nothing. Four are new and exist to give this node's decisions a failing oracle:
+            a missing block nonce (@jsmu322m), a missing rules section (@jnft7xse), a mis-shaped digest (the
+            new pattern), and an instance carrying v1's 'ri' (the migration itself).
+            MAJOR per @k3wm7d, since renaming 'ri' invalidates every conceivable prior instance: 1.0.0 ->
+            2.0.0, new SAID EE5FA0uE3ydhSYrG8lqECgR0Ad3NpkQxPw0b3jp-2eDa, with the old
+            EJxFPpyDRV-W6O2Vtjdy2K90ltWmQK8l1jePw5YOo_Ft kept resolvable in registry.json per @r5vk3n.
+            Nothing pinned the old SAID: no other schema references it and it has no recorded issuer.
 
     Schema-authoring tooling is deferred, pending a TypeScript-vs-Python decision = decision:
       id: p4zc7n
