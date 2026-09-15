@@ -48,7 +48,6 @@ _V2_MIGRATION = {
     "citation": "7bdk",
     "faa": "3x2z",
     "face-to-face": "3n4u",
-    "org-vet": "4a4i",
     "sedi-guardian": "4224",
     "sedi-id": "65yn",
     "sedi-present-age-portrait": "2tyb",

@@ -10,7 +10,7 @@
     "u": "0AA9UmyyoDYUBG6m_A5eR70w",
     "i": "EIkxoE8eYnPLCydPcyc_lhQgwOdBHwzkSe36e2gqEH-5",
     "dt": "2026-09-15T14:23:16.000000+00:00",
-    "loa": "gold",
+    "loa": 2.2,
     "lids": [
       "5493001KJTIIGC8Y1R12",
       "gb/01234567",
@@ -23,5 +23,6 @@
     "noClaimBeyondTheTier": "Each tier asserts only what its own procedures establish. In particular, a credential below the tier that checks a thing says nothing about the organization's legal standing, signing authority, governance, tooling, solvency or competence, and a verifier MUST NOT infer any of them from the organization having been vetted at all.",
     "lidsAreReferencesNotAssertions": "The linked identifiers are the references the vetter was able to use. The issuer does not assert that each registry entry is current, accurate, or exclusively controlled by this organization, and a verifier that relies on one MUST check it at its source.",
     "assuranceIsPointInTime": "The vetting speaks as of its stated datetime. The issuer agrees to revoke promptly once it believes the tier no longer holds, and a verifier MUST check the registry rather than treat an unexpired credential as current."
-  }
+  },
+  "unexpected": "x"
 }
