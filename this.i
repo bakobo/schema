@@ -828,6 +828,62 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             decorative. MAJOR per @k3wm7d: 1.0.0 -> 2.0.0, new SAID
             EAwWdh1p_JlRUn35GjvueqljM5w-tQCe3XWIc52k0pyC, with EFvHYHX0cUx9sdjxZOr9fpPcQKdzRNFH42D8R29p7lAH
             kept resolvable in registry.json per @r5vk3n.
+        org-vet 2.0.0 gets governance of its own, an issuee, and a bounded loa; 1.0.0 is archived = decision:
+          id: kdndo6dc
+          why: >
+            The third migration (tick 4a4i), and the one where the envelope was the least of it: three
+            things this schema's own documentation claimed were either absent from the schema or contradicted
+            by it. None was caught by any check, because every check here validates shape and SAIDs rather
+            than whether a credential says what it says it says.
+            THE GOVERNANCE FRAMEWORK BELONGED TO ANOTHER CREDENTIAL. org-vet/rules.json was BYTE-IDENTICAL to
+            citation/rules.json — four clauses entirely about citations ("the citation, in and of itself,
+            only commits the issuer to point at content in a way that makes the issuer and the target
+            verifiable") — and the schema pinned that ruleset's SAID as a const on 'r'. So an org-vet's
+            binding terms, the thing @jnft7xse calls the only channel by which a credential tells a relying
+            party what it means, were a disclaimer about pointing at content. Replaced with four clauses of
+            its own — loaIsTheIssuersProcedure, noClaimBeyondTheTier, lidsAreReferencesNotAssertions,
+            assuranceIsPointInTime — each traceable to a sentence index.md's own LoA table already contained.
+            THE INDEX.MD GOVERNANCE SECTION BELONGED TO A THIRD CREDENTIAL. It cited rules SAID
+            EFthNcTE20MLMaCOoXlSmNtdooGEbZF8uGmO5G85eMSF, which is GCD's pre-@k3wm7d ruleset and is not the
+            SAID org-vet actually pinned; it referred to a 'gfw' field org-vet does not have; and it closed
+            with "the act of issuing or receiving a GCD credential constitutes binding acceptance of the
+            rules". Three wrong things in one paragraph, all copy-paste inherited at the hard fork (@q3nv6t).
+            THE CREDENTIAL WAS UNTARGETED WHILE ITS PROSE SAID IT WAS TARGETED. index.md: "It is issued to a
+            cryptographic identifier controlled by the org, allowing the org to authenticate itself on the
+            basis of the credential." The attribute block had no 'i', so there was no org to issue it to and
+            nothing for a presentation to bind to. 'a.i' is added and REQUIRED. That is the third schema in
+            three migrations whose prose and shape disagreed (@4t5t4yca's untargeted-but-broken example,
+            @v5ma6uxn's RSA that CESR could not carry), which is a finding about the corpus rather than about
+            any one schema: it was documented aspirationally and never exercised by an issuer.
+            'loa' AND 'lids' BECOME REQUIRED. A credential titled "Authenticate an org with an explicit level
+            of assurance" left the level of assurance optional, so a conforming instance could assert nothing
+            its own title promises. 'lids' follows at one remove: every tier in the LoA table begins by
+            proving that a non-cryptographic identifier references a real, non-defunct org, so a vet carrying
+            no references records no vetting.
+            'loa' IS BOUNDED to [1, 4], where 1.0.0 accepted any number at all including zero and negatives.
+            index.md defines exactly four tiers and explicitly blesses fractional values within one
+            (2.1 < 2.2), which is why the type stays 'number' rather than becoming an integer enum. A fifth
+            tier later only raises the ceiling, which invalidates no existing instance and is MINOR under
+            @k3wm7d — so the bound costs nothing that a future tier could not undo cheaply.
+            The rest is the defaults applying cleanly. Nonce in both slots with 'a.u' required (@jsmu322m),
+            and this is the most guessable attribute block in the corpus — a short list of public identifiers
+            and a number between 1 and 4 — so confirmation by recomputation against the registry's published
+            SAID is available to anyone who cares to try. 'rd' REQUIRED as for @v5ma6uxn and for the reason
+            its own assuranceIsPointInTime clause states: an assurance level speaks to a state of affairs
+            that changes, and an issuer's duty to revoke is empty without a registry to exercise it in.
+            additionalProperties CLOSED at top level and on 'a' (@hoag7c7s) — two more of @p3rk6d's six.
+            FIRST EXAMPLE EVER. org-vet was the only family in the corpus with no positive example on disk,
+            so check_examples, check_example_refs and check_example_saids all had nothing to look at and
+            reported clean. example.json is built by the fork's acdcmap and is now SAID-checked like the rest.
+            ORACLES, both run: the fork-built acm validates under Draft 2020-12 with format assertion, and
+            heti mints a facet, opens an upd registry, learns this schema and issues against it end to end,
+            reporting nonced slots ('u', 'a.u').
+            MAJOR per @k3wm7d: 1.0.0 -> 2.0.0, new SAID EJ5HgojIGN2_R9TzhCgnYe9NhNHxfWY0MkENZcs1CRZa, old
+            EJvwY9n7EsJ4ZejUBHFrnrNammC8BkGI9YaW1Wnp5c22 kept resolvable per @r5vk3n. The archive keeps
+            rules.json, UNLIKE the archives at @4t5t4yca and @v5ma6uxn where the old example was dropped as
+            defective: the 1.0.0 schema pins that ruleset's SAID as a const, so an archive without it would
+            not resolve. Preserving the citation clauses there is not endorsing them; it is keeping a
+            published SAID answerable, which is the whole of what @r5vk3n asks.
 
     Schema-authoring tooling is deferred, pending a TypeScript-vs-Python decision = decision:
       id: p4zc7n
