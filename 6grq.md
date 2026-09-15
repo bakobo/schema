@@ -2,3 +2,4 @@
 kind: debt
 created: 2026-09-14T21:52Z
 
+- 2026-09-15T06:06Z RE-SCOPED 2026-09-15 (this.i @lkfnoess, decided with Daniel): NO LONGER folded into the v2-envelope unit -- that landed without it, deliberately. The worked example this schema is modeled on (bakobo/keripy tests/acdc/test_clc_disclosure.py AGE_SCHEMA_MAD) has the SAME unpinned-position weakness, so fixing it here alone would fork a security-relevant shape downstream of upstream. Sequence is now upstream-first: (1) fix the A-arm shape in bakobo/keripy's worked example, (2) raise a PR there, (3) contribute it back to WebOfTrust/keripy, (4) only then bring prefixItems + minItems:2 + the required-object issuee arm here. Note Daniel posts anything that reaches a WebOfTrust conversation himself. Still MAJOR here when it lands: a prior instance lacking the issuee block becomes invalid.
