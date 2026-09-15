@@ -1,31 +1,39 @@
 {
-  "$id": "EO6RR2KsPCPfUjBaF5onVLCqoSem_GAf9tc_BYUtEvlX",
+  "$id": "EBaOk8MWJv-mMOer7VySiiPMqBZbzLW7FQsZJR-lGCfu",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Age Attestation",
   "description": "Derived, state-endorsed age attestation for Utah's SEDI (Utah Code 63A-20). A selectively disclosable Aggregate ('A') section of individually-blinded boolean flags -- ageOver13/16/18/21/55/65 -- plus the holder (issuee) and an as-of date. The holder discloses only the threshold(s) a verifier needs (e.g. ageOver21 for alcohol, 63A-20-204(2)(a)) and the birth date is never involved (63A-20-301(1)(e)). An aggregate (not an attribute) section is correct for a homogeneous boolean vector: it treats the thresholds as an unordered blinded set, matching the ISO mDL age_over_NN element and leaving room for a sparse-Merkle-tree upgrade (PR WebOfTrust/keripy#1505; this.i @sdav5t).",
-  "$comment": "ACDC v2 Aggregate credential (ilk 'acg'). The v1-pinned oracle (keri 1.2.13) cannot stamp a v2 version string, so 'v' is optional and examples omit it; the AGID and per-block SAIDs are computed by the v2 Aggor and are not recomputed by this repo's linter (this.i @sd2qfw).",
+  "$comment": "ACDC v2 Aggregate credential (ilk 'acg'), modeled on the worked example in bakobo/keripy tests/acdc/test_clc_disclosure.py (AGE_SCHEMA_MAD). 'acg' is a FIXED-FIELD ilk with no optional fields: keripy emits all ten top-level fields on every instance, so all ten are required here and the 't' const rejects a message of any other ilk. The AGID and per-block SAIDs are computed by the v2 Aggor; this repo's linter does not yet recompute the AGID (this.i @lkfnoess; tick 2nd5).",
   "credentialType": "SEDI_Age",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "object",
   "required": [
+    "v",
+    "t",
     "d",
+    "u",
     "i",
     "rd",
     "s",
     "A",
+    "e",
     "r"
   ],
   "properties": {
     "v": {
-      "description": "ACDC version string (v2 in production; omitted under this repo's v1 oracle)",
+      "description": "ACDC version string",
       "type": "string"
+    },
+    "t": {
+      "description": "Message type; 'acg' is the fixed-field aggregate ACDC ilk",
+      "const": "acg"
     },
     "d": {
       "description": "SAID of the credential",
       "type": "string"
     },
     "u": {
-      "description": "Top-level blinding nonce; present => private variant",
+      "description": "Top-level blinding nonce (salty); always present on an 'acg', so the credential is always the private variant",
       "type": "string"
     },
     "i": {
@@ -312,6 +320,75 @@
               }
             ]
           }
+        }
+      ]
+    },
+    "e": {
+      "description": "Edge section: one E1E identity edge chaining this entitlement back to the holder's sedi-id root.",
+      "oneOf": [
+        {
+          "description": "SAID of the edge section (compact form)",
+          "type": "string"
+        },
+        {
+          "$id": "EH_almbeRua1Ehwd447CahkB0yBerUeWmMe1ErjbdX-y",
+          "description": "Edge section",
+          "type": "object",
+          "required": [
+            "d",
+            "identity"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of the edge section",
+              "type": "string"
+            },
+            "u": {
+              "description": "Edge-section blinding nonce (salty)",
+              "type": "string"
+            },
+            "identity": {
+              "description": "E1E identity edge to the holder's sedi-id. E1E is an IDENTITY relation -- this credential's issuee is the same subject as the far node's issuee -- and leaves the issuer unconstrained, so it holds even though the State issues both and is the issuee of neither. I2I would misapply here (keripy discussion #1515); this.i @lkfnoess supersedes the no-edge half of @sd5hjb.",
+              "oneOf": [
+                {
+                  "description": "SAID of the edge (withheld)",
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "n",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "SAID of this edge",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Per-edge blinding nonce (salty)",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "Far node: SAID of the holder's sedi-id credential",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "Far node schema SAID (sedi-id)",
+                      "type": "string"
+                    },
+                    "o": {
+                      "description": "Edge operator; E1E: this ACDC's issuee = far node's issuee",
+                      "const": "E1E"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
         }
       ]
     },

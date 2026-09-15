@@ -114,7 +114,7 @@ looks like:
 
 The verifier hashes each disclosed block, substitutes the withheld SAIDs, and recomputes `a.d` to
 confirm the disclosure is authentic. (This is shown as prose rather than a SAID-checked gallery file
-because the repo's pinned keri 1.2.13 oracle does not compact nested blocks — see the [SAID note](#a-note-on-saids).)
+because the repo's oracle does not compact nested blocks — see the [SAID note](#a-note-on-saids).)
 
 ### Schema
 
@@ -125,7 +125,7 @@ SAID, block detail)` — so any subset can be disclosed as detail while the rest
 ### Worked example
 
 [`example.json`](example.json) is the fully-disclosed issued credential (all attributes present) — a
-**private** variant (top-level `u`), a **version-stamped v1 ACDC** issued by the State to the holder
+**private** variant (top-level `u`), a **version-stamped ACDC v2 `acm`** issued by the State to the holder
 Alice. The [`invalid/`](invalid) corpus rejects: a top-level extra property, a missing/`a`-section-less
 credential, a missing issuee, a missing required attribute, a block with an extra property, a block
 missing its blinding nonce, a non-date `dob`, an `image` missing its `digest`, and a non-string
@@ -133,13 +133,13 @@ missing its blinding nonce, a non-date `dob`, an `image` missing its `digest`, a
 
 ### A note on SAIDs
 
-Because `sedi-id` is a plain **attributive v1 ACDC**, this repo's keri 1.2.13 oracle version-stamps and
-SAIDs it fully — unlike the aggregate [`sedi-age`](../sedi-age), it carries a real version string and a
-canonical `d`. One residual: keri 1.2.13 does not compact nested partial-disclosure blocks, so a
-partial-disclosure form's `a.d`/`d` differ from the full form's (a v2 stack computes the disclosure-
-invariant compact SAID). That is why the residence disclosure above is illustrative prose, and the
-machine-validated selective-disclosure gallery lives on `sedi-age`, where the AGID is stable across
-disclosures. See [`this.i` `@sdav5t` / `@sd2qfw`](../this.i).
+`sedi-id` is an **attributive ACDC v2 `acm`** — the field-map ilk, so `u` and `e` are genuinely optional
+here, unlike the fixed-field `acg` of [`sedi-age`](../sedi-age). It carries a real v2 version string and
+a canonical `d`, both computed by this repo's oracle. One residual remains: the oracle does not compact
+nested partial-disclosure blocks, so a partial-disclosure form's `a.d`/`d` differ from the full form's.
+That is why the residence disclosure above is illustrative prose, and the machine-validated
+selective-disclosure gallery lives on `sedi-age`, where the AGID is stable across disclosures. See
+[`this.i` `@sdav5t` / `@lkfnoess`](../this.i).
 
 ### The SEDI family
 

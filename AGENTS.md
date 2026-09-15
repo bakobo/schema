@@ -19,8 +19,12 @@ work: `git clone --depth 1 https://github.com/bakobo/dev`. Always on:
   `e.state.conflict.r`, `w.feature.deprecated.f` — classified by what the *obstacle* was rather than
   by which component raised it, with retryability in the trailing token so a caller can prefix-match
   a whole branch of meaning. Codes are globally unique across Bakobo and declared as module-scope
-  literals. Full standard: [`dev/standards/error-codes.md`](../dev/standards/error-codes.md); the
-  HTTP wire format is [`dev/standards/http-errors.md`](../dev/standards/http-errors.md).
+  literals. **Declarative configuration is in scope** — an OpenTofu `precondition`, an Ansible
+  `assert` — and carries its code as a literal prefix on the message, `"<code>: <sentence>"`, since
+  no single module-scoped value can represent a per-instance one; test-assertion messages are the
+  one exclusion. Full standard: [`dev/standards/error-codes.md`](../dev/standards/error-codes.md);
+  the HTTP wire format is [`dev/standards/http-errors.md`](../dev/standards/http-errors.md) and the
+  declarative binding is [`dev/standards/config-errors.md`](../dev/standards/config-errors.md).
 - **Repo layout.** Architecture and developer docs live in `docs/`; the root holds only repo-level
   files (`README`, `LICENSE`, `CONTRIBUTING`), the instruction/config files, build manifests, and
   `this.i` at the root as the source of truth. Don't leave `design.md` loose at the root. Full

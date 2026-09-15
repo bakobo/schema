@@ -68,6 +68,13 @@ SAD_LABEL = "d"
 def _saidify_children(node: dict, label: str) -> None:
     # Post-order: saidify every nested block carrying the label, deepest first,
     # so an enclosing block's SAID is computed over already-correct child SAIDs.
+    #
+    # ~7v2h An ACDC v2 AGGREGATE section ('A') is a list, so it is skipped here
+    # and its element SAIDs and AGID are never recomputed or checked. Aggregate
+    # elements are blinded by keri's Aggor, which does NOT agree with the plain
+    # Saider path below — so an aggregate can be self-consistent against this
+    # module while failing Aggor.verifyDisclosure. That is not hypothetical: it
+    # is what sedi-age shipped until this.i @lkfnoess.
     for value in node.values():
         if isinstance(value, dict) and label in value:
             _saidify_children(value, label)

@@ -50,7 +50,7 @@ they are not "authorized to act on behalf of" and are not a digital guardian (se
 `sedi-guardian` carries only what Utah law makes **relationship- and jurisdiction-specific**: the
 `basis`, the `powers` scope, and a clustered **`recognition`** block (appointing court/case/order or
 self-executed instrument, `appointingState`, and cross-state `registrationStatus` — `native` /
-`registeredForeign` / `transferred` under UAGPPJA, Title 75 Ch. 5b). It is **registry-bound** (`ri`):
+`registeredForeign` / `transferred` under UAGPPJA, Title 75 Ch. 5b). It is **registry-bound** (`rd`):
 guardianship terminates dynamically (majority, restored capacity, death, court order), so a verifier MUST
 check current status, not just the signature and dates.
 
@@ -69,7 +69,8 @@ protect), which remains GCD's territory. See `this.i` `@sdlg3n`.
 
 ### Schema and examples
 
-See [`sedi-guardian.schema.json`](sedi-guardian.schema.json) — a v1 attribute+edges+rules ACDC. Like
+See [`sedi-guardian.schema.json`](sedi-guardian.schema.json) — an ACDC v2 attribute+edges+rules
+`acm`. Like
 GCD, an authority credential is disclosed **whole** (a verifier needs basis + scope + validity together),
 so the attribute section is flat, not selectively disclosable. Edges: `subject` (→ ward's `sedi-id`;
 `I2I` when a principal self-designates, else `NI2I`), `authorization` (→ the court order / Letters /

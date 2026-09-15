@@ -1,16 +1,18 @@
 {
-  "$id": "EE2VI0j6cttlC4nqu7HwlHfc0Et6xicoaFjvO41w27qN",
+  "$id": "EMZtIHLNTVmFfzKXGC1Qvwza37mNqaxLh0bU7zjQyJHS",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Identity Credential",
   "description": "State-Endorsed Digital Identity (Utah Code 63A-20) root credential. The department verifies and endorses exactly the statutory attribute set -- name, birth date, image, Utah residence address (63A-20-301(2)(f)) -- carried in an attribute ('a') section as individually-blinded, partially-disclosable nested blocks, so a holder discloses an arbitrary subset by label (e.g. prove Utah residence without the street line). An attribute section (not an aggregate) is correct for a fixed set of meaningfully-labeled fields: label-based pathing for graduated-disclosure negotiation, with no advantage to hiding block labels/positions (PR WebOfTrust/keripy#1505; this.i @sdav5t).",
+  "$comment": "ACDC v2 field-map credential (ilk 'acm'), modeled on the worked example in bakobo/keripy tests/acdc/test_clc_disclosure.py (SEDI_SCHEMA_MAD). 'acm' is the variable field-map ilk, so 'u' and 'e' are genuinely optional here, unlike the fixed-field 'acg' of sedi-age. The registry field is the v2 'rd' (this.i @lkfnoess migrated the family off the v1 'ri').",
   "credentialType": "SEDI_Identity",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "object",
   "required": [
     "v",
+    "t",
     "d",
     "i",
-    "ri",
+    "rd",
     "s",
     "a",
     "r"
@@ -19,6 +21,10 @@
     "v": {
       "description": "ACDC version string",
       "type": "string"
+    },
+    "t": {
+      "description": "Message type; 'acm' is the field-map ACDC ilk",
+      "const": "acm"
     },
     "d": {
       "description": "SAID of the credential",
@@ -32,8 +38,8 @@
       "description": "AID of the issuer (the State, via the Department of Government Operations)",
       "type": "string"
     },
-    "ri": {
-      "description": "Registry for the issuer's credential status (revocation)",
+    "rd": {
+      "description": "Registry SAID: binds the credential to the State's revocation registry (TEL)",
       "type": "string"
     },
     "s": {
@@ -437,6 +443,19 @@
             }
           },
           "additionalProperties": false
+        }
+      ]
+    },
+    "e": {
+      "description": "Edge section. The identity root chains to nothing, so instances omit it; admitted because 'acm' permits it and a future sedi-id variant may carry one.",
+      "oneOf": [
+        {
+          "description": "SAID of the edge section",
+          "type": "string"
+        },
+        {
+          "description": "Edge section",
+          "type": "object"
         }
       ]
     },
