@@ -8,6 +8,8 @@ invariant holds. The checks are:
   - ``check_registry``       registry.json <-> disk agree (indexed once, path
                              correct, ``$id`` == key, no orphans, no dangling)
   - ``check_examples``       ``<folder>/example.json`` validates against its schema
+  - ``check_envelope``       the ACDC v2 envelope (@jruwvxnt): ``rd`` not ``ri``,
+                             canonical field order, compact arm first
 
 Per-schema instance *fixtures* (negative corpora, semantic rules, regression)
 are the other axis of @n7xk4r and are added as GCD's evolution pulls them in.
@@ -16,6 +18,7 @@ are the other axis of @n7xk4r and are added as GCD's evolution pulls them in.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -253,6 +256,104 @@ def check_negative_examples(root: str | Path) -> list[Problem]:
     return problems
 
 
+#: Canonical ACDC v2 top-level field order (this.i @enr3eg, following the v2
+#: spec's worked examples). A schema declares a SUBSET of these, in this order.
+V2_FIELD_ORDER = ("v", "t", "d", "u", "i", "rd", "s", "a", "A", "e", "r")
+
+#: The section labels whose subtrees carry the idioms v2 changed.
+_SECTION_LABELS = ("a", "A", "e", "r")
+
+#: ``<family>-<semver>/`` — an archived version directory (this.i @r5vk3n).
+_ARCHIVED_DIR = re.compile(r"-\d+\.\d+\.\d+$")
+
+
+def _is_acdc_schema(schema) -> bool:
+    """True for a credential schema, as opposed to a manifest or a config schema.
+
+    The test is a ``d`` plus an attribute or aggregate section — the minimum
+    that makes something an ACDC rather than any other JSON document. The
+    tooling is generic (this.i @c5tj3p), so a repo may hold schemas the
+    envelope rules simply do not address.
+    """
+    props = schema.get("properties")
+    if not isinstance(props, dict):
+        return False
+    return "d" in props and ("a" in props or "A" in props)
+
+
+def _section_defects(node, path: str):
+    """Yield envelope defects found anywhere inside one section's subtree."""
+    if isinstance(node, dict):
+        if SAID_LABEL in node:
+            yield f"{path} carries a v1-era inner {SAID_LABEL!r}; v2 sections carry none"
+        arms = node.get("oneOf")
+        if isinstance(arms, list):
+            compact = [i for i, arm in enumerate(arms) if isinstance(arm, dict) and arm.get("type") == "string"]
+            if compact and compact[0] != 0:
+                yield (f"{path} puts the compact string arm at oneOf[{compact[0]}]; the most-compact-form "
+                       "SAID algorithm keys on it being first")
+        for key, value in node.items():
+            yield from _section_defects(value, f"{path}/{key}")
+    elif isinstance(node, list):
+        for index, item in enumerate(node):
+            yield from _section_defects(item, f"{path}[{index}]")
+
+
+def check_envelope(root: str | Path) -> list[Problem]:
+    """Every credential schema carries the ACDC v2 envelope (this.i @jruwvxnt).
+
+    The invariant @enr3eg fixed for GCD and @2n2vtee3 repeated for
+    proof-of-control, made enforceable so the remaining migrations ratchet:
+    ``rd`` rather than v1's ``ri``, ``t`` declared, the canonical top-level
+    order, no v1-era inner ``$id`` on an expanded arm, and the compact
+    SAID-string arm first in every ``oneOf`` — which is what the most-compact-
+    form SAID algorithm keys on.
+
+    Two exclusions, both deliberate. An archived ``<family>-<semver>/``
+    directory is frozen byte-identical by @r5vk3n, so migrating one would
+    change its SAID and break the OOBI that keeps it resolvable; it is skipped
+    rather than reported, because there is no defect to fix. A schema that is
+    not a credential at all (no ``d``, no attribute or aggregate section) is
+    skipped for the same reason — the rules do not address it.
+
+    What this check deliberately does NOT assert is which envelope fields a
+    schema *requires*: @enr3eg requires ``rd`` for GCD and @2n2vtee3 leaves it
+    optional for proof-of-control, and both are right for their credential.
+    """
+    problems: list[Problem] = []
+    for entry in discover_schemas(root):
+        if _ARCHIVED_DIR.search(entry.name):
+            continue
+        try:
+            schema = _load_json(entry.path)
+        except json.JSONDecodeError:
+            continue  # a broken schema is already reported by check_structure
+        if not _is_acdc_schema(schema):
+            continue
+        props = schema["properties"]
+        if "ri" in props:
+            problems.append(Problem(
+                "envelope", entry.rel,
+                "declares v1 'ri'; ACDC v2 names the registry 'rd'",
+            ))
+        for label in ("t", "rd"):
+            if label not in props:
+                problems.append(Problem(
+                    "envelope", entry.rel, f"does not declare the v2 top-level {label!r}",
+                ))
+        declared = [key for key in props if key in V2_FIELD_ORDER]
+        canonical = sorted(declared, key=V2_FIELD_ORDER.index)
+        if declared != canonical:
+            problems.append(Problem(
+                "envelope", entry.rel, f"top-level order {declared} is not the v2 order {canonical}",
+            ))
+        for label in _SECTION_LABELS:
+            if label in props:
+                for message in _section_defects(props[label], label):
+                    problems.append(Problem("envelope", entry.rel, message))
+    return problems
+
+
 def check_intent_yaml(root: str | Path) -> list[Problem]:
     """If a ``this.i`` intent tree exists at the repo root, it must be valid YAML.
 
@@ -282,13 +383,34 @@ ALL_CHECKS = (
     check_example_refs,
     check_example_saids,
     check_negative_examples,
+    check_envelope,
     check_intent_yaml,
 )
 
 
-def run_all(root: str | Path) -> list[Problem]:
-    """Run every check over ``root`` and return the combined problem list."""
+#: The subset a *publication* must satisfy (this.i @jruwvxnt).
+#:
+#: Deliberately excludes ``check_envelope``. @r5vk3n keeps every superseded
+#: schema published byte-identical and forever, so that a SAID somebody holds
+#: stays resolvable — ``gcd-1.0.0``, ``gcd-2.0.1`` and ``proof-of-control-1.1.0``
+#: are v1 by design and must go on being served. A v1 envelope is not a defect
+#: in the artifact being published; it is a statement about which issuer can
+#: mint against it, which is a maintainer's question rather than a stranger's.
+PUBLISH_CHECKS = tuple(check for check in ALL_CHECKS if check is not check_envelope)
+
+
+def _run(selected, root: str | Path) -> list[Problem]:
     problems: list[Problem] = []
-    for check in ALL_CHECKS:
+    for check in selected:
         problems.extend(check(root))
     return problems
+
+
+def run_all(root: str | Path) -> list[Problem]:
+    """Run every check over ``root`` and return the combined problem list."""
+    return _run(ALL_CHECKS, root)
+
+
+def run_publish_gate(root: str | Path) -> list[Problem]:
+    """Run the checks a publication must satisfy — ``publish`` fails closed on these."""
+    return _run(PUBLISH_CHECKS, root)

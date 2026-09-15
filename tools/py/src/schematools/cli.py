@@ -70,7 +70,7 @@ def cmd_registry(args: argparse.Namespace) -> int:
 
 def cmd_publish(args: argparse.Namespace) -> int:
     root = _resolve_root(args.root)
-    problems = checks.run_all(root)
+    problems = checks.run_publish_gate(root)
     if problems:
         for problem in problems:
             print(problem, file=sys.stderr)

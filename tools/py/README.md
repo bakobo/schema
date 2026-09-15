@@ -55,3 +55,14 @@ Two suites:
 | `example` | `<folder>/example.json` validates against its schema |
 | `example_ref` | an example's `s` equals its schema's `$id` (referential integrity) |
 | `example_said` | an example instance is internally SAID-consistent (a re-saidify fixed point) |
+| `negative` | every `<folder>/invalid/*.json` is REJECTED by its schema |
+| `envelope` | the ACDC v2 envelope (`this.i` `@jruwvxnt`): `rd` not `ri`, `t` declared, canonical top-level order, no v1-era inner `$id`, compact string arm first in every `oneOf` |
+| `intent_yaml` | `this.i` at the repo root parses as YAML |
+
+`check` runs all of them. **`publish` gates on all of them except `envelope`** —
+`@r5vk3n` keeps superseded v1 schemas (`gcd-1.0.0`, `gcd-2.0.1`,
+`proof-of-control-1.1.0`) published byte-identical and forever so their SAIDs
+stay resolvable, so a v1 envelope is not a defect in a published artifact; it
+says which issuer can mint against it, which is a maintainer's question. The
+`envelope` check skips archived `<family>-<semver>/` directories and any schema
+that is not a credential (no `d`, no `a`/`A`).

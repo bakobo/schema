@@ -8,6 +8,8 @@ from schematools import publish
 from schematools.cli import main
 from schematools.said import SAID_LABEL
 
+from tests.support import write_registry, write_schema
+
 
 def _schema_said(repo):
     return json.loads((repo / "widget" / "widget.schema.json").read_text())[SAID_LABEL]
@@ -287,3 +289,14 @@ def test_meta_schema_published_and_manifest_conforms(synthetic_repo, tmp_path):
     assert manifest["$schema"] == "https://x.example/acdc-schema-registry.schema.json"
     # dogfood: the emitted manifest validates against its own meta-schema
     assert not list(Draft202012Validator(meta).iter_errors(manifest))
+
+
+def test_publish_cli_builds_despite_a_v1_envelope(synthetic_repo, tmp_path):
+    # The Pages deploy must not be held hostage to the v2 migration (@jruwvxnt).
+    schema = json.loads((synthetic_repo / "widget" / "widget.schema.json").read_text())
+    props = schema["properties"]
+    props["ri"] = props.pop("rd")
+    write_schema(synthetic_repo, "widget", schema)  # re-saidify: only the envelope is at issue
+    write_registry(synthetic_repo)
+    rc = main(["publish", "--root", str(synthetic_repo), "--out", str(tmp_path / "site")])
+    assert rc == 0
