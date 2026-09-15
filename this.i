@@ -1276,9 +1276,14 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             correlation-consent rule since a shared protocol is a cross-credential linkage key. Data URLs are
             tolerated only as a presentation-edge convenience; the digested artifact is always the canonical
             raw bytes, never the data-URL string (its MIME/base64/charset params make the digest brittle).
-        Age is a derived boolean attestation (sedi-age), not a ZK predicate or an edge from the root = decision:
+        Age is a derived boolean attestation (sedi-age), not a ZK predicate — the no-edge half is SUPERSEDED by @lkfnoess = decision:
           id: sd5hjb
           why: >
+            SUPERSEDED IN PART by @lkfnoess (2026-09-15): the "sedi-age carries NO edge to sedi-id" clause
+            below no longer holds. Its reasoning is specifically about I2I and remains correct about I2I;
+            sedi-age now carries an E1E identity edge, which constrains only the issuees and so holds where
+            I2I would not. Everything else in this node — derived boolean over ZK predicate, and the
+            presentation-time I2I binding — stands unchanged.
             REFINED by @sdav5t (2026-07-16): sedi-age is now an AGGREGATE ('A') of boolean threshold flags
             (ageOver13/16/18/21/55/65) plus issuee and as-of blocks — the holder discloses just the needed
             threshold(s) — rather than the single-threshold attribute credential described below. The
@@ -1294,9 +1299,14 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             credential whose I2I edges point at both source credentials (the holder is issuer there, and the
             issuee of both). A ZK-predicate variant is a possible future profile the statute explicitly
             permits.
-        The v1-pinned SAID oracle cannot stamp v2 aggregate ACDCs; aggregate examples are unversioned = constraint:
+        The v1-pinned SAID oracle cannot stamp v2 aggregate ACDCs — LIFTED by @lkfnoess = constraint:
           id: sd2qfw
           why: >
+            LIFTED by @lkfnoess (2026-09-15) and retained as the record of why the corpus looked the way it
+            did. The premise expired when @h3or4x moved the oracle to bakobo/keripy@a1f2f32b (keri
+            2.1.0-dev0), which stamps v2; sedi-age is now a true 'acg', whose field domain has no optional
+            fields, so 'v' is required and the unversioned-example dodge below is gone. Consequence (3) —
+            this repo's linter does not recompute the AGID — is the ONE part still live, and is tick 2nd5.
             This repo's SAID oracle is pinned to keri 1.2.13 (@m4vd7s, @xv4m7d), which predates the ACDC v2
             Aggregate section. Empirically (probed 2026-07-16): keri 1.2.13's SerderACDC REJECTS a versioned
             aggregate SAD (it disallows even the v2 'rd' field, let alone 'A'), but the generic Saider path
@@ -1451,3 +1461,67 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             types make each credential's default reading safe without a flag check (the same instinct as not
             putting isAdmin on the ordinary-user schema). This is why SDM is not a basis value on sedi-guardian
             and why thing-controllership is not folded into the person-fiduciary family.
+        The whole SEDI family moves to the ACDC v2 envelope; sedi-age becomes a true 'acg' with an E1E edge = decision:
+          id: lkfnoess
+          stage-status: in-progress
+          why: >
+            OCCASION: sedi-age refused every ACDC v2 message it exists to describe. It sets
+            additionalProperties:false and never listed 't', so a heti-issued credential failed validation on
+            the ilk field alone, blocking bakobo/arf-interop from minting a real sedi-age instead of a locally
+            shaped stand-in (its ticks 3qay, 7o46, 2awf). The minimal repair is one property. This node records
+            why the repair is NOT minimal.
+            ROOT CAUSE: diffed against the worked example this credential descends from — AGE_SCHEMA_MAD in
+            bakobo/keripy tests/acdc/test_clc_disclosure.py, already cited by sedi-age/index.md — sedi-age is
+            that schema MINUS 't' and MINUS 'e'. The missing 't' is the visible half of a dropped envelope, not
+            an isolated omission, so fixing only what the error message named would have left the other half.
+            ILK: sedi-age is a true 'acg' and pins "t": {"const": "acg"}; the other three pin "const": "acm".
+            Rejected declaring sedi-age an 'acm', which would also have worked mechanically — acm's field
+            domain (keri.core.serdering FieldDom) lists 'a' and 'A' as an alternate pair, so an acm may carry
+            an aggregate section, and building one that way validates against the existing schema plus a bare
+            't'. That was the cheap path and it was refused for three reasons: the $comment and index.md
+            already assert acg, so the cheap path meant editing the documentation to match a mistake rather
+            than the schema to match the documentation; acg is the FIXED-FIELD ilk, whose field set keripy
+            itself enforces on every instance, which makes this JSON Schema a second independent check instead
+            of the only one; and the worked example mints it with acdcagg. Rejected a bare {"type": "string"}
+            for 't' (the style of WebOfTrust/keripy tests/sedi/test_sedi.py and of this repo's gcd and
+            proof-of-control) in favour of the const: on a fixed-field ilk the const is load-bearing, since a
+            wrong-ilk message is otherwise indistinguishable, and the worked example pins all five of its own.
+            ACCEPTED CONSEQUENCE — @sd2qfw IS LIFTED FOR sedi-age: acg has NO optional fields, so 'v' and 'e'
+            are present on every instance. The unversioned-aggregate dodge cannot survive the ilk choice; it is
+            a consequence of this decision, not a separate one. This is only possible because @h3or4x moved the
+            SAID oracle to bakobo/keripy@a1f2f32b (keri 2.1.0-dev0), which stamps v2; that node deferred the
+            lift as "sedi scope, not 25ra", and this is that scope. Tick 2nd5's version-stamp half closes here.
+            Its linter-recomputes-the-AGID half does NOT: the artifacts minted here carry oracle-computed
+            AGIDs, but schematools still treats 'A' opaquely, so AGID authenticity remains checked only by the
+            keripy test. That is left open deliberately rather than silently satisfied.
+            THE E1E EDGE SUPERSEDES @sd5hjb. That node ruled out an edge from sedi-age to sedi-id, reasoning
+            that "an I2I edge would hold only if age's issuer equalled sedi-id's issuee (the holder), i.e. only
+            if the holder self-issued age". The reasoning is sound and is specifically about I2I. E1E is an
+            IDENTITY relation — near issuee = far issuee, issuer unconstrained (keripy discussion #1515) — so
+            it holds in exactly the case I2I fails, which is why the worked example uses it. Verified rather
+            than assumed: against the real AGE_SCHEMA_MAD, an edgeless acg (acdcagg emits "e": {}) is REFUSED
+            by the 'e' subschema, and an edge carrying o=I2I is REFUSED by the const. The edge is therefore
+            mandatory in practice even though 'e' is absent from that schema's required array, and the code
+            comment there claiming it is schema-required is right by a two-step argument. The presentation-time
+            I2I binding @sd5hjb describes still stands and is unchanged; this adds an issuance-time identity
+            relation, it does not replace the presentation-time one.
+            WHOLE FAMILY, NOT JUST sedi-age: sedi-id, sedi-guardian and sedi-present-age-portrait all move to
+            the v2 envelope ('ri' -> 'rd', 't' pinned to acm). Rejected stopping at sedi-age + sedi-id, which
+            was the smaller and more tempting unit. It does not close the problem, it relocates it: both
+            sedi-guardian and sedi-present-age-portrait carry edges INTO sedi-id (and the portrait into
+            sedi-age too) with I2I/NI2I operators a verifier can only check by resolving the far node, so
+            stopping early leaves v1 near-nodes edging into v2 far nodes — a schema that passes CI and a chain
+            that does not walk, which is precisely the defect being repaired. The marginal cost is also smaller
+            than it looks: guardian and portrait pin the two moving SAIDs in ~25 fixtures between them and must
+            be re-minted regardless, so the choice is one migration or two, not one migration or none.
+            ACCEPTED CONSEQUENCE: sedi-present-age-portrait/invalid/rd-not-allowed.json asserts a v1 property.
+            Under v2 'rd' is legal, so that fixture stops being a negative case and is REPLACED rather than
+            re-SAIDified. Every other fixture in the family keeps its meaning and moves only its pins.
+            DELIBERATELY NOT DONE HERE — tick 6grq: sedi-age's 'A' arm still uses items/anyOf with no
+            prefixItems and no minItems, so the AGID is not pinned at index 0 and the issuee block is not
+            required at index 1, which lets a holder withhold element 1 and present a targeted credential as an
+            untargeted affidavit. The worked example has the SAME weakness, so fixing it here alone would make
+            this family diverge from the artifact it is modeled on, and would fork a security-relevant shape
+            downstream of upstream rather than upstream of it. Sequenced instead as its own unit, starting at
+            the source: fix the example in bakobo/keripy, raise a PR there, then contribute it back to
+            WebOfTrust/keripy, and only then bring the shape here. Confirmed with Daniel 2026-09-15.
