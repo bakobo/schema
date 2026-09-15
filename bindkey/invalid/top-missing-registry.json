@@ -3,7 +3,6 @@
   "t": "acm",
   "d": "EJSGYmxDbW-Lg_rsUmUfd-c_DVTP7FTvE8B0zNuv9jXq",
   "i": "EIw_fe9e7TTGUL5nrXfjuzqzGWq7iHc4mzmGiqb_CCGK",
-  "rd": "EAEBPOD8GzIYVKlElExZroScFvGbiKdLjbcJ4XuYeOQv",
   "s": "EAwWdh1p_JlRUn35GjvueqljM5w-tQCe3XWIc52k0pyC",
   "a": {
     "dt": "2026-09-15T14:23:16.000000+00:00",
@@ -12,7 +11,8 @@
     "validFrom": "2026-09-15T14:23:16.000000+00:00",
     "validUntil": "2027-09-15T14:23:16.000000+00:00",
     "uses": [
-      "DKIM"
+      "ssh",
+      "gpg"
     ]
   },
   "r": {

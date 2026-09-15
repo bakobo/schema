@@ -45,7 +45,6 @@ _V2_MIGRATION = {
     "ai-coder": "6e3q",
     "ai-user-coca": "6e3q",
     "award": "272l",
-    "bindkey": "4jwa",
     "citation": "7bdk",
     "faa": "3x2z",
     "face-to-face": "3n4u",

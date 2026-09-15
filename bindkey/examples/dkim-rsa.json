@@ -1,18 +1,19 @@
 {
-  "v": "ACDCCAACAAJSONAAZa.",
+  "v": "ACDCCAACAAJSONAAeX.",
   "t": "acm",
-  "d": "EJSGYmxDbW-Lg_rsUmUfd-c_DVTP7FTvE8B0zNuv9jXq",
+  "d": "EMVMRt8F3xJjQGZY3pm6q8QnW3KgTnv70Dq_A4XjHESw",
   "i": "EIw_fe9e7TTGUL5nrXfjuzqzGWq7iHc4mzmGiqb_CCGK",
   "rd": "EAEBPOD8GzIYVKlElExZroScFvGbiKdLjbcJ4XuYeOQv",
   "s": "EAwWdh1p_JlRUn35GjvueqljM5w-tQCe3XWIc52k0pyC",
   "a": {
     "dt": "2026-09-15T14:23:16.000000+00:00",
-    "pubkey": "DN0j0cEHZqxTqsrLWZTf1jlHSCCwAqShI1nUHNGKJNbb",
-    "keyFormat": "cesr",
+    "pubkey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2uHVOcm8eIb1HTdfILqJBl9QmMMeT6pBtv8Lhc6ImkV93w6PD6CrUyFEoXMQ3mnjMMdpk5x+N0GKGPbF3Ti2b66J0T3fhBOS6d3E8D+J/9jBKb7NhBc0dF4UgrZPOhPM44VKWKdCDl1zf/gtO43s+fqSUdE566mL46zU0wtCA7MqeiZSiowsq0nf9GoXx24tO0p1526ljZiM7X+Pct3gMPq/2myILCRh9kJfUks8q4yKrTTak0/W/yunNWPAk0dnOgmNEdmfAP0ViF3qghfbtAXIiQ3SEj69CF3OFOsxxwIUAu8Z6FqeCBtfNmhzWL4lslqs9oG8Kd0WmJI+TAkVrwIDAQAB",
+    "keyFormat": "spki-der-b64",
     "validFrom": "2026-09-15T14:23:16.000000+00:00",
-    "validUntil": "2027-09-15T14:23:16.000000+00:00",
     "uses": [
-      "DKIM"
+      "spf",
+      "dkim",
+      "dmarc"
     ]
   },
   "r": {

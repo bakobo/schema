@@ -1,16 +1,27 @@
 {
-  "d": "Ez6QKIKLzrGqpq4v9Bj908pQanoRKwOgBXjPW-w-P_8Q",
-  "v": "1.0",
-  "s": "EDRcdVpb8SXY2xuI7LVgcX33ilJwvUYKHX0oBfY-3uk2",
-  "i": "Ez6QKIKLzrGqpq4v9Bj908pQanoRKwOgBXjPW-w-P_8Q",
-  "ri": "EiySMSMLRrpt9AD_b34VEtUD6tDO0yaGoWCwB1iyJOgY",
+  "v": "ACDCCAACAAJSONAAZa.",
+  "t": "acm",
+  "d": "EJSGYmxDbW-Lg_rsUmUfd-c_DVTP7FTvE8B0zNuv9jXq",
+  "i": "EIw_fe9e7TTGUL5nrXfjuzqzGWq7iHc4mzmGiqb_CCGK",
+  "rd": "EAEBPOD8GzIYVKlElExZroScFvGbiKdLjbcJ4XuYeOQv",
+  "s": "EAwWdh1p_JlRUn35GjvueqljM5w-tQCe3XWIc52k0pyC",
   "a": {
-    "pubkey": "LNwXhZMqd76ZYHlh5q5cebA0qeYz76ZYHlh5qnl_wTA0qeYzfxf0qeYz76ZYHlh5qnl_wTA0qeY",
+    "dt": "2026-09-15T14:23:16.000000+00:00",
+    "pubkey": "DN0j0cEHZqxTqsrLWZTf1jlHSCCwAqShI1nUHNGKJNbb",
+    "keyFormat": "cesr",
+    "validFrom": "2026-09-15T14:23:16.000000+00:00",
+    "validUntil": "2027-09-15T14:23:16.000000+00:00",
     "uses": [
-      "spf",
-      "dkim",
-      "dmarc"
+      "ssh",
+      "gpg"
     ]
   },
-  "extra": "x"
+  "r": {
+    "d": "ENdLVPKyANKUdHgTkkTud9nKTH6SHL7pqIYKpdDH1tSo",
+    "keyNotAssertedSound": "The issuer declares that it uses this key. It does not assert that the key is uncompromised, well managed, generated soundly, or held only by the issuer, and a verifier MUST NOT read any of those into this credential.",
+    "usesAreDeclarative": "The uses field says what the issuer intends the key for. It confers no authority and creates no obligation on anyone: a verifier that treats a declared use as permission has granted that permission itself.",
+    "bindingEndsOnHorizonOrRevocation": "The binding holds from validFrom, or from issuance when none is stated, until validUntil or revocation, whichever comes first. An absent validUntil means the issuer set no horizon, never that the binding is perpetual, and a verifier MUST check the registry before relying on one.",
+    "unknownFormatFailsClosed": "A verifier that does not recognize a credential's keyFormat MUST refuse to use the key rather than guess at its encoding. A later version of this schema may name a format this one does not, and a key parsed under the wrong assumption is worse than a key not parsed at all."
+  },
+  "unexpected": "x"
 }

@@ -3,7 +3,6 @@
   "t": "acm",
   "d": "EJSGYmxDbW-Lg_rsUmUfd-c_DVTP7FTvE8B0zNuv9jXq",
   "i": "EIw_fe9e7TTGUL5nrXfjuzqzGWq7iHc4mzmGiqb_CCGK",
-  "rd": "EAEBPOD8GzIYVKlElExZroScFvGbiKdLjbcJ4XuYeOQv",
   "s": "EAwWdh1p_JlRUn35GjvueqljM5w-tQCe3XWIc52k0pyC",
   "a": {
     "dt": "2026-09-15T14:23:16.000000+00:00",
@@ -12,7 +11,8 @@
     "validFrom": "2026-09-15T14:23:16.000000+00:00",
     "validUntil": "2027-09-15T14:23:16.000000+00:00",
     "uses": [
-      "DKIM"
+      "ssh",
+      "gpg"
     ]
   },
   "r": {
@@ -21,5 +21,6 @@
     "usesAreDeclarative": "The uses field says what the issuer intends the key for. It confers no authority and creates no obligation on anyone: a verifier that treats a declared use as permission has granted that permission itself.",
     "bindingEndsOnHorizonOrRevocation": "The binding holds from validFrom, or from issuance when none is stated, until validUntil or revocation, whichever comes first. An absent validUntil means the issuer set no horizon, never that the binding is perpetual, and a verifier MUST check the registry before relying on one.",
     "unknownFormatFailsClosed": "A verifier that does not recognize a credential's keyFormat MUST refuse to use the key rather than guess at its encoding. A later version of this schema may name a format this one does not, and a key parsed under the wrong assumption is worse than a key not parsed at all."
-  }
+  },
+  "ri": "EAEBPOD8GzIYVKlElExZroScFvGbiKdLjbcJ4XuYeOQv"
 }

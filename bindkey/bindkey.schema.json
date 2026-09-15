@@ -1,80 +1,117 @@
 {
-  "$id": "EFvHYHX0cUx9sdjxZOr9fpPcQKdzRNFH42D8R29p7lAH",
+  "$id": "EAwWdh1p_JlRUn35GjvueqljM5w-tQCe3XWIc52k0pyC",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Bind Key",
-  "description": "Declare that issuer uses a cryptographic key that's not directly managed by the KEL (e.g., to conform to an external standard). Issuing this ACDC makes key binding provable and revokable.",
-  "$comment": "These credentials are intentionally public and untargeted. Hence they lack an issuee and don't support compaction.",
+  "description": "Declare that the issuer uses a cryptographic key that is not directly managed by its KEL (e.g. to conform to an external standard). Issuing this ACDC makes the key binding provable and revocable.",
+  "$comment": "These credentials are intentionally public and untargeted. They lack an issuee, they carry no privacy nonce, and they do not support compaction: the announcement IS the content, so a form with the key withheld would say nothing.",
   "type": "object",
   "credentialType": "BindKeyAttestation",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "required": [
     "v",
     "d",
     "i",
-    "ri",
+    "rd",
     "s",
-    "a"
+    "a",
+    "r"
   ],
   "properties": {
     "v": {
-      "description": "version string using ACDC conventions",
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type. Optional; an ACDC JSON message without it is of type acm.",
       "type": "string"
     },
     "d": {
-      "description": "SAID of the credential",
-      "type": "string"
+      "description": "SAID of this credential",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "i": {
-      "description": "AID of the issuer",
-      "type": "string"
+      "description": "AID of the issuer declaring the key binding",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
-    "ri": {
-      "description": "Registry for issuer's assertion status",
-      "type": "string"
+    "rd": {
+      "description": "SAID of the registry whose TEL carries this credential's issuance and revocation. Required: a key binding that cannot be revoked is a claim nobody can withdraw, and revocability is half of what this credential exists to provide.",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "s": {
       "description": "SAID of this schema",
-      "type": "string"
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "a": {
-      "$id": "EEuuowmRpUKeaR2myHZDnMXPlVWOoSOJSbk5QWSSVlDl",
-      "description": "Attributes block",
+      "description": "Attributes block. Uncompactable by design: this credential is a public announcement, so there is no form of it worth presenting with the key withheld.",
       "type": "object",
       "required": [
-        "pubkey"
+        "dt",
+        "pubkey",
+        "keyFormat"
       ],
       "properties": {
         "d": {
-          "description": "Attributes block SAID",
-          "type": "string"
+          "description": "SAID of this attributes block",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
         },
         "dt": {
-          "description": "Issuance datetime, ISO-8601 datetime string",
+          "description": "When the issuer made this declaration, as an ISO-8601 datetime",
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "examples": [
+            "2026-09-15T14:23:16+00:00"
+          ]
         },
         "pubkey": {
-          "description": "Public key that issuer will use",
-          "format": "cesr",
+          "description": "The public key the issuer declares it uses, encoded as keyFormat says. No pattern is asserted here: the encodings this field admits are checked by whoever parses the key, and a pattern this repo cannot test against a real issuer of each format would reject legitimate keys (the lesson the privacy nonce taught in @4t5t4yca).",
           "type": "string"
         },
-        "startDate": {
-          "description": "Time issuer intends key binding to start; if missing, starts on issuance",
-          "format": "date-time",
-          "type": "string"
+        "keyFormat": {
+          "description": "How pubkey is encoded. Required rather than defaulted: a JSON Schema default is an annotation nothing applies, so an absent keyFormat would leave two readers free to parse the same key differently.",
+          "type": "string",
+          "enum": [
+            "cesr",
+            "spki-der-b64",
+            "pem",
+            "openssh",
+            "jwk"
+          ],
+          "examples": [
+            "cesr",
+            "spki-der-b64"
+          ]
         },
-        "stopDate": {
-          "description": "Time issuer intends key binding to stop; if missing, stops only on revocation",
+        "validFrom": {
+          "description": "When the issuer intends the binding to start, as an ISO-8601 datetime. Absent means it starts on issuance.",
+          "type": "string",
           "format": "date-time",
-          "type": "string"
+          "examples": [
+            "2026-09-15T14:23:16+00:00"
+          ]
+        },
+        "validUntil": {
+          "description": "When the issuer intends the binding to stop, as an ISO-8601 datetime. Absent means the issuer set no horizon, so the binding stops only on revocation \u2014 never that it is perpetual.",
+          "type": "string",
+          "format": "date-time",
+          "examples": [
+            "2027-09-15T14:23:16+00:00"
+          ]
         },
         "uses": {
-          "description": "short strings that describe ways that the key will be used",
+          "description": "Short strings naming the ways the issuer intends to use this key. Declarative only: a verifier gets no authority from them that its own governance did not already grant.",
           "type": "array",
           "uniqueItems": true,
           "minItems": 1,
           "items": {
-            "$comment": "Enum omitted to stay flexible, but use examples if they apply.",
+            "$comment": "Enum omitted to stay flexible, but use these examples where they apply.",
+            "description": "One declared use",
+            "type": "string",
+            "pattern": "^([a-z]([a-z0-9]*[-._/]?))+[a-z0-9]+$",
             "examples": [
               "ssh",
               "x509",
@@ -82,12 +119,139 @@
               "spf",
               "dkim",
               "dmarc"
-            ],
-            "type": "string",
-            "pattern": "^([a-z]([a-z0-9]*[-._/]?))+[a-z0-9]+$"
+            ]
           }
         }
-      }
+      },
+      "additionalProperties": false
+    },
+    "r": {
+      "oneOf": [
+        {
+          "description": "Rules section SAID (compact form)",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+        },
+        {
+          "description": "Rules detail",
+          "type": "object",
+          "required": [
+            "d",
+            "keyNotAssertedSound",
+            "usesAreDeclarative",
+            "bindingEndsOnHorizonOrRevocation",
+            "unknownFormatFailsClosed"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this rules block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "keyNotAssertedSound": {
+              "description": "keyNotAssertedSound Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The issuer declares that it uses this key. It does not assert that the key is uncompromised, well managed, generated soundly, or held only by the issuer, and a verifier MUST NOT read any of those into this credential."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The issuer declares that it uses this key. It does not assert that the key is uncompromised, well managed, generated soundly, or held only by the issuer, and a verifier MUST NOT read any of those into this credential."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "usesAreDeclarative": {
+              "description": "usesAreDeclarative Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The uses field says what the issuer intends the key for. It confers no authority and creates no obligation on anyone: a verifier that treats a declared use as permission has granted that permission itself."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The uses field says what the issuer intends the key for. It confers no authority and creates no obligation on anyone: a verifier that treats a declared use as permission has granted that permission itself."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "bindingEndsOnHorizonOrRevocation": {
+              "description": "bindingEndsOnHorizonOrRevocation Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The binding holds from validFrom, or from issuance when none is stated, until validUntil or revocation, whichever comes first. An absent validUntil means the issuer set no horizon, never that the binding is perpetual, and a verifier MUST check the registry before relying on one."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The binding holds from validFrom, or from issuance when none is stated, until validUntil or revocation, whichever comes first. An absent validUntil means the issuer set no horizon, never that the binding is perpetual, and a verifier MUST check the registry before relying on one."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "unknownFormatFailsClosed": {
+              "description": "unknownFormatFailsClosed Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "A verifier that does not recognize a credential's keyFormat MUST refuse to use the key rather than guess at its encoding. A later version of this schema may name a format this one does not, and a key parsed under the wrong assumption is worse than a key not parsed at all."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "required": [
+                    "l"
+                  ],
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "A verifier that does not recognize a credential's keyFormat MUST refuse to use the key rather than guess at its encoding. A later version of this schema may name a format this one does not, and a key parsed under the wrong assumption is worse than a key not parsed at all."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
     }
   },
   "additionalProperties": false

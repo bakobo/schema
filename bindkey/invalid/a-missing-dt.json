@@ -6,13 +6,13 @@
   "rd": "EAEBPOD8GzIYVKlElExZroScFvGbiKdLjbcJ4XuYeOQv",
   "s": "EAwWdh1p_JlRUn35GjvueqljM5w-tQCe3XWIc52k0pyC",
   "a": {
-    "dt": "2026-09-15T14:23:16.000000+00:00",
     "pubkey": "DN0j0cEHZqxTqsrLWZTf1jlHSCCwAqShI1nUHNGKJNbb",
     "keyFormat": "cesr",
     "validFrom": "2026-09-15T14:23:16.000000+00:00",
     "validUntil": "2027-09-15T14:23:16.000000+00:00",
     "uses": [
-      "DKIM"
+      "ssh",
+      "gpg"
     ]
   },
   "r": {
