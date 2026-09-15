@@ -740,9 +740,20 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             called example-attestation.json, and all three positive checks key on example.json, which is the
             silent skip @jruwvxnt's rename convention exists to end. Archiving it would preserve a defect, so
             attestation-1.0.0/ carries the schema and index.md only, following proof-of-control-1.1.0.
-            ACCEPTANCE ORACLE, run and passing: a credential built by the fork's acdcmap(israid, uuid, regid,
-            schema=<new $id>, attribute={u, dt, digest}, rule=<rules>) validates against the schema under
-            Draft 2020-12 with format assertion on. The negative corpus is REBUILT from that instance, one
+            ACCEPTANCE ORACLE, run and passing at BOTH levels. The probe @enr3eg used: a credential built by
+            the fork's acdcmap(israid, uuid, regid, schema=<new $id>, attribute={u, dt, digest},
+            rule=<rules>) validates against the schema under Draft 2020-12 with format assertion on. And the
+            stronger one @2n2vtee3 used, run 2026-09-15 because @jsmu322m's required 'a.u' rests on a claim
+            about heti rather than about this repo: heti mints a facet, opens an upd registry, learns this
+            schema and issues against it end to end, reporting nonced slots ('u', 'a.u') — so heti DOES fill
+            a nonce into a block whose schema requires one, and the default is safe for the nine schemas
+            designed after this one. Two things that run measured which reading could not. heti emits the
+            attribute block in the order [dt, digest, u], appending the nonce it mints rather than following
+            the schema's declaration order, which is harmless under JSON Schema but would matter to anything
+            comparing serializations. And heti's own facet AID came back E-prefixed, which is the first real
+            evidence that the [BE] pattern applied to 'i' accepts what the only issuer actually mints —
+            heti validates a credential against the schema BEFORE anchoring, so a wrong pattern would have
+            refused the issuance rather than passing quietly. The negative corpus is REBUILT from that instance, one
             mutation each, and every fixture verified to fail for the defect it is NAMED after rather than
             for the envelope — the check @2n2vtee3 added after finding repointed fixtures can keep passing
             while testing nothing. Four are new and exist to give this node's decisions a failing oracle:
