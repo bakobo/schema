@@ -3,7 +3,6 @@
   "t": "acm",
   "d": "EEBh9XxqoVlEHlhO0i_XohYQ3N_W4--bwLxjhValWE0k",
   "u": "0AAvrt6Sg6szLo4ImlYmsvAI",
-  "i": "EMRlhEQK44_V5804rsRvQ99Gtf7uDpYQqZuvrw0LhV3S",
   "rd": "EKfi58Jiv-NVqr6GOrxgxzhrE5RsDaH4QNwv9rCyZCwZ",
   "s": "EM00uWV5K7YtTt5dDWH2diXCGtDhQlrWHsLPT5WKh-Pc",
   "a": {
@@ -27,6 +26,5 @@
     "namesAreConvenience": "issuerName and issueeName are self-asserted conveniences for human readers and carry no verification weight. The parties are the AIDs, and a verifier that matches on a name rather than an AID has matched on nothing.",
     "unrecognizedClauseFailsClosed": "An issuer may add clauses to this ruleset for the award it governs. A verifier that does not understand a clause MUST treat whatever that clause requires as unmet, rather than disregarding it \u2014 an award's terms are set by its issuer, so silence about a clause is not permission.",
     "imageByReferenceMayChange": "Where an award's image is an ordinary URL rather than a data URL or a digest, the issuer commits to a location and not to specific content, which can change after issuance. A verifier that needs the image to be the one the issuer saw MUST require a data URL or a digest."
-  },
-  "unexpected": "x"
+  }
 }
