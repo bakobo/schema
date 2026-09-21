@@ -72,6 +72,7 @@ jobs:
           PR_DRAFT: ${{ github.event.pull_request.draft }}
           PR_STATE: ${{ github.event.pull_request.state }}
           PR_FORKED: ${{ github.event.pull_request.head.repo.fork }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           COPILOT_REVIEW: ${{ vars.COPILOT_REVIEW }}
         run: |
           set -euo pipefail
@@ -115,6 +116,35 @@ jobs:
             action=remove
           elif echo "$PR_LABELS" | jq -e 'any(.[]; . == "no-ccr")' > /dev/null 2>&1; then
             action=remove
+          fi
+
+          # GITHUB ACCEPTS A COPILOT REVIEW REQUEST ON A DEPENDABOT PULL REQUEST AND ASSIGNS NOBODY.
+          # Measured on bakobo/webvh-gate #1, #2 and #3 on 2026-09-15 and 2026-09-21: the POST below
+          # returns 2xx, the run log shows `PullRequests: write`, and no `review_requested` event
+          # ever appears, so the request step spends thirty seconds polling and then fails the job.
+          # It is not the repository and it is not the Actions identity -- the same
+          # `github-actions[bot]` successfully requests Copilot in infra, witness, errors, dev,
+          # bakobo.com and status, and a request made by hand on #3 produced a `review_requested`
+          # event and a posted review within six seconds. The one thing those runs do not share is
+          # the PR author, and webvh-gate is simply the first repo here where Dependabot opened one.
+          #
+          # So this is the fork case again: a request that CANNOT succeed, failed loudly, on a pull
+          # request nobody can fix. Skip it and say why. The reason to key on the AUTHOR rather than
+          # on `github.triggering_actor` is that a human labelling a Dependabot pull request would
+          # otherwise flip the verdict halfway through its life, and the property that predicts the
+          # failure is whose pull request it is.
+          #
+          # NARROWING A `request`, NOT SHORT-CIRCUITING THE CHAIN, and that is the whole reason this
+          # sits after the chain rather than inside it. `remove` must still work here: somebody can
+          # ask Copilot by hand on a Dependabot pull request -- that is exactly the workaround --
+          # and `[no-ccr]` has to be able to take it back off again. Turning the skip into an early
+          # `action=none` would strand a hand-made request permanently, which is the same defect the
+          # three-outcome design above was written to fix.
+          if [[ "$action" == "request" && "$PR_AUTHOR" == "dependabot[bot]" ]]; then
+            echo "This pull request is Dependabot's, and GitHub drops a Copilot review request made"
+            echo "from a workflow on one: the call succeeds and assigns nobody. Not asking. To get a"
+            echo "review here, request Copilot by hand -- that path works."
+            action=none
           fi
           echo "action=$action" >> "$GITHUB_OUTPUT"
 
