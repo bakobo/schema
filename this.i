@@ -2185,6 +2185,9 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         preserving the existing expanded-object constraints. This changes the schema
         SAID and therefore requires a new published revision; keep the original 0.1.0
         bytes resolvable, repin dependent schemas and examples to the new Core SAID,
+        and archive every displaced dependent schema by its old SAID. Those schemas
+        are already published: replacing their registry entries in place would
+        strand existing credentials even though the new graph validates.
         and identify the revision as a Bakobo interoperability amendment to Sam's
         source. Rejected weakening the object arms or treating any string as an
         endorsed claim: schema validation checks representation, while the verifier
