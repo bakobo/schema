@@ -1,0 +1,207 @@
+{
+  "$id": "EE1qJmXEgBbinrT_1fSe3_ccu-MWG7znc2D88f6aCxL_",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SEDI County Presentation",
+  "description": "A holder-issued one-time presentation of a county claim backed by I2I edges to SEDI Core and Residence. The verifier is the issuee; the holder is the issuer. The Residence county block is disclosed alongside this recipe.",
+  "$comment": "Bakobo Summit profile, not a Sam Smith schema. Registry-less acm with I2I source edges and required rules.",
+  "credentialType": "SEDI_CountyPresentation",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "v",
+    "t",
+    "d",
+    "i",
+    "s",
+    "a",
+    "e",
+    "r"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type; 'acm' is the field-map ACDC ilk",
+      "const": "acm"
+    },
+    "d": {
+      "description": "SAID of the presentation",
+      "type": "string"
+    },
+    "u": {
+      "description": "Top-level blinding nonce; present => private variant",
+      "type": "string"
+    },
+    "i": {
+      "description": "Issuer = the holder (Discloser) AID",
+      "type": "string"
+    },
+    "s": {
+      "description": "SAID of this schema",
+      "type": "string"
+    },
+    "a": {
+      "oneOf": [
+        {
+          "description": "SAID of the attribute block",
+          "type": "string"
+        },
+        {
+          "description": "Attribute block: the interaction facts",
+          "type": "object",
+          "required": [
+            "d",
+            "u",
+            "i",
+            "county"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of the attribute block",
+              "type": "string"
+            },
+            "u": {
+              "description": "Attribute-block blinding nonce (salty)",
+              "type": "string"
+            },
+            "i": {
+              "description": "Issuee = the verifier (Disclosee) AID",
+              "type": "string"
+            },
+            "county": {
+              "description": "Holder summary of the disclosed Residence county",
+              "type": "string"
+            },
+            "venue": {
+              "description": "Where the presentation is made (free text)",
+              "type": "string"
+            },
+            "occurredAt": {
+              "description": "When the presentation is made",
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "e": {
+      "oneOf": [
+        {
+          "description": "SAID of the edge block",
+          "type": "string"
+        },
+        {
+          "description": "Edge block: I2I edges to the two source credentials",
+          "type": "object",
+          "required": [
+            "d",
+            "identity",
+            "residence"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of the edge block",
+              "type": "string"
+            },
+            "u": {
+              "description": "Edge-block blinding nonce (salty)",
+              "type": "string"
+            },
+            "identity": {
+              "description": "I2I edge to the holder's SEDI Core identity",
+              "oneOf": [
+                {
+                  "description": "SAID of the edge",
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "SAID of this edge",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge blinding nonce (salty)",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "SAID of the far node (the SEDI Core credential)",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "SEDI Core schema SAID",
+                      "const": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5"
+                    },
+                    "o": {
+                      "description": "Edge operator: I2I asserts the issuer of this presentation is the issuee of the far node (same holder)",
+                      "const": "I2I"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "residence": {
+              "description": "I2I edge to the holder's SEDI Residence",
+              "oneOf": [
+                {
+                  "description": "SAID of the edge",
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "SAID of this edge",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge blinding nonce (salty)",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "SAID of the far node (the SEDI Residence credential)",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "SEDI Residence schema SAID",
+                      "const": "EEgFNN1XH90koG5J5pbXKlRNU6TnibizaTQmJcRfEcop"
+                    },
+                    "o": {
+                      "description": "Edge operator: I2I asserts the issuer of this presentation is the issuee of the far node (same holder)",
+                      "const": "I2I"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "description": "SAID of the governing SEDI governance framework (sedi-id/rules.json); carries the chain-link-confidentiality and duty-of-loyalty terms the verifier accepts",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}
