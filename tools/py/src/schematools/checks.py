@@ -26,7 +26,7 @@ import yaml
 from jsonschema import Draft202012Validator
 from jsonschema import exceptions as js_exc
 
-from .repo import _RULES_PATH_CODE, discover_schemas, load_registry
+from .repo import RULES_PATH_CODE, discover_schemas, load_registry
 from .said import SAD_LABEL, SAID_LABEL, compute_schema_said, saidify_sad
 
 _RULES_SHAPE_CODE = "e.input.format.rules-object.f"
@@ -131,7 +131,7 @@ def check_registry(root: str | Path) -> list[Problem]:
             if Path(rel).is_absolute() or not path.resolve().is_relative_to(resolved_root):
                 problems.append(Problem(
                     "registry", rel,
-                    f"{_RULES_PATH_CODE}: The rules path escapes the repository root. "
+                    f"{RULES_PATH_CODE}: The rules path escapes the repository root. "
                     "Correct registry.json before retrying.",
                 ))
                 continue
@@ -191,7 +191,7 @@ def check_registry(root: str | Path) -> list[Problem]:
             if not path.resolve().is_relative_to(resolved_root):
                 problems.append(Problem(
                     "registry", rel,
-                    f"{_RULES_PATH_CODE}: The rules path escapes the repository root. "
+                    f"{RULES_PATH_CODE}: The rules path escapes the repository root. "
                     "Correct the file path before retrying.",
                 ))
                 continue

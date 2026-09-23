@@ -23,7 +23,7 @@ import json
 import shutil
 from pathlib import Path
 
-from .repo import _RULES_PATH_CODE, REGISTRY_NAME, SchemaEntry, discover_schemas, load_registry
+from .repo import RULES_PATH_CODE, REGISTRY_NAME, SchemaEntry, discover_schemas, load_registry
 from .said import SAID_LABEL
 
 DEFAULT_BASE_URL = "https://schema.bakobo.com"
@@ -318,7 +318,7 @@ def build_site(root: str | Path, out: str | Path, base_url: str = DEFAULT_BASE_U
             if (Path(rel).is_absolute() or not source.is_relative_to(resolved_root)
                     or not destination.is_relative_to(resolved_out)):
                 raise ValueError(
-                    f"{_RULES_PATH_CODE}: The rules path escapes the repository or output root. "
+                    f"{RULES_PATH_CODE}: The rules path escapes the repository or output root. "
                     "Correct registry.json before retrying."
                 )
             rules_paths.append((source, destination))

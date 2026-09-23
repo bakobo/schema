@@ -93,6 +93,7 @@ def test_build_site_rejects_rules_path_escaping_either_root(synthetic_repo, tmp_
     registry_path = synthetic_repo / "registry.json"
     registry = json.loads(registry_path.read_text())
     out = tmp_path / "site"
+    outside = tmp_path / "outside"
     if escape == "source":
         outside = tmp_path.parent / f"{tmp_path.name}-outside"
         outside.mkdir()
@@ -102,7 +103,6 @@ def test_build_site_rejects_rules_path_escaping_either_root(synthetic_repo, tmp_
         archive = synthetic_repo / "archive"
         archive.mkdir()
         (archive / "rules.json").write_text("{}")
-        outside = tmp_path / "outside"
         outside.mkdir()
         out.mkdir()
         (out / "archive").symlink_to(outside, target_is_directory=True)

@@ -15,7 +15,7 @@ from pathlib import Path
 REGISTRY_NAME = "registry.json"
 
 # A registry path that escapes its declared root is permanent until the index changes.
-_RULES_PATH_CODE = "e.input.format.schema-registry-path.f"
+RULES_PATH_CODE = "e.input.format.schema-registry-path.f"
 
 
 class SchemaRepoNotFoundError(FileNotFoundError):
