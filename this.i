@@ -2171,9 +2171,13 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         schema SAIDs. R3 shows our sedi-id differs in field placement, block shape, edge
         semantics, and rule shape, so calling it Sam-compatible would mislead issuers.
         Keep sedi-id resolvable as a superseded Bakobo schema; Core, Residence, and IAR
-        are the active state-issued set. Preserve Sam's legalPresenceStatus field while
-        documenting that Utah Code 63A-20-301(2)(f) endorses only name, birth date,
-        image, and residence address. The existing Saider(label="$id") computation
+        are the active state-issued set. Preserve Sam's legalPresenceStatus field. This
+        node first documented it as a tension, since Utah Code 63A-20-301(2)(f) names only
+        name, birth date, image, and residence address as endorsed. Sam Smith settled that
+        in an email to Daniel on 2026-09-23: legal presence status is an endorsed status,
+        not only a proofing input, because the State plans visitor SEDIs (Olympics visitors,
+        out-of-state hunting licence holders) whose statuses are other than citizen, with
+        values still to be decided. The docs record it as endorsed. The existing Saider(label="$id") computation
         equals Sam's Mapper(saids={"$id":"E"}) on all three schemas with JSON serialization,
         so no new SAID algorithm is justified. Pin both SAIDs and source bytes in CI.
       children:
