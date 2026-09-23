@@ -2196,6 +2196,25 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             archived schema bytes: changing a path description there would itself
             invalidate an already published schema SAID. The cost is retaining old
             governance text and teaching the registry to index rules as well as schemas.
+    Publish a compact-capable revision of SEDI Residence = decision:
+      id: a5kbqzfs
+      why: >
+        The same defect @spytom65 fixed in Core, found in its sibling. Sam's Residence 0.1.0
+        declares street, city, county, state, postcode, country, issuedDate and expirationDate as
+        required object blocks with no SAID-string arm, so a Residence with any block compacted
+        fails validation, and the county step of the demo, which must reveal county while
+        withholding street and postcode, cannot be expressed at all. Chose to repeat Core's
+        amendment exactly rather than design a second one: a string arm before the existing object
+        arm for every attribute block and for the coreIdentity edge, the object arms unchanged,
+        version 0.2.0 identified as a Bakobo interoperability amendment, Sam's 0.1.0 bytes kept
+        resolvable under sedi-residence-0.1.0, and dependents repinned. Two families of SEDI schema
+        differing in how they compact would make every verifier learn both. The only dependent that
+        pins Residence is sedi-present-county's residence edge; its revision carrying the old pin
+        was never published (it existed only on this branch, under @lm37js6k), so it is replaced
+        rather than archived, while the published county 1.0.0 archives stay as they are. Same
+        tradeoff as @spytom65: the current Residence loses byte identity with Sam's upstream, and
+        the archive keeps that provenance. Same verifier duty: a compact block is a SAID, and a
+        verifier must resolve and verify it before admitting the claim.
     Publish a compact-capable revision of SEDI Core = decision:
       id: spytom65
       why: >
