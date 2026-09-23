@@ -1,5 +1,5 @@
 {
-  "$id": "EKcCW7BBhbh60MmwzqTkeb927IKxY8IJ95YqL8gLA594",
+  "$id": "EGYLXmZOamfx3HMVJbXkjEx02dz_N6IN6aF6xTRWuA8q",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI County Presentation",
   "description": "A holder-issued one-time presentation of a county claim backed by I2I edges to SEDI Core and Residence. The verifier is the issuee; the holder is the issuer. The Residence county block is disclosed alongside this recipe.",
@@ -49,7 +49,6 @@
           "type": "string"
         },
         {
-          "$id": "EPEZmQxPk9FFy8Q-4ilQC_YI7gZnnWKvTJAGqWoV_9of",
           "description": "Attribute block: the interaction facts",
           "type": "object",
           "required": [
@@ -96,7 +95,6 @@
           "type": "string"
         },
         {
-          "$id": "ELz57h8ca71jjiPYwLCk6mByJggbOfQUqhbpvpwY_q68",
           "description": "Edge block: I2I edges to the two source credentials",
           "type": "object",
           "required": [

@@ -1,5 +1,5 @@
 {
-  "$id": "ECRbcnYXJMwzqdVQNTp5KkmT0esuJooKd-TAcR82STz1",
+  "$id": "EJPEOjoSH3A_JengmOu5418v2vTaInYlWPXD4JNdNd4F",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Age-and-Portrait Presentation",
   "description": "A holder-issued SEDI presentation for the common 'prove over-21 and show the state-endorsed photo' verification pattern (e.g. venue/alcohol admittance, Utah Code 63A-20-204(2)(a)). Issuer = the holder (Discloser); issuee = the verifier (Disclosee). It combines the holder's two source credentials by reference via I2I edges -- the SEDI Core identity credential (for the state-endorsed portrait, disclosed by selective disclosure of just that block) and a sedi-age attestation (for the over-21 boolean) -- and binds the verifier to the SEDI governance framework referenced in 'r'. It is deliberately NOT registry-bound (no 'rd'): a one-time presentation is not logged. This is the first concrete verifier-pattern schema; a general presentation-base would be extracted once a second pattern exists (this.i @sdp3wk).",
@@ -49,7 +49,6 @@
           "type": "string"
         },
         {
-          "$id": "EP9rl6lgwg72Jh-Jx_Fadb5GvX-QORDPoNzsvwQhdmld",
           "description": "Attribute block: the interaction facts",
           "type": "object",
           "required": [
@@ -96,7 +95,6 @@
           "type": "string"
         },
         {
-          "$id": "EFLLcnrHomJ8TUxHvkaec7f8TseOcxOK3EE7M_rYZi_i",
           "description": "Edge block: I2I edges to the two source credentials",
           "type": "object",
           "required": [
@@ -184,7 +182,7 @@
                     },
                     "s": {
                       "description": "SEDI Age schema SAID",
-                      "const": "EIv4uQS1NcPghzXcO-jcekp_hk6tbrIX-wDb8IKSzNdD"
+                      "const": "EFxTYHyCerqMSJthl17hGxZhcRz1lEP5cWtRZ-hsZh85"
                     },
                     "o": {
                       "description": "Edge operator: I2I asserts the issuer of this presentation is the issuee of the far node (same holder)",

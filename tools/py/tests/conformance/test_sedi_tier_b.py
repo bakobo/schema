@@ -42,3 +42,9 @@ def test_county_presentation_links_core_and_residence() -> None:
     assert edges["residence"]["oneOf"][1]["properties"]["s"]["const"] == RESIDENCE
     assert example["e"]["identity"]["s"] == CORE
     assert example["e"]["residence"]["s"] == RESIDENCE
+
+
+@pytest.mark.parametrize("name", ["sedi-age", "sedi-present-age-portrait", "sedi-present-county", "sedi-guardian"])
+def test_current_bakobo_sedi_profiles_have_no_v1_inner_schema_ids(name: str) -> None:
+    schema = _load(name, f"{name}.schema.json")
+    assert '"$id"' not in json.dumps(schema["properties"])

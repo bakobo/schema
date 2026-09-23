@@ -1,5 +1,5 @@
 {
-  "$id": "EAfd7i45-N5R9chc8Q5tFqmxCVqzqKnAnmVWTWDOSloS",
+  "$id": "EDhcDjDkCgdCHQurAvXjYPx2bR9jpBxw6WvOYiismmOV",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Digital Guardian",
   "description": "Provisional Bakobo SEDI guardianship profile following keripy discussion #1550: state-issued to a guardian, with the ward AID in a separately disclosable attribute block, coarse statutory scope, and separate delegable powers. Registry-bound for independent status checks.",
@@ -54,7 +54,6 @@
           "type": "string"
         },
         {
-          "$id": "EFGrtDgY3C1tBm5lMrnlSiY7nu9MdbdsZ6XmxjY_Uf_z",
           "description": "Guardian attributes, with the ward in a disclosable block",
           "type": "object",
           "required": [
@@ -265,7 +264,6 @@
           "type": "string"
         },
         {
-          "$id": "EEYg6xzK_V9s5lJ5ouNh1dCD5qzetzUzDzWpIAhnf4QP",
           "description": "Edge section",
           "type": "object",
           "required": [

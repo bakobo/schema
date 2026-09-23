@@ -1,5 +1,5 @@
 {
-  "$id": "EF1m5uPP1vvDLuKQlz0Y_tnH9DFEWnaDPH4gc7ugSskm",
+  "$id": "ELQbIW0bvd8ocbitQmjsaKEMEMxPX5YDFOdsWCca171s",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Ward Core",
   "description": "Provisional Bakobo variant of Sam Smith's Core with an NI2I edge back to state-issued guardianship. Core attributes and utahAgent edge are retained.",
@@ -380,7 +380,7 @@
                     },
                     "s": {
                       "description": "Guardian schema SAID",
-                      "const": "EAfd7i45-N5R9chc8Q5tFqmxCVqzqKnAnmVWTWDOSloS"
+                      "const": "EDhcDjDkCgdCHQurAvXjYPx2bR9jpBxw6WvOYiismmOV"
                     },
                     "o": {
                       "description": "Different-issuee relation",
