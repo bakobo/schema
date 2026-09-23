@@ -32,6 +32,13 @@ from .said import SAD_LABEL, SAID_LABEL, compute_schema_said, saidify_sad
 _RULES_SHAPE_CODE = "e.input.format.rules-object.f"
 _RULES_SAID_CODE = "e.input.format.rules-sad.f"
 _RULES_ORPHAN_CODE = "e.state.conflict.rules-registry.f"
+_REGISTRY_MISSING_CODE = "e.state.missing.schema-registry-target.f"
+_RULES_JSON_CODE = "e.input.format.rules-json.f"
+_RULES_KEY_CODE = "e.proof.rules-registry-said.f"
+_RULES_INTEGRITY_CODE = "e.proof.rules-said.f"
+_SCHEMA_JSON_CODE = "e.input.format.schema-json.f"
+_SCHEMA_KEY_CODE = "e.proof.schema-registry-said.f"
+_SCHEMA_ORPHAN_CODE = "e.state.conflict.schema-registry.f"
 
 
 @dataclass(frozen=True)
@@ -136,12 +143,20 @@ def check_registry(root: str | Path) -> list[Problem]:
                 ))
                 continue
             if not path.is_file():
-                problems.append(Problem("registry", said, f"registry path {rel!r} not found on disk"))
+                problems.append(Problem(
+                    "registry", said,
+                    f"{_REGISTRY_MISSING_CODE}: The registry path {rel!r} was not found on disk. "
+                    "Correct registry.json before retrying.",
+                ))
                 continue
             try:
                 rules = _load_json(path)
             except json.JSONDecodeError:
-                problems.append(Problem("registry", rel, "unparseable, cannot verify rules SAID"))
+                problems.append(Problem(
+                    "registry", rel,
+                    f"{_RULES_JSON_CODE}: The rules artifact is not valid JSON, so its SAID "
+                    "cannot be verified. Correct the file before retrying.",
+                ))
                 continue
             if not isinstance(rules, dict):
                 problems.append(Problem(
@@ -152,7 +167,12 @@ def check_registry(root: str | Path) -> list[Problem]:
                 continue
             stored = rules.get(SAD_LABEL)
             if stored != said:
-                problems.append(Problem("registry", rel, f"registry key {said!r} != rules d {stored!r}"))
+                problems.append(Problem(
+                    "registry", rel,
+                    f"{_RULES_KEY_CODE}: The registry key {said!r} does not match the rules "
+                    f"artifact's d value {stored!r}. Correct registry.json or the rules artifact "
+                    "before retrying.",
+                ))
             try:
                 recomputed = saidify_sad(rules)
             except Exception as exc:  # the KERI oracle rejects malformed SADs with several error types
@@ -163,28 +183,48 @@ def check_registry(root: str | Path) -> list[Problem]:
                 ))
                 continue
             if recomputed != rules:
-                problems.append(Problem("registry", rel, f"rules d {stored!r} != recomputed SAID"))
+                problems.append(Problem(
+                    "registry", rel,
+                    f"{_RULES_INTEGRITY_CODE}: The rules artifact's d value {stored!r} does not "
+                    "match the recomputed SAID. Correct the rules artifact before retrying.",
+                ))
             elif stored == said:
                 registered_rules_bytes.add(path.read_bytes())
             continue
         entry = by_rel.get(rel)
         if entry is None:
-            problems.append(Problem("registry", said, f"registry path {rel!r} not found on disk"))
+            problems.append(Problem(
+                "registry", said,
+                f"{_REGISTRY_MISSING_CODE}: The registry path {rel!r} was not found on disk. "
+                "Correct registry.json before retrying.",
+            ))
             continue
         try:
             schema = _load_json(entry.path)
         except json.JSONDecodeError:
-            problems.append(Problem("registry", rel, "unparseable, cannot verify $id vs registry key"))
+            problems.append(Problem(
+                "registry", rel,
+                f"{_SCHEMA_JSON_CODE}: The schema is not valid JSON, so its $id cannot "
+                "be checked against the registry key. Correct the file before retrying.",
+            ))
             continue
         stored = schema.get(SAID_LABEL)
         if stored != said:
             problems.append(
-                Problem("registry", rel, f"registry key {said!r} != schema $id {stored!r}")
+                Problem(
+                    "registry", rel,
+                    f"{_SCHEMA_KEY_CODE}: The registry key {said!r} does not match the schema "
+                    f"$id {stored!r}. Correct registry.json or the schema before retrying.",
+                )
             )
 
     for entry in entries:
         if entry.rel not in indexed:
-            problems.append(Problem("registry", entry.rel, "schema on disk but absent from registry.json"))
+            problems.append(Problem(
+                "registry", entry.rel,
+                f"{_SCHEMA_ORPHAN_CODE}: The schema is on disk but absent from registry.json. "
+                "Add it to the index before retrying.",
+            ))
     for path in sorted(Path(root).glob("*/rules.json")):
         rel = path.relative_to(root).as_posix()
         if rel not in indexed:

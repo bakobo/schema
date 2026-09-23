@@ -48,6 +48,10 @@ META_SCHEMA_SRC = "spec/acdc-schema-registry.schema.json"
 META_SCHEMA_PATH = "acdc-schema-registry.schema.json"
 
 
+class RulesPathError(ValueError):
+    """A rules path escapes its source or destination root."""
+
+
 def load_federation(root: str | Path) -> dict | None:
     """The parsed ``federation.json`` if the repo has one, else ``None``."""
     path = Path(root) / FEDERATION_NAME
@@ -317,7 +321,7 @@ def build_site(root: str | Path, out: str | Path, base_url: str = DEFAULT_BASE_U
             destination = (out / rel).resolve()
             if (Path(rel).is_absolute() or not source.is_relative_to(resolved_root)
                     or not destination.is_relative_to(resolved_out)):
-                raise ValueError(
+                raise RulesPathError(
                     f"{RULES_PATH_CODE}: The rules path escapes the repository or output root. "
                     "Correct registry.json before retrying."
                 )

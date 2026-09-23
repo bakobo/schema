@@ -88,6 +88,26 @@ def test_publish_cli_rejects_traversing_rules_path(synthetic_repo, tmp_path, cap
     assert not out.exists()
 
 
+def test_publish_cli_reports_output_symlink_escape(synthetic_repo, tmp_path, capsys):
+    rules = saidify_sad({"d": "", "l": "An indexed duty."})
+    (synthetic_repo / "widget" / "rules.json").write_text(json.dumps(rules))
+    registry_path = synthetic_repo / "registry.json"
+    registry = json.loads(registry_path.read_text())
+    registry[rules["d"]] = "widget/rules.json"
+    registry_path.write_text(json.dumps(registry))
+    out = tmp_path / "site"
+    out.mkdir()
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    (out / "widget").symlink_to(outside, target_is_directory=True)
+
+    assert main(["publish", "--root", str(synthetic_repo), "--out", str(out)]) != 0
+    err = capsys.readouterr().err
+    assert "e.input.format.schema-registry-path.f: The rules path escapes" in err
+    assert "Traceback" not in err
+    assert list(outside.iterdir()) == []
+
+
 @pytest.mark.parametrize("escape", ["source", "destination", "absolute"])
 def test_build_site_rejects_rules_path_escaping_either_root(synthetic_repo, tmp_path, escape):
     registry_path = synthetic_repo / "registry.json"
