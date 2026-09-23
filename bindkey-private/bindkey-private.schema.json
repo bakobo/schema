@@ -1,0 +1,248 @@
+{
+  "$id": "EB54v9pVk2tdD04lPpgD2NkHZ9Sb1zM-vQ2NLA8EgLJ-",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Private Bind Key",
+  "description": "A holder declares, privately, a P-256 key it controls outside its KEL, so that a reissuer can bind a credential derived from the holder's credential to that key (SD-JWT cnf, mDoc deviceKey). Self-issued: issuer and issuee are the holder AID. Shown only to the reissuer, which verifies it before deriving.",
+  "$comment": "The private counterpart of bindkey, which is a public announcement by design. This one is targeted, nonced in both slots, compactable, P-256 only, and short-lived (this.i @kakslwv3).",
+  "type": "object",
+  "credentialType": "PrivateBindKeyAttestation",
+  "version": "1.0.0",
+  "required": [
+    "v",
+    "d",
+    "u",
+    "i",
+    "rd",
+    "s",
+    "a",
+    "r"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type. Optional; an ACDC JSON message without it is of type acm.",
+      "type": "string"
+    },
+    "d": {
+      "description": "SAID of this credential",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+    },
+    "u": {
+      "description": "Privacy nonce",
+      "type": "string"
+    },
+    "i": {
+      "description": "AID of the holder, which issues this credential to itself",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+    },
+    "rd": {
+      "description": "SAID of the holder's registry whose TEL carries this credential's issuance and revocation. Required: a binding must be withdrawable the moment the key is lost.",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+    },
+    "s": {
+      "description": "SAID of this schema",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+    },
+    "a": {
+      "description": "Attributes section",
+      "oneOf": [
+        {
+          "description": "SAID of the compact attributes block",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+        },
+        {
+          "description": "Attributes block",
+          "type": "object",
+          "required": [
+            "d",
+            "u",
+            "i",
+            "dt",
+            "purpose",
+            "pubkey",
+            "keyFormat",
+            "validUntil"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this attributes block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "u": {
+              "description": "Privacy nonce, so an observer who guesses the key cannot confirm the guess by recomputing this block's SAID",
+              "type": "string"
+            },
+            "i": {
+              "description": "AID of the holder: the issuee, and also the issuer, because this credential is self-issued",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "dt": {
+              "description": "When the holder made this declaration, as an ISO-8601 datetime",
+              "type": "string",
+              "format": "date-time"
+            },
+            "purpose": {
+              "description": "What the key is bound for. Pinned, so the credential cannot be repurposed silently.",
+              "type": "string",
+              "const": "holderBindingForDerivation"
+            },
+            "pubkey": {
+              "description": "The holder's P-256 public key, encoded as keyFormat says: a JWK object for jwk, a CESR string for cesr."
+            },
+            "keyFormat": {
+              "description": "How pubkey is encoded",
+              "type": "string",
+              "enum": [
+                "jwk",
+                "cesr"
+              ]
+            },
+            "validFrom": {
+              "description": "When the binding starts, as an ISO-8601 datetime. Absent means it starts on issuance.",
+              "type": "string",
+              "format": "date-time"
+            },
+            "validUntil": {
+              "description": "When the binding stops, as an ISO-8601 datetime. Required, because a holder binding is meant to be short-lived; the deriving party enforces the ceiling.",
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "keyFormat": {
+                    "const": "jwk"
+                  }
+                },
+                "required": [
+                  "keyFormat"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "pubkey": {
+                    "description": "A public P-256 key as a JSON Web Key (RFC 7517/7518). No private member d is admitted.",
+                    "type": "object",
+                    "required": [
+                      "kty",
+                      "crv",
+                      "x",
+                      "y"
+                    ],
+                    "properties": {
+                      "kty": {
+                        "description": "Key type",
+                        "type": "string",
+                        "const": "EC"
+                      },
+                      "crv": {
+                        "description": "Curve",
+                        "type": "string",
+                        "const": "P-256"
+                      },
+                      "x": {
+                        "description": "x coordinate, base64url, 32 bytes",
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]{43}$"
+                      },
+                      "y": {
+                        "description": "y coordinate, base64url, 32 bytes",
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]{43}$"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "keyFormat": {
+                    "const": "cesr"
+                  }
+                },
+                "required": [
+                  "keyFormat"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "pubkey": {
+                    "description": "A CESR ECDSA secp256r1 verification key: code 1AAJ (transferable) or 1AAI (non-transferable).",
+                    "type": "string",
+                    "pattern": "^1AA[IJ][A-Za-z0-9_-]{44}$"
+                  }
+                }
+              }
+            }
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "description": "Rules section",
+      "oneOf": [
+        {
+          "description": "SAID of the compact rules block",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+        },
+        {
+          "description": "Rules detail",
+          "type": "object",
+          "required": [
+            "d",
+            "privateToTheReissuer",
+            "bindsForDerivationOnly",
+            "keyNotAssertedSound",
+            "bindingEndsOnHorizonOrRevocation"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this rules block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "privateToTheReissuer": {
+              "description": "privateToTheReissuer clause",
+              "type": "string",
+              "const": "The holder shows this credential only to a reissuer it has chosen, so that the reissuer can bind a derived credential to the key. A party that obtains it any other way has no license to rely on it, to retain it, or to link the key to the holder."
+            },
+            "bindsForDerivationOnly": {
+              "description": "bindsForDerivationOnly clause",
+              "type": "string",
+              "const": "The holder declares that it controls this key for holder binding in credentials derived from the credential of which it is the issuee. The declaration confers no other authority, and a verifier MUST NOT treat the key as one of the holder's KERI signing keys."
+            },
+            "keyNotAssertedSound": {
+              "description": "keyNotAssertedSound clause",
+              "type": "string",
+              "const": "The holder declares that it controls this key. It does not assert that the key is uncompromised, generated soundly, or held in secure hardware, and a verifier MUST NOT read any of those into this credential."
+            },
+            "bindingEndsOnHorizonOrRevocation": {
+              "description": "bindingEndsOnHorizonOrRevocation clause",
+              "type": "string",
+              "const": "The binding holds from validFrom, or from issuance when none is stated, until validUntil or revocation, whichever comes first. A reissuer MUST check the registry before deriving, and MUST NOT derive a credential that outlives the binding."
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}
