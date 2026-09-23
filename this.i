@@ -1943,6 +1943,28 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             binding), 'r' required, and 'rd' disallowed (additionalProperties:false — unregistered, not logged).
             The general presentation-base remains deferred until a SECOND pattern exists to prove the shared
             shape (tick ~5c35).
+        SEDI presentations are issued into the holder's presentation registry, so rd is required = decision:
+          id: lm37js6k
+          why: >
+            REVERSES the "rd disallowed, unregistered, not logged" clause of @sdgv7k for both presentation
+            patterns, sedi-present-age-portrait and sedi-present-county. Sam Smith's SEDI model gives the
+            holder a registry for exactly this: Core and Residence carry a.rd, "Issuee Presentation Registry
+            SAID" (keripy ec307cd74 tests/sedi/test_sedi.py:194, :417), which the issuee incepts in advance and
+            issues its presentations into. A presentation issued there has an anchored, revocable state like
+            any other ACDC, so a verifier can tell a live presentation from one the holder has withdrawn, and
+            the registry is the holder's own, so "logged" means logged in the holder's KEL and nowhere a third
+            party watches. The concern @sdgv7k answered, a presentation leaving a trail the state or an
+            observer can follow, is not reopened: the registry is under the holder's AID and its events are
+            disclosed only to whom the holder presents them. Also forced in practice: heti's Registry.issue
+            always writes rd (heti @89kk7cft), so under the old schemas no heti-issued presentation validated,
+            which blocks the rich Core+Residence presentation of sedi-summit plan M4. Chose REQUIRED over
+            optional, following @enr3eg for GCD: an optional rd lets an rd-less presentation validate and so
+            fails open on the registry a verifier checks state against. The previous SAIDs stay resolvable as
+            archived revisions, as @sdgv7k's successors did for the Core repin, because presentations may
+            already have been minted against them. Not enforceable by schema, and left to the verifier: that a
+            presentation's rd is the registry the presenter's Core names in a.rd. Tradeoff: a holder must
+            incept a registry before presenting at all, one more event per holder, and a presentation made
+            offline without one is no longer expressible under these patterns.
         Section choice A-vs-a — sedi-id is attributive, sedi-age is an aggregate boolean vector = decision:
           id: sdav5t
           why: >
