@@ -2174,3 +2174,20 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             archived schema bytes: changing a path description there would itself
             invalidate an already published schema SAID. The cost is retaining old
             governance text and teaching the registry to index rules as well as schemas.
+    Publish a compact-capable revision of SEDI Core = decision:
+      id: spytom65
+      why: >
+        The pinned Sam Core 0.1.0 schema accepts only expanded objects for its named
+        attribute blocks and utahAgent edge. ACDC compaction replaces those nested
+        mappings with their SAID strings, so an issued Core or its selectively disclosed
+        form fails schema validation and cannot enter the public admission path. Add a
+        string arm before the existing object arm for each compactable nested block,
+        preserving the existing expanded-object constraints. This changes the schema
+        SAID and therefore requires a new published revision; keep the original 0.1.0
+        bytes resolvable, repin dependent schemas and examples to the new Core SAID,
+        and identify the revision as a Bakobo interoperability amendment to Sam's
+        source. Rejected weakening the object arms or treating any string as an
+        endorsed claim: schema validation checks representation, while the verifier
+        must still resolve and verify each SAID before admitting a claim. The accepted
+        tradeoff is that the revised Core no longer has byte identity with Sam's
+        upstream schema; the archived revision retains that provenance.
