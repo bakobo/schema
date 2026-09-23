@@ -1,11 +1,11 @@
 {
-  "$id": "EIv4uQS1NcPghzXcO-jcekp_hk6tbrIX-wDb8IKSzNdD",
+  "$id": "EBaOk8MWJv-mMOer7VySiiPMqBZbzLW7FQsZJR-lGCfu",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Age Attestation",
-  "description": "Derived, state-endorsed age attestation for Utah's SEDI (Utah Code 63A-20). A selectively disclosable Aggregate ('A') section of individually-blinded boolean flags -- ageOver13/16/18/21/55/65 -- plus the holder (issuee) and an as-of date. The holder discloses only the threshold(s) a verifier needs (e.g. ageOver21 for alcohol, 63A-20-204(2)(a)) and the birth date is never involved (63A-20-301(1)(e)). An aggregate (not an attribute) section is correct for a homogeneous boolean vector: it treats the thresholds as an unordered blinded set, matching the ISO mDL age_over_NN element and provisional pending Sam Smith's age mechanism in keripy discussion #1098 (PR WebOfTrust/keripy#1505; this.i @sdav5t).",
+  "description": "Derived, state-endorsed age attestation for Utah's SEDI (Utah Code 63A-20). A selectively disclosable Aggregate ('A') section of individually-blinded boolean flags -- ageOver13/16/18/21/55/65 -- plus the holder (issuee) and an as-of date. The holder discloses only the threshold(s) a verifier needs (e.g. ageOver21 for alcohol, 63A-20-204(2)(a)) and the birth date is never involved (63A-20-301(1)(e)). An aggregate (not an attribute) section is correct for a homogeneous boolean vector: it treats the thresholds as an unordered blinded set, matching the ISO mDL age_over_NN element and leaving room for a sparse-Merkle-tree upgrade (PR WebOfTrust/keripy#1505; this.i @sdav5t).",
   "$comment": "ACDC v2 Aggregate credential (ilk 'acg'), modeled on the worked example in bakobo/keripy tests/acdc/test_clc_disclosure.py (AGE_SCHEMA_MAD). 'acg' is a FIXED-FIELD ilk with no optional fields: keripy emits all ten top-level fields on every instance, so all ten are required here and the 't' const rejects a message of any other ilk. The AGID and per-block SAIDs are computed by the v2 Aggor; this repo's linter does not yet recompute the AGID (this.i @lkfnoess; tick 2nd5).",
   "credentialType": "SEDI_Age",
-  "version": "3.0.0",
+  "version": "2.0.0",
   "type": "object",
   "required": [
     "v",
@@ -45,17 +45,8 @@
       "type": "string"
     },
     "s": {
-      "description": "Schema Section",
-      "oneOf": [
-        {
-          "description": "Schema Section SAID",
-          "type": "string"
-        },
-        {
-          "description": "Schema Section Detail",
-          "type": "object"
-        }
-      ]
+      "description": "SAID of this schema",
+      "type": "string"
     },
     "A": {
       "description": "Selectively disclosable aggregate of age-threshold flags. Compact form is the AGID string; expanded form is a list with the AGID at index 0, then blinded blocks (issuee, as-of, and one per threshold), each disclosed or left as a bare SAID.",
@@ -333,14 +324,14 @@
       ]
     },
     "e": {
-      "description": "One E1E identity edge to the holder's SEDI Core identity credential.",
+      "description": "Edge section: one E1E identity edge chaining this entitlement back to the holder's sedi-id root.",
       "oneOf": [
         {
           "description": "SAID of the edge section (compact form)",
           "type": "string"
         },
         {
-          "$id": "EGSw1_qlmWZL4tjNTZwgq8eFH6pX9G8HvfdxxW_xRfsf",
+          "$id": "EH_almbeRua1Ehwd447CahkB0yBerUeWmMe1ErjbdX-y",
           "description": "Edge section",
           "type": "object",
           "required": [
@@ -357,7 +348,7 @@
               "type": "string"
             },
             "identity": {
-              "description": "E1E identity edge to the holder's SEDI Core identity credential",
+              "description": "E1E identity edge to the holder's sedi-id. E1E is an IDENTITY relation -- this credential's issuee is the same subject as the far node's issuee -- and leaves the issuer unconstrained, so it holds even though the State issues both and is the issuee of neither. I2I would misapply here (keripy discussion #1515); this.i @lkfnoess supersedes the no-edge half of @sd5hjb.",
               "oneOf": [
                 {
                   "description": "SAID of the edge (withheld)",
@@ -380,12 +371,12 @@
                       "type": "string"
                     },
                     "n": {
-                      "description": "Far node: SEDI Core credential SAID",
+                      "description": "Far node: SAID of the holder's sedi-id credential",
                       "type": "string"
                     },
                     "s": {
-                      "description": "SEDI Core schema SAID",
-                      "const": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5"
+                      "description": "Far node schema SAID (sedi-id)",
+                      "type": "string"
                     },
                     "o": {
                       "description": "Edge operator; E1E: this ACDC's issuee = far node's issuee",
@@ -402,32 +393,8 @@
       ]
     },
     "r": {
-      "description": "SEDI governance rules, compact SAID or Sam-shaped legal language",
-      "oneOf": [
-        {
-          "description": "Rule Section SAID",
-          "type": "string"
-        },
-        {
-          "description": "Rule Section Detail",
-          "type": "object",
-          "required": [
-            "d",
-            "l"
-          ],
-          "properties": {
-            "d": {
-              "description": "Rule Section SAID",
-              "type": "string"
-            },
-            "l": {
-              "description": "Legal language",
-              "type": "string"
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
+      "description": "SAID of the governing SEDI governance framework (sedi-id/rules.json)",
+      "type": "string"
     }
   },
   "additionalProperties": false

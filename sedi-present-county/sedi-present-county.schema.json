@@ -1,11 +1,11 @@
 {
-  "$id": "ECRbcnYXJMwzqdVQNTp5KkmT0esuJooKd-TAcR82STz1",
+  "$id": "EKcCW7BBhbh60MmwzqTkeb927IKxY8IJ95YqL8gLA594",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "SEDI Age-and-Portrait Presentation",
-  "description": "A holder-issued SEDI presentation for the common 'prove over-21 and show the state-endorsed photo' verification pattern (e.g. venue/alcohol admittance, Utah Code 63A-20-204(2)(a)). Issuer = the holder (Discloser); issuee = the verifier (Disclosee). It combines the holder's two source credentials by reference via I2I edges -- the SEDI Core identity credential (for the state-endorsed portrait, disclosed by selective disclosure of just that block) and a sedi-age attestation (for the over-21 boolean) -- and binds the verifier to the SEDI governance framework referenced in 'r'. It is deliberately NOT registry-bound (no 'rd'): a one-time presentation is not logged. This is the first concrete verifier-pattern schema; a general presentation-base would be extracted once a second pattern exists (this.i @sdp3wk).",
-  "$comment": "An ACDC v2 attribute+edges+rules field-map credential (ilk 'acm'). The schema ENFORCES the pattern's teeth: every edge operator is pinned to const 'I2I' (the same-holder binding), the governance reference 'r' is required, and 'rd' is disallowed (additionalProperties:false), so a registry-bound or non-I2I presentation is rejected. Migrated to the v2 envelope by this.i @lkfnoess, so the I2I edges into sedi-id and sedi-age no longer cross a protocol-version boundary; staying registry-less is a design choice, not a v1 artifact, and 'rd' remains refused.",
-  "credentialType": "SEDI_AgePortraitPresentation",
-  "version": "3.0.0",
+  "title": "SEDI County Presentation",
+  "description": "A holder-issued one-time presentation of a county claim backed by I2I edges to SEDI Core and Residence. The verifier is the issuee; the holder is the issuer. The Residence county block is disclosed alongside this recipe.",
+  "$comment": "Bakobo Summit profile, not a Sam Smith schema. Registry-less acm with I2I source edges and required rules.",
+  "credentialType": "SEDI_CountyPresentation",
+  "version": "1.0.0",
   "type": "object",
   "required": [
     "v",
@@ -49,14 +49,14 @@
           "type": "string"
         },
         {
-          "$id": "EP9rl6lgwg72Jh-Jx_Fadb5GvX-QORDPoNzsvwQhdmld",
+          "$id": "EPEZmQxPk9FFy8Q-4ilQC_YI7gZnnWKvTJAGqWoV_9of",
           "description": "Attribute block: the interaction facts",
           "type": "object",
           "required": [
             "d",
             "u",
             "i",
-            "ageOver21"
+            "county"
           ],
           "properties": {
             "d": {
@@ -71,9 +71,9 @@
               "description": "Issuee = the verifier (Disclosee) AID",
               "type": "string"
             },
-            "ageOver21": {
-              "description": "The holder's asserted over-21 summary; authoritatively backed by the 'age' I2I edge to a sedi-age credential",
-              "type": "boolean"
+            "county": {
+              "description": "Holder summary of the disclosed Residence county",
+              "type": "string"
             },
             "venue": {
               "description": "Where the presentation is made (free text)",
@@ -96,13 +96,13 @@
           "type": "string"
         },
         {
-          "$id": "EFLLcnrHomJ8TUxHvkaec7f8TseOcxOK3EE7M_rYZi_i",
+          "$id": "ELz57h8ca71jjiPYwLCk6mByJggbOfQUqhbpvpwY_q68",
           "description": "Edge block: I2I edges to the two source credentials",
           "type": "object",
           "required": [
             "d",
             "identity",
-            "age"
+            "residence"
           ],
           "properties": {
             "d": {
@@ -154,8 +154,8 @@
                 }
               ]
             },
-            "age": {
-              "description": "I2I edge to the holder's sedi-age attestation",
+            "residence": {
+              "description": "I2I edge to the holder's SEDI Residence",
               "oneOf": [
                 {
                   "description": "SAID of the edge",
@@ -183,8 +183,8 @@
                       "type": "string"
                     },
                     "s": {
-                      "description": "SEDI Age schema SAID",
-                      "const": "EIv4uQS1NcPghzXcO-jcekp_hk6tbrIX-wDb8IKSzNdD"
+                      "description": "SEDI Residence schema SAID",
+                      "const": "EEgFNN1XH90koG5J5pbXKlRNU6TnibizaTQmJcRfEcop"
                     },
                     "o": {
                       "description": "Edge operator: I2I asserts the issuer of this presentation is the issuee of the far node (same holder)",

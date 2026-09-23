@@ -60,6 +60,7 @@ KNOWN_XFAIL[("sedi-age", "envelope")] = "declares no 't'; tick 2nd5 (with 6grq)"
 # Sam's IAR is signed without a registry and its pinned schema intentionally
 # omits rd. The generic envelope check still assumes every credential declares it.
 KNOWN_XFAIL[("sedi-iar", "envelope")] = "Sam's registry-less IAR at ec307cd74 omits rd"
+KNOWN_XFAIL[("sedi-present-county", "envelope")] = "one-time holder presentation intentionally omits rd"
 
 SCHEMA_NAMES = [entry.name for entry in discover_schemas(ROOT)]
 
