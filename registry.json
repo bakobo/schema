@@ -32,5 +32,19 @@
   "EE1qJmXEgBbinrT_1fSe3_ccu-MWG7znc2D88f6aCxL_": "sedi-present-county/sedi-present-county.schema.json",
   "EEgFNN1XH90koG5J5pbXKlRNU6TnibizaTQmJcRfEcop": "sedi-residence/sedi-residence.schema.json",
   "EDLnuzqWAuaahMDwPIynm0StlbqrUZHKMehfmyaMwIEh": "sedi-ward-authz/sedi-ward-authz.schema.json",
-  "ELQbIW0bvd8ocbitQmjsaKEMEMxPX5YDFOdsWCca171s": "sedi-ward-core/sedi-ward-core.schema.json"
+  "ELQbIW0bvd8ocbitQmjsaKEMEMxPX5YDFOdsWCca171s": "sedi-ward-core/sedi-ward-core.schema.json",
+  "EBZEbTHl6qaaMzPb5_cGIgXmGKDWMgQgCPZp4ivSxvt-": "ai-coder/rules.json",
+  "EJaMEDp0_WMMVV-32nQAR4qVWJqcc7SeIFXoHp5lhEKs": "ai-user-coca/rules.json",
+  "EOt3_C6yOMgTFbxdtb5znz-ETWqEm-wCpFzuQjl-60A-": "attestation/rules.json",
+  "EJqO4rLZXwb1E7YIBcU7NVvN2VASBBTvEDQ54h2e9vYq": "award/rules.json",
+  "ENdLVPKyANKUdHgTkkTud9nKTH6SHL7pqIYKpdDH1tSo": "bindkey/rules.json",
+  "EM6kWxMNL9BFm0ReegqQfNJLw8OZAfn2ZxcjWs4Ceifh": "citation/rules.json",
+  "EGhkNqT1LbfYlimCBMsorDt7PpeGKYdOdj6hKpUjrqtB": "face-to-face/rules.json",
+  "ENiUyBCG2MjCHa9djlgHiogd6uZHECc09ZELmQ3fEMzR": "gcd/rules.json",
+  "EFthNcTE20MLMaCOoXlSmNtdooGEbZF8uGmO5G85eMSF": "gcd-1.0.0/rules.json",
+  "EPFGDcKNXJFuW41EVIac87paJs4FwkMzIMFxHyEBmh_w": "org-vet/rules.json",
+  "EKLBoGWUawixiHtnA5LZ23cPfWjG1niiLlRIhDUGmHRz": "sedi-guardian/rules.json",
+  "EOW7nnASAYoY72gJ7brJwE0V2Hm8o6RfZvN2gNeyKmO0": "sedi-guardian-2.0.0/rules.json",
+  "EG8X1nQFCrQ4Rg8BjfE0-BIuKSo1TVbwqymQ3Wuam6VW": "sedi-id/rules.json",
+  "EA5O9z0TB932sm8kJIVdAIpwLpEWRWC5--VNS5r69frn": "sedi-id-2.0.0/rules.json"
 }

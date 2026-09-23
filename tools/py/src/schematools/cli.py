@@ -3,7 +3,7 @@
 Subcommands:
   - ``check``    run all conformance checks over a schema repo (CI gate).
   - ``saidify``  (re)compute and write SAIDs into a schema file.
-  - ``registry`` rebuild ``registry.json`` from the schemas on disk.
+  - ``registry`` rebuild ``registry.json`` from schemas and rules on disk.
 """
 
 from __future__ import annotations
@@ -63,6 +63,9 @@ def cmd_registry(args: argparse.Namespace) -> int:
     for entry in discover_schemas(root):
         schema = json.loads(entry.path.read_text())
         registry[schema[SAID_LABEL]] = entry.rel
+    for path in sorted(root.glob("*/rules.json")):
+        rules = json.loads(path.read_text())
+        registry.setdefault(rules[SAD_LABEL], path.relative_to(root).as_posix())
     (root / REGISTRY_NAME).write_text(json.dumps(registry, indent=2) + "\n")
     print(f"wrote {len(registry)} entries to {root / REGISTRY_NAME}")
     return 0
@@ -108,7 +111,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_sad.add_argument("-l", "--label", default=SAD_LABEL, help=f"SAID field label (default: {SAD_LABEL!r})")
     p_sad.set_defaults(func=cmd_saidify_sad)
 
-    p_reg = sub.add_parser("registry", help="rebuild registry.json from schemas on disk")
+    p_reg = sub.add_parser("registry", help="rebuild registry.json from schemas and rules on disk")
     p_reg.add_argument("--root", help="repo root (default: auto-detect via registry.json)")
     p_reg.set_defaults(func=cmd_registry)
 

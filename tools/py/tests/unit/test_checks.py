@@ -11,7 +11,7 @@ import json
 
 from schematools import checks
 from schematools.repo import REGISTRY_NAME
-from schematools.said import SAID_LABEL
+from schematools.said import SAID_LABEL, saidify_sad
 
 from tests.support import minimal_schema, write_registry, write_schema
 
@@ -60,6 +60,58 @@ def test_registry_catches_key_id_mismatch(synthetic_repo):
     reg_path.write_text(json.dumps(registry, indent=2))
     problems = checks.check_registry(synthetic_repo)
     assert any("!= schema $id" in p.message for p in problems)
+
+
+def test_registry_accepts_addressed_rules(synthetic_repo):
+    rules = saidify_sad({"d": "", "l": "A stable duty."})
+    path = synthetic_repo / "widget" / "rules.json"
+    path.write_text(json.dumps(rules))
+    reg_path = synthetic_repo / REGISTRY_NAME
+    registry = json.loads(reg_path.read_text())
+    registry[rules["d"]] = "widget/rules.json"
+    reg_path.write_text(json.dumps(registry))
+    assert checks.check_registry(synthetic_repo) == []
+
+
+def test_registry_rejects_changed_addressed_rules(synthetic_repo):
+    rules = saidify_sad({"d": "", "l": "The original duty."})
+    path = synthetic_repo / "widget" / "rules.json"
+    path.write_text(json.dumps(rules))
+    reg_path = synthetic_repo / REGISTRY_NAME
+    registry = json.loads(reg_path.read_text())
+    registry[rules["d"]] = "widget/rules.json"
+    reg_path.write_text(json.dumps(registry))
+    rules["l"] = "The changed duty."
+    path.write_text(json.dumps(rules))
+    problems = checks.check_registry(synthetic_repo)
+    assert any("recomputed" in p.message for p in problems)
+
+
+def test_registry_rejects_wrong_rules_key(synthetic_repo):
+    rules = saidify_sad({"d": "", "l": "The duty."})
+    (synthetic_repo / "widget" / "rules.json").write_text(json.dumps(rules))
+    reg_path = synthetic_repo / REGISTRY_NAME
+    registry = json.loads(reg_path.read_text())
+    registry["E" + "A" * 43] = "widget/rules.json"
+    reg_path.write_text(json.dumps(registry))
+    assert any("!= rules d" in p.message for p in checks.check_registry(synthetic_repo))
+
+
+def test_registry_rejects_unparseable_rules(synthetic_repo):
+    (synthetic_repo / "widget" / "rules.json").write_text("{ bad json")
+    reg_path = synthetic_repo / REGISTRY_NAME
+    registry = json.loads(reg_path.read_text())
+    registry["E" + "A" * 43] = "widget/rules.json"
+    reg_path.write_text(json.dumps(registry))
+    assert any("unparseable" in p.message for p in checks.check_registry(synthetic_repo))
+
+
+def test_registry_rejects_missing_rules_file(synthetic_repo):
+    reg_path = synthetic_repo / REGISTRY_NAME
+    registry = json.loads(reg_path.read_text())
+    registry["E" + "A" * 43] = "widget-1.0.0/rules.json"
+    reg_path.write_text(json.dumps(registry))
+    assert any("not found on disk" in p.message for p in checks.check_registry(synthetic_repo))
 
 
 def test_examples_catches_bad_instance(synthetic_repo):

@@ -318,6 +318,13 @@ def build_site(root: str | Path, out: str | Path, base_url: str = DEFAULT_BASE_U
         _copy_schema_folder(entry, out)
     shutil.copy2(root / REGISTRY_NAME, out / REGISTRY_NAME)
 
+    # A rules-only archive has no schema folder to trigger the copy above.
+    for rel in registry.values():
+        if rel.endswith("/rules.json"):
+            destination = out / rel
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(root / rel, destination)
+
     # OOBIs: byte-identical schema copies addressed by SAID
     oobi_dir = out / "oobi"
     oobi_dir.mkdir(exist_ok=True)

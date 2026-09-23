@@ -107,8 +107,9 @@ def check_said_integrity(root: str | Path) -> list[Problem]:
 def check_registry(root: str | Path) -> list[Problem]:
     """registry.json and the schemas on disk must agree.
 
-    Every registry entry points at an existing schema whose ``$id`` equals the
-    registry key; every schema on disk is indexed exactly once.
+    Every registry entry points at an existing schema (``$id``) or rules
+    artifact (``d``) with a matching, recomputable SAID. Every schema on disk
+    is indexed exactly once.
     """
     problems: list[Problem] = []
     registry = load_registry(root)
@@ -118,6 +119,22 @@ def check_registry(root: str | Path) -> list[Problem]:
     indexed: set[str] = set()
     for said, rel in registry.items():
         indexed.add(rel)
+        if rel.endswith("/rules.json"):
+            path = Path(root) / rel
+            if not path.is_file():
+                problems.append(Problem("registry", said, f"registry path {rel!r} not found on disk"))
+                continue
+            try:
+                rules = _load_json(path)
+            except json.JSONDecodeError:
+                problems.append(Problem("registry", rel, "unparseable, cannot verify rules SAID"))
+                continue
+            stored = rules.get(SAD_LABEL)
+            if stored != said:
+                problems.append(Problem("registry", rel, f"registry key {said!r} != rules d {stored!r}"))
+            if saidify_sad(rules) != rules:
+                problems.append(Problem("registry", rel, f"rules d {stored!r} != recomputed SAID"))
+            continue
         entry = by_rel.get(rel)
         if entry is None:
             problems.append(Problem("registry", said, f"registry path {rel!r} not found on disk"))

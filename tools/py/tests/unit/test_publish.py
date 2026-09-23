@@ -7,6 +7,7 @@ import json
 from schematools import publish
 from schematools.cli import main
 from schematools.said import SAID_LABEL
+from schematools.said import saidify_sad
 
 from tests.support import write_registry, write_schema
 
@@ -53,6 +54,22 @@ def test_build_site_publishes_examples_gallery(synthetic_repo, tmp_path):
     (gallery / "scenario.json").write_text("{}")
     publish.build_site(synthetic_repo, tmp_path / "site")
     assert (tmp_path / "site" / "widget" / "examples" / "scenario.json").is_file()
+
+
+def test_build_site_publishes_archived_rules_at_registry_path(synthetic_repo, tmp_path):
+    rules = saidify_sad({"d": "", "l": "An archived duty."})
+    archive = synthetic_repo / "widget-1.0.0"
+    archive.mkdir()
+    path = archive / "rules.json"
+    path.write_text(json.dumps(rules))
+    registry_path = synthetic_repo / "registry.json"
+    registry = json.loads(registry_path.read_text())
+    registry[rules["d"]] = "widget-1.0.0/rules.json"
+    registry_path.write_text(json.dumps(registry))
+    out = tmp_path / "site"
+    publish.build_site(synthetic_repo, out)
+    assert (out / "widget-1.0.0" / "rules.json").read_bytes() == path.read_bytes()
+    assert (out / "oobi" / f"{rules['d']}.json").read_bytes() == path.read_bytes()
 
 
 def test_rules_said_reads_const_else_none():

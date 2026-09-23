@@ -1,6 +1,6 @@
 ## SEDI Identity Credential (`sedi-id`)
 
-**Superseded for new issuance.** This Bakobo schema remains resolvable for existing credentials. The active Summit schema family is Sam Smith's [IAR](../sedi-iar/), [Core](../sedi-core/), and [Residence](../sedi-residence/). The text below describes the historical `sedi-id` design, including its optional `faceTemplate`; that field is not in Sam's Core. [`rules.json`](rules.json) remains a standalone Bakobo governance artifact. Its `d` and `l` fields now fit the expanded `r` section in Sam's schemas, and its former named clauses are retained verbatim within `l`. See `this.i` `@epnvr5oq` and `@2vqmhxai`.
+**Superseded for new issuance.** This Bakobo schema remains resolvable for existing credentials. The active Summit schema family is Sam Smith's [IAR](../sedi-iar/), [Core](../sedi-core/), and [Residence](../sedi-residence/). The text below describes the historical `sedi-id` design, including its optional `faceTemplate`; that field is not in Sam's Core. The current [`rules.json`](rules.json) is a standalone Bakobo governance artifact with `d` and `l` fields that fit the expanded `r` section in Sam's schemas. Its former named clauses are retained verbatim within `l`. The [earlier rules](../sedi-id-2.0.0/rules.json) remain available for credentials that carry their original SAID. See `this.i` `@epnvr5oq`, `@2vqmhxai`, and `@jmr6znql`.
 
 ### Purpose
 
@@ -153,9 +153,10 @@ delegation) and `sedi-bridge` (foreign-credential reissuer). See [`this.i` `@sd4
 ### Governance
 
 SEDI's duty-of-loyalty and minimization obligations (§701, §702, Parts 4–6) are carried as the
-family-wide **SEDI governance framework** in [`rules.json`](rules.json) (this root credential's folder
-is its home), referenced by SAID from every SEDI credential's `r`. Issuing or accepting a SEDI
-credential is binding acceptance of it.
+family-wide **SEDI governance framework** in the current [`rules.json`](rules.json),
+referenced by SAID from new SEDI examples. The [original revision](../sedi-id-2.0.0/rules.json)
+remains resolvable under SAID `EA5O9z0TB932sm8kJIVdAIpwLpEWRWC5--VNS5r69frn`.
+Issuing or accepting a SEDI credential is binding acceptance of its referenced revision.
 
 ### Provenance and further reading
 
