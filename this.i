@@ -763,6 +763,37 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             2.0.0, new SAID EE5FA0uE3ydhSYrG8lqECgR0Ad3NpkQxPw0b3jp-2eDa, with the old
             EJxFPpyDRV-W6O2Vtjdy2K90ltWmQK8l1jePw5YOo_Ft kept resolvable in registry.json per @r5vk3n.
             Nothing pinned the old SAID: no other schema references it and it has no recorded issuer.
+        bindkey-private is a separate schema that binds a holder key for derivation, private by design = decision:
+          id: kakslwv3
+          why: >
+            Daniel's D5 (2026-09-23, sedi-summit plan): a derivative made from SEDI bulk copy k binds its
+            SD-JWT cnf (later its mDoc deviceKey) to a P-256 key K that copy k's holder AID declares, in a
+            credential shown only to the reissuer, which verifies it before deriving. K may live in a
+            phone's secure hardware, so it cannot be one of the AID's own KEL keys.
+            A NEW SCHEMA, NOT A bindkey VARIANT. @v5ma6uxn made bindkey a public announcement on purpose,
+            with no nonce, no compact form and no issuee, so that anyone can confirm it. This credential
+            needs the opposite on each count, so it inverts that node's choices for the reason that node
+            gave. A nonce in the top-level u and in the attribute block stops an observer who guesses the
+            holder's key from confirming it by recomputing a SAID. The attribute block is compactable. The
+            credential is targeted, with issuer and issuee both the holder AID, because a self-issued
+            credential in the holder's own presentation registry is the one shape heti can issue, verify
+            and revoke without involving anyone else. Folding it into bindkey behind a flag would make one
+            schema promise publicity and privacy at once, and a verifier could not tell which it was
+            reading.
+            P-256 ONLY, CHECKED BY THE SCHEMA. keyFormat is jwk or cesr. A jwk key is a JSON object whose kty
+            and crv are pinned to EC and P-256 and which admits no private member d. A cesr key must carry
+            ECDSA 256r1 code 1AAJ or 1AAI, which were measured against the pinned keri's MtrDex rather than
+            recalled. EdDSA is refused here because the EU profile the derivative targets forbids it.
+            purpose is a const naming holder binding for derivation, so the credential cannot be
+            repurposed silently.
+            rd, dt and validUntil are REQUIRED. rd, because heti's Registry.issue always writes it and
+            because a binding must be revocable when the phone is lost. validUntil, because the binding
+            should be short-lived. The schema cannot bound the lifetime relative to dt, so the deriving
+            party enforces a ceiling.
+            Not enforceable by schema, and left to the verifier: that issuer and issuee are the same AID,
+            and that the AID is the issuee of the credential being derived from. Tradeoff: one more
+            credential per bulk copy, issued before any derivation, and a key the holder must keep outside
+            the KEL.
         bindkey 2.0.0 is public by design, so it takes the nonce default's opposite; pubkey gains keyFormat = decision:
           id: v5ma6uxn
           why: >
