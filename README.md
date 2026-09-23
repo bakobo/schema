@@ -33,10 +33,16 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 | [face-to-face](face-to-face/) | issuer knows the issuee to be a human, from in-person contact |
 | [org-vet](org-vet/) | authenticate an org at an explicit level of assurance |
 | [proof-of-control](proof-of-control/) | issuee demonstrated control of a digital resource |
-| [sedi-id](sedi-id/) | Utah State-Endorsed Digital Identity root (name, birth date, image, residence) as a partially-disclosable attribute section |
-| [sedi-age](sedi-age/) | derived state-endorsed aggregate age-threshold vector (ageOver13/16/18/21/55/65; prove over-21 without the birth date) |
-| [sedi-present-age-portrait](sedi-present-age-portrait/) | holder-issued SEDI presentation: prove over-21 and show the state-endorsed photo (I2I edges to sedi-id + sedi-age) |
-| [sedi-guardian](sedi-guardian/) | SEDI digital guardian: recognized legal authority to act for a ward (four statutory bases; composes with GCD) |
+| [sedi-iar](sedi-iar/) | Sam Smith's identity assurance receipt, pinned to keripy `ec307cd74` |
+| [sedi-core](sedi-core/) | Sam Smith's Core identity credential, pinned to keripy `ec307cd74` |
+| [sedi-residence](sedi-residence/) | Sam Smith's separate Residence credential, pinned to keripy `ec307cd74` |
+| [sedi-id](sedi-id/) | superseded Bakobo identity schema, retained for SAID resolution; its `rules.json` remains a standalone governance artifact |
+| [sedi-age](sedi-age/) | provisional Bakobo age threshold aggregate, with an E1E edge to Core |
+| [sedi-present-age-portrait](sedi-present-age-portrait/) | holder-issued over-21 and portrait recipe, with I2I edges to Core and Age |
+| [sedi-present-county](sedi-present-county/) | holder-issued county recipe, with I2I edges to Core and Residence |
+| [sedi-guardian](sedi-guardian/) | provisional guardian credential with ward in a disclosable attribute block |
+| [sedi-ward-core](sedi-ward-core/) | provisional Core variant for a ward, with an NI2I edge to guardianship |
+| [sedi-ward-authz](sedi-ward-authz/) | provisional guardian-issued, separately revocable ward authorization |
 
 ## Status
 
@@ -52,6 +58,14 @@ under [`gcd-1.0.0/`](gcd-1.0.0/). The whole corpus is validated in CI — SAID
 integrity, registry consistency, JSON-Schema validity, example validation,
 referential + example SAID integrity, and a should-reject negative corpus. See
 [`this.i` `@b6xh4m`](this.i) and [`@tq5wnh`](this.i).
+
+The three Sam Smith SEDI schemas are pinned to his [keripy test module at
+`ec307cd74`](https://github.com/WebOfTrust/keripy/blob/ec307cd74/tests/sedi/test_sedi.py).
+CI recomputes their SAIDs and checks their source bytes in addition to the
+corpus checks. The Age, presentation, guardian, ward, and authorization schemas
+are Bakobo profiles for the November SEDI Summit; they are not Sam's schemas or
+statements of Utah policy. Previous major versions remain in versioned
+directories and in [`registry.json`](registry.json).
 
 ## Tooling
 
