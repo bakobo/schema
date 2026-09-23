@@ -90,3 +90,20 @@ def test_the_published_revision_stays_resolvable_byte_for_byte(name, version, sa
     assert hashlib.sha256(raw).hexdigest() == digest
     assert _schema(name)["$id"] != said
     assert registry[_schema(name)["$id"]] == f"{name}/{name}.schema.json"
+
+
+@pytest.mark.parametrize("name", PRESENTATIONS)
+def test_the_example_is_issued_into_the_registry_its_identity_far_node_names(name: str) -> None:
+    """Copilot on #10: rd is the presenter's presentation registry, which Core names in a.rd."""
+    presentation = _load(f"{name}/example.json")
+    core = _load("sedi-core/example.json")
+    assert presentation["e"]["identity"]["n"] == core["d"]
+    assert presentation["i"] == core["a"]["i"]
+    assert presentation["rd"] == core["a"]["rd"]
+
+
+def test_core_and_residence_name_the_same_presentation_registry() -> None:
+    """Both are issued to the same SMAID, whose one presentation registry both name."""
+    core, residence = _load("sedi-core/example.json"), _load("sedi-residence/example.json")
+    assert core["a"]["i"] == residence["a"]["i"]
+    assert core["a"]["rd"] == residence["a"]["rd"]
