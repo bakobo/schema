@@ -1,10 +1,10 @@
 {
-  "$id": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5",
+  "$id": "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Core Schema",
   "description": "SEDI Core Identity JSON Schema for acm ACDC.",
   "credentialType": "SEDI_Core_ACDC_acm_message",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "object",
   "required": [
     "v",
@@ -96,195 +96,267 @@
             },
             "givenName": {
               "description": "Given Name Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact givenName block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Given Name Value",
-                  "type": "string"
+                {
+                  "description": "Given Name Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Given Name Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "middleName": {
               "description": "Middle Name(s) Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact middleName block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Middle Name(s) Value",
-                  "type": "string"
+                {
+                  "description": "Middle Name(s) Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Middle Name(s) Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "familyName": {
               "description": "Family Name Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact familyName block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Family Name Value",
-                  "type": "string"
+                {
+                  "description": "Family Name Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Family Name Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "birthDate": {
               "description": "Birth Date Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact birthDate block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Birth Date Value as RFC-3339/ISO-8601 time MBZ",
-                  "type": "string"
+                {
+                  "description": "Birth Date Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Birth Date Value as RFC-3339/ISO-8601 time MBZ",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "facialImageProof": {
               "description": "Facial Image Proof Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact facialImageProof block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Facial Image Proof Value as SAID of typed media block",
-                  "type": "string"
+                {
+                  "description": "Facial Image Proof Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Facial Image Proof Value as SAID of typed media block",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "legalPresenceStatus": {
               "description": "Legal Presense Status Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact legalPresenceStatus block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Legal Presense Status Value i.e. citizen",
-                  "type": "string"
+                {
+                  "description": "Legal Presense Status Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Legal Presense Status Value i.e. citizen",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "issuedDate": {
               "description": "Issued Date Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact issuedDate block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Issued Date Value as RFC-3339/ISO-8601 time MBZ",
-                  "type": "string"
+                {
+                  "description": "Issued Date Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Issued Date Value as RFC-3339/ISO-8601 time MBZ",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "expirationDate": {
               "description": "Expiration Date Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact expirationDate block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Expiration Date Value as RFC-3339/ISO-8601 time MBZ",
-                  "type": "string"
+                {
+                  "description": "Expiration Date Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Expiration Date Value as RFC-3339/ISO-8601 time MBZ",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             }
           },
           "additionalProperties": false
@@ -317,37 +389,46 @@
             },
             "utahAgent": {
               "description": "Utah Agent Edge Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "n",
-                "s",
-                "o"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Edge SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact utahAgent edge",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Edge UE",
-                  "type": "string"
-                },
-                "n": {
-                  "description": "Far Node SAID",
-                  "type": "string"
-                },
-                "s": {
-                  "description": "Far Node Schema SAID",
-                  "type": "string"
-                },
-                "o": {
-                  "description": "Edge Unary Operator",
-                  "type": "string"
+                {
+                  "description": "Utah Agent Edge Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Edge SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge UE",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "Far Node SAID",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "Far Node Schema SAID",
+                      "type": "string"
+                    },
+                    "o": {
+                      "description": "Edge Unary Operator",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             }
           },
           "additionalProperties": false

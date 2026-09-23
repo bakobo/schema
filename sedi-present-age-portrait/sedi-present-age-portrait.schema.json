@@ -1,5 +1,5 @@
 {
-  "$id": "EPOBcvL3nas-yNPNufD2bIlO7nwuJLy4MAvqSxJmfmh3",
+  "$id": "EGScFnkqFnKv0c8X2yBXKieX7Ya6h7kAPiLz_48YsIL_",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Age-and-Portrait Presentation",
   "description": "A holder-issued SEDI presentation for the common 'prove over-21 and show the state-endorsed photo' verification pattern (e.g. venue/alcohol admittance, Utah Code 63A-20-204(2)(a)). Issuer = the holder (Discloser); issuee = the verifier (Disclosee). It combines the holder's two source credentials by reference via I2I edges -- the SEDI Core identity credential (for the state-endorsed portrait, disclosed by selective disclosure of just that block) and a sedi-age attestation (for the over-21 boolean) -- and binds the verifier to the SEDI governance framework referenced in 'r'. It is deliberately NOT registry-bound (no 'rd'): a one-time presentation is not logged. This is the first concrete verifier-pattern schema; a general presentation-base would be extracted once a second pattern exists (this.i @sdp3wk).",
@@ -141,7 +141,7 @@
                     },
                     "s": {
                       "description": "SEDI Core schema SAID",
-                      "const": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5"
+                      "const": "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh"
                     },
                     "o": {
                       "description": "Edge operator: I2I asserts the issuer of this presentation is the issuee of the far node (same holder)",
@@ -182,7 +182,7 @@
                     },
                     "s": {
                       "description": "SEDI Age schema SAID",
-                      "const": "EFxTYHyCerqMSJthl17hGxZhcRz1lEP5cWtRZ-hsZh85"
+                      "const": "EOZgLvehWuTl_lOJjEX7sEqsif1jrk9f_H10_p85r65H"
                     },
                     "o": {
                       "description": "Edge operator: I2I asserts the issuer of this presentation is the issuee of the far node (same holder)",

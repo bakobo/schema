@@ -1,5 +1,5 @@
 {
-  "$id": "EDhcDjDkCgdCHQurAvXjYPx2bR9jpBxw6WvOYiismmOV",
+  "$id": "EMQmtKXdW2bAgtzn9sUJ8VcWwasXvkL5JneYwU83m6Eh",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Digital Guardian",
   "description": "Provisional Bakobo SEDI guardianship profile following keripy discussion #1550: state-issued to a guardian, with the ward AID in a separately disclosable attribute block, coarse statutory scope, and separate delegable powers. Registry-bound for independent status checks.",
@@ -310,7 +310,7 @@
                     },
                     "s": {
                       "description": "SEDI Core schema SAID",
-                      "const": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5"
+                      "const": "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh"
                     },
                     "o": {
                       "description": "Same-issuee identity relation",

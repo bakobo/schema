@@ -1,5 +1,5 @@
 {
-  "$id": "EFxTYHyCerqMSJthl17hGxZhcRz1lEP5cWtRZ-hsZh85",
+  "$id": "EOZgLvehWuTl_lOJjEX7sEqsif1jrk9f_H10_p85r65H",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Age Attestation",
   "description": "Derived, state-endorsed age attestation for Utah's SEDI (Utah Code 63A-20). A selectively disclosable Aggregate ('A') section of individually-blinded boolean flags -- ageOver13/16/18/21/55/65 -- plus the holder (issuee) and an as-of date. The holder discloses only the threshold(s) a verifier needs (e.g. ageOver21 for alcohol, 63A-20-204(2)(a)) and the birth date is never involved (63A-20-301(1)(e)). An aggregate (not an attribute) section is correct for a homogeneous boolean vector: it treats the thresholds as an unordered blinded set, matching the ISO mDL age_over_NN element and provisional pending Sam Smith's age mechanism in keripy discussion #1098 (PR WebOfTrust/keripy#1505; this.i @sdav5t).",
@@ -384,7 +384,7 @@
                     },
                     "s": {
                       "description": "SEDI Core schema SAID",
-                      "const": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5"
+                      "const": "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh"
                     },
                     "o": {
                       "description": "Edge operator; E1E: this ACDC's issuee = far node's issuee",

@@ -8,7 +8,7 @@ import pytest
 from schematools.said import saidify_sad
 
 ROOT = Path(__file__).resolve().parents[4]
-CORE = "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5"
+CORE = "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh"
 RESIDENCE = "EEgFNN1XH90koG5J5pbXKlRNU6TnibizaTQmJcRfEcop"
 
 

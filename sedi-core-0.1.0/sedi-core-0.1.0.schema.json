@@ -1,10 +1,10 @@
 {
-  "$id": "EHM6a9atXNYYta67ZKp8VknJ0KiQ8m5BU6RkMWoK5_1Y",
+  "$id": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "SEDI Ward Core",
-  "description": "Provisional Bakobo variant of Sam Smith's Core with an NI2I edge back to state-issued guardianship. Core attributes and utahAgent edge are retained.",
-  "credentialType": "SEDI_Ward_Core_ACDC_acm_message",
-  "version": "1.0.0",
+  "title": "SEDI Core Schema",
+  "description": "SEDI Core Identity JSON Schema for acm ACDC.",
+  "credentialType": "SEDI_Core_ACDC_acm_message",
+  "version": "0.1.0",
   "type": "object",
   "required": [
     "v",
@@ -304,8 +304,7 @@
           "required": [
             "d",
             "u",
-            "utahAgent",
-            "guardian"
+            "utahAgent"
           ],
           "properties": {
             "d": {
@@ -349,47 +348,6 @@
                 }
               },
               "additionalProperties": false
-            },
-            "guardian": {
-              "description": "NI2I edge to the guardian credential held by someone other than the ward",
-              "oneOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "object",
-                  "required": [
-                    "d",
-                    "u",
-                    "n",
-                    "s",
-                    "o"
-                  ],
-                  "properties": {
-                    "d": {
-                      "description": "Edge SAID",
-                      "type": "string"
-                    },
-                    "u": {
-                      "description": "Edge UE",
-                      "type": "string"
-                    },
-                    "n": {
-                      "description": "Guardianship credential SAID",
-                      "type": "string"
-                    },
-                    "s": {
-                      "description": "Guardian schema SAID",
-                      "const": "EMQmtKXdW2bAgtzn9sUJ8VcWwasXvkL5JneYwU83m6Eh"
-                    },
-                    "o": {
-                      "description": "Different-issuee relation",
-                      "const": "NI2I"
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              ]
             }
           },
           "additionalProperties": false

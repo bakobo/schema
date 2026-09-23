@@ -7,7 +7,7 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[4]
-CORE = "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5"
+CORE = "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh"
 
 
 def load(name: str, filename: str) -> dict:
