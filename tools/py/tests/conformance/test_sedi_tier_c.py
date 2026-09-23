@@ -44,6 +44,17 @@ def test_ward_core_has_ni2i_guardianship_edge() -> None:
     assert example["e"]["guardian"]["n"] == load("sedi-guardian", "example.json")["d"]
 
 
+def test_ward_core_inherits_sam_core_optional_message_type() -> None:
+    core = load("sedi-core", "sedi-core.schema.json")
+    ward = load("sedi-ward-core", "sedi-ward-core.schema.json")
+    example = load("sedi-ward-core", "example.json")
+    assert "t" not in core["required"]
+    assert "t" not in ward["required"]
+    assert ward["properties"]["t"] == core["properties"]["t"]
+    assert "t" not in example
+    Draft202012Validator(ward).validate(example)
+
+
 def test_guardian_issues_separately_revocable_ward_authorization() -> None:
     guardian = load("sedi-guardian", "example.json")
     ward = load("sedi-ward-core", "example.json")

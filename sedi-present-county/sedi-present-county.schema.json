@@ -1,5 +1,5 @@
 {
-  "$id": "EGYLXmZOamfx3HMVJbXkjEx02dz_N6IN6aF6xTRWuA8q",
+  "$id": "EE1qJmXEgBbinrT_1fSe3_ccu-MWG7znc2D88f6aCxL_",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI County Presentation",
   "description": "A holder-issued one-time presentation of a county claim backed by I2I edges to SEDI Core and Residence. The verifier is the issuee; the holder is the issuer. The Residence county block is disclosed alongside this recipe.",
@@ -136,7 +136,7 @@
                       "type": "string"
                     },
                     "n": {
-                      "description": "SAID of the far node (the sedi-id credential)",
+                      "description": "SAID of the far node (the SEDI Core credential)",
                       "type": "string"
                     },
                     "s": {
@@ -177,7 +177,7 @@
                       "type": "string"
                     },
                     "n": {
-                      "description": "SAID of the far node (the sedi-age credential)",
+                      "description": "SAID of the far node (the SEDI Residence credential)",
                       "type": "string"
                     },
                     "s": {

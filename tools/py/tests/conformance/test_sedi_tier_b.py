@@ -5,6 +5,8 @@ from pathlib import Path
 
 import pytest
 
+from schematools.said import saidify_sad
+
 ROOT = Path(__file__).resolve().parents[4]
 CORE = "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5"
 RESIDENCE = "EEgFNN1XH90koG5J5pbXKlRNU6TnibizaTQmJcRfEcop"
@@ -42,6 +44,18 @@ def test_county_presentation_links_core_and_residence() -> None:
     assert edges["residence"]["oneOf"][1]["properties"]["s"]["const"] == RESIDENCE
     assert example["e"]["identity"]["s"] == CORE
     assert example["e"]["residence"]["s"] == RESIDENCE
+
+
+def test_county_presentation_example_matches_its_source_credentials() -> None:
+    presentation = _load("sedi-present-county", "example.json")
+    core = _load("sedi-core", "example.json")
+    residence = _load("sedi-residence", "example.json")
+    for label, source in (("identity", core), ("residence", residence)):
+        edge = presentation["e"][label]
+        assert (edge["n"], edge["s"]) == (source["d"], source["s"])
+        assert presentation["i"] == source["a"]["i"]
+    assert saidify_sad(presentation) == presentation
+    assert presentation["a"]["county"] == residence["a"]["county"]["value"]
 
 
 @pytest.mark.parametrize("name", ["sedi-age", "sedi-present-age-portrait", "sedi-present-county", "sedi-guardian"])
