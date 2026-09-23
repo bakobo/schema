@@ -1,17 +1,18 @@
 {
-  "$id": "EGScFnkqFnKv0c8X2yBXKieX7Ya6h7kAPiLz_48YsIL_",
+  "$id": "EHcc2Ow86VVg37zhILHFz942GEYfQ8PGTwKb2h4KdJFU",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Age-and-Portrait Presentation",
-  "description": "A holder-issued SEDI presentation for the common 'prove over-21 and show the state-endorsed photo' verification pattern (e.g. venue/alcohol admittance, Utah Code 63A-20-204(2)(a)). Issuer = the holder (Discloser); issuee = the verifier (Disclosee). It combines the holder's two source credentials by reference via I2I edges -- the SEDI Core identity credential (for the state-endorsed portrait, disclosed by selective disclosure of just that block) and a sedi-age attestation (for the over-21 boolean) -- and binds the verifier to the SEDI governance framework referenced in 'r'. It is deliberately NOT registry-bound (no 'rd'): a one-time presentation is not logged. This is the first concrete verifier-pattern schema; a general presentation-base would be extracted once a second pattern exists (this.i @sdp3wk).",
-  "$comment": "An ACDC v2 attribute+edges+rules field-map credential (ilk 'acm'). The schema ENFORCES the pattern's teeth: every edge operator is pinned to const 'I2I' (the same-holder binding), the governance reference 'r' is required, and 'rd' is disallowed (additionalProperties:false), so a registry-bound or non-I2I presentation is rejected. Migrated to the v2 envelope by this.i @lkfnoess, so the I2I edges into SEDI Core and sedi-age no longer cross a protocol-version boundary; staying registry-less is a design choice, not a v1 artifact, and 'rd' remains refused.",
+  "description": "A holder-issued SEDI presentation for the common 'prove over-21 and show the state-endorsed photo' verification pattern (e.g. venue/alcohol admittance, Utah Code 63A-20-204(2)(a)). Issuer = the holder (Discloser); issuee = the verifier (Disclosee). It combines the holder's two source credentials by reference via I2I edges -- the SEDI Core identity credential (for the state-endorsed portrait, disclosed by selective disclosure of just that block) and a sedi-age attestation (for the over-21 boolean) -- and binds the verifier to the SEDI governance framework referenced in 'r'. It is issued into the holder's presentation registry, which 'rd' names (this.i @lm37js6k), so its state is anchored and revocable by the holder. This is the first concrete verifier-pattern schema; a general presentation-base would be extracted once a second pattern exists (this.i @sdp3wk).",
+  "$comment": "An ACDC v2 attribute+edges+rules field-map credential (ilk 'acm'). The schema ENFORCES the pattern's teeth: every edge operator is pinned to const 'I2I' (the same-holder binding), and the governance reference 'r' and the presentation registry 'rd' are required, so an unregistered or non-I2I presentation is rejected. Migrated to the v2 envelope by this.i @lkfnoess, so the I2I edges into SEDI Core and sedi-age no longer cross a protocol-version boundary; 'rd' became required under @lm37js6k.",
   "credentialType": "SEDI_AgePortraitPresentation",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "type": "object",
   "required": [
     "v",
     "t",
     "d",
     "i",
+    "rd",
     "s",
     "a",
     "e",
@@ -36,6 +37,10 @@
     },
     "i": {
       "description": "Issuer = the holder (Discloser) AID",
+      "type": "string"
+    },
+    "rd": {
+      "description": "Registry SAID",
       "type": "string"
     },
     "s": {

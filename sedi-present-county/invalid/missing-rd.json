@@ -1,21 +1,20 @@
 {
-  "v": "ACDCCAACAAJSONAARB.",
+  "v": "ACDCCAACAAJSONAARJ.",
   "t": "acm",
-  "d": "EDvo_LoxtQpjL-pUXP2ylJk0uUlbhp_oCO2JplQz3nQh",
+  "d": "EFkI-BPQevcfMrZH1fhkrSCh1ICW0uO85zy-5DlrnXsV",
   "u": "0ABwcmVzdG9wbm9uY2UwcmF3",
   "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC",
-  "rd": "EMjjagHYNoGZI05ydZWMimQzHx5sOeFEhFJlzhbPL8IM",
-  "s": "EHcc2Ow86VVg37zhILHFz942GEYfQ8PGTwKb2h4KdJFU",
+  "s": "EALU1_5py2Pje_oQfWEbNa3ojGsfVOXiLANpEghWO1s0",
   "a": {
-    "d": "EHFNzPfy1OzHB-iomK992Gk_mLEOVwGADxA52luajPzO",
+    "d": "ENSgiMJTarfFHvVXUvkR3I834KZvYhXZU8loS3TbJvIA",
     "u": "0ABwcmVzYXR0cm5vbmNlMHJh",
     "i": "EJQON0fDA5FKC14BKbk921e212IctfjLsCL7l46OzHgG",
-    "ageOver21": true,
     "venue": "The Alcove Club, 200 S West Temple, Salt Lake City UT",
-    "occurredAt": "2026-07-14T21:30:00.000000+00:00"
+    "occurredAt": "2026-07-14T21:30:00.000000+00:00",
+    "county": "example"
   },
   "e": {
-    "d": "EEyAi7JWgTawY6maSWMAlehJTTUDEkTm2tKXhzdfX56F",
+    "d": "EG7SqjrxAIe2BV0jR83a_y7RVq1oNe4GIxKOt87MoAqF",
     "u": "0ABwcmVzZWRnZW5vbmNlMHJh",
     "identity": {
       "d": "ELotJEnQ06b5UZ7CjZ47qwitEYwFc0yjSdRFZ_rG0Hci",
@@ -24,11 +23,11 @@
       "s": "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh",
       "o": "I2I"
     },
-    "age": {
-      "d": "EFswGSBwXt68-h3a1zuMIExgH6-IaG7D3PN-YgUZEIIu",
+    "residence": {
+      "d": "ELq8ISVKb3lEuiiQ809IOtsj8WCVrM_AANOHzYSv72Sw",
       "u": "0ABwcmVzYWdlZWRnZW5vbmNl",
-      "n": "ECfEPuHS8wdbhbMV63dV5nW-OGMz66rPeNdb-jERB_Po",
-      "s": "EOZgLvehWuTl_lOJjEX7sEqsif1jrk9f_H10_p85r65H",
+      "n": "EMDW-V8kVa9HAhHIEu0L36pBFFi0Ucw0nK_J8m7LsDFl",
+      "s": "EEgFNN1XH90koG5J5pbXKlRNU6TnibizaTQmJcRfEcop",
       "o": "I2I"
     }
   },

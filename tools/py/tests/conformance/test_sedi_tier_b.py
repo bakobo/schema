@@ -16,11 +16,11 @@ def _load(name: str, filename: str) -> dict:
     return json.loads((ROOT / name / filename).read_text())
 
 
-@pytest.mark.parametrize("name", ["sedi-age", "sedi-present-age-portrait"])
-def test_new_major_version_chains_to_core(name: str) -> None:
+@pytest.mark.parametrize("name,version", [("sedi-age", "3.0.0"), ("sedi-present-age-portrait", "4.0.0")])
+def test_new_major_version_chains_to_core(name: str, version: str) -> None:
     schema = _load(name, f"{name}.schema.json")
     example = _load(name, "example.json")
-    assert schema["version"] == "3.0.0"
+    assert schema["version"] == version
     assert schema["properties"]["e"]["oneOf"][1]["properties"]["identity"]["oneOf"][1]["properties"]["s"]["const"] == CORE
     assert example["e"]["identity"]["s"] == CORE
     assert example["s"] == schema["$id"]
@@ -38,7 +38,7 @@ def test_county_presentation_links_core_and_residence() -> None:
     schema = _load("sedi-present-county", "sedi-present-county.schema.json")
     example = _load("sedi-present-county", "example.json")
     edges = schema["properties"]["e"]["oneOf"][1]["properties"]
-    assert schema["version"] == "1.0.0"
+    assert schema["version"] == "2.0.0"
     assert set(edges) >= {"identity", "residence"}
     assert edges["identity"]["oneOf"][1]["properties"]["s"]["const"] == CORE
     assert edges["residence"]["oneOf"][1]["properties"]["s"]["const"] == RESIDENCE

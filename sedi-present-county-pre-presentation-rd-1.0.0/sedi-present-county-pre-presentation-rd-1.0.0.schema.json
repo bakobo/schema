@@ -1,18 +1,17 @@
 {
-  "$id": "EALU1_5py2Pje_oQfWEbNa3ojGsfVOXiLANpEghWO1s0",
+  "$id": "EBzm1khKzF5_kasnw3QTKfcycQyqMc3WE6WXW5UM9o2L",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI County Presentation",
   "description": "A holder-issued one-time presentation of a county claim backed by I2I edges to SEDI Core and Residence. The verifier is the issuee; the holder is the issuer. The Residence county block is disclosed alongside this recipe.",
-  "$comment": "Bakobo Summit profile, not a Sam Smith schema. acm issued into the holder's presentation registry with I2I source edges and required rules.",
+  "$comment": "Bakobo Summit profile, not a Sam Smith schema. Registry-less acm with I2I source edges and required rules.",
   "credentialType": "SEDI_CountyPresentation",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "type": "object",
   "required": [
     "v",
     "t",
     "d",
     "i",
-    "rd",
     "s",
     "a",
     "e",
@@ -37,10 +36,6 @@
     },
     "i": {
       "description": "Issuer = the holder (Discloser) AID",
-      "type": "string"
-    },
-    "rd": {
-      "description": "Registry SAID",
       "type": "string"
     },
     "s": {
