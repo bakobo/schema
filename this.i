@@ -2159,3 +2159,18 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             acm would make this Core variant's envelope stricter for no reason
             supplied by the new guardianship edge. These are Bakobo provisional
             profiles, not Utah policy or Sam's schemas.
+        Preserve every published rules revision by SAID = decision:
+          id: jmr6znql
+          why: >
+            A rules SAID in an issued credential is a permanent content address. Replacing
+            sedi-guardian/rules.json and sedi-id/rules.json in place during this migration
+            stranded the earlier EOW7nnASAYoY72gJ7brJwE0V2Hm8o6RfZvN2gNeyKmO0 and
+            EA5O9z0TB932sm8kJIVdAIpwLpEWRWC5--VNS5r69frn revisions. Keep their
+            origin/main bytes in versioned archive paths, alongside the revised rules
+            used by new examples. Index both revisions in registry.json so a verifier
+            can resolve either SAID without guessing a path. Extend the registry check
+            and a corpus-wide conformance test to recompute every referenced rules SAID;
+            testing only the current examples would miss old credentials. Preserve the
+            archived schema bytes: changing a path description there would itself
+            invalidate an already published schema SAID. The cost is retaining old
+            governance text and teaching the registry to index rules as well as schemas.
