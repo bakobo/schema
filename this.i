@@ -1943,6 +1943,28 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             binding), 'r' required, and 'rd' disallowed (additionalProperties:false — unregistered, not logged).
             The general presentation-base remains deferred until a SECOND pattern exists to prove the shared
             shape (tick ~5c35).
+        SEDI presentations are issued into the holder's presentation registry, so rd is required = decision:
+          id: lm37js6k
+          why: >
+            REVERSES the "rd disallowed, unregistered, not logged" clause of @sdgv7k for both presentation
+            patterns, sedi-present-age-portrait and sedi-present-county. Sam Smith's SEDI model gives the
+            holder a registry for exactly this: Core and Residence carry a.rd, "Issuee Presentation Registry
+            SAID" (keripy ec307cd74 tests/sedi/test_sedi.py:194, :417), which the issuee incepts in advance and
+            issues its presentations into. A presentation issued there has an anchored, revocable state like
+            any other ACDC, so a verifier can tell a live presentation from one the holder has withdrawn, and
+            the registry is the holder's own, so "logged" means logged in the holder's KEL and nowhere a third
+            party watches. The concern @sdgv7k answered, a presentation leaving a trail the state or an
+            observer can follow, is not reopened: the registry is under the holder's AID and its events are
+            disclosed only to whom the holder presents them. Also forced in practice: heti's Registry.issue
+            always writes rd (heti @89kk7cft), so under the old schemas no heti-issued presentation validated,
+            which blocks the rich Core+Residence presentation of sedi-summit plan M4. Chose REQUIRED over
+            optional, following @enr3eg for GCD: an optional rd lets an rd-less presentation validate and so
+            fails open on the registry a verifier checks state against. The previous SAIDs stay resolvable as
+            archived revisions, as @sdgv7k's successors did for the Core repin, because presentations may
+            already have been minted against them. Not enforceable by schema, and left to the verifier: that a
+            presentation's rd is the registry the presenter's Core names in a.rd. Tradeoff: a holder must
+            incept a registry before presenting at all, one more event per holder, and a presentation made
+            offline without one is no longer expressible under these patterns.
         Section choice A-vs-a — sedi-id is attributive, sedi-age is an aggregate boolean vector = decision:
           id: sdav5t
           why: >
@@ -2174,6 +2196,25 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             archived schema bytes: changing a path description there would itself
             invalidate an already published schema SAID. The cost is retaining old
             governance text and teaching the registry to index rules as well as schemas.
+    Publish a compact-capable revision of SEDI Residence = decision:
+      id: a5kbqzfs
+      why: >
+        The same defect @spytom65 fixed in Core, found in its sibling. Sam's Residence 0.1.0
+        declares street, city, county, state, postcode, country, issuedDate and expirationDate as
+        required object blocks with no SAID-string arm, so a Residence with any block compacted
+        fails validation, and the county step of the demo, which must reveal county while
+        withholding street and postcode, cannot be expressed at all. Chose to repeat Core's
+        amendment exactly rather than design a second one: a string arm before the existing object
+        arm for every attribute block and for the coreIdentity edge, the object arms unchanged,
+        version 0.2.0 identified as a Bakobo interoperability amendment, Sam's 0.1.0 bytes kept
+        resolvable under sedi-residence-0.1.0, and dependents repinned. Two families of SEDI schema
+        differing in how they compact would make every verifier learn both. The only dependent that
+        pins Residence is sedi-present-county's residence edge; its revision carrying the old pin
+        was never published (it existed only on this branch, under @lm37js6k), so it is replaced
+        rather than archived, while the published county 1.0.0 archives stay as they are. Same
+        tradeoff as @spytom65: the current Residence loses byte identity with Sam's upstream, and
+        the archive keeps that provenance. Same verifier duty: a compact block is a SAID, and a
+        verifier must resolve and verify it before admitting the claim.
     Publish a compact-capable revision of SEDI Core = decision:
       id: spytom65
       why: >

@@ -26,7 +26,7 @@ PINS = {
         "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5",
         "543ffc58f48bf6d04dc3f49f9967ae36e586c863798bd67eefe2ff3485ef3a4e",
     ),
-    "sedi-residence": (
+    "sedi-residence-0.1.0": (
         "EEgFNN1XH90koG5J5pbXKlRNU6TnibizaTQmJcRfEcop",
         "a9c23887bcd8d436a70367ccd1f683cb78305bb281d047bfad19e0f7bb6d4227",
     ),
@@ -35,6 +35,11 @@ PINS = {
 CURRENT_CORE = (
     "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh",
     "fecf18fcffc622820783e5cc8cc66653a61bf1ea6797a0d6ef5b46965b092cb9",
+)
+
+CURRENT_RESIDENCE = (
+    "EDg5tBqnVFoGILBgIknKs-0CHv3au4GczuPgjf4jx1X2",
+    "2bfe9f3ab0836714554f90bc971cb2723306453ad0f953825dc22459ffa9797d",
 )
 
 
@@ -54,3 +59,11 @@ def test_bakobo_compact_core_pin() -> None:
     assert schema["$id"] == CURRENT_CORE[0]
     assert compute_schema_said(schema) == CURRENT_CORE[0]
     assert hashlib.sha256(raw).hexdigest() == CURRENT_CORE[1]
+
+
+def test_bakobo_compact_residence_pin() -> None:
+    raw = (ROOT / "sedi-residence/sedi-residence.schema.json").read_bytes()
+    schema = json.loads(raw)
+    assert schema["$id"] == CURRENT_RESIDENCE[0]
+    assert compute_schema_said(schema) == CURRENT_RESIDENCE[0]
+    assert hashlib.sha256(raw).hexdigest() == CURRENT_RESIDENCE[1]

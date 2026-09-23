@@ -1,10 +1,10 @@
 {
-  "$id": "EEgFNN1XH90koG5J5pbXKlRNU6TnibizaTQmJcRfEcop",
+  "$id": "EDg5tBqnVFoGILBgIknKs-0CHv3au4GczuPgjf4jx1X2",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Residence Schema",
   "description": "SEDI Residence JSON Schema for acm ACDC.",
   "credentialType": "SEDI_Residence_ACDC_acm_message",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "object",
   "required": [
     "v",
@@ -96,195 +96,267 @@
             },
             "street": {
               "description": "Street Address Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact street block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Street Address Value",
-                  "type": "string"
+                {
+                  "description": "Street Address Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Street Address Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "city": {
               "description": "City Name Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact city block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "City Name Value",
-                  "type": "string"
+                {
+                  "description": "City Name Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "City Name Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "county": {
               "description": "County Name Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact county block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "County Name Value",
-                  "type": "string"
+                {
+                  "description": "County Name Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "County Name Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "state": {
               "description": "State Name Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact state block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "State Name Value",
-                  "type": "string"
+                {
+                  "description": "State Name Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "State Name Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "postcode": {
               "description": "Postcode Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact postcode block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Postcode Value",
-                  "type": "string"
+                {
+                  "description": "Postcode Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Postcode Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "country": {
               "description": "Country Name Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact country block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Country Name Value",
-                  "type": "string"
+                {
+                  "description": "Country Name Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Country Name Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "issuedDate": {
               "description": "Issued Date Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact issuedDate block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Issued Date Value as RFC-3339/ISO-8601 time MBZ",
-                  "type": "string"
+                {
+                  "description": "Issued Date Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Issued Date Value as RFC-3339/ISO-8601 time MBZ",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             },
             "expirationDate": {
               "description": "Expiration Date Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "value"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Block SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact expirationDate block",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Bock UE",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Expiration Date Value as RFC-3339/ISO-8601 time MBZ",
-                  "type": "string"
+                {
+                  "description": "Expiration Date Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Expiration Date Value as RFC-3339/ISO-8601 time MBZ",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             }
           },
           "additionalProperties": false
@@ -317,41 +389,50 @@
             },
             "coreIdentity": {
               "description": "Core Identity Edge Block",
-              "type": "object",
-              "required": [
-                "d",
-                "u",
-                "n",
-                "s",
-                "o"
-              ],
-              "properties": {
-                "d": {
-                  "description": "Edge SAID",
+              "oneOf": [
+                {
+                  "description": "SAID of the compact coreIdentity edge",
                   "type": "string"
                 },
-                "u": {
-                  "description": "Edge UE",
-                  "type": "string"
-                },
-                "n": {
-                  "description": "Far Node SAID",
-                  "type": "string"
-                },
-                "s": {
-                  "description": "Far Node Schema SAID",
-                  "type": "string"
-                },
-                "o": {
-                  "description": "Edge Unary Operator",
-                  "type": "array",
-                  "items": {
-                    "type": "string"
+                {
+                  "description": "Core Identity Edge Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Edge SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge UE",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "Far Node SAID",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "Far Node Schema SAID",
+                      "type": "string"
+                    },
+                    "o": {
+                      "description": "Edge Unary Operator",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1
+                    }
                   },
-                  "minItems": 1
+                  "additionalProperties": false
                 }
-              },
-              "additionalProperties": false
+              ]
             }
           },
           "additionalProperties": false
