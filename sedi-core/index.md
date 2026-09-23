@@ -1,0 +1,5 @@
+# SEDI Core Identity
+
+The state issues Core to the citizen. Its individually disclosed blocks include name, birth date, facial image proof, legal presence status, and issuance dates. Its required `utahAgent` I2I edge links the issuing department to an authorizing agent credential. This is [Sam Smith's Core schema at `ec307cd74`](https://github.com/WebOfTrust/keripy/blob/ec307cd74/tests/sedi/test_sedi.py#L138-L359); Sam Smith is the author. Version `0.1.0` and SAID `ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5` are pinned for the Summit.
+
+**Legal scope tension:** Sam's schema requires `legalPresenceStatus`. Utah Code [63A-20-301(2)(f)](https://le.utah.gov/xcode/Title63A/Chapter20/63A-20-S301.html) names only name, birth date, image, and Utah residence address as the endorsed attributes. This repo preserves Sam's field for wire compatibility; whether it is intended as an endorsed output needs confirmation. The local [`example.json`](example.json) is structural and uses a placeholder far node for `utahAgent`, as Sam's module does. It is not an issued test vector. [`invalid/`](invalid/) holds negative cases.

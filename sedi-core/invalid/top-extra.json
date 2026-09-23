@@ -1,0 +1,68 @@
+{
+  "v": "ACDCCAACAAJSONAAaE.",
+  "d": "ENhqP2Rzu0Mm4tCUzWdVhZ7NnE0YYL-oGcgEQManRmcQ",
+  "i": "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "rd": "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "s": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5",
+  "a": {
+    "d": "EOdpzDXner3vgl1bIyZNh3FybSw3usexbbsO6JvyPYwA",
+    "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+    "i": "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "givenName": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "middleName": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "familyName": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "birthDate": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "facialImageProof": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "legalPresenceStatus": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "issuedDate": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "expirationDate": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    }
+  },
+  "e": {
+    "d": "EB0MIQn4iKEHOotwB-qI8fX01SiDz9RNCWF6hwDqk_a5",
+    "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+    "utahAgent": {
+      "d": "EBycBOWoyCb0xz5yvugebB-C4npubRLg08fRboC8V9es",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "n": "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "s": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5",
+      "o": "I2I"
+    }
+  },
+  "r": {
+    "d": "EFPxq4WPl29szUqbrQIviOh_Ls_RlrYbp4L-fdQH0XrX",
+    "l": ""
+  },
+  "unexpected": true
+}

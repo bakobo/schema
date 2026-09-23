@@ -57,6 +57,9 @@ KNOWN_XFAIL: dict[tuple[str, str], str] = {
 # sedi-age is already v2 in every respect but one: it declares no 't', so a
 # heti-issued credential carrying t=acm has nothing in the schema to land on.
 KNOWN_XFAIL[("sedi-age", "envelope")] = "declares no 't'; tick 2nd5 (with 6grq)"
+# Sam's IAR is signed without a registry and its pinned schema intentionally
+# omits rd. The generic envelope check still assumes every credential declares it.
+KNOWN_XFAIL[("sedi-iar", "envelope")] = "Sam's registry-less IAR at ec307cd74 omits rd"
 
 SCHEMA_NAMES = [entry.name for entry in discover_schemas(ROOT)]
 
