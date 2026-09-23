@@ -9,7 +9,7 @@ from schematools.said import saidify_sad
 
 ROOT = Path(__file__).resolve().parents[4]
 CORE = "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh"
-RESIDENCE = "EEgFNN1XH90koG5J5pbXKlRNU6TnibizaTQmJcRfEcop"
+RESIDENCE = "EDg5tBqnVFoGILBgIknKs-0CHv3au4GczuPgjf4jx1X2"
 
 
 def _load(name: str, filename: str) -> dict:

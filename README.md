@@ -35,7 +35,7 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 | [proof-of-control](proof-of-control/) | issuee demonstrated control of a digital resource |
 | [sedi-iar](sedi-iar/) | Sam Smith's identity assurance receipt, pinned to keripy `ec307cd74` |
 | [sedi-core](sedi-core/) | Bakobo's compact-capable revision of Sam Smith's Core identity credential; [his original revision](sedi-core-0.1.0/) remains pinned to keripy `ec307cd74` |
-| [sedi-residence](sedi-residence/) | Sam Smith's separate Residence credential, pinned to keripy `ec307cd74` |
+| [sedi-residence](sedi-residence/) | Bakobo's compact-capable revision of Sam Smith's Residence credential; [his original revision](sedi-residence-0.1.0/) remains pinned to keripy `ec307cd74` |
 | [sedi-id](sedi-id/) | superseded Bakobo identity schema, retained for SAID resolution; its `rules.json` remains a standalone governance artifact |
 | [sedi-age](sedi-age/) | provisional Bakobo age threshold aggregate, with an E1E edge to Core |
 | [sedi-present-age-portrait](sedi-present-age-portrait/) | holder-issued over-21 and portrait recipe, with I2I edges to Core and Age |
