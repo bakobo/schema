@@ -1,0 +1,241 @@
+{
+  "$id": "EIWPGSkamABdxjSuYWgCB6oXy0s_euJCOAFqI7dJowYc",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SEDI Ward Authorization",
+  "description": "Provisional guardian-issued, separately revocable ward authorization. The resource-capability payload is a Bakobo profile of the syntax Sam left open in keripy discussion #1550.",
+  "credentialType": "SEDI_Ward_AuthZ",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "v",
+    "t",
+    "d",
+    "i",
+    "rd",
+    "s",
+    "a",
+    "e",
+    "r"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type",
+      "const": "acm"
+    },
+    "d": {
+      "description": "Credential SAID",
+      "type": "string"
+    },
+    "u": {
+      "description": "Top-level nonce",
+      "type": "string"
+    },
+    "i": {
+      "description": "Guardian issuer AID",
+      "type": "string"
+    },
+    "rd": {
+      "description": "Guardian-owned registry SAID",
+      "type": "string"
+    },
+    "s": {
+      "description": "Schema Section",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "a": {
+      "description": "Authorization attributes",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "d",
+            "u",
+            "i",
+            "authz",
+            "issuedAt"
+          ],
+          "properties": {
+            "d": {
+              "type": "string"
+            },
+            "u": {
+              "type": "string"
+            },
+            "i": {
+              "description": "Ward issuee AID",
+              "type": "string"
+            },
+            "authz": {
+              "description": "Resource and capability grants; every caps list must be checked against guardian powers",
+              "type": "object",
+              "required": [
+                "rc"
+              ],
+              "properties": {
+                "rc": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "route",
+                      "caps"
+                    ],
+                    "properties": {
+                      "route": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "caps": {
+                        "type": "array",
+                        "minItems": 1,
+                        "uniqueItems": true,
+                        "items": {
+                          "enum": [
+                            "read",
+                            "post",
+                            "message",
+                            "profile",
+                            "configure",
+                            "purchase",
+                            "livestream"
+                          ]
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "issuedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "e": {
+      "description": "Authority and ward identity edges",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "d",
+            "authority",
+            "subject"
+          ],
+          "properties": {
+            "d": {
+              "type": "string"
+            },
+            "u": {
+              "type": "string"
+            },
+            "authority": {
+              "description": "I2I authority edge to guardian credential",
+              "oneOf": [
+                {
+                  "description": "Compact edge SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "Expanded edge",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "type": "string"
+                    },
+                    "u": {
+                      "type": "string"
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "s": {
+                      "const": "EAfd7i45-N5R9chc8Q5tFqmxCVqzqKnAnmVWTWDOSloS"
+                    },
+                    "o": {
+                      "const": "I2I"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "subject": {
+              "description": "E1E identity edge to ward Core credential",
+              "oneOf": [
+                {
+                  "description": "Compact edge SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "Expanded edge",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "type": "string"
+                    },
+                    "u": {
+                      "type": "string"
+                    },
+                    "n": {
+                      "type": "string"
+                    },
+                    "s": {
+                      "const": "EF1m5uPP1vvDLuKQlz0Y_tnH9DFEWnaDPH4gc7ugSskm"
+                    },
+                    "o": {
+                      "const": "E1E"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "description": "Guardian governance rules SAID",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

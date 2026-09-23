@@ -1,20 +1,21 @@
 {
-  "v": "ACDCCAACAAJSONAAYz.",
+  "v": "ACDCCAACAAJSONAAbr.",
   "t": "acm",
-  "d": "EBsOO-tgUp8S4XxkylR95rKHd29irDPnT12Blsz_zJMr",
+  "d": "EMHe5djz6DLFveIVAq78dLVr7XIZXdJkhOUOTzqdRhds",
   "u": "0ABpbmNhcHRzYWx0cGFkMDAw",
   "i": "EGA-48IbFJLG0nG0nv2eJoevtvNpElOqnSM_HBDZNNgc",
   "rd": "EC-DlJTW3_34SsV5PSG0-U7hxR3uVj8JfCoC5e-8pCBB",
-  "s": "ENzPKrfeHE7Qs247OhF5RQ_QO78iCiJevqIErOY5H94Q",
+  "s": "EAfd7i45-N5R9chc8Q5tFqmxCVqzqKnAnmVWTWDOSloS",
   "a": {
-    "d": "ECup0cpIxGo4HXvrRx_IJL4Hiif6mOze0rwsFJWipuMu",
+    "ward": {
+      "d": "EFAMpHMLlUWnM8ElFLfpi_Z2s9674PG-l1HpdFfkoAn2",
+      "u": "0ABzZWRpd2FyZG5vbmNlMDAw",
+      "i": "EDB8gKNwzurf33pV2hsyGR9XFOmitDhc0LUzDamcU2JR"
+    },
+    "d": "EOe160F-JeDfdJkk-j884xDKSEXvYGxXf063UH2rsmQf",
     "u": "0ABpbmNhcGFzYWx0cGFkMDAw",
-    "i": "EC1tsDmWsQ50ubsCcqVRntpZev6WsMcA2NY76nSsqP5Q",
+    "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC",
     "basis": "courtGuardianIncapacitated",
-    "powers": [
-      "healthCare",
-      "residence"
-    ],
     "fiduciary": "bestInterest",
     "recognition": {
       "authorityType": "court",
@@ -26,7 +27,16 @@
       "registrationStatus": "native"
     },
     "effectiveDate": "2026-03-10",
-    "reviewDueDate": "2027-03-10"
+    "reviewDueDate": "2027-03-10",
+    "scope": [
+      "healthCare",
+      "residence"
+    ],
+    "powers": [
+      "read",
+      "message",
+      "profile"
+    ]
   },
-  "r": "EOW7nnASAYoY72gJ7brJwE0V2Hm8o6RfZvN2gNeyKmO0"
+  "r": "EKLBoGWUawixiHtnA5LZ23cPfWjG1niiLlRIhDUGmHRz"
 }

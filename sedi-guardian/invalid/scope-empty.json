@@ -28,10 +28,7 @@
     },
     "effectiveDate": "2026-03-10",
     "reviewDueDate": "2027-03-10",
-    "scope": [
-      "healthCare",
-      "residence"
-    ],
+    "scope": [],
     "powers": [
       "read",
       "message",
@@ -63,6 +60,5 @@
       "o": "NI2I"
     }
   },
-  "r": "EKLBoGWUawixiHtnA5LZ23cPfWjG1niiLlRIhDUGmHRz",
-  "unexpected": true
+  "r": "EKLBoGWUawixiHtnA5LZ23cPfWjG1niiLlRIhDUGmHRz"
 }

@@ -1,0 +1,44 @@
+{
+  "v": "ACDCCAACAAJSONAAQy.",
+  "t": "acm",
+  "d": "EDYr75fKpQPreXk6qrLpAz5yziAJJ9CGnjKehzlQIvt3",
+  "u": "0ABzZWRpYXV0aHpub25jZTAw",
+  "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC",
+  "rd": "EDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+  "s": "EIWPGSkamABdxjSuYWgCB6oXy0s_euJCOAFqI7dJowYc",
+  "a": {
+    "d": "EJBZWkLEmxt_O-2nFc_QpZzNbKyt7xlnRxVlo5fw8bZ7",
+    "u": "0ABzZWRpYXV0aGF0dG5vbmNl",
+    "authz": {
+      "rc": [
+        {
+          "route": "health/records",
+          "caps": [
+            "read",
+            "message"
+          ]
+        }
+      ]
+    },
+    "issuedAt": "2026-09-01T12:00:00+00:00"
+  },
+  "e": {
+    "d": "EOJIB--rdmLVInidabdiIRJ9SsL3lp5716ET9UTXHZys",
+    "u": "0ABzZWRpYXV0aGVub25jZTAw",
+    "authority": {
+      "d": "EHdmTxe_6q-rAjdXOqlj5abeWY-dC5Ne8LWSlCCtW7N9",
+      "u": "0ABzZWRpYXV0aGVkZ2UwMDAw",
+      "n": "EMHe5djz6DLFveIVAq78dLVr7XIZXdJkhOUOTzqdRhds",
+      "s": "EAfd7i45-N5R9chc8Q5tFqmxCVqzqKnAnmVWTWDOSloS",
+      "o": "I2I"
+    },
+    "subject": {
+      "d": "ELQ3DuEWfv1h4VHfoSIHnse38jgYRosAQJAAQm0S4tqa",
+      "u": "0ABzZWRpYXV0aGVkZ2UwMDAx",
+      "n": "ENMjztveNXIW1k0M__8YdrljLSvIblUeDOL7ch6Q_qyw",
+      "s": "EF1m5uPP1vvDLuKQlz0Y_tnH9DFEWnaDPH4gc7ugSskm",
+      "o": "E1E"
+    }
+  },
+  "r": "EKLBoGWUawixiHtnA5LZ23cPfWjG1niiLlRIhDUGmHRz"
+}
