@@ -1,5 +1,7 @@
 ## SEDI Identity Credential (`sedi-id`)
 
+**Superseded for new issuance.** This Bakobo schema remains resolvable for existing credentials. The active Summit schema family is Sam Smith's [IAR](../sedi-iar/), [Core](../sedi-core/), and [Residence](../sedi-residence/). The text below describes the historical `sedi-id` design, including its optional `faceTemplate`; that field is not in Sam's Core. [`rules.json`](rules.json) remains a standalone Bakobo governance artifact. Its `d` and `l` fields now fit the expanded `r` section in Sam's schemas, and its former named clauses are retained verbatim within `l`. See `this.i` `@epnvr5oq` and `@2vqmhxai`.
+
 ### Purpose
 
 `sedi-id` is the **root credential of Utah's State-Endorsed Digital Identity** (SEDI, Utah Code
