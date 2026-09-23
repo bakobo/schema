@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from schematools import publish
 from schematools.cli import main
 from schematools.said import SAID_LABEL
@@ -70,6 +72,52 @@ def test_build_site_publishes_archived_rules_at_registry_path(synthetic_repo, tm
     publish.build_site(synthetic_repo, out)
     assert (out / "widget-1.0.0" / "rules.json").read_bytes() == path.read_bytes()
     assert (out / "oobi" / f"{rules['d']}.json").read_bytes() == path.read_bytes()
+
+
+def test_publish_cli_rejects_traversing_rules_path(synthetic_repo, tmp_path, capsys):
+    outside = tmp_path.parent / f"{tmp_path.name}-outside"
+    outside.mkdir()
+    (outside / "rules.json").write_text(json.dumps(saidify_sad({"d": "", "l": "Outside."})))
+    registry_path = synthetic_repo / "registry.json"
+    registry = json.loads(registry_path.read_text())
+    registry["E" + "A" * 43] = f"../{outside.name}/rules.json"
+    registry_path.write_text(json.dumps(registry))
+    out = tmp_path / "site"
+    assert main(["publish", "--root", str(synthetic_repo), "--out", str(out)]) == 1
+    assert "[registry]" in capsys.readouterr().err
+    assert not out.exists()
+
+
+@pytest.mark.parametrize("escape", ["source", "destination", "absolute"])
+def test_build_site_rejects_rules_path_escaping_either_root(synthetic_repo, tmp_path, escape):
+    registry_path = synthetic_repo / "registry.json"
+    registry = json.loads(registry_path.read_text())
+    out = tmp_path / "site"
+    if escape == "source":
+        outside = tmp_path.parent / f"{tmp_path.name}-outside"
+        outside.mkdir()
+        (outside / "rules.json").write_text("{}")
+        registry["E" + "A" * 43] = f"../{outside.name}/rules.json"
+    elif escape == "destination":
+        archive = synthetic_repo / "archive"
+        archive.mkdir()
+        (archive / "rules.json").write_text("{}")
+        outside = tmp_path / "outside"
+        outside.mkdir()
+        out.mkdir()
+        (out / "archive").symlink_to(outside, target_is_directory=True)
+        registry["E" + "A" * 43] = "archive/rules.json"
+    else:
+        path = synthetic_repo / "widget" / "rules.json"
+        path.write_text("{}")
+        registry["E" + "A" * 43] = str(path)
+    registry_path.write_text(json.dumps(registry))
+    with pytest.raises(ValueError, match="e.input.format.schema-registry-path.f"):
+        publish.build_site(synthetic_repo, out)
+    if escape == "destination":
+        assert not (outside / "rules.json").exists()
+    else:
+        assert not (out / "index.html").exists()
 
 
 def test_rules_said_reads_const_else_none():

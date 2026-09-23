@@ -14,6 +14,9 @@ from pathlib import Path
 #: The crawl-free index of released schemas and rules: ``{SAID: relative/path.json}``.
 REGISTRY_NAME = "registry.json"
 
+# A registry path that escapes its declared root is permanent until the index changes.
+_RULES_PATH_CODE = "e.input.format.schema-registry-path.f"
+
 
 class SchemaRepoNotFoundError(FileNotFoundError):
     """No schema repository (a directory with a ``registry.json``) was found.

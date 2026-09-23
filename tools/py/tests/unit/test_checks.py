@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from schematools import checks
 from schematools.repo import REGISTRY_NAME
 from schematools.said import SAID_LABEL, saidify_sad
@@ -112,6 +114,77 @@ def test_registry_rejects_missing_rules_file(synthetic_repo):
     registry["E" + "A" * 43] = "widget-1.0.0/rules.json"
     reg_path.write_text(json.dumps(registry))
     assert any("not found on disk" in p.message for p in checks.check_registry(synthetic_repo))
+
+
+@pytest.mark.parametrize("folder", ["widget", "widget-1.0.0"])
+def test_registry_reports_unindexed_rules(synthetic_repo, folder):
+    directory = synthetic_repo / folder
+    directory.mkdir(exist_ok=True)
+    (directory / "rules.json").write_text(json.dumps(saidify_sad({"d": "", "l": "Unindexed."})))
+    problems = checks.check_registry(synthetic_repo)
+    assert len(problems) == 1
+    assert problems[0].check == "registry"
+    assert problems[0].where == f"{folder}/rules.json"
+    assert "e.state.conflict.rules-registry.f" in problems[0].message
+    assert "absent from registry.json" in problems[0].message
+
+
+def test_registry_accepts_byte_identical_archived_rules_alias(synthetic_repo):
+    rules = saidify_sad({"d": "", "l": "A shared duty."})
+    current = synthetic_repo / "widget" / "rules.json"
+    current.write_text(json.dumps(rules))
+    archive = synthetic_repo / "widget-1.0.0"
+    archive.mkdir()
+    (archive / "rules.json").write_bytes(current.read_bytes())
+    reg_path = synthetic_repo / REGISTRY_NAME
+    registry = json.loads(reg_path.read_text())
+    registry[rules["d"]] = "widget/rules.json"
+    reg_path.write_text(json.dumps(registry))
+    assert checks.check_registry(synthetic_repo) == []
+
+
+def test_registry_does_not_read_orphan_rules_symlink_outside_root(synthetic_repo):
+    outside = synthetic_repo.parent / f"{synthetic_repo.name}-outside.json"
+    outside.write_text("{}")
+    (synthetic_repo / "widget" / "rules.json").symlink_to(outside)
+    problems = checks.check_registry(synthetic_repo)
+    assert len(problems) == 1
+    assert "schema-registry-path.f" in problems[0].message
+
+
+@pytest.mark.parametrize("rules", [[], 42, "text", {"d": "x", "v": "bad"}])
+def test_registry_reports_malformed_rules_as_problem(synthetic_repo, rules):
+    (synthetic_repo / "widget" / "rules.json").write_text(json.dumps(rules))
+    reg_path = synthetic_repo / REGISTRY_NAME
+    registry = json.loads(reg_path.read_text())
+    registry["E" + "A" * 43] = "widget/rules.json"
+    reg_path.write_text(json.dumps(registry))
+    problems = checks.check_registry(synthetic_repo)
+    assert any(p.check == "registry" and p.where == "widget/rules.json" and
+               ("e.input.format.rules-object.f" in p.message or
+                "e.input.format.rules-sad.f" in p.message) for p in problems)
+
+
+def test_registry_rejects_rules_path_outside_root(synthetic_repo):
+    outside = synthetic_repo.parent / f"{synthetic_repo.name}-outside"
+    outside.mkdir()
+    (outside / "rules.json").write_text(json.dumps(saidify_sad({"d": "", "l": "Outside."})))
+    reg_path = synthetic_repo / REGISTRY_NAME
+    registry = json.loads(reg_path.read_text())
+    registry["E" + "A" * 43] = f"../{outside.name}/rules.json"
+    reg_path.write_text(json.dumps(registry))
+    problems = checks.check_registry(synthetic_repo)
+    assert any(p.check == "registry" and "escapes the repository root" in p.message for p in problems)
+
+
+def test_registry_rejects_absolute_rules_path(synthetic_repo):
+    path = synthetic_repo / "widget" / "rules.json"
+    path.write_text("{}")
+    reg_path = synthetic_repo / REGISTRY_NAME
+    registry = json.loads(reg_path.read_text())
+    registry["E" + "A" * 43] = str(path)
+    reg_path.write_text(json.dumps(registry))
+    assert any("schema-registry-path.f" in p.message for p in checks.check_registry(synthetic_repo))
 
 
 def test_examples_catches_bad_instance(synthetic_repo):
