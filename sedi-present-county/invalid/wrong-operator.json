@@ -1,0 +1,35 @@
+{
+  "v": "ACDCCAACAAJSONAAQV.",
+  "t": "acm",
+  "d": "EFSq_0afAAJ7fZXh5Tp__adWSFFc_Xj7lht7-6gYpY4s",
+  "u": "0ABwcmVzdG9wbm9uY2UwcmF3",
+  "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC",
+  "s": "EE1qJmXEgBbinrT_1fSe3_ccu-MWG7znc2D88f6aCxL_",
+  "a": {
+    "d": "EFXE6QOPUfeey81EAPRrVN_fNNHoINy-qslSAGqM8I6O",
+    "u": "0ABwcmVzYXR0cm5vbmNlMHJh",
+    "i": "EJQON0fDA5FKC14BKbk921e212IctfjLsCL7l46OzHgG",
+    "venue": "The Alcove Club, 200 S West Temple, Salt Lake City UT",
+    "occurredAt": "2026-07-14T21:30:00.000000+00:00",
+    "county": "Beaver"
+  },
+  "e": {
+    "d": "EELUjjBf9FDlanYT846zowpH7MF84Ydc3CTn9_MVlRXR",
+    "u": "0ABwcmVzZWRnZW5vbmNlMHJh",
+    "identity": {
+      "d": "EKL1keF9oCGI0lHo1snfx0zqjTLnngfEZTJhzNwL7-4B",
+      "u": "0ABwcmVzaWRlZGdlbm9uY2Uw",
+      "n": "EDDk-04pqW8eOqmIoCO8tRrRF6rN2nO44YqkmR20DqoS",
+      "s": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5",
+      "o": "I2I"
+    },
+    "residence": {
+      "d": "EM9WRhGKCgdTBqWqU1ImHHv1hInparZP8sco1hliZflg",
+      "u": "0ABwcmVzYWdlZWRnZW5vbmNl",
+      "n": "EEowKA8vsmWhJAyRsSaUYu1i6z8RYYpHromWiXPHl4Xc",
+      "s": "EEgFNN1XH90koG5J5pbXKlRNU6TnibizaTQmJcRfEcop",
+      "o": "NI2I"
+    }
+  },
+  "r": "EG8X1nQFCrQ4Rg8BjfE0-BIuKSo1TVbwqymQ3Wuam6VW"
+}

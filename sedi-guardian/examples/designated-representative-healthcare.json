@@ -1,20 +1,22 @@
 {
-  "v": "ACDCCAACAAJSONAAUo.",
+  "v": "ACDCCAACAAJSONAAXb.",
   "t": "acm",
-  "d": "EFFBBhsQqu0mxe1Rld1gXkM-DGQBlKtPpYwYGjqHUIdy",
+  "d": "EERnb5db2uBtvMa-b4Ud7_cXAsXTMYZLGYrayXwVSTOf",
   "u": "0ABkZXNpZ250c2FsdHBhZDAw",
   "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC",
   "rd": "EC-DlJTW3_34SsV5PSG0-U7hxR3uVj8JfCoC5e-8pCBB",
-  "s": "ENzPKrfeHE7Qs247OhF5RQ_QO78iCiJevqIErOY5H94Q",
+  "s": "EDhcDjDkCgdCHQurAvXjYPx2bR9jpBxw6WvOYiismmOV",
   "a": {
-    "d": "EFZF9a2_9STEJ4_blQbCqBaGOWN7LHzrNPXOKlkebuhE",
+    "ward": {
+      "d": "EFAMpHMLlUWnM8ElFLfpi_Z2s9674PG-l1HpdFfkoAn2",
+      "u": "0ABzZWRpd2FyZG5vbmNlMDAw",
+      "i": "EDB8gKNwzurf33pV2hsyGR9XFOmitDhc0LUzDamcU2JR"
+    },
+    "d": "ECNRPFvfMuhMnsrTQ4A2IkFL6pjwGGjvr_SRHMU964A_",
     "u": "0ABkZXNpZ25hc2FsdHBhZDAw",
-    "i": "EBDslNQxKa8JNUt8c_H19Jnl001e_5s345L5427IkDk2",
+    "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC",
     "basis": "designatedRepresentative",
     "subtype": "healthCareAgent",
-    "powers": [
-      "healthCare"
-    ],
     "fiduciary": "substitutedJudgment",
     "capacityConditioned": true,
     "recognition": {
@@ -23,18 +25,26 @@
       "appointingState": "US-UT",
       "registrationStatus": "native"
     },
-    "effectiveDate": "2026-01-15"
+    "effectiveDate": "2026-01-15",
+    "scope": [
+      "healthCare"
+    ],
+    "powers": [
+      "read",
+      "message",
+      "profile"
+    ]
   },
   "e": {
-    "d": "EIyAVJa8T6o24HXiEgWYhdatIE5jtMuHZQ6c-URFImJJ",
-    "u": "0ABkZXNpZ25lc2FsdHBhZDAw",
-    "subject": {
-      "d": "EAD9-E3wJknNJOUlqydH83STlf4fHVSnkBEUjXX8r0OW",
+    "citizen": {
+      "d": "EOj_eFwpA4o-Ww7cv819Vgo56svjbLMIrfFowfkNlviA",
       "u": "0ABnNHNzYWx0cGFkMDAwMDAw",
-      "n": "EMjjagHYNoGZI05ydZWMimQzHx5sOeFEhFJlzhbPL8IM",
-      "s": "EMZtIHLNTVmFfzKXGC1Qvwza37mNqaxLh0bU7zjQyJHS",
-      "o": "I2I"
+      "n": "EDDk-04pqW8eOqmIoCO8tRrRF6rN2nO44YqkmR20DqoS",
+      "s": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5",
+      "o": "E1E"
     },
+    "d": "EDt_XEgq-zLNh7hli1C6HgjvwdJjCgkZ4STY09tn6SfH",
+    "u": "0ABkZXNpZ25lc2FsdHBhZDAw",
     "authorization": {
       "d": "EIXyneEobquN0pLOo5f7F2SQRB21hTAxz6yEYBdu92iw",
       "u": "0ABnNGFzYWx0cGFkMDAwMDAw",
@@ -43,5 +53,5 @@
       "o": "NI2I"
     }
   },
-  "r": "EOW7nnASAYoY72gJ7brJwE0V2Hm8o6RfZvN2gNeyKmO0"
+  "r": "EKLBoGWUawixiHtnA5LZ23cPfWjG1niiLlRIhDUGmHRz"
 }

@@ -1,11 +1,11 @@
 {
-  "$id": "ENzPKrfeHE7Qs247OhF5RQ_QO78iCiJevqIErOY5H94Q",
+  "$id": "EDhcDjDkCgdCHQurAvXjYPx2bR9jpBxw6WvOYiismmOV",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Digital Guardian",
-  "description": "The SEDI legal-recognition layer for a digital guardian (Utah Code 63A-20-201(3), Parts 4-6). It attests, in machine-checkable form a verifier can evaluate under the acceptance mandate, that a guardian holds recognized authority to act on behalf of a ward: the statutory basis, the scope of powers (Utah prefers LIMITED guardianship, so scope must be explicit), and the appointment/registration. The credential is HELD BY THE GUARDIAN (issuee) and names the WARD by edge -- the holder-not-subject invariant that keeps guardianship transparent, never impersonation (Sovrin Guardianship V2; Aries RFC 0103). It is registry-bound: guardianship terminates dynamically (majority, restored capacity, death, court order), so a verifier MUST check current status. The generic act/duty/termination machinery lives in GCD (relationType: guardianship), reachable via the optional scope edge; this schema carries only what Utah law makes relationship- and jurisdiction-specific. This is the first of a likely sedi-legal-authority family (conservatorship, POA-agency); see this.i @sdlg3n.",
-  "$comment": "An ACDC v2 attribute+edges+rules field-map credential (ilk 'acm'). Authority credentials are disclosed whole (like GCD), not selectively -- a verifier must see basis+scope+validity together -- so the attribute section is flat. Migrated off the v1 'ri' to the v2 'rd' by this.i @lkfnoess, so the 'subject' edge into sedi-id no longer crosses a protocol-version boundary.",
+  "description": "Provisional Bakobo SEDI guardianship profile following keripy discussion #1550: state-issued to a guardian, with the ward AID in a separately disclosable attribute block, coarse statutory scope, and separate delegable powers. Registry-bound for independent status checks.",
+  "$comment": "The ward is in a.ward, not an edge. The ward Core variant has an NI2I edge back here. This is not a Sam Smith schema or a statement of Utah policy.",
   "credentialType": "SEDI_Guardian",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "type": "object",
   "required": [
     "v",
@@ -54,14 +54,15 @@
           "type": "string"
         },
         {
-          "$id": "EOMVzfo7HXXxhuaJ2B8ovV3Yh9QzE0Y-3qAqFDEe7-aE",
-          "description": "Attribute section: the recognized guardianship",
+          "description": "Guardian attributes, with the ward in a disclosable block",
           "type": "object",
           "required": [
             "d",
             "u",
             "i",
             "basis",
+            "ward",
+            "scope",
             "powers",
             "fiduciary",
             "recognition",
@@ -96,8 +97,41 @@
                 "healthCareAgent"
               ]
             },
-            "powers": {
-              "description": "Scope of authority -- 'plenary' or an explicit limited set of guardian-of-the-person powers (Utah prefers limited)",
+            "ward": {
+              "description": "Ward AID in an individually disclosable block",
+              "oneOf": [
+                {
+                  "description": "Withheld ward block SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "Ward block detail",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "i"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Ward block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Ward block blinding nonce",
+                      "type": "string"
+                    },
+                    "i": {
+                      "description": "Ward AID",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "scope": {
+              "description": "Coarse statutory scope of the guardianship",
               "type": "array",
               "minItems": 1,
               "uniqueItems": true,
@@ -111,6 +145,23 @@
                   "socialBenefits",
                   "digitalIdentity",
                   "contracts"
+                ]
+              }
+            },
+            "powers": {
+              "description": "Capabilities the guardian may delegate in a separate ward authorization",
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "read",
+                  "post",
+                  "message",
+                  "profile",
+                  "configure",
+                  "purchase",
+                  "livestream"
                 ]
               }
             },
@@ -213,12 +264,11 @@
           "type": "string"
         },
         {
-          "$id": "EKtUsQCGjy1riNW_P4kqWAleHUWALyXr7fIK_eCXwZne",
           "description": "Edge section",
           "type": "object",
           "required": [
             "d",
-            "subject",
+            "citizen",
             "authorization"
           ],
           "properties": {
@@ -230,8 +280,8 @@
               "description": "Edge-section blinding nonce",
               "type": "string"
             },
-            "subject": {
-              "description": "Edge to the ward/principal's sedi-id (the subject of the authority; I2I when a principal self-designates, else NI2I)",
+            "citizen": {
+              "description": "E1E edge to the guardian's own SEDI Core credential",
               "oneOf": [
                 {
                   "description": "SAID of the edge",
@@ -259,15 +309,12 @@
                       "type": "string"
                     },
                     "s": {
-                      "description": "SAID of the far node's schema",
-                      "type": "string"
+                      "description": "SEDI Core schema SAID",
+                      "const": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5"
                     },
                     "o": {
-                      "description": "Edge operator",
-                      "enum": [
-                        "I2I",
-                        "NI2I"
-                      ]
+                      "description": "Same-issuee identity relation",
+                      "const": "E1E"
                     }
                   },
                   "additionalProperties": false
@@ -318,8 +365,8 @@
                 }
               ]
             },
-            "scope": {
-              "description": "Optional edge to a GCD (relationType: guardianship) carrying the rich act-constraints, duties, and terminating events",
+            "constraints": {
+              "description": "Optional GCD constraints edge",
               "oneOf": [
                 {
                   "description": "SAID of the edge",

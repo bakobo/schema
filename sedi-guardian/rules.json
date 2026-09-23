@@ -1,8 +1,8 @@
 {
-  "d": "EOW7nnASAYoY72gJ7brJwE0V2Hm8o6RfZvN2gNeyKmO0",
+  "d": "EKLBoGWUawixiHtnA5LZ23cPfWjG1niiLlRIhDUGmHRz",
   "bestInterestFiduciary": "A guardian MUST act solely in the ward's best interest, as a fiduciary held to the strictest standard, and MUST NOT self-deal or subordinate the ward's interest to the guardian's (Utah Code 75-5-312).",
-  "holderNotSubject": "This credential is HELD BY THE GUARDIAN and names the WARD only by edge. A guardian MUST present as a guardian acting on the ward's behalf and MUST NEVER present as, or impersonate, the ward. A verifier MUST be able to tell that a guardian -- not the ward -- is acting.",
-  "scopeEnforcement": "Utah prefers limited guardianship, so authority is bounded by the 'powers' field. A verifier MUST confirm the specific presented action falls within the granted powers; a limited guardianship MUST NOT be relied on outside its stated scope.",
+  "holderNotSubject": "The state issues this credential to the guardian. The ward is named in a separately disclosable attribute block. A guardian MUST present as a guardian acting for the ward and MUST NOT impersonate the ward.",
+  "scopeEnforcement": "The coarse statutory scope is the 'scope' field. A verifier MUST confirm the proposed act falls within it, and that any delegated capability is within the separate 'powers' ceiling.",
   "dynamicRevocation": "Guardianship terminates dynamically -- a minor reaching majority, restoration of capacity, death, or a court order. A verifier MUST check current status against the registry; a terminated guardianship confers no authority even before any stated expiry date.",
   "highRiskSecondApproval": "High-value, high-risk, or irreversible acts (for example irreversible medical decisions) require authorization by a second guardian, a trusted third party, or the appointing court before the guardian may act.",
   "auditability": "Every act taken under this authority MUST leave a cryptographically verifiable audit trail so the guardian's exercise of authority can be reviewed.",

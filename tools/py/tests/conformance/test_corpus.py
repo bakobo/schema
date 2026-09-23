@@ -44,9 +44,7 @@ CHECK_FUNCS = {_CHECK_NAME[fn]: fn for fn in checks.ALL_CHECKS}
 _V2_MIGRATION = {
     "faa": "3x2z",
     "face-to-face": "3n4u",
-    "sedi-guardian": "4224",
     "sedi-id": "65yn",
-    "sedi-present-age-portrait": "2tyb",
 }
 
 # (schema_name, check_name) -> reason.
@@ -54,9 +52,11 @@ KNOWN_XFAIL: dict[tuple[str, str], str] = {
     (name, "envelope"): f"v1-enveloped; migrates under tick {tick} (@jruwvxnt)"
     for name, tick in _V2_MIGRATION.items()
 }
-# sedi-age is already v2 in every respect but one: it declares no 't', so a
-# heti-issued credential carrying t=acm has nothing in the schema to land on.
-KNOWN_XFAIL[("sedi-age", "envelope")] = "declares no 't'; tick 2nd5 (with 6grq)"
+# Sam's IAR is signed without a registry and its pinned schema intentionally
+# omits rd. The generic envelope check still assumes every credential declares it.
+KNOWN_XFAIL[("sedi-iar", "envelope")] = "Sam's registry-less IAR at ec307cd74 omits rd"
+KNOWN_XFAIL[("sedi-present-age-portrait", "envelope")] = "one-time holder presentation intentionally omits rd"
+KNOWN_XFAIL[("sedi-present-county", "envelope")] = "one-time holder presentation intentionally omits rd"
 
 SCHEMA_NAMES = [entry.name for entry in discover_schemas(ROOT)]
 

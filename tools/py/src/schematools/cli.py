@@ -3,7 +3,7 @@
 Subcommands:
   - ``check``    run all conformance checks over a schema repo (CI gate).
   - ``saidify``  (re)compute and write SAIDs into a schema file.
-  - ``registry`` rebuild ``registry.json`` from the schemas on disk.
+  - ``registry`` rebuild ``registry.json`` from schemas and rules on disk.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 from . import checks, publish
-from .repo import REGISTRY_NAME, SchemaRepoNotFoundError, discover_schemas, find_repo_root
+from .repo import RULES_PATH_CODE, REGISTRY_NAME, SchemaRepoNotFoundError, discover_schemas, find_repo_root
 from .said import SAD_LABEL, SAID_LABEL, saidify_sad, saidify_schema
 
 
@@ -59,10 +59,19 @@ def cmd_saidify_sad(args: argparse.Namespace) -> int:
 
 def cmd_registry(args: argparse.Namespace) -> int:
     root = _resolve_root(args.root)
+    resolved_root = root.resolve()
     registry: dict[str, str] = {}
     for entry in discover_schemas(root):
         schema = json.loads(entry.path.read_text())
         registry[schema[SAID_LABEL]] = entry.rel
+    for path in sorted(root.glob("*/rules.json")):
+        if not path.resolve().is_relative_to(resolved_root):
+            raise publish.RulesPathError(
+                f"{RULES_PATH_CODE}: The rules path escapes the repository root. "
+                "Correct the file path before retrying."
+            )
+        rules = json.loads(path.read_text())
+        registry.setdefault(rules[SAD_LABEL], path.relative_to(root).as_posix())
     (root / REGISTRY_NAME).write_text(json.dumps(registry, indent=2) + "\n")
     print(f"wrote {len(registry)} entries to {root / REGISTRY_NAME}")
     return 0
@@ -108,7 +117,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_sad.add_argument("-l", "--label", default=SAD_LABEL, help=f"SAID field label (default: {SAD_LABEL!r})")
     p_sad.set_defaults(func=cmd_saidify_sad)
 
-    p_reg = sub.add_parser("registry", help="rebuild registry.json from schemas on disk")
+    p_reg = sub.add_parser("registry", help="rebuild registry.json from schemas and rules on disk")
     p_reg.add_argument("--root", help="repo root (default: auto-detect via registry.json)")
     p_reg.set_defaults(func=cmd_registry)
 
@@ -130,7 +139,7 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
         return args.func(args)
-    except SchemaRepoNotFoundError as exc:
+    except (SchemaRepoNotFoundError, publish.RulesPathError) as exc:
         # Surface the coded, actionable message instead of a raw traceback.
         print(str(exc), file=sys.stderr)
         return 2

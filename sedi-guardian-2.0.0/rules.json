@@ -1,0 +1,15 @@
+{
+  "d": "EOW7nnASAYoY72gJ7brJwE0V2Hm8o6RfZvN2gNeyKmO0",
+  "bestInterestFiduciary": "A guardian MUST act solely in the ward's best interest, as a fiduciary held to the strictest standard, and MUST NOT self-deal or subordinate the ward's interest to the guardian's (Utah Code 75-5-312).",
+  "holderNotSubject": "This credential is HELD BY THE GUARDIAN and names the WARD only by edge. A guardian MUST present as a guardian acting on the ward's behalf and MUST NEVER present as, or impersonate, the ward. A verifier MUST be able to tell that a guardian -- not the ward -- is acting.",
+  "scopeEnforcement": "Utah prefers limited guardianship, so authority is bounded by the 'powers' field. A verifier MUST confirm the specific presented action falls within the granted powers; a limited guardianship MUST NOT be relied on outside its stated scope.",
+  "dynamicRevocation": "Guardianship terminates dynamically -- a minor reaching majority, restoration of capacity, death, or a court order. A verifier MUST check current status against the registry; a terminated guardianship confers no authority even before any stated expiry date.",
+  "highRiskSecondApproval": "High-value, high-risk, or irreversible acts (for example irreversible medical decisions) require authorization by a second guardian, a trusted third party, or the appointing court before the guardian may act.",
+  "auditability": "Every act taken under this authority MUST leave a cryptographically verifiable audit trail so the guardian's exercise of authority can be reviewed.",
+  "appealAndOversight": "The ward or any interested person may object to or appeal the guardianship. The appointing court retains oversight, review, removal, modification, and accounting authority.",
+  "requalification": "The issuer MUST review each guardianship on a cadence appropriate to its stakes and revoke or narrow it promptly once the conditions that justified it no longer hold. This duty does not extend authority.",
+  "leastRestrictiveAndEvolvingCapacity": "Guardianship is a least-restrictive-alternative arrangement. A guardian MUST promptly assist the ward in reclaiming self-sovereignty as the ward's capacity allows, and support re-issuance reflecting the ward as both subject and holder when capacity is restored.",
+  "noBulkLoad": "Guardianships MUST NOT be established by bulk conversion of a population without an individual determination of legitimate need and, wherever possible, the dependent's informed consent.",
+  "issuerAuthority": "Only the authority competent for a basis may issue: a court (or the department attesting a court order) for court-appointed bases; the individual for a self-executed designation; the department for a parental attestation. A verifier evaluates the authorizing-instrument edge.",
+  "notForSupportedDecisionMaking": "This credential attests SUBSTITUTE authority -- acting on behalf of another. A supported-decision-making supporter, who assists but cannot decide for the principal, is NOT a digital guardian and MUST NOT be represented with this credential."
+}

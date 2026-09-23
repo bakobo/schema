@@ -1,0 +1,25 @@
+{
+  "v": "ACDCCAACAAJSONAAZr.",
+  "d": "EEowKA8vsmWhJAyRsSaUYu1i6z8RYYpHromWiXPHl4Xc",
+  "i": "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "rd": "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "s": "EEgFNN1XH90koG5J5pbXKlRNU6TnibizaTQmJcRfEcop",
+  "e": {
+    "d": "EKF8ebDQ4permvRKlQEwuAM1LAhjLOV_WqXU1uQ3ptOv",
+    "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+    "coreIdentity": {
+      "d": "EGUdwpSpQX81eEnFRT1P6qjyodRwZaxfhXl51Ge_EMaM",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "n": "EDDk-04pqW8eOqmIoCO8tRrRF6rN2nO44YqkmR20DqoS",
+      "s": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5",
+      "o": [
+        "E1E",
+        "NI2I"
+      ]
+    }
+  },
+  "r": {
+    "d": "EFPxq4WPl29szUqbrQIviOh_Ls_RlrYbp4L-fdQH0XrX",
+    "l": ""
+  }
+}

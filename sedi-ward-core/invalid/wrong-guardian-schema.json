@@ -1,0 +1,74 @@
+{
+  "v": "ACDCCAACAAJSONAAdU.",
+  "d": "ENMjztveNXIW1k0M__8YdrljLSvIblUeDOL7ch6Q_qyw",
+  "i": "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "rd": "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "s": "ELQbIW0bvd8ocbitQmjsaKEMEMxPX5YDFOdsWCca171s",
+  "a": {
+    "d": "EOdoV1cjR7Q5Hub88Ke88m_lFKxl5BV2FYDMKX-L-FWS",
+    "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+    "i": "EDB8gKNwzurf33pV2hsyGR9XFOmitDhc0LUzDamcU2JR",
+    "givenName": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "middleName": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "familyName": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "birthDate": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "facialImageProof": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "legalPresenceStatus": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "issuedDate": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    },
+    "expirationDate": {
+      "d": "EIhgsh2tsbG1RS3wfPpcet0DSJG1i9VcPRTJXI8LRMoK",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "value": "example"
+    }
+  },
+  "e": {
+    "d": "EAPKNVEUgiJVNAoOuk5jVcwGfRcGpLpL7yqYIAAihqbk",
+    "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+    "utahAgent": {
+      "d": "EBycBOWoyCb0xz5yvugebB-C4npubRLg08fRboC8V9es",
+      "u": "0ABzZWRpaWRhdHRybm9uYzAw",
+      "n": "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "s": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5",
+      "o": "I2I"
+    },
+    "guardian": {
+      "d": "EC6LNuRIxuYBwEdeyYauRedpVPdb3Fxygf-dqrGJiMDS",
+      "u": "0ABzZWRpZ3VhcmRlZGdlMDAw",
+      "n": "EL4PD8FdYG--vxM69gHKGlruFEKQia4eYbdUWzj2pngL",
+      "s": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5",
+      "o": "NI2I"
+    }
+  },
+  "r": {
+    "d": "EFPxq4WPl29szUqbrQIviOh_Ls_RlrYbp4L-fdQH0XrX",
+    "l": ""
+  }
+}

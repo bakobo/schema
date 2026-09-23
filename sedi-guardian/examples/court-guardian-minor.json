@@ -1,19 +1,21 @@
 {
-  "v": "ACDCCAACAAJSONAAVq.",
+  "v": "ACDCCAACAAJSONAAYc.",
   "t": "acm",
-  "d": "EP0rtuUdo5V9l9ES1sGRCYo039I9C1HmD4jwRrBFPVqs",
+  "d": "EOrIwEdqIUkaiTEYzEwnGSlej0b4OWoYWuLv381KO9xQ",
   "u": "0ABtaW5vcnRzYWx0cGFkMDAw",
   "i": "EGA-48IbFJLG0nG0nv2eJoevtvNpElOqnSM_HBDZNNgc",
   "rd": "EC-DlJTW3_34SsV5PSG0-U7hxR3uVj8JfCoC5e-8pCBB",
-  "s": "ENzPKrfeHE7Qs247OhF5RQ_QO78iCiJevqIErOY5H94Q",
+  "s": "EDhcDjDkCgdCHQurAvXjYPx2bR9jpBxw6WvOYiismmOV",
   "a": {
-    "d": "EFWwcV_YiZ8mL3bfX-c-kzkKxEqap12KlhOamJxpEDlT",
+    "ward": {
+      "d": "EFAMpHMLlUWnM8ElFLfpi_Z2s9674PG-l1HpdFfkoAn2",
+      "u": "0ABzZWRpd2FyZG5vbmNlMDAw",
+      "i": "EDB8gKNwzurf33pV2hsyGR9XFOmitDhc0LUzDamcU2JR"
+    },
+    "d": "ENi2D9OA20mlY5mAhr7UUeAxYVxhNMJKbL6vc-ZYEnTO",
     "u": "0ABtaW5vcmFzYWx0cGFkMDAw",
-    "i": "EC1tsDmWsQ50ubsCcqVRntpZev6WsMcA2NY76nSsqP5Q",
+    "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC",
     "basis": "courtGuardianMinor",
-    "powers": [
-      "plenary"
-    ],
     "fiduciary": "bestInterest",
     "residualParentalRights": true,
     "recognition": {
@@ -26,18 +28,26 @@
       "registrationStatus": "native"
     },
     "effectiveDate": "2026-01-05",
-    "expiryDate": "2035-06-15"
+    "expiryDate": "2035-06-15",
+    "scope": [
+      "plenary"
+    ],
+    "powers": [
+      "read",
+      "message",
+      "profile"
+    ]
   },
   "e": {
-    "d": "EDaubeDbJBpIxqZ_Ybq1rEn2KUrx9uW84Ma0ZrPkMFlU",
-    "u": "0ABtaW5vcmVzYWx0cGFkMDAw",
-    "subject": {
-      "d": "EB2u5U2MHW8SAj8mNyoTRyVhMwERvqxadyTSE4cPm2pE",
+    "citizen": {
+      "d": "EEbqIXiyoTjUxzvPPr0NiRmjI6Hybv6eTaPF2sHvxTJ7",
       "u": "0ABnMnNzYWx0cGFkMDAwMDAw",
-      "n": "ENcmpr7DUmOGCnTYh3GYhXWQnGb2UzVzA88968ndCfTT",
-      "s": "EMZtIHLNTVmFfzKXGC1Qvwza37mNqaxLh0bU7zjQyJHS",
-      "o": "NI2I"
+      "n": "EDDk-04pqW8eOqmIoCO8tRrRF6rN2nO44YqkmR20DqoS",
+      "s": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5",
+      "o": "E1E"
     },
+    "d": "ECDMLe5wvYVptbmjg8Z6UD-fIgOY-g5Fofx4O-VOlftn",
+    "u": "0ABtaW5vcmVzYWx0cGFkMDAw",
     "authorization": {
       "d": "ELesXEHTeyJ2ewVbIZATHXSxh4jmiWEj5-qFwEFIO3e_",
       "u": "0ABnMmFzYWx0cGFkMDAwMDAw",
@@ -46,5 +56,5 @@
       "o": "NI2I"
     }
   },
-  "r": "EOW7nnASAYoY72gJ7brJwE0V2Hm8o6RfZvN2gNeyKmO0"
+  "r": "EKLBoGWUawixiHtnA5LZ23cPfWjG1niiLlRIhDUGmHRz"
 }

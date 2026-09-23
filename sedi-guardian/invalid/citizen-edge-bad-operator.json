@@ -1,0 +1,67 @@
+{
+  "v": "ACDCCAACAAJSONAAbr.",
+  "t": "acm",
+  "d": "EMHe5djz6DLFveIVAq78dLVr7XIZXdJkhOUOTzqdRhds",
+  "u": "0ABpbmNhcHRzYWx0cGFkMDAw",
+  "i": "EGA-48IbFJLG0nG0nv2eJoevtvNpElOqnSM_HBDZNNgc",
+  "rd": "EC-DlJTW3_34SsV5PSG0-U7hxR3uVj8JfCoC5e-8pCBB",
+  "s": "EDhcDjDkCgdCHQurAvXjYPx2bR9jpBxw6WvOYiismmOV",
+  "a": {
+    "ward": {
+      "d": "EFAMpHMLlUWnM8ElFLfpi_Z2s9674PG-l1HpdFfkoAn2",
+      "u": "0ABzZWRpd2FyZG5vbmNlMDAw",
+      "i": "EDB8gKNwzurf33pV2hsyGR9XFOmitDhc0LUzDamcU2JR"
+    },
+    "d": "EOe160F-JeDfdJkk-j884xDKSEXvYGxXf063UH2rsmQf",
+    "u": "0ABpbmNhcGFzYWx0cGFkMDAw",
+    "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC",
+    "basis": "courtGuardianIncapacitated",
+    "fiduciary": "bestInterest",
+    "recognition": {
+      "authorityType": "court",
+      "court": "Third District Court, Salt Lake County",
+      "caseNumber": "234500123",
+      "orderDate": "2026-03-10",
+      "lettersReference": "Letters of Guardianship 234500123-LG",
+      "appointingState": "US-UT",
+      "registrationStatus": "native"
+    },
+    "effectiveDate": "2026-03-10",
+    "reviewDueDate": "2027-03-10",
+    "scope": [
+      "healthCare",
+      "residence"
+    ],
+    "powers": [
+      "read",
+      "message",
+      "profile"
+    ]
+  },
+  "e": {
+    "citizen": {
+      "d": "EH3nbr6BNgVX9rmttZcnkgYIjVpCNWYrFT3PuJYp5sGa",
+      "u": "0ABnMXNzYWx0cGFkMDAwMDAw",
+      "n": "EDDk-04pqW8eOqmIoCO8tRrRF6rN2nO44YqkmR20DqoS",
+      "s": "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5",
+      "o": "NI2I"
+    },
+    "d": "EIXrehi_7S_WoMBDuA8aZ2WACEP_pikrbeZhuWjnIlT-",
+    "u": "0ABpbmNhcGVzYWx0cGFkMDAw",
+    "authorization": {
+      "d": "ENPTkPT_C3A6lnIoGVucogptdBhFFZ_ahZYqg_qMMX1Y",
+      "u": "0ABnMWFzYWx0cGFkMDAwMDAw",
+      "n": "EKmtHAgr5r1GNppGJs-GqskGxB4YG4lmfpFYLhZsJW1U",
+      "s": "EJvd1ns0KVsbB4Ji1MEv4cdq8WOSQezILlluN63K_JOH",
+      "o": "NI2I"
+    },
+    "constraints": {
+      "d": "EInPm_13acxlC53m-20jZtateWsVDnzTtCtX-w2vK-7h",
+      "u": "0ABnMWNzYWx0cGFkMDAwMDAw",
+      "n": "EHhi7OwRq3PqMM3pT6CGBtIgwyNAmoggiI0qQIN73FBs",
+      "s": "EAqOeo_YMHDEMZ-dIJTYd72nsoUS-C1RdXtOdfAj7ZxR",
+      "o": "NI2I"
+    }
+  },
+  "r": "EKLBoGWUawixiHtnA5LZ23cPfWjG1niiLlRIhDUGmHRz"
+}

@@ -7,6 +7,8 @@ import json
 import pytest
 
 from schematools.cli import main
+from schematools.repo import RULES_PATH_CODE
+from schematools.said import saidify_sad
 from tests.support import minimal_schema
 
 
@@ -57,6 +59,31 @@ def test_registry_rebuilds(synthetic_repo):
     assert main(["registry", "--root", str(synthetic_repo)]) == 0
     registry = json.loads((synthetic_repo / "registry.json").read_text())
     assert len(registry) == 1
+
+
+def test_registry_rebuilds_rules_entries(synthetic_repo):
+    archive = synthetic_repo / "widget-1.0.0"
+    archive.mkdir()
+    rules = saidify_sad({"d": "", "l": "An older duty."})
+    (archive / "rules.json").write_text(json.dumps(rules))
+    assert main(["registry", "--root", str(synthetic_repo)]) == 0
+    registry = json.loads((synthetic_repo / "registry.json").read_text())
+    assert registry[rules["d"]] == "widget-1.0.0/rules.json"
+
+
+def test_registry_rejects_rules_symlink_outside_root(synthetic_repo, capsys):
+    outside = synthetic_repo.parent / f"{synthetic_repo.name}-outside.json"
+    rules = saidify_sad({"d": "", "l": "Outside duty."})
+    outside.write_text(json.dumps(rules))
+    (synthetic_repo / "widget" / "rules.json").symlink_to(outside)
+    registry_path = synthetic_repo / "registry.json"
+    before = registry_path.read_bytes()
+
+    assert main(["registry", "--root", str(synthetic_repo)]) != 0
+    err = capsys.readouterr().err
+    assert f"{RULES_PATH_CODE}: The rules path escapes the repository root." in err
+    assert "Traceback" not in err
+    assert registry_path.read_bytes() == before
 
 
 def test_no_subcommand_errors():

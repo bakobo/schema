@@ -1,0 +1,7 @@
+# SEDI Ward Authorization (`sedi-ward-authz`)
+
+**Bakobo provisional Tier C profile, version 1.0.0.** The guardian issues this registry-bound credential to the ward, using the guardian's own registry so authorization can be revoked separately from state-issued guardianship. The `authority` edge requires `I2I` to the guardian credential, and the `subject` edge requires `E1E` to the ward's [Ward Core](../sedi-ward-core/) credential. Both far-schema SAIDs are pinned. The `a.authz.rc` list grants capabilities for named resource routes; a route is a value, so paths containing `/` can be serialized without using illegal CESR field labels.
+
+[Sam Smith's #1550 discussion](https://github.com/WebOfTrust/keripy/discussions/1550) leaves authorization syntax open. This route-and-capability list is a Bakobo demo choice informed by [Daniel Hardman's ward authorization example](https://github.com/WebOfTrust/keripy/blob/ec307cd74/tests/acdc/test_ward_authz_presentation.py). It is not a Utah statutory vocabulary. A verifier must ensure each capability fits the guardian's `powers`, the action fits `scope`, all edges resolve to the named parties, and both registries show live status. JSON Schema cannot enforce those cross-credential checks.
+
+[`example.json`](example.json) points to the local guardian and ward examples. [`invalid/`](invalid/) contains absent registry, bad operators, an empty capability list, and a missing ward issuee. The separate status of this authorization and the guardianship supports independent revocation.

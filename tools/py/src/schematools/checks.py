@@ -26,8 +26,19 @@ import yaml
 from jsonschema import Draft202012Validator
 from jsonschema import exceptions as js_exc
 
-from .repo import discover_schemas, load_registry
+from .repo import RULES_PATH_CODE, discover_schemas, load_registry
 from .said import SAD_LABEL, SAID_LABEL, compute_schema_said, saidify_sad
+
+_RULES_SHAPE_CODE = "e.input.format.rules-object.f"
+_RULES_SAID_CODE = "e.input.format.rules-sad.f"
+_RULES_ORPHAN_CODE = "e.state.conflict.rules-registry.f"
+_REGISTRY_MISSING_CODE = "e.state.missing.schema-registry-target.f"
+_RULES_JSON_CODE = "e.input.format.rules-json.f"
+_RULES_KEY_CODE = "e.proof.rules-registry-said.f"
+_RULES_INTEGRITY_CODE = "e.proof.rules-said.f"
+_SCHEMA_JSON_CODE = "e.input.format.schema-json.f"
+_SCHEMA_KEY_CODE = "e.proof.schema-registry-said.f"
+_SCHEMA_ORPHAN_CODE = "e.state.conflict.schema-registry.f"
 
 
 @dataclass(frozen=True)
@@ -107,35 +118,132 @@ def check_said_integrity(root: str | Path) -> list[Problem]:
 def check_registry(root: str | Path) -> list[Problem]:
     """registry.json and the schemas on disk must agree.
 
-    Every registry entry points at an existing schema whose ``$id`` equals the
-    registry key; every schema on disk is indexed exactly once.
+    Every registry entry points at an existing schema (``$id``) or rules
+    artifact (``d``) with a matching, recomputable SAID. Every schema and
+    distinct rules artifact on disk is indexed; byte-identical archived rules
+    may share a single SAID entry.
     """
     problems: list[Problem] = []
     registry = load_registry(root)
     entries = discover_schemas(root)
     by_rel = {e.rel: e for e in entries}
+    resolved_root = Path(root).resolve()
 
     indexed: set[str] = set()
+    registered_rules_bytes: set[bytes] = set()
     for said, rel in registry.items():
         indexed.add(rel)
+        if rel.endswith("/rules.json"):
+            path = Path(root) / rel
+            if Path(rel).is_absolute() or not path.resolve().is_relative_to(resolved_root):
+                problems.append(Problem(
+                    "registry", rel,
+                    f"{RULES_PATH_CODE}: The rules path escapes the repository root. "
+                    "Correct registry.json before retrying.",
+                ))
+                continue
+            if not path.is_file():
+                problems.append(Problem(
+                    "registry", said,
+                    f"{_REGISTRY_MISSING_CODE}: The registry path {rel!r} was not found on disk. "
+                    "Correct registry.json before retrying.",
+                ))
+                continue
+            try:
+                rules = _load_json(path)
+            except json.JSONDecodeError:
+                problems.append(Problem(
+                    "registry", rel,
+                    f"{_RULES_JSON_CODE}: The rules artifact is not valid JSON, so its SAID "
+                    "cannot be verified. Correct the file before retrying.",
+                ))
+                continue
+            if not isinstance(rules, dict):
+                problems.append(Problem(
+                    "registry", rel,
+                    f"{_RULES_SHAPE_CODE}: The rules artifact must be a JSON object. "
+                    "Correct the file before retrying.",
+                ))
+                continue
+            stored = rules.get(SAD_LABEL)
+            if stored != said:
+                problems.append(Problem(
+                    "registry", rel,
+                    f"{_RULES_KEY_CODE}: The registry key {said!r} does not match the rules "
+                    f"artifact's d value {stored!r}. Correct registry.json or the rules artifact "
+                    "before retrying.",
+                ))
+            try:
+                recomputed = saidify_sad(rules)
+            except Exception as exc:  # the KERI oracle rejects malformed SADs with several error types
+                problems.append(Problem(
+                    "registry", rel,
+                    f"{_RULES_SAID_CODE}: The rules artifact cannot be SAIDified "
+                    f"({type(exc).__name__}). Correct the file before retrying.",
+                ))
+                continue
+            if recomputed != rules:
+                problems.append(Problem(
+                    "registry", rel,
+                    f"{_RULES_INTEGRITY_CODE}: The rules artifact's d value {stored!r} does not "
+                    "match the recomputed SAID. Correct the rules artifact before retrying.",
+                ))
+            elif stored == said:
+                registered_rules_bytes.add(path.read_bytes())
+            continue
         entry = by_rel.get(rel)
         if entry is None:
-            problems.append(Problem("registry", said, f"registry path {rel!r} not found on disk"))
+            problems.append(Problem(
+                "registry", said,
+                f"{_REGISTRY_MISSING_CODE}: The registry path {rel!r} was not found on disk. "
+                "Correct registry.json before retrying.",
+            ))
             continue
         try:
             schema = _load_json(entry.path)
         except json.JSONDecodeError:
-            problems.append(Problem("registry", rel, "unparseable, cannot verify $id vs registry key"))
+            problems.append(Problem(
+                "registry", rel,
+                f"{_SCHEMA_JSON_CODE}: The schema is not valid JSON, so its $id cannot "
+                "be checked against the registry key. Correct the file before retrying.",
+            ))
             continue
         stored = schema.get(SAID_LABEL)
         if stored != said:
             problems.append(
-                Problem("registry", rel, f"registry key {said!r} != schema $id {stored!r}")
+                Problem(
+                    "registry", rel,
+                    f"{_SCHEMA_KEY_CODE}: The registry key {said!r} does not match the schema "
+                    f"$id {stored!r}. Correct registry.json or the schema before retrying.",
+                )
             )
 
     for entry in entries:
         if entry.rel not in indexed:
-            problems.append(Problem("registry", entry.rel, "schema on disk but absent from registry.json"))
+            problems.append(Problem(
+                "registry", entry.rel,
+                f"{_SCHEMA_ORPHAN_CODE}: The schema is on disk but absent from registry.json. "
+                "Add it to the index before retrying.",
+            ))
+    for path in sorted(Path(root).glob("*/rules.json")):
+        rel = path.relative_to(root).as_posix()
+        if rel not in indexed:
+            if not path.resolve().is_relative_to(resolved_root):
+                problems.append(Problem(
+                    "registry", rel,
+                    f"{RULES_PATH_CODE}: The rules path escapes the repository root. "
+                    "Correct the file path before retrying.",
+                ))
+                continue
+            # Archived copies can share a SAID with the canonical indexed file.
+            # Only byte-identical copies are covered by that registry entry.
+            if path.read_bytes() in registered_rules_bytes:
+                continue
+            problems.append(Problem(
+                "registry", rel,
+                f"{_RULES_ORPHAN_CODE}: The rules artifact is on disk but absent from "
+                "registry.json. Add it to the index before retrying.",
+            ))
     return problems
 
 

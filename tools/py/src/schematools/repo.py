@@ -11,8 +11,11 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
-#: The crawl-free index of released schemas: ``{SAID: relative/path.schema.json}``.
+#: The crawl-free index of released schemas and rules: ``{SAID: relative/path.json}``.
 REGISTRY_NAME = "registry.json"
+
+# A registry path that escapes its declared root is permanent until the index changes.
+RULES_PATH_CODE = "e.input.format.schema-registry-path.f"
 
 
 class SchemaRepoNotFoundError(FileNotFoundError):

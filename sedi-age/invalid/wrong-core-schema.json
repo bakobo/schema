@@ -1,0 +1,64 @@
+{
+  "v": "ACDCCAACAAJSONAAXv.",
+  "t": "acg",
+  "d": "EBlxS8wgLPRBhKqTgLSZxS3N-sbfW5pP2purl1PCpWqc",
+  "u": "0ABzZWRpYWdldG9wbm9uY2Uw",
+  "i": "EP6GqGCzbQ2oI8lk0FryCvP7x1So8LWltKgQJn4Utccv",
+  "rd": "EAeSuhKi8glYgZ4vBwKIYneudKj0hkvWhebriwk5eEIQ",
+  "s": "EFxTYHyCerqMSJthl17hGxZhcRz1lEP5cWtRZ-hsZh85",
+  "A": [
+    "EG3ktb3ah6TWtW1YQnMR66tyaUXUcWNbBmioUNEX8IYh",
+    {
+      "d": "EKkvH-4jmq3E7ngfuwcHQ-AQiS_aPBU0XDikar4Ex_uq",
+      "u": "0ABzZWRpYWdldmVjbm9uYzAx",
+      "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC"
+    },
+    {
+      "d": "EL1Kj_ubrsVUkR2u--notg-ak8K5qoGRHGWTas56Xn4t",
+      "u": "0ABzZWRpYWdldmVjbm9uYzAy",
+      "asOf": "2026-07-14"
+    },
+    {
+      "d": "ECulMcWBDnhc783i9f1CWC2uS4SFfTTb0uQF5XQaBUiN",
+      "u": "0ABzZWRpYWdldmVjbm9uYzAz",
+      "ageOver13": true
+    },
+    {
+      "d": "EIcaKSu_Fff4REpp76f342vbcd7bXcrK9FhW_yTYgt52",
+      "u": "0ABzZWRpYWdldmVjbm9uYzA0",
+      "ageOver16": true
+    },
+    {
+      "d": "EHc5p17FSqHX9nOffyqd2bCnUuQVjrtQidTGtEvu5tjy",
+      "u": "0ABzZWRpYWdldmVjbm9uYzA1",
+      "ageOver18": true
+    },
+    {
+      "d": "EOMviyiE6u_CgJlwztCMWDxqrAsGKfE23eZm_s6AHYxO",
+      "u": "0ABzZWRpYWdldmVjbm9uYzA2",
+      "ageOver21": true
+    },
+    {
+      "d": "EG-qvCCyOW3CC_zRGr1CIuCc7RkHlSnC3MtguGYeknZr",
+      "u": "0ABzZWRpYWdldmVjbm9uYzA3",
+      "ageOver55": false
+    },
+    {
+      "d": "EKkKlREFgG9MVb9Hk685vV5SONWIHZucRhzOJ3oCJdp2",
+      "u": "0ABzZWRpYWdldmVjbm9uYzA4",
+      "ageOver65": false
+    }
+  ],
+  "e": {
+    "d": "EEVvZhw2oXhduu7PRXbJhkq1bqyDJtiocPqFMQDfahxy",
+    "u": "0ABzZWRpYWdlZWRnc2VjdDAw",
+    "identity": {
+      "d": "EIPA-t6O7l5SDUpzcCJuAU142xYfsiWuRyPesTctOHi8",
+      "u": "0ABzZWRpYWdlZWRnaWRlbnQw",
+      "n": "EDDk-04pqW8eOqmIoCO8tRrRF6rN2nO44YqkmR20DqoS",
+      "s": "EMZtIHLNTVmFfzKXGC1Qvwza37mNqaxLh0bU7zjQyJHS",
+      "o": "E1E"
+    }
+  },
+  "r": "EG8X1nQFCrQ4Rg8BjfE0-BIuKSo1TVbwqymQ3Wuam6VW"
+}

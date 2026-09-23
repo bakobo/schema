@@ -7,7 +7,7 @@ that replaces the inherited reference scripts now in [`../../oldtools`](../../ol
 - **keri is the SAID oracle** (`this.i` `@xv4m7d`), pinned exactly to `1.2.13`
   (`@m4vd7s`). Any change to that pin must re-verify SAID identity.
 - **Generic in shape** (`@c5tj3p`): everything is driven by the
-  `registry.json` + `<folder>/<folder>.schema.json` convention, so this tooling
+  `registry.json` + `<folder>/<folder>.schema.json` and `<folder>/rules.json` conventions, so this tooling
   serves any issuer's schema repo, not just this one.
 - The reserved sibling [`../ts`](../ts) is where a future browser/TypeScript
   layer would live (`@w3kp6m`); it does not exist yet.
@@ -25,7 +25,7 @@ uv sync
 uv run schematools check                 # run all conformance checks over the repo
 uv run schematools saidify -f ../../gcd/gcd.schema.json      # (re)SAID a schema file
 uv run schematools saidify-sad -f ../../gcd/example.json     # (re)SAID an ACDC instance
-uv run schematools registry              # rebuild ../../registry.json from disk
+uv run schematools registry              # rebuild ../../registry.json from schemas and rules
 ```
 
 `check` auto-detects the repo root by walking up to the nearest `registry.json`.

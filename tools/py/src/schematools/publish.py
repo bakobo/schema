@@ -23,7 +23,7 @@ import json
 import shutil
 from pathlib import Path
 
-from .repo import REGISTRY_NAME, SchemaEntry, discover_schemas, load_registry
+from .repo import RULES_PATH_CODE, REGISTRY_NAME, SchemaEntry, discover_schemas, load_registry
 from .said import SAID_LABEL
 
 DEFAULT_BASE_URL = "https://schema.bakobo.com"
@@ -46,6 +46,10 @@ ACDC_SPEC_URL = "https://trustoverip.github.io/kswg-acdc-specification/"
 # Layer 2 (this.i @m5tqw3): the published JSON Schema FOR the discovery manifest.
 META_SCHEMA_SRC = "spec/acdc-schema-registry.schema.json"
 META_SCHEMA_PATH = "acdc-schema-registry.schema.json"
+
+
+class RulesPathError(ValueError):
+    """A rules path escapes its source or destination root."""
 
 
 def load_federation(root: str | Path) -> dict | None:
@@ -307,16 +311,35 @@ def build_site(root: str | Path, out: str | Path, base_url: str = DEFAULT_BASE_U
     """Assemble the machine site under ``out``; return the discovery manifest dict."""
     root = Path(root)
     out = Path(out)
+    registry = load_registry(root)
+    rules_paths = []
+    resolved_root = root.resolve()
+    resolved_out = out.resolve()
+    for rel in registry.values():
+        if rel.endswith("/rules.json"):
+            source = (root / rel).resolve()
+            destination = (out / rel).resolve()
+            if (Path(rel).is_absolute() or not source.is_relative_to(resolved_root)
+                    or not destination.is_relative_to(resolved_out)):
+                raise RulesPathError(
+                    f"{RULES_PATH_CODE}: The rules path escapes the repository or output root. "
+                    "Correct registry.json before retrying."
+                )
+            rules_paths.append((source, destination))
     out.mkdir(parents=True, exist_ok=True)
 
     entries = discover_schemas(root)
-    registry = load_registry(root)
     rel_to_said = {rel: said for said, rel in registry.items()}
 
     # per-schema folders + registry index
     for entry in entries:
         _copy_schema_folder(entry, out)
     shutil.copy2(root / REGISTRY_NAME, out / REGISTRY_NAME)
+
+    # A rules-only archive has no schema folder to trigger the copy above.
+    for source, destination in rules_paths:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
 
     # OOBIs: byte-identical schema copies addressed by SAID
     oobi_dir = out / "oobi"

@@ -2110,3 +2110,67 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             share one top-level 'd'. They do not under the pinned oracle — keripy recomputes 'd' over the
             form it is given. What ties the disclosure to the credential is the AGID they share at A[0],
             which is what Aggor.verifyDisclosure checks. The prediction is retired, not carried forward.
+    Align the SEDI family to Sam Smith's pinned Summit schemas = decision:
+      id: epnvr5oq
+      why: >
+        For the November SEDI Summit, publish Sam Smith's IAR, Core, and Residence JSON Schemas
+        exactly as authored at WebOfTrust/keripy ec307cd74 (0.1.0), preserving their three
+        schema SAIDs. R3 shows our sedi-id differs in field placement, block shape, edge
+        semantics, and rule shape, so calling it Sam-compatible would mislead issuers.
+        Keep sedi-id resolvable as a superseded Bakobo schema; Core, Residence, and IAR
+        are the active state-issued set. Preserve Sam's legalPresenceStatus field while
+        documenting that Utah Code 63A-20-301(2)(f) endorses only name, birth date,
+        image, and residence address. The existing Saider(label="$id") computation
+        equals Sam's Mapper(saids={"$id":"E"}) on all three schemas with JSON serialization,
+        so no new SAID algorithm is justified. Pin both SAIDs and source bytes in CI.
+      children:
+        Keep governance separate from Sam's credential vocabulary = decision:
+          id: 2vqmhxai
+          why: >
+            sedi-id/rules.json is Bakobo's standalone governance artifact, not one of
+            Sam's state-issued credentials. Keep it reachable when sedi-id is superseded.
+            Sam's r object permits only d and l, so express the existing legal clauses
+            as legal-language text in l and re-SAID the artifact and its local examples;
+            doing so preserves the text while making it usable in Sam-shaped r sections.
+        Age and presentations remain explicit Bakobo profiles = decision:
+          id: eqbjfpq3
+          why: >
+            Sam has no age or presentation schema at ec307cd74. Keep the age threshold
+            aggregate and named holder-issued recipes to support the Summit's over-21
+            and county steps, but publish new major versions because their source-schema
+            edges move from sedi-id to Core. Age's E1E relation and presentations' I2I
+            relations remain. Mark age provisional pending Sam's #1098 mechanism.
+            A second recipe now exists, but a shared base still adds no enforceable rule
+            beyond each concrete schema's edge and disclosure requirements, so defer it.
+        Put the ward in guardian attributes and name authority layers distinctly = decision:
+          id: 6ge27cya
+          why: >
+            Tier C follows Sam's #1550 graph and Daniel's ward authorization example:
+            the state issues the guardian credential to the guardian, with the ward AID
+            in a separately disclosable attribute sub-block; the ward's Core variant
+            has the NI2I edge back to guardianship. This avoids a cyclic pair of edges
+            and allows the ward identity to be withheld independently. Rename our
+            coarse statutory powers list to scope, reserve powers for delegable
+            capabilities, and rename the optional GCD scope edge to constraints so
+            it cannot be mistaken for statutory scope. The guardian issues a distinct
+            revocable ward authorization with I2I authority and E1E ward identity
+            edges; its capability set must be checked against guardian powers.
+            Ward Core inherits Sam Core's optional, string-valued t: requiring
+            acm would make this Core variant's envelope stricter for no reason
+            supplied by the new guardianship edge. These are Bakobo provisional
+            profiles, not Utah policy or Sam's schemas.
+        Preserve every published rules revision by SAID = decision:
+          id: jmr6znql
+          why: >
+            A rules SAID in an issued credential is a permanent content address. Replacing
+            sedi-guardian/rules.json and sedi-id/rules.json in place during this migration
+            stranded the earlier EOW7nnASAYoY72gJ7brJwE0V2Hm8o6RfZvN2gNeyKmO0 and
+            EA5O9z0TB932sm8kJIVdAIpwLpEWRWC5--VNS5r69frn revisions. Keep their
+            origin/main bytes in versioned archive paths, alongside the revised rules
+            used by new examples. Index both revisions in registry.json so a verifier
+            can resolve either SAID without guessing a path. Extend the registry check
+            and a corpus-wide conformance test to recompute every referenced rules SAID;
+            testing only the current examples would miss old credentials. Preserve the
+            archived schema bytes: changing a path description there would itself
+            invalidate an already published schema SAID. The cost is retaining old
+            governance text and teaching the registry to index rules as well as schemas.
