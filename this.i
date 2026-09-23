@@ -2155,4 +2155,7 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             it cannot be mistaken for statutory scope. The guardian issues a distinct
             revocable ward authorization with I2I authority and E1E ward identity
             edges; its capability set must be checked against guardian powers.
-            These are Bakobo provisional profiles, not Utah policy or Sam's schemas.
+            Ward Core inherits Sam Core's optional, string-valued t: requiring
+            acm would make this Core variant's envelope stricter for no reason
+            supplied by the new guardianship edge. These are Bakobo provisional
+            profiles, not Utah policy or Sam's schemas.
