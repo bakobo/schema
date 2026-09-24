@@ -24,7 +24,10 @@ def _example() -> dict:
 
 
 def _validate(instance: dict) -> None:
-    jsonschema.Draft202012Validator(_schema()).validate(instance)
+    # The format checker is what makes "format": "date-time" an assertion rather than an
+    # annotation; without it every timestamp passes.
+    jsonschema.Draft202012Validator(
+        _schema(), format_checker=jsonschema.Draft202012Validator.FORMAT_CHECKER).validate(instance)
 
 
 def _refused(instance: dict) -> None:
@@ -131,3 +134,27 @@ def test_the_schema_floors_both_nonces_at_24_characters() -> None:
     schema = _schema()
     assert schema["properties"]["u"]["minLength"] == 24
     assert schema["properties"]["a"]["oneOf"][1]["properties"]["u"]["minLength"] == 24
+
+
+@pytest.mark.parametrize("field", ["dt", "validFrom", "validUntil"])
+@pytest.mark.parametrize("value", ["2026-11-17", "2026-11-17T09:00:00", "yesterday",
+                                   "2026-11-17T09:00:00+0000", "17/11/2026 09:00"])
+def test_every_time_is_an_rfc_3339_date_time(field: str, value: str) -> None:
+    """format date-time is RFC 3339: a full date, a time, and an offset or Z."""
+    instance = _example()
+    instance["a"][field] = value
+    _refused(instance)
+
+
+def test_the_time_descriptions_name_rfc_3339() -> None:
+    block = _schema()["properties"]["a"]["oneOf"][1]["properties"]
+    for field in ("dt", "validFrom", "validUntil"):
+        assert block[field]["format"] == "date-time"
+        assert "RFC 3339" in block[field]["description"]
+        assert "ISO-8601" not in block[field]["description"]
+
+
+def test_no_description_promises_a_lifetime_ceiling() -> None:
+    """Nothing enforces a maximum binding lifetime, so nothing may claim one (@kakslwv3)."""
+    text = json.dumps(_schema()) + (FOLDER / "index.md").read_text()
+    assert "ceiling" not in text.lower()

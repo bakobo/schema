@@ -9,18 +9,18 @@ A holder declares, privately, a P-256 key it controls outside its KEL, so that a
 | | `bindkey` | `bindkey-private` |
 |---|---|---|
 | Audience | anyone | the reissuer only (`privateToTheReissuer`) |
-| Nonce | none | top-level `u` and attribute `u`, so a guessed key cannot be confirmed by recomputing a SAID |
+| Nonce | none | top-level `u` and attribute `u`, each at least 24 characters (a CESR 128-bit salt), so a guessed key cannot be confirmed by recomputing a SAID |
 | Issuee | none | the holder itself |
 | Compact form | none | `a` and `r` compact to their SAIDs |
 | Key | any format, including RSA | P-256 only, as a `jwk` object (kty `EC`, crv `P-256`, no private `d`) or a CESR `1AAJ`/`1AAI` string |
 | Purpose | free `uses` strings | the constant `holderBindingForDerivation` |
-| Lifetime | `validUntil` optional | `validUntil` required, and the reissuer enforces a ceiling |
+| Lifetime | `validUntil` optional | `validUntil` required; every derivative must fall inside the binding's window |
 
 Do not use `bindkey` for a holder binding. A public binding would let every relying party that sees a derivative join it to the holder AID, which undoes the uncorrelatable bulk copies it was derived from.
 
 ### What a verifier must still check
 
-The schema cannot check that issuer and issuee are the same AID, that the AID is the issuee of the credential being derived from, that the registry state is live, or that `validUntil` has not passed. The reissuer checks all four before deriving, and the `bindingEndsOnHorizonOrRevocation` rule says so in the credential.
+The schema cannot check that issuer and issuee are the same AID, that the AID is the issuee of the credential being derived from, that the registry state is live, or that `validUntil` has not passed. Times are RFC 3339 date-times with an offset or `Z` (JSON Schema `date-time`). When `validFrom` is absent, the binding starts at its issuance as recorded in the holder's registry, not at `dt`, which is only the holder's own word. No maximum lifetime is enforced. The reissuer checks all four before deriving, and the `bindingEndsOnHorizonOrRevocation` rule says so in the credential.
 
 ### Schema
 

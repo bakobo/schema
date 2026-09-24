@@ -1,5 +1,5 @@
 {
-  "$id": "EEvByHMKmDG_pEaVLlvt40t5U76g0V5u3jqke7mVTYS4",
+  "$id": "EEOlXEm4qnRfnZMEOmK9dI-ZzPWpGzq4zSr8V_Lbg9uA",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Private Bind Key",
   "description": "A holder declares, privately, a P-256 key it controls outside its KEL, so that a reissuer can bind a credential derived from the holder's credential to that key (SD-JWT cnf, mDoc deviceKey). Self-issued: issuer and issuee are the holder AID. Shown only to the reissuer, which verifies it before deriving.",
@@ -89,7 +89,7 @@
               "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
             },
             "dt": {
-              "description": "When the holder made this declaration, as an ISO-8601 datetime",
+              "description": "When the holder made this declaration, as an RFC 3339 date-time with an offset or Z (JSON Schema format date-time). This is the holder's own word; a deriving party dates an undated binding from its verified registry issuance instead.",
               "type": "string",
               "format": "date-time"
             },
@@ -110,12 +110,12 @@
               ]
             },
             "validFrom": {
-              "description": "When the binding starts, as an ISO-8601 datetime. Absent means it starts on issuance.",
+              "description": "When the binding starts, as an RFC 3339 date-time with an offset or Z. Absent means it starts on issuance, as recorded in the holder's registry.",
               "type": "string",
               "format": "date-time"
             },
             "validUntil": {
-              "description": "When the binding stops, as an ISO-8601 datetime. Required, because a holder binding is meant to be short-lived; the deriving party enforces the ceiling.",
+              "description": "When the binding stops, as an RFC 3339 date-time with an offset or Z. Required, because a holder binding is meant to be short-lived; a deriving party keeps every derivative inside this window.",
               "type": "string",
               "format": "date-time"
             }
