@@ -763,6 +763,44 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             2.0.0, new SAID EE5FA0uE3ydhSYrG8lqECgR0Ad3NpkQxPw0b3jp-2eDa, with the old
             EJxFPpyDRV-W6O2Vtjdy2K90ltWmQK8l1jePw5YOo_Ft kept resolvable in registry.json per @r5vk3n.
             Nothing pinned the old SAID: no other schema references it and it has no recorded issuer.
+        bindkey-private is a separate schema that binds a holder key for derivation, private by design = decision:
+          id: kakslwv3
+          why: >
+            Daniel's D5 (2026-09-23, sedi-summit plan): a derivative made from SEDI bulk copy k binds its
+            SD-JWT cnf (later its mDoc deviceKey) to a P-256 key K that copy k's holder AID declares, in a
+            credential shown only to the reissuer, which verifies it before deriving. K may live in a
+            phone's secure hardware, so it cannot be one of the AID's own KEL keys.
+            A NEW SCHEMA, NOT A bindkey VARIANT. @v5ma6uxn made bindkey a public announcement on purpose,
+            with no nonce, no compact form and no issuee, so that anyone can confirm it. This credential
+            needs the opposite on each count, so it inverts that node's choices for the reason that node
+            gave. A nonce in the top-level u and in the attribute block stops an observer who guesses the
+            holder's key from confirming it by recomputing a SAID. The attribute block is compactable. The
+            credential is targeted, with issuer and issuee both the holder AID, because a self-issued
+            credential in the holder's own presentation registry is the one shape heti can issue, verify
+            and revoke without involving anyone else. Folding it into bindkey behind a flag would make one
+            schema promise publicity and privacy at once, and a verifier could not tell which it was
+            reading.
+            P-256 ONLY, CHECKED BY THE SCHEMA. keyFormat is jwk or cesr. A jwk key is a JSON object whose kty
+            and crv are pinned to EC and P-256 and which admits no private member d. A cesr key must carry
+            ECDSA 256r1 code 1AAJ or 1AAI, which were measured against the pinned keri's MtrDex rather than
+            recalled. EdDSA is refused here because the EU profile the derivative targets forbids it.
+            purpose is a const naming holder binding for derivation, so the credential cannot be
+            repurposed silently.
+            BOTH NONCES HAVE A 24-CHARACTER FLOOR. A nonce that may be empty blinds nothing, so a
+            credential could claim to be private and have no entropy behind the claim. The floor is
+            the length of a CESR 128-bit salt, the form heti mints (measured on the example). It is
+            deliberately not a pattern: @4t5t4yca found that a SAID-shaped pattern rejected every
+            nonce heti actually mints. Like any length floor it does not measure randomness.
+            rd, dt and validUntil are REQUIRED. rd, because heti's Registry.issue always writes it and
+            because a binding must be revocable when the phone is lost. validUntil, because the binding
+            should be short-lived. The schema cannot bound the lifetime relative to dt, and no ceiling is
+            enforced anywhere yet: the deriving party keeps each derivative inside the binding's window,
+            which bounds what a long binding can be used for but not how long it lives. Corrected
+            2026-09-24; the first revision claimed the deriving party enforced a ceiling.
+            Not enforceable by schema, and left to the verifier: that issuer and issuee are the same AID,
+            and that the AID is the issuee of the credential being derived from. Tradeoff: one more
+            credential per bulk copy, issued before any derivation, and a key the holder must keep outside
+            the KEL.
         bindkey 2.0.0 is public by design, so it takes the nonce default's opposite; pubkey gains keyFormat = decision:
           id: v5ma6uxn
           why: >
@@ -2140,9 +2178,13 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         schema SAIDs. R3 shows our sedi-id differs in field placement, block shape, edge
         semantics, and rule shape, so calling it Sam-compatible would mislead issuers.
         Keep sedi-id resolvable as a superseded Bakobo schema; Core, Residence, and IAR
-        are the active state-issued set. Preserve Sam's legalPresenceStatus field while
-        documenting that Utah Code 63A-20-301(2)(f) endorses only name, birth date,
-        image, and residence address. The existing Saider(label="$id") computation
+        are the active state-issued set. Preserve Sam's legalPresenceStatus field. This
+        node first documented it as a tension, since Utah Code 63A-20-301(2)(f) names only
+        name, birth date, image, and residence address as endorsed. Sam Smith settled that
+        in an email to Daniel on 2026-09-23: legal presence status is an endorsed status,
+        not only a proofing input, because the State plans visitor SEDIs (Olympics visitors,
+        out-of-state hunting licence holders) whose statuses are other than citizen, with
+        values still to be decided. The docs record it as endorsed. The existing Saider(label="$id") computation
         equals Sam's Mapper(saids={"$id":"E"}) on all three schemas with JSON serialization,
         so no new SAID algorithm is justified. Pin both SAIDs and source bytes in CI.
       children:

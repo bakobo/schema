@@ -1,0 +1,7 @@
+{
+  "d": "EDFzwZtj1ldc_gqjZt2Mk-9b_7KTL-3uxqo4ZV-4PQYv",
+  "privateToTheReissuer": "The holder shows this credential only to a reissuer it has chosen, so that the reissuer can bind a derived credential to the key. A party that obtains it any other way has no license to rely on it, to retain it, or to link the key to the holder.",
+  "bindsForDerivationOnly": "The holder declares that it controls this key for holder binding in credentials derived from the credential of which it is the issuee. The declaration confers no other authority, and a verifier MUST NOT treat the key as one of the holder's KERI signing keys.",
+  "keyNotAssertedSound": "The holder declares that it controls this key. It does not assert that the key is uncompromised, generated soundly, or held in secure hardware, and a verifier MUST NOT read any of those into this credential.",
+  "bindingEndsOnHorizonOrRevocation": "The binding holds from validFrom, or from issuance when none is stated, until validUntil or revocation, whichever comes first. A reissuer MUST check the registry before deriving, and MUST NOT derive a credential that outlives the binding."
+}

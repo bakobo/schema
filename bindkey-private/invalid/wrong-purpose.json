@@ -1,0 +1,31 @@
+{
+  "v": "ACDCCAACAAJSONAAcJ.",
+  "t": "acm",
+  "d": "EABnmYWE57pK8uymEaQg_EgJa98C5RzePMyJ9EHp5qj-",
+  "u": "0ABGuijsufDFPNlAs_Rg4848",
+  "i": "EIkEgsb23LS5Qb0gFjTVmLHBiuYuzEM9fg_Ljac-sWW7",
+  "rd": "EBTfwTfKimW5bxsO31aw9A1JaPCnJq1AJFSjU8G0Ning",
+  "s": "EEOlXEm4qnRfnZMEOmK9dI-ZzPWpGzq4zSr8V_Lbg9uA",
+  "a": {
+    "d": "EPq68L4SOw3kYpM_bhLj218wC4Q-XhSdtbqra4DixGPI",
+    "dt": "2026-11-17T09:00:00+00:00",
+    "purpose": "ssh",
+    "pubkey": {
+      "kty": "EC",
+      "crv": "P-256",
+      "x": "_NCxlIIizIVki_G99PHT1czMP1pYiW_O8WiPdhH-YZo",
+      "y": "2t1j2pUamB9S4SmVJkLIJGhUIj-gPm8IDGTxtvRh8e8"
+    },
+    "keyFormat": "jwk",
+    "validUntil": "2026-11-18T09:00:00+00:00",
+    "u": "0ABs93NSW7VkLAdmre4WFwHJ",
+    "i": "EIkEgsb23LS5Qb0gFjTVmLHBiuYuzEM9fg_Ljac-sWW7"
+  },
+  "r": {
+    "d": "EDFzwZtj1ldc_gqjZt2Mk-9b_7KTL-3uxqo4ZV-4PQYv",
+    "privateToTheReissuer": "The holder shows this credential only to a reissuer it has chosen, so that the reissuer can bind a derived credential to the key. A party that obtains it any other way has no license to rely on it, to retain it, or to link the key to the holder.",
+    "bindsForDerivationOnly": "The holder declares that it controls this key for holder binding in credentials derived from the credential of which it is the issuee. The declaration confers no other authority, and a verifier MUST NOT treat the key as one of the holder's KERI signing keys.",
+    "keyNotAssertedSound": "The holder declares that it controls this key. It does not assert that the key is uncompromised, generated soundly, or held in secure hardware, and a verifier MUST NOT read any of those into this credential.",
+    "bindingEndsOnHorizonOrRevocation": "The binding holds from validFrom, or from issuance when none is stated, until validUntil or revocation, whichever comes first. A reissuer MUST check the registry before deriving, and MUST NOT derive a credential that outlives the binding."
+  }
+}
