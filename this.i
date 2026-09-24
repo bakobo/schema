@@ -793,8 +793,10 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             nonce heti actually mints. Like any length floor it does not measure randomness.
             rd, dt and validUntil are REQUIRED. rd, because heti's Registry.issue always writes it and
             because a binding must be revocable when the phone is lost. validUntil, because the binding
-            should be short-lived. The schema cannot bound the lifetime relative to dt, so the deriving
-            party enforces a ceiling.
+            should be short-lived. The schema cannot bound the lifetime relative to dt, and no ceiling is
+            enforced anywhere yet: the deriving party keeps each derivative inside the binding's window,
+            which bounds what a long binding can be used for but not how long it lives. Corrected
+            2026-09-24; the first revision claimed the deriving party enforced a ceiling.
             Not enforceable by schema, and left to the verifier: that issuer and issuee are the same AID,
             and that the AID is the issuee of the credential being derived from. Tradeoff: one more
             credential per bulk copy, issued before any derivation, and a key the holder must keep outside
