@@ -27,6 +27,7 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 | [attestation](attestation/) | verifiable attestation of a data digest |
 | [award](award/) | conferral of an award on a person or group |
 | [bindkey](bindkey/) | issuer uses a key not directly managed by its KEL |
+| [bindkey-private](bindkey-private/) | holder privately declares a P-256 key for binding derived credentials; shown only to the reissuer |
 | [citation](citation/) | a formal reference to non-ACDC content |
 | [dossier-base](dossier-base/) | base schema for verifiable dossiers (issuer-curated evidence) |
 | [faa](faa/) | a tamper-evident cryptographic identity for arbitrary binary data |
