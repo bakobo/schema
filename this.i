@@ -786,6 +786,11 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             recalled. EdDSA is refused here because the EU profile the derivative targets forbids it.
             purpose is a const naming holder binding for derivation, so the credential cannot be
             repurposed silently.
+            BOTH NONCES HAVE A 24-CHARACTER FLOOR. A nonce that may be empty blinds nothing, so a
+            credential could claim to be private and have no entropy behind the claim. The floor is
+            the length of a CESR 128-bit salt, the form heti mints (measured on the example). It is
+            deliberately not a pattern: @4t5t4yca found that a SAID-shaped pattern rejected every
+            nonce heti actually mints. Like any length floor it does not measure randomness.
             rd, dt and validUntil are REQUIRED. rd, because heti's Registry.issue always writes it and
             because a binding must be revocable when the phone is lost. validUntil, because the binding
             should be short-lived. The schema cannot bound the lifetime relative to dt, so the deriving
