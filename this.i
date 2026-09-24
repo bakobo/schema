@@ -2132,6 +2132,29 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             share one top-level 'd'. They do not under the pinned oracle — keripy recomputes 'd' over the
             form it is given. What ties the disclosure to the credential is the AGID they share at A[0],
             which is what Aggor.verifyDisclosure checks. The prediction is retired, not carried forward.
+    foreign-evidence records what a reissuer checked on a foreign credential, and nothing it said = decision:
+      id: vho4mibp
+      why: >
+        Plan M9 (sedi-summit): a credential Bakobo did not produce, first the EU reference issuer's
+        test PID as an SD-JWT VC, is verified by its own rules, and the reissuer then issues an ACDC
+        recording that evidence. This schema is that ACDC. It records the format, the credential type,
+        the foreign issuer and every certificate in its chain by subject and SHA-256, the trust
+        anchor the chain ended in, the named checks that ran, the checks that could not run (as
+        caveat codes), and the verification time.
+        It records NO CLAIM VALUE from the foreign credential. A PID carries a name, a birth date and
+        a nationality, and an evidence record that repeated them would be a second copy of personal
+        data under a signature that is not the State's. Rejected also carrying a digest of the
+        foreign token. It would bind the record to one specific credential, but anyone holding that
+        credential could then link the two, and the binding the demo needs already comes from the
+        issuee: the ACDC is issued to the AID that presented.
+        checks is a CLOSED ENUM, so every value names one specific piece of verifier code and a
+        reader cannot be shown a check that no implementation performs. Adding a check is a schema
+        revision, which is the right cost for adding a claim about what was verified.
+        Targeted and revocable: rd is required, the issuer is the reissuer, the issuee is the
+        presenter, and nonces blind both slots, following the corpus default for a credential
+        about a person (@jsmu322m). Tradeoff: nothing in the record lets a third party re-verify the
+        foreign credential. It is the reissuer's attestation of what it checked, and the rules
+        section says so.
     Align the SEDI family to Sam Smith's pinned Summit schemas = decision:
       id: epnvr5oq
       why: >
