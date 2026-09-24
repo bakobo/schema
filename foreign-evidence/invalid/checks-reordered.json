@@ -1,13 +1,13 @@
 {
-  "v": "ACDCCAACAAJSONAAla.",
+  "v": "ACDCCAACAAJSONAAlq.",
   "t": "acm",
-  "d": "ELufJhGSWlxZgh6rQgmHh-27JWJJjNv-c7TM68DFXOxB",
+  "d": "EHxkudJjDN5NkLLeisysmAzxYbcFWBEQHYG2ec8GmsqK",
   "u": "0ADUwiKlTCMXb-ppR5bvLJQF",
   "i": "EASQ29X2bmJ72RpqJaoAj1q14TPlUtp1XFeCSSMnAAr1",
   "rd": "EAOctA0jYqNRqic7jNqqlSOVyaiVSevDocIdsDRtZpsO",
-  "s": "EAfGFgQdYLq0Ao0QKngUxkNNWd5SZFF3E_ALuhroW9jV",
+  "s": "EH4PDqEiMgA6gO0hjC5bnbosnBdGjUKug60yhx9CtUAO",
   "a": {
-    "d": "ENQicmE66N_zSDLoVRhZyADq24U8ht06JGfTLdQ_P2Yr",
+    "d": "EDTW5tStjOB_WTilOZ3pE7gg4LqJ1hiI2v2nIUguH-iH",
     "dt": "2026-08-28T12:00:00+00:00",
     "format": "dc+sd-jwt",
     "credentialType": "urn:eudi:pid:1",
@@ -24,11 +24,13 @@
     "checks": [
       {
         "name": "status-list",
-        "outcome": "not-performed"
+        "outcome": "not-performed",
+        "caveat": "w.proof.revocation.unchecked.f"
       },
       {
         "name": "key-binding",
-        "outcome": "not-performed"
+        "outcome": "not-performed",
+        "caveat": "w.proof.binding.absent.f"
       },
       {
         "name": "disclosure-digests",
@@ -36,7 +38,8 @@
       },
       {
         "name": "issuer-binding",
-        "outcome": "not-performed"
+        "outcome": "not-performed",
+        "caveat": "w.proof.identity.unbindable.f"
       },
       {
         "name": "time-window",
@@ -56,7 +59,7 @@
       },
       {
         "name": "x5t-thumbprint",
-        "outcome": "not-performed"
+        "outcome": "not-applicable"
       },
       {
         "name": "typ",
@@ -70,11 +73,6 @@
         "name": "size-bound",
         "outcome": "passed"
       }
-    ],
-    "caveats": [
-      "w.proof.identity.unbindable.f",
-      "w.proof.binding.absent.f",
-      "w.proof.revocation.unchecked.f"
     ],
     "verifiedAt": "2026-08-28T12:00:00+00:00",
     "foreignIssuer": "https://backend.issuer.eudiw.dev",

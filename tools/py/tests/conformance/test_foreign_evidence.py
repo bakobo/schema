@@ -10,6 +10,12 @@ import pytest
 from schematools.said import compute_schema_said, saidify_sad
 
 ROOT = Path(__file__).resolve().parents[4]
+UNCONDITIONAL = ["size-bound", "framing", "typ", "chain", "signature", "time-window",
+                 "disclosure-digests"]
+CAVEAT_FOR = {"certificate-revocation": "w.proof.certificate.revocation.unchecked.f",
+              "issuer-binding": "w.proof.identity.unbindable.f",
+              "key-binding": "w.proof.binding.absent.f",
+              "status-list": "w.proof.revocation.unchecked.f"}
 FOLDER = ROOT / "foreign-evidence"
 CHECKS = ["size-bound", "framing", "typ", "x5t-thumbprint", "chain", "certificate-revocation",
           "signature", "time-window", "issuer-binding", "disclosure-digests", "key-binding",
@@ -42,20 +48,30 @@ def test_the_schema_names_itself_and_is_registered() -> None:
     assert schema["version"] == "1.0.0"
 
 
-def test_every_check_is_pinned_in_order_with_an_outcome() -> None:
-    """Copilot on #12: the whole vocabulary, each {name, outcome}, one position per check."""
+def test_every_check_is_pinned_in_order_with_its_permitted_outcomes() -> None:
+    """Copilot on #12: outcomes pinned per check, and an unperformed check carries its caveat."""
     checks = _schema()["properties"]["a"]["oneOf"][1]["properties"]["checks"]
     assert [item["properties"]["name"]["const"] for item in checks["prefixItems"]] == CHECKS
     assert checks["items"] is False and checks["minItems"] == len(CHECKS)
-    for item in checks["prefixItems"]:
-        assert item["properties"]["outcome"]["enum"] == ["passed", "not-performed"]
-        assert item["required"] == ["name", "outcome"]
+    outcomes = {item["properties"]["name"]["const"]: item["properties"]["outcome"]["enum"]
+                for item in checks["prefixItems"]}
+    for name in UNCONDITIONAL:
+        assert outcomes[name] == ["passed"], name
+    for name in CAVEAT_FOR:
+        assert outcomes[name] == ["passed", "not-performed"], name
+    assert outcomes["x5t-thumbprint"] == ["passed", "not-applicable"]
+
+
+def test_there_is_no_separate_caveats_array() -> None:
+    assert "caveats" not in _schema()["properties"]["a"]["oneOf"][1]["properties"]
 
 
 def test_the_example_records_every_check():
     checks = _example()["a"]["checks"]
     assert [c["name"] for c in checks] == CHECKS
-    assert {c["outcome"] for c in checks} == {"passed", "not-performed"}
+    assert {c["outcome"] for c in checks} == {"passed", "not-performed", "not-applicable"}
+    for check in checks:
+        assert ("caveat" in check) == (check["outcome"] == "not-performed")
 
 
 def test_the_example_validates_and_is_saidified() -> None:
@@ -70,11 +86,18 @@ def test_the_example_carries_no_claim_value() -> None:
     """Nothing from the foreign credential but its type, issuer and chain (@vho4mibp)."""
     attributes = _example()["a"]
     assert set(attributes) <= {"d", "u", "i", "dt", "format", "credentialType", "foreignIssuer",
-                               "issuerChain", "trustAnchor", "checks", "caveats", "verifiedAt"}
+                               "issuerChain", "trustAnchor", "checks", "verifiedAt"}
 
 
 @pytest.mark.parametrize("mutate", [
     lambda a: a["checks"][0].update(outcome="failed"),
+    lambda a: a["checks"][0].update(outcome="not-performed", caveat="w.proof.x.y.f"),
+    lambda a: a["checks"][8].pop("caveat"),
+    lambda a: a["checks"][8].update(caveat="w.proof.revocation.unchecked.f"),
+    lambda a: a["checks"][6].update(caveat="w.proof.binding.absent.f"),
+    lambda a: a["checks"][3].update(outcome="not-performed"),
+    lambda a: a["checks"][8].update(outcome="not-applicable"),
+    lambda a: a.update(caveats=[]),
     lambda a: a["checks"][0].update(outcome="skipped"),
     lambda a: a["checks"][0].update(name="vibes"),
     lambda a: a["checks"].pop(),
@@ -92,11 +115,12 @@ def test_the_example_carries_no_claim_value() -> None:
     lambda a: a["trustAnchor"].pop("sha256"),
     lambda a: a.pop("checks"),
     lambda a: a.pop("i"),
-    lambda a: a.update(caveats=["not a code"]),
-], ids=["outcome-failed", "outcome-unknown", "unknown-check", "missing-check", "extra-check",
+], ids=["outcome-failed", "unconditional-not-performed", "not-performed-without-caveat",
+        "wrong-caveat-for-check", "caveat-on-passed", "thumbprint-not-performed",
+        "conditional-not-applicable", "caveats-array", "outcome-unknown", "unknown-check", "missing-check", "extra-check",
         "reordered", "no-outcome", "extra-member", "bare-names", "no-checks", "bad-format", "bad-time",
         "bad-digest", "empty-chain", "claim-value", "anchor-no-digest", "missing-checks",
-        "missing-issuee", "bad-caveat"])
+        "missing-issuee"])
 def test_anything_else_is_refused(mutate) -> None:
     instance = copy.deepcopy(_example())
     mutate(instance["a"])

@@ -48,7 +48,7 @@
       },
       {
         "name": "signature",
-        "outcome": "passed"
+        "outcome": "not-performed"
       },
       {
         "name": "time-window",
@@ -67,6 +67,11 @@
         "name": "key-binding",
         "outcome": "not-performed",
         "caveat": "w.proof.binding.absent.f"
+      },
+      {
+        "name": "status-list",
+        "outcome": "not-performed",
+        "caveat": "w.proof.revocation.unchecked.f"
       }
     ],
     "verifiedAt": "2026-08-28T12:00:00+00:00",

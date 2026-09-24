@@ -1,5 +1,5 @@
 {
-  "$id": "EAfGFgQdYLq0Ao0QKngUxkNNWd5SZFF3E_ALuhroW9jV",
+  "$id": "EH4PDqEiMgA6gO0hjC5bnbosnBdGjUKug60yhx9CtUAO",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Foreign Evidence",
   "description": "A reissuer's record that it verified a credential Bakobo did not produce, by that credential's own rules: its format and type, its issuer and certificate chain, the trust anchor, the checks that ran and those that could not, and when. Issued to the holder who presented it. Carries no claim value from the foreign credential.",
@@ -71,7 +71,6 @@
             "issuerChain",
             "trustAnchor",
             "checks",
-            "caveats",
             "verifiedAt"
           ],
           "properties": {
@@ -158,7 +157,7 @@
               "additionalProperties": false
             },
             "checks": {
-              "description": "Every check in the vocabulary, in order, each with its outcome (this.i @vho4mibp). passed means it ran and held; not-performed means it did not run, and caveats says why. There is no failed: a failed check refuses the credential, which then yields no record.",
+              "description": "Every check in the vocabulary, in order, each with the outcomes it can have in a record (this.i @vho4mibp). The seven unconditional checks can only be passed, since a failure refuses the credential and yields no record. The four conditional checks are passed, or not-performed with the verifier's warning code for that check in caveat. x5t-thumbprint is passed, or not-applicable when the header carries no x5t#S256, which RFC 7515 makes optional.",
               "type": "array",
               "minItems": 12,
               "items": false,
@@ -177,8 +176,7 @@
                     "outcome": {
                       "type": "string",
                       "enum": [
-                        "passed",
-                        "not-performed"
+                        "passed"
                       ]
                     }
                   },
@@ -198,8 +196,7 @@
                     "outcome": {
                       "type": "string",
                       "enum": [
-                        "passed",
-                        "not-performed"
+                        "passed"
                       ]
                     }
                   },
@@ -219,8 +216,7 @@
                     "outcome": {
                       "type": "string",
                       "enum": [
-                        "passed",
-                        "not-performed"
+                        "passed"
                       ]
                     }
                   },
@@ -241,7 +237,7 @@
                       "type": "string",
                       "enum": [
                         "passed",
-                        "not-performed"
+                        "not-applicable"
                       ]
                     }
                   },
@@ -261,8 +257,7 @@
                     "outcome": {
                       "type": "string",
                       "enum": [
-                        "passed",
-                        "not-performed"
+                        "passed"
                       ]
                     }
                   },
@@ -285,6 +280,30 @@
                         "passed",
                         "not-performed"
                       ]
+                    },
+                    "caveat": {
+                      "description": "Why it was not performed: the verifier's warning code for this check",
+                      "type": "string",
+                      "const": "w.proof.certificate.revocation.unchecked.f"
+                    }
+                  },
+                  "if": {
+                    "properties": {
+                      "outcome": {
+                        "const": "not-performed"
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "caveat"
+                    ]
+                  },
+                  "else": {
+                    "not": {
+                      "required": [
+                        "caveat"
+                      ]
                     }
                   },
                   "additionalProperties": false
@@ -303,8 +322,7 @@
                     "outcome": {
                       "type": "string",
                       "enum": [
-                        "passed",
-                        "not-performed"
+                        "passed"
                       ]
                     }
                   },
@@ -324,8 +342,7 @@
                     "outcome": {
                       "type": "string",
                       "enum": [
-                        "passed",
-                        "not-performed"
+                        "passed"
                       ]
                     }
                   },
@@ -348,6 +365,30 @@
                         "passed",
                         "not-performed"
                       ]
+                    },
+                    "caveat": {
+                      "description": "Why it was not performed: the verifier's warning code for this check",
+                      "type": "string",
+                      "const": "w.proof.identity.unbindable.f"
+                    }
+                  },
+                  "if": {
+                    "properties": {
+                      "outcome": {
+                        "const": "not-performed"
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "caveat"
+                    ]
+                  },
+                  "else": {
+                    "not": {
+                      "required": [
+                        "caveat"
+                      ]
                     }
                   },
                   "additionalProperties": false
@@ -366,8 +407,7 @@
                     "outcome": {
                       "type": "string",
                       "enum": [
-                        "passed",
-                        "not-performed"
+                        "passed"
                       ]
                     }
                   },
@@ -390,6 +430,30 @@
                         "passed",
                         "not-performed"
                       ]
+                    },
+                    "caveat": {
+                      "description": "Why it was not performed: the verifier's warning code for this check",
+                      "type": "string",
+                      "const": "w.proof.binding.absent.f"
+                    }
+                  },
+                  "if": {
+                    "properties": {
+                      "outcome": {
+                        "const": "not-performed"
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "caveat"
+                    ]
+                  },
+                  "else": {
+                    "not": {
+                      "required": [
+                        "caveat"
+                      ]
                     }
                   },
                   "additionalProperties": false
@@ -411,20 +475,35 @@
                         "passed",
                         "not-performed"
                       ]
+                    },
+                    "caveat": {
+                      "description": "Why it was not performed: the verifier's warning code for this check",
+                      "type": "string",
+                      "const": "w.proof.revocation.unchecked.f"
+                    }
+                  },
+                  "if": {
+                    "properties": {
+                      "outcome": {
+                        "const": "not-performed"
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "caveat"
+                    ]
+                  },
+                  "else": {
+                    "not": {
+                      "required": [
+                        "caveat"
+                      ]
                     }
                   },
                   "additionalProperties": false
                 }
               ]
-            },
-            "caveats": {
-              "description": "Checks that could not be performed, as Bakobo warning codes",
-              "type": "array",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "pattern": "^w\\.[a-z0-9-]+(\\.[a-z0-9-]+)+\\.[fr]$"
-              }
             },
             "verifiedAt": {
               "description": "The moment the checks were made against, as an ISO-8601 datetime",
