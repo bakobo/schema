@@ -2147,9 +2147,16 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         foreign token. It would bind the record to one specific credential, but anyone holding that
         credential could then link the two, and the binding the demo needs already comes from the
         issuee: the ACDC is issued to the AID that presented.
-        checks is a CLOSED ENUM, so every value names one specific piece of verifier code and a
+        checks is a CLOSED VOCABULARY, so every name is one specific piece of verifier code and a
         reader cannot be shown a check that no implementation performs. Adding a check is a schema
         revision, which is the right cost for adding a claim about what was verified.
+        EVERY CHECK APPEARS, WITH ITS OUTCOME (Copilot on #12). The first revision listed only the
+        checks that ran, which left a reader to infer the others from their absence. Now checks is
+        the whole vocabulary in a fixed order, each entry {name, outcome}, pinned position by position
+        with prefixItems so none can be missing, repeated or reordered. outcome is passed or
+        not-performed, and deliberately has no failed: a check that fails refuses the credential, and
+        a refused credential yields no record, so a record saying failed could never be issued.
+        Offering the value would suggest otherwise. A not-performed check has its reason in caveats.
         Targeted and revocable: rd is required, the issuer is the reissuer, the issuee is the
         presenter, and nonces blind both slots, following the corpus default for a credential
         about a person (@jsmu322m). Tradeoff: nothing in the record lets a third party re-verify the
