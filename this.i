@@ -2139,8 +2139,8 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         test PID as an SD-JWT VC, is verified by its own rules, and the reissuer then issues an ACDC
         recording that evidence. This schema is that ACDC. It records the format, the credential type,
         the foreign issuer and every certificate in its chain by subject and SHA-256, the trust
-        anchor the chain ended in, the named checks that ran, the checks that could not run (as
-        caveat codes), and the verification time.
+        anchor the chain ended in, every check with its outcome (an unperformed check carrying its
+        caveat code), and the verification time.
         It records NO CLAIM VALUE from the foreign credential. A PID carries a name, a birth date and
         a nationality, and an evidence record that repeated them would be a second copy of personal
         data under a signature that is not the State's. Rejected also carrying a digest of the
@@ -2156,7 +2156,16 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         with prefixItems so none can be missing, repeated or reordered. outcome is passed or
         not-performed, and deliberately has no failed: a check that fails refuses the credential, and
         a refused credential yields no record, so a record saying failed could never be issued.
-        Offering the value would suggest otherwise. A not-performed check has its reason in caveats.
+        Offering the value would suggest otherwise.
+        EACH OUTCOME IS PINNED PER CHECK, AND AN UNPERFORMED CHECK CARRIES ITS REASON (Copilot on #12,
+        second round). The first revision let not-performed stand with an empty caveats array, which
+        contradicted its own description. Measured against the verifier: the seven unconditional
+        checks can only be passed in a record, since any failure refuses the credential. The four
+        conditional checks (certificate revocation, issuer binding, key binding, status list) are
+        passed or not-performed, and every path that skips one emits exactly one warning code, so a
+        not-performed entry must carry that code, pinned per check. x5t-thumbprint is passed or
+        not-applicable, because RFC 7515 makes x5t#S256 optional and its absence is no gap. The
+        separate caveats array is removed, so there is one representation that cannot drift.
         Targeted and revocable: rd is required, the issuer is the reissuer, the issuee is the
         presenter, and nonces blind both slots, following the corpus default for a credential
         about a person (@jsmu322m). Tradeoff: nothing in the record lets a third party re-verify the
