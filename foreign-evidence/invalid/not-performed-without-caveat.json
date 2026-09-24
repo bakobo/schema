@@ -1,0 +1,87 @@
+{
+  "v": "ACDCCAACAAJSONAAlq.",
+  "t": "acm",
+  "d": "EHxkudJjDN5NkLLeisysmAzxYbcFWBEQHYG2ec8GmsqK",
+  "u": "0ADUwiKlTCMXb-ppR5bvLJQF",
+  "i": "EASQ29X2bmJ72RpqJaoAj1q14TPlUtp1XFeCSSMnAAr1",
+  "rd": "EAOctA0jYqNRqic7jNqqlSOVyaiVSevDocIdsDRtZpsO",
+  "s": "EH4PDqEiMgA6gO0hjC5bnbosnBdGjUKug60yhx9CtUAO",
+  "a": {
+    "d": "EDTW5tStjOB_WTilOZ3pE7gg4LqJ1hiI2v2nIUguH-iH",
+    "dt": "2026-08-28T12:00:00+00:00",
+    "format": "dc+sd-jwt",
+    "credentialType": "urn:eudi:pid:1",
+    "issuerChain": [
+      {
+        "subject": "C=UT,O=EUDI Wallet Reference Implementation,2.5.4.97=LEIEU-123456789,CN=PID DS - 002",
+        "sha256": "e62c5d3cc29089acbb934e9811d441cc10e0b6dde8a292c5e4239e632e645419"
+      }
+    ],
+    "trustAnchor": {
+      "subject": "C=UT,O=EUDI Wallet Reference Implementation,CN=PID Issuer CA - UT 02",
+      "sha256": "f5d8b03daf986de86202f886b98dc42a05bab4486ba3e262e9c5760bdf5c4500"
+    },
+    "checks": [
+      {
+        "name": "size-bound",
+        "outcome": "passed"
+      },
+      {
+        "name": "framing",
+        "outcome": "passed"
+      },
+      {
+        "name": "typ",
+        "outcome": "passed"
+      },
+      {
+        "name": "x5t-thumbprint",
+        "outcome": "not-applicable"
+      },
+      {
+        "name": "chain",
+        "outcome": "passed"
+      },
+      {
+        "name": "certificate-revocation",
+        "outcome": "passed"
+      },
+      {
+        "name": "signature",
+        "outcome": "passed"
+      },
+      {
+        "name": "time-window",
+        "outcome": "passed"
+      },
+      {
+        "name": "issuer-binding",
+        "outcome": "not-performed"
+      },
+      {
+        "name": "disclosure-digests",
+        "outcome": "passed"
+      },
+      {
+        "name": "key-binding",
+        "outcome": "not-performed",
+        "caveat": "w.proof.binding.absent.f"
+      },
+      {
+        "name": "status-list",
+        "outcome": "not-performed",
+        "caveat": "w.proof.revocation.unchecked.f"
+      }
+    ],
+    "verifiedAt": "2026-08-28T12:00:00+00:00",
+    "foreignIssuer": "https://backend.issuer.eudiw.dev",
+    "u": "0ACcGnOKdLdYbGuFjgopCM8r",
+    "i": "EDILsuevQgE7T5nwcurEetTonIDfwfms0Ulwc4OSMiyk"
+  },
+  "r": {
+    "d": "ELGhB_hackGxbEGXJFS5joB4w1FsBHCxvYsF14cOltoL",
+    "evidenceNotEndorsement": "The issuer records which checks it ran on a foreign credential and what they found at verifiedAt. It does not endorse the foreign issuer's claims, and a verifier MUST NOT read this credential as asserting any of them.",
+    "checksAsOfVerifiedAt": "Every check describes the foreign credential as it stood at verifiedAt. A later revocation of the foreign credential or its certificates is not reflected here, and a verifier relying on current standing MUST check the foreign credential itself.",
+    "noClaimValues": "This credential carries no claim value from the foreign credential. The issuer MUST NOT add personal data from it, and a holder presenting this credential discloses only that the listed checks ran."
+  }
+}
