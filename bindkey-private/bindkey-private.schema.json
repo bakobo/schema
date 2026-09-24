@@ -1,5 +1,5 @@
 {
-  "$id": "EB54v9pVk2tdD04lPpgD2NkHZ9Sb1zM-vQ2NLA8EgLJ-",
+  "$id": "EEvByHMKmDG_pEaVLlvt40t5U76g0V5u3jqke7mVTYS4",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Private Bind Key",
   "description": "A holder declares, privately, a P-256 key it controls outside its KEL, so that a reissuer can bind a credential derived from the holder's credential to that key (SD-JWT cnf, mDoc deviceKey). Self-issued: issuer and issuee are the holder AID. Shown only to the reissuer, which verifies it before deriving.",
@@ -32,8 +32,9 @@
       "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "u": {
-      "description": "Privacy nonce",
-      "type": "string"
+      "description": "Privacy nonce. At least the 24 characters of a CESR 128-bit salt, so the credential cannot claim a blinding it lacks.",
+      "type": "string",
+      "minLength": 24
     },
     "i": {
       "description": "AID of the holder, which issues this credential to itself",
@@ -78,8 +79,9 @@
               "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
             },
             "u": {
-              "description": "Privacy nonce, so an observer who guesses the key cannot confirm the guess by recomputing this block's SAID",
-              "type": "string"
+              "description": "Privacy nonce, so an observer who guesses the key cannot confirm the guess by recomputing this block's SAID. At least the 24 characters of a CESR 128-bit salt, so the credential cannot claim a blinding it lacks.",
+              "type": "string",
+              "minLength": 24
             },
             "i": {
               "description": "AID of the holder: the issuee, and also the issuer, because this credential is self-issued",

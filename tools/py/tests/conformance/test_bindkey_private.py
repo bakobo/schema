@@ -116,3 +116,18 @@ def test_every_negative_fixture_is_refused_and_pins_this_schema() -> None:
         instance = json.loads(path.read_text())
         assert instance["s"] == _schema()["$id"], path.name
         _refused(instance)
+
+
+@pytest.mark.parametrize("where", ["top", "block"])
+@pytest.mark.parametrize("nonce", ["", "0A" + "x" * 21])
+def test_a_nonce_without_a_128_bit_salt_s_length_is_refused(where: str, nonce: str) -> None:
+    """Copilot on #11: an empty nonce blinds nothing (@kakslwv3)."""
+    instance = _example()
+    (instance if where == "top" else instance["a"])["u"] = nonce
+    _refused(instance)
+
+
+def test_the_schema_floors_both_nonces_at_24_characters() -> None:
+    schema = _schema()
+    assert schema["properties"]["u"]["minLength"] == 24
+    assert schema["properties"]["a"]["oneOf"][1]["properties"]["u"]["minLength"] == 24
