@@ -1,0 +1,6 @@
+{
+  "d": "ELGhB_hackGxbEGXJFS5joB4w1FsBHCxvYsF14cOltoL",
+  "evidenceNotEndorsement": "The issuer records which checks it ran on a foreign credential and what they found at verifiedAt. It does not endorse the foreign issuer's claims, and a verifier MUST NOT read this credential as asserting any of them.",
+  "checksAsOfVerifiedAt": "Every check describes the foreign credential as it stood at verifiedAt. A later revocation of the foreign credential or its certificates is not reflected here, and a verifier relying on current standing MUST check the foreign credential itself.",
+  "noClaimValues": "This credential carries no claim value from the foreign credential. The issuer MUST NOT add personal data from it, and a holder presenting this credential discloses only that the listed checks ran."
+}

@@ -1,0 +1,247 @@
+{
+  "$id": "EF5YZr7JLPNXKbq1PEnpTf1IsrgxLFZyVqfoR_vniUgY",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Foreign Evidence",
+  "description": "A reissuer's record that it verified a credential Bakobo did not produce, by that credential's own rules: its format and type, its issuer and certificate chain, the trust anchor, the checks that ran and those that could not, and when. Issued to the holder who presented it. Carries no claim value from the foreign credential.",
+  "$comment": "this.i @vho4mibp. The check vocabulary is closed; adding a check is a schema revision.",
+  "type": "object",
+  "credentialType": "ForeignEvidenceAttestation",
+  "version": "1.0.0",
+  "required": [
+    "v",
+    "d",
+    "u",
+    "i",
+    "rd",
+    "s",
+    "a",
+    "r"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type. Optional; an ACDC JSON message without it is of type acm.",
+      "type": "string"
+    },
+    "d": {
+      "description": "SAID of this credential",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+    },
+    "u": {
+      "description": "Privacy nonce",
+      "type": "string"
+    },
+    "i": {
+      "description": "AID of the reissuer that ran the checks",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+    },
+    "rd": {
+      "description": "SAID of the reissuer's registry whose TEL carries this credential's issuance and revocation",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+    },
+    "s": {
+      "description": "SAID of this schema",
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+    },
+    "a": {
+      "description": "Attributes section",
+      "oneOf": [
+        {
+          "description": "SAID of the compact attributes block",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+        },
+        {
+          "description": "Attributes block",
+          "type": "object",
+          "required": [
+            "d",
+            "u",
+            "i",
+            "dt",
+            "format",
+            "credentialType",
+            "issuerChain",
+            "trustAnchor",
+            "checks",
+            "caveats",
+            "verifiedAt"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this attributes block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "u": {
+              "description": "Privacy nonce",
+              "type": "string"
+            },
+            "i": {
+              "description": "AID of the holder who presented the foreign credential",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "dt": {
+              "description": "When this record was issued, as an ISO-8601 datetime",
+              "type": "string",
+              "format": "date-time"
+            },
+            "format": {
+              "description": "The foreign credential's format, as its typ header declared it",
+              "type": "string",
+              "enum": [
+                "dc+sd-jwt",
+                "vc+sd-jwt"
+              ]
+            },
+            "credentialType": {
+              "description": "The foreign credential's type, e.g. an SD-JWT VC vct",
+              "type": "string",
+              "minLength": 1
+            },
+            "foreignIssuer": {
+              "description": "The foreign credential's iss claim, when it carries one",
+              "type": "string",
+              "minLength": 1
+            },
+            "issuerChain": {
+              "description": "The certificates the foreign credential carried, leaf first",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "description": "One certificate, named by subject and fingerprinted",
+                "type": "object",
+                "required": [
+                  "subject",
+                  "sha256"
+                ],
+                "properties": {
+                  "subject": {
+                    "description": "The certificate's subject as an RFC 4514 string",
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "description": "Lower-case hex SHA-256 of the certificate's DER",
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "trustAnchor": {
+              "description": "The anchor the chain was validated against",
+              "type": "object",
+              "required": [
+                "subject",
+                "sha256"
+              ],
+              "properties": {
+                "subject": {
+                  "description": "The certificate's subject as an RFC 4514 string",
+                  "type": "string"
+                },
+                "sha256": {
+                  "description": "Lower-case hex SHA-256 of the certificate's DER",
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              },
+              "additionalProperties": false
+            },
+            "checks": {
+              "description": "The checks that ran, from a closed vocabulary (this.i @vho4mibp)",
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "size-bound",
+                  "framing",
+                  "typ",
+                  "x5t-thumbprint",
+                  "chain",
+                  "certificate-revocation",
+                  "signature",
+                  "time-window",
+                  "issuer-binding",
+                  "disclosure-digests",
+                  "key-binding",
+                  "status-list"
+                ]
+              }
+            },
+            "caveats": {
+              "description": "Checks that could not be performed, as Bakobo warning codes",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^w\\.[a-z0-9-]+(\\.[a-z0-9-]+)+\\.[fr]$"
+              }
+            },
+            "verifiedAt": {
+              "description": "The moment the checks were made against, as an ISO-8601 datetime",
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "description": "Rules section",
+      "oneOf": [
+        {
+          "description": "SAID of the compact rules block",
+          "type": "string",
+          "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+        },
+        {
+          "description": "Rules detail",
+          "type": "object",
+          "required": [
+            "d",
+            "evidenceNotEndorsement",
+            "checksAsOfVerifiedAt",
+            "noClaimValues"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of this rules block",
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
+            },
+            "evidenceNotEndorsement": {
+              "description": "evidenceNotEndorsement clause",
+              "type": "string",
+              "const": "The issuer records which checks it ran on a foreign credential and what they found at verifiedAt. It does not endorse the foreign issuer's claims, and a verifier MUST NOT read this credential as asserting any of them."
+            },
+            "checksAsOfVerifiedAt": {
+              "description": "checksAsOfVerifiedAt clause",
+              "type": "string",
+              "const": "Every check describes the foreign credential as it stood at verifiedAt. A later revocation of the foreign credential or its certificates is not reflected here, and a verifier relying on current standing MUST check the foreign credential itself."
+            },
+            "noClaimValues": {
+              "description": "noClaimValues clause",
+              "type": "string",
+              "const": "This credential carries no claim value from the foreign credential. The issuer MUST NOT add personal data from it, and a holder presenting this credential discloses only that the listed checks ran."
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

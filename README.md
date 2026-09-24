@@ -31,6 +31,7 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 | [dossier-base](dossier-base/) | base schema for verifiable dossiers (issuer-curated evidence) |
 | [faa](faa/) | a tamper-evident cryptographic identity for arbitrary binary data |
 | [face-to-face](face-to-face/) | issuer knows the issuee to be a human, from in-person contact |
+| [foreign-evidence](foreign-evidence/) | a reissuer's record of the checks it ran on a foreign credential, with no claim value |
 | [org-vet](org-vet/) | authenticate an org at an explicit level of assurance |
 | [proof-of-control](proof-of-control/) | issuee demonstrated control of a digital resource |
 | [sedi-iar](sedi-iar/) | Sam Smith's identity assurance receipt, pinned to keripy `ec307cd74` |
