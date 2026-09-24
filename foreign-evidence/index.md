@@ -7,7 +7,7 @@ A reissuer's record that it verified a credential Bakobo did not produce, by tha
 - `format` and `credentialType`: the foreign credential's declared media type and its type, e.g. `dc+sd-jwt` and `urn:eudi:pid:1`.
 - `foreignIssuer`: its `iss`, when it has one.
 - `issuerChain` and `trustAnchor`: every certificate it carried and the anchor the chain was validated against, each by subject and SHA-256 of the DER.
-- `checks`: the checks that ran, from a closed vocabulary. Each name is one piece of the verifier, so a record cannot claim a check no implementation performs.
+- `checks`: every check in a closed vocabulary, in a fixed order, each with its outcome: `passed` (it ran and held) or `not-performed` (it did not run, and `caveats` says why). Each name is one piece of the verifier, so a record cannot claim a check no implementation performs. There is no `failed`: a failed check refuses the credential, and a refused credential yields no record.
 - `caveats`: the checks that could not run, as Bakobo warning codes (`w.…`).
 - `verifiedAt`: the moment the checks were made against.
 

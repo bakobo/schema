@@ -42,9 +42,20 @@ def test_the_schema_names_itself_and_is_registered() -> None:
     assert schema["version"] == "1.0.0"
 
 
-def test_the_check_vocabulary_is_closed_and_exact() -> None:
-    block = _schema()["properties"]["a"]["oneOf"][1]
-    assert block["properties"]["checks"]["items"]["enum"] == CHECKS
+def test_every_check_is_pinned_in_order_with_an_outcome() -> None:
+    """Copilot on #12: the whole vocabulary, each {name, outcome}, one position per check."""
+    checks = _schema()["properties"]["a"]["oneOf"][1]["properties"]["checks"]
+    assert [item["properties"]["name"]["const"] for item in checks["prefixItems"]] == CHECKS
+    assert checks["items"] is False and checks["minItems"] == len(CHECKS)
+    for item in checks["prefixItems"]:
+        assert item["properties"]["outcome"]["enum"] == ["passed", "not-performed"]
+        assert item["required"] == ["name", "outcome"]
+
+
+def test_the_example_records_every_check():
+    checks = _example()["a"]["checks"]
+    assert [c["name"] for c in checks] == CHECKS
+    assert {c["outcome"] for c in checks} == {"passed", "not-performed"}
 
 
 def test_the_example_validates_and_is_saidified() -> None:
@@ -63,9 +74,16 @@ def test_the_example_carries_no_claim_value() -> None:
 
 
 @pytest.mark.parametrize("mutate", [
-    lambda a: a.update(checks=["signature", "vibes"]),
+    lambda a: a["checks"][0].update(outcome="failed"),
+    lambda a: a["checks"][0].update(outcome="skipped"),
+    lambda a: a["checks"][0].update(name="vibes"),
+    lambda a: a["checks"].pop(),
+    lambda a: a["checks"].append({"name": "signature", "outcome": "passed"}),
+    lambda a: a["checks"].reverse(),
+    lambda a: a["checks"][0].pop("outcome"),
+    lambda a: a["checks"][0].update(note="extra"),
+    lambda a: a.update(checks=[c["name"] for c in a["checks"]]),
     lambda a: a.update(checks=[]),
-    lambda a: a.update(checks=["signature", "signature"]),
     lambda a: a.update(format="jwt"),
     lambda a: a.update(verifiedAt="yesterday"),
     lambda a: a["issuerChain"][0].update(sha256="nothex"),
@@ -75,7 +93,8 @@ def test_the_example_carries_no_claim_value() -> None:
     lambda a: a.pop("checks"),
     lambda a: a.pop("i"),
     lambda a: a.update(caveats=["not a code"]),
-], ids=["unknown-check", "no-checks", "duplicate-check", "bad-format", "bad-time",
+], ids=["outcome-failed", "outcome-unknown", "unknown-check", "missing-check", "extra-check",
+        "reordered", "no-outcome", "extra-member", "bare-names", "no-checks", "bad-format", "bad-time",
         "bad-digest", "empty-chain", "claim-value", "anchor-no-digest", "missing-checks",
         "missing-issuee", "bad-caveat"])
 def test_anything_else_is_refused(mutate) -> None:

@@ -1,5 +1,5 @@
 {
-  "$id": "EF5YZr7JLPNXKbq1PEnpTf1IsrgxLFZyVqfoR_vniUgY",
+  "$id": "EAfGFgQdYLq0Ao0QKngUxkNNWd5SZFF3E_ALuhroW9jV",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Foreign Evidence",
   "description": "A reissuer's record that it verified a credential Bakobo did not produce, by that credential's own rules: its format and type, its issuer and certificate chain, the trust anchor, the checks that ran and those that could not, and when. Issued to the holder who presented it. Carries no claim value from the foreign credential.",
@@ -158,27 +158,264 @@
               "additionalProperties": false
             },
             "checks": {
-              "description": "The checks that ran, from a closed vocabulary (this.i @vho4mibp)",
+              "description": "Every check in the vocabulary, in order, each with its outcome (this.i @vho4mibp). passed means it ran and held; not-performed means it did not run, and caveats says why. There is no failed: a failed check refuses the credential, which then yields no record.",
               "type": "array",
-              "minItems": 1,
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "size-bound",
-                  "framing",
-                  "typ",
-                  "x5t-thumbprint",
-                  "chain",
-                  "certificate-revocation",
-                  "signature",
-                  "time-window",
-                  "issuer-binding",
-                  "disclosure-digests",
-                  "key-binding",
-                  "status-list"
-                ]
-              }
+              "minItems": 12,
+              "items": false,
+              "prefixItems": [
+                {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "outcome"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "size-bound"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "not-performed"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "outcome"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "framing"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "not-performed"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "outcome"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "typ"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "not-performed"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "outcome"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "x5t-thumbprint"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "not-performed"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "outcome"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "chain"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "not-performed"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "outcome"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "certificate-revocation"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "not-performed"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "outcome"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "signature"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "not-performed"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "outcome"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "time-window"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "not-performed"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "outcome"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "issuer-binding"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "not-performed"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "outcome"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "disclosure-digests"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "not-performed"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "outcome"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "key-binding"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "not-performed"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "outcome"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "status-list"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "passed",
+                        "not-performed"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
             },
             "caveats": {
               "description": "Checks that could not be performed, as Bakobo warning codes",

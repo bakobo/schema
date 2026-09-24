@@ -1,13 +1,13 @@
 {
-  "v": "ACDCCAACAAJSONAAew.",
+  "v": "ACDCCAACAAJSONAAla.",
   "t": "acm",
-  "d": "EIvXCi7R5yUQryGnUAL1O60q5N_s-Cbi_hf7dTIQThIv",
+  "d": "ELufJhGSWlxZgh6rQgmHh-27JWJJjNv-c7TM68DFXOxB",
   "u": "0ADUwiKlTCMXb-ppR5bvLJQF",
   "i": "EASQ29X2bmJ72RpqJaoAj1q14TPlUtp1XFeCSSMnAAr1",
   "rd": "EAOctA0jYqNRqic7jNqqlSOVyaiVSevDocIdsDRtZpsO",
-  "s": "EF5YZr7JLPNXKbq1PEnpTf1IsrgxLFZyVqfoR_vniUgY",
+  "s": "EAfGFgQdYLq0Ao0QKngUxkNNWd5SZFF3E_ALuhroW9jV",
   "a": {
-    "d": "EMG1cawa1ZYj3e2tx95vQjUeE9TvJ2fZrifT8pZm1hhM",
+    "d": "ENQicmE66N_zSDLoVRhZyADq24U8ht06JGfTLdQ_P2Yr",
     "dt": "2026-08-28T12:00:00+00:00",
     "format": "dc+sd-jwt",
     "credentialType": "urn:eudi:pid:1",
@@ -22,8 +22,54 @@
       "sha256": "f5d8b03daf986de86202f886b98dc42a05bab4486ba3e262e9c5760bdf5c4500"
     },
     "checks": [
-      "signature",
-      "vibes"
+      {
+        "name": "size-bound",
+        "outcome": "passed"
+      },
+      {
+        "name": "framing",
+        "outcome": "passed"
+      },
+      {
+        "name": "typ",
+        "outcome": "passed"
+      },
+      {
+        "name": "x5t-thumbprint",
+        "outcome": "not-performed"
+      },
+      {
+        "name": "chain",
+        "outcome": "passed"
+      },
+      {
+        "name": "certificate-revocation",
+        "outcome": "passed"
+      },
+      {
+        "name": "signature",
+        "outcome": "failed"
+      },
+      {
+        "name": "time-window",
+        "outcome": "passed"
+      },
+      {
+        "name": "issuer-binding",
+        "outcome": "not-performed"
+      },
+      {
+        "name": "disclosure-digests",
+        "outcome": "passed"
+      },
+      {
+        "name": "key-binding",
+        "outcome": "not-performed"
+      },
+      {
+        "name": "status-list",
+        "outcome": "not-performed"
+      }
     ],
     "caveats": [
       "w.proof.identity.unbindable.f",

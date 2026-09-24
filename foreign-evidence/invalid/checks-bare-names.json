@@ -14,7 +14,7 @@
     "issuerChain": [
       {
         "subject": "C=UT,O=EUDI Wallet Reference Implementation,2.5.4.97=LEIEU-123456789,CN=PID DS - 002",
-        "sha256": "nothex"
+        "sha256": "e62c5d3cc29089acbb934e9811d441cc10e0b6dde8a292c5e4239e632e645419"
       }
     ],
     "trustAnchor": {
@@ -22,54 +22,18 @@
       "sha256": "f5d8b03daf986de86202f886b98dc42a05bab4486ba3e262e9c5760bdf5c4500"
     },
     "checks": [
-      {
-        "name": "size-bound",
-        "outcome": "passed"
-      },
-      {
-        "name": "framing",
-        "outcome": "passed"
-      },
-      {
-        "name": "typ",
-        "outcome": "passed"
-      },
-      {
-        "name": "x5t-thumbprint",
-        "outcome": "not-performed"
-      },
-      {
-        "name": "chain",
-        "outcome": "passed"
-      },
-      {
-        "name": "certificate-revocation",
-        "outcome": "passed"
-      },
-      {
-        "name": "signature",
-        "outcome": "passed"
-      },
-      {
-        "name": "time-window",
-        "outcome": "passed"
-      },
-      {
-        "name": "issuer-binding",
-        "outcome": "not-performed"
-      },
-      {
-        "name": "disclosure-digests",
-        "outcome": "passed"
-      },
-      {
-        "name": "key-binding",
-        "outcome": "not-performed"
-      },
-      {
-        "name": "status-list",
-        "outcome": "not-performed"
-      }
+      "size-bound",
+      "framing",
+      "typ",
+      "x5t-thumbprint",
+      "chain",
+      "certificate-revocation",
+      "signature",
+      "time-window",
+      "issuer-binding",
+      "disclosure-digests",
+      "key-binding",
+      "status-list"
     ],
     "caveats": [
       "w.proof.identity.unbindable.f",
