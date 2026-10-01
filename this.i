@@ -388,6 +388,68 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
             container fails the conformance suite. CROSS-REPO: heti's tests/produce/test_end_to_end.py pins
             this schema's raw JSON in GCD_SHAPED_RAW (@enr3eg) and any consumer pinning the 3.0.0 SAID must
             repoint; tracked as tick 2zy3.
+        GCD 4.0.0 names the targets of acts and who may designate them; acts and targets are one constraint = decision:
+          id: yivcussv
+          why: >
+            DRIVER — the confused deputy (Hardy, 1988). A deputy supplies its own authority to an object
+            someone else chose; "designation" is the capability literature's word for choosing which object an
+            act applies to. Through 3.1.0 a GCD grants a region of act space (acts, domains, monetaryLimit) and
+            names no objects, so every check passes when a stranger picks the target: an accounts-payable
+            delegate allowed to pay invoices up to 500 USD, told by a forged supplier email to pay invoice 123
+            to a new IBAN, signs a payment instruction that a bank verifies in full and pays to the attacker.
+            ZCAP avoids this by naming an invocationTarget, but ZCAP verification is closed-loop and a GCD must
+            stay open-loop. GCD's own prose already admitted the hole: the gate is "derived per act from its
+            points and its target", and no field carried a target. CHANGE: a.constraints gains `targets`, an
+            OR-set of entries in two shapes. A NAMED target {kind, id} is designation at grant time: the
+            principal chose the object in advance, and a stranger checks the act's target against the
+            credential alone, with no evidence about who asked. A DESIGNATOR entry {kind, designatedBy} is
+            designation at act time: designatedBy is "any", {aids: [...]} (a target named in a request signed
+            by one of these AIDs), or {proof: SAID} (a target named by a party who satisfies that proof
+            request). Either shape may carry its own `acts`, which only narrows. kind "*" (every kind) is
+            allowed only on a designator entry, so a wildcard can never stand in for a named object. THE
+            STRUCTURAL RULE (Daniel, 2026-10-01): an act is located by (effect, state-kind, target), so acts
+            and targets are ONE logical constraint spelled in two keys — `dependentRequired: {acts: [targets]}`.
+            This keeps the "absent = unconstrained" rule intact at the level of the constraint: with neither
+            key present, act space is unconstrained as before; targets without acts means any act on these
+            targets only; acts without targets is invalid, so a grant that names act points must say whose
+            designations count, and "anyone" is a declaration ({kind, designatedBy: "any"}), never a default. A
+            target whose kind no entry names is denied. MATCHING (from tefa @2buy5hdu, measured in
+            src/tefa/designation.py): exact over a canonical form defined per kind, because a loose comparison
+            is a bypass; a kind the verifier does not know matches nothing. Standard kinds are aid and said
+            (equality over qb64) and iban (ISO 13616 electronic format, check digits verified by the verifier,
+            since JSON Schema cannot); url and path are left out on purpose, because their containment is
+            prefix-shaped and canonicalizing them is where tefa's bypass list lives; a gfw may define more. An
+            act whose target the grant itself fixes (a duty-driven act) satisfies targets only where the gfw or
+            the protocol binding says that act kind carries no target; otherwise the verifier finds nothing to
+            check and denies. The proof-request object behind {proof: SAID} is ONE object shared with
+            constraints.proofs: its core is the IPEX apply payload (schema, attribute labels, aggregate-element
+            labels) so a verifier can forward it verbatim, plus what apply lacks — acceptable issuers, and a
+            targeted credential whose presenter is its issuee, compared explicitly because heti's admit refuses
+            only a sender who is neither issuee nor issuer. Its schema is a separate artifact and lands
+            separately (tick to follow); this schema references it by SAID, exactly as proofs already does.
+            REJECTED — restructuring acts into {target, points} pairs (the EVAC synthesis's merge): a verifier
+            from the 3.x era that half-reads an object entry in a key it knows can drop the target and
+            over-authorize, whereas a new key in constraints is unknown to it, so rule 1's fail-closed denial
+            comes for free. REJECTED — leaving "anyone" as the absence of targets: that
+            is the most permissive stance and must be declared. REJECTED — demoting act-time designation to a
+            delegate duty: a duty is invisible to the counterparty, so it
+            fails exactly when the delegate is confused or compromised, which is the case this exists for; its
+            costs (the act must carry the designating request, revealing the requester) are opt-in per entry.
+            TRADEOFFS ACCEPTED: every verifier sees the whole target list (constraints are not graduated-
+            disclosure-friendly), which may expose a principal's vendors; a salted-digest entry is a possible
+            later form. A new named target means reissuance — for the bank-detail-change fraud that is the
+            point, since it forces the change through the one party with standing to make it. Designation
+            chains get no depth: the designator must sign the designating request itself. What it does not
+            stop: payload attacks (paying a fake invoice to a real vendor's account) and a qualifying designator
+            who designates dishonestly. GRADING & CASCADE: requiring targets alongside acts invalidates every
+            3.x instance that carries acts, so MAJOR per RFC-0430 grading (@k3wm7d): 3.1.0 -> 4.0.0, and per
+            @r5vk3n 3.1.0 is archived byte-identical at gcd-3.1.0/ under its SAID
+            EDqAod5ZiCNfQziVHjOALNNRabw2iwpAYqqOsEXUcxm5, which stays registered; credentials issued under it
+            keep 3.1.0's meaning. rules.json is untouched (its SAID still resolves). Cascade: schema $id,
+            registry.json, example.json, the gallery, and the negative corpus. Consumers pinning 3.1.0 (heti's
+            GCD_SHAPED_RAW above all) may stay on it or repoint; tracked alongside tick 2zy3. Origin: bakobo/schema
+            tick 5eok; the act-time designator forms beyond aids wait on tefa tick 45p5 for implementation
+            evidence, and the schema admits them now so that evidence has somewhere to land.
     face-to-face is hardened as a proof-of-personhood primitive for AI-proscribed contexts (v1.2.0) = decision:
       id: hp4mk7
       stage-status: done
