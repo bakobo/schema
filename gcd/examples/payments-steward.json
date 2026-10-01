@@ -1,67 +1,64 @@
 {
-  "v": "ACDCCAACAAJSONAA88.",
+  "v": "ACDCCAACAAJSONAA3A.",
   "t": "acm",
-  "d": "EOUUV4OyH41Ya0uQiLDNGJ0b0IJmGO7PF3BP7vAMFK1Z",
-  "i": "EMVRTCnDB1rX2xHfQSEHmq-2QWJt6z7dOt4mHOZrLCO9",
-  "rd": "EHS30vlXk7_NoZMPMU6yiqf1_6zqRyQYZAU6oMyjBuhB",
+  "d": "EMsA0ju0dGKf8IAZU-1ZLAwgl3QPCxiG7f4S17hg7ed-",
+  "i": "EAvj3i1ocHuQ__5Wv7cpThwSf-_ZTSOLXUfySwR_nPUz",
+  "rd": "EH6aSaly6WwPkzWv5quTAwQq5cj1Om4llul-NGlxfLec",
   "s": "EO94qOAXKvls3FbMIl02mlyRBDXe0MydS6y2CchJkjqT",
   "a": {
-    "d": "EOa7CoHyK3c4HVg835F1aTFf9GTszMT24wwjuOJ_dJYg",
-    "i": "EEAq2oRYKymMNKnRJF_Fb2lAMcqr-6scGxJQRq3kPOsH",
-    "dt": "2026-08-01T09:00:00.000000+00:00",
-    "gfw": "EPuKongCyb6j6jh8tQ1iVya26rXSy-XDFEA7PCa2I1kU",
+    "d": "EDIMo2bnaw7r0FSdQTYO-H1Uykxm0OgUNSeMd68m6Qh-",
+    "i": "EDP2pw3_Ls1wpIo1C9HgbPPEqO-KMejrxhSxD4ZhWnes",
+    "dt": "2026-10-01T09:00:00.000000+00:00",
+    "gfw": "EFLrzqVi1cNYkgUAaoNvhaO4eqE6KYu3qO7NQQfGBeT_",
     "facet": {
-      "role": "guardian",
-      "relationType": "guardianship",
-      "liableParty": "EEAq2oRYKymMNKnRJF_Fb2lAMcqr-6scGxJQRq3kPOsH",
-      "presentsAs": "EL0QGP-mEO4bSrYqcgXs2ZpxGYQN-h4_0gFhQYj5C1u7",
-      "exerciseMode": "both"
+      "role": "accounts-payable-agent",
+      "relationType": "delegation",
+      "liableParty": "EAvj3i1ocHuQ__5Wv7cpThwSf-_ZTSOLXUfySwR_nPUz",
+      "presentsAs": "EDP2pw3_Ls1wpIo1C9HgbPPEqO-KMejrxhSxD4ZhWnes",
+      "exerciseMode": "act"
     },
     "constraints": {
       "goals": [
-        "care.medical",
-        "care.education",
-        "manage.finances"
+        "pay.invoice"
       ],
       "acts": [
-        "observe {commitment, resource, relationship}",
-        "create {commitment, resource, relationship}",
-        "modify {commitment, resource, relationship}",
-        "preserve {commitment, resource, relationship}"
+        "create commitment",
+        "observe {commitment, record}"
       ],
       "targets": [
         {
-          "kind": "*",
-          "designatedBy": "any"
+          "kind": "iban",
+          "id": "DE89370400440532013000"
+        },
+        {
+          "kind": "iban",
+          "id": "GB33BUKB20201555555555"
+        },
+        {
+          "kind": "iban",
+          "designatedBy": {
+            "proof": "EJwz6KQCVLMK9QjAdLg5F4NbUbaPj3pb8R5edYKgQnvS"
+          },
+          "acts": [
+            "observe {commitment, record}"
+          ]
         }
       ],
-      "jurisdictions": [
-        "US-CA"
-      ],
-      "monetaryLimit": "10000 USD",
-      "humanReview": "Medical decisions with irreversible consequences require review by a licensed physician and the court-appointed advocate before the guardian may act.",
-      "validFrom": "2026-08-01T00:00:00.000000+00:00",
-      "validUntil": "2032-06-15T00:00:00.000000+00:00"
-    },
-    "terminatingEvents": [
-      "EBpComIVGhgQ4u4IVgRKdZV0Qr2_zf7FArcg9dN06Vdf",
-      "EB1utwap1yEUA_ig9OYic1fJFrgIneE-_Bs5iSIqNNsv"
-    ],
-    "disclosables": [
-      "EG7tvCBSSDy8C2UA-gjO5V061MetqZ7jycT6DWmYdQBm",
-      "EPkMPCEtExJ-ZQvaFCMrpq0PCynvksNWd6qdJryMykUl"
-    ]
+      "monetaryLimit": "500 USD",
+      "validFrom": "2026-10-01T00:00:00.000000+00:00",
+      "validUntil": "2027-04-01T00:00:00.000000+00:00"
+    }
   },
   "e": {
-    "d": "EL_CbhG4hksxVaTfj7bccLEZJrpA71ARp7FT_pYmBtl3",
+    "d": "EDZ4ASGy1w07P33pAs1N-E3r6uTvSSoBD0bdXP_jHkeY",
     "issuer": {
-      "n": "ECrRqxp4-M-dQ7LeAaOfQlhKaDHYxN5luJBPG2r-Um6V",
-      "s": "EBl3GZnDld385uFmgxizkBGcVhyWm8SqLwm1FthHE5Me",
+      "n": "EArwMZWID4KGbJ46N4KlI6stXluqbZMqo51mKXKdaEvB",
+      "s": "EI_JITtNnoaajhsW6RXkvb1RleFfRN3DLukiRjxyKL8k",
       "o": "I2I"
     }
   },
   "r": {
-    "d": "EC0VpLS8WGMdXXIq_30KiuncaSe7hYhIAJQjkSQ4cK4z",
+    "d": "EKc862MUbtoi9xqRIqIar_6BtLOwvBOJPVGcc8hd-x8D",
     "noRoleSemanticsWithoutGfw": "All parties agree that the role field has no enforceable semantics unless the gfw field is also defined, and its rules formally describe what the role means.",
     "issuerNotResponsibleOutsideConstraints": "Although verifiers set their own standards for verification, verifiers and issuees/delegates agree that they cannot not use this credential as proof that delegator has the right to exercise delegated authority under conditions when the constraints say otherwise.",
     "noConstraintOutsideConstraints": "All parties agree that enforceable constraints exist only inside the constraints container, or in the role field when gfw is defined. Nothing outside the constraints container constrains the exercise of delegated authority, and an unrecognized key inside the constraints container MUST be treated as fail-closed. This allows verifiers to know with confidence whether all constraints have been satisfied, even if they do not recognize other fields elsewhere in the credential.",
@@ -76,10 +73,10 @@
       },
       {
         "bearer": "delegate",
-        "effect": "preserve",
-        "goal": "care.medical",
-        "cadence": "ongoing",
-        "priority": 1
+        "effect": "create",
+        "goal": "pay.invoice",
+        "cadence": "within 24h of each payment",
+        "priority": 2
       }
     ]
   }

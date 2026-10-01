@@ -1,12 +1,12 @@
 {
-  "v": "ACDCCAACAAJSONAA38.",
+  "v": "ACDCCAACAAJSONAA6O.",
   "t": "acm",
-  "d": "EK6l7HwTcCswYZ7y8tw5PqDlSfZvVThnUs5Q-0QRgLR2",
+  "d": "ECu18VW-7lE3mg75v0UUA9Fqn0eUKG9z2gvXeZVTO_pv",
   "i": "EO208tzf2dCxspgkL427V3GtLp0S1JbxCeYRMOrSWDS8",
   "rd": "EN5b7q6dMXIC9L0jzZFB7DiHBq0JrvU6ASWeJ0pnogK0",
-  "s": "EDqAod5ZiCNfQziVHjOALNNRabw2iwpAYqqOsEXUcxm5",
+  "s": "EO94qOAXKvls3FbMIl02mlyRBDXe0MydS6y2CchJkjqT",
   "a": {
-    "d": "EJxNFCzEw8N3dLYAPGLvPMxTk4pu1Dm_0MfL9B8zsPEg",
+    "d": "EMCHulKuph4noK7R9Vq7W2uVHd8qViHEASB-OCT-vLJ2",
     "i": "ECs3P_4LYTH8DZ8EPaJclUBR8f_VzfN6XIF07Cp9ZloU",
     "dt": "2026-08-01T09:00:00.000000+00:00",
     "gfw": "EOri-GbJjnMy8Qkk7DL2UwAp0HK84olXu8If6VqRYVAi",
@@ -26,6 +26,16 @@
         "observe {info, resource}",
         "modify {info, resource}",
         "preserve {info, resource}"
+      ],
+      "targets": [
+        {
+          "kind": "aid",
+          "id": "EInaxtA1xaVBEjH9MC8A72LjU7clUwR88eiRt_ZHXISc"
+        },
+        {
+          "kind": "aid",
+          "id": "EEMUndi-VpDwOKJiSnVqUHJBzeQE_5nsustyqIWNfSRd"
+        }
       ],
       "virtGeos": [
         "US",

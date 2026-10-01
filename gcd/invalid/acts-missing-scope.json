@@ -5,7 +5,7 @@
   "u": "0ADE6oAxBl4E7uKeGUb7BEYi",
   "i": "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL",
   "rd": "EM2YZ78SKE8eO4W1lQOJeer5xKZqLmJV7SPr3Ji5DMBZ",
-  "s": "EDqAod5ZiCNfQziVHjOALNNRabw2iwpAYqqOsEXUcxm5",
+  "s": "EO94qOAXKvls3FbMIl02mlyRBDXe0MydS6y2CchJkjqT",
   "a": {
     "d": "EFSYtX23kKdRryp-q6pYpAL-8463P0df5N2ei9LdGI19",
     "u": "0AC9kH8q99PTCQNteGyI-F4g",
@@ -25,6 +25,16 @@
       ],
       "acts": [
         "create"
+      ],
+      "targets": [
+        {
+          "kind": "*",
+          "designatedBy": {
+            "aids": [
+              "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL"
+            ]
+          }
+        }
       ],
       "domains": [
         "payments"

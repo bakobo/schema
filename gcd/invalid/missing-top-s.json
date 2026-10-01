@@ -25,6 +25,16 @@
       "acts": [
         "{observe, create} commitment"
       ],
+      "targets": [
+        {
+          "kind": "*",
+          "designatedBy": {
+            "aids": [
+              "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL"
+            ]
+          }
+        }
+      ],
       "domains": [
         "payments"
       ],
