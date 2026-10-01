@@ -13,7 +13,7 @@ FOLDER = ROOT / "gcd"
 ARCHIVE = ROOT / "gcd-3.1.0"
 PRIOR_SAID = "EDqAod5ZiCNfQziVHjOALNNRabw2iwpAYqqOsEXUcxm5"
 AID = "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL"
-PROOF = "EGZ_DdmzryjQOtOdQauTm_YxggbVM7EWelk8IBxsnC-d"
+PROOF = "EGZ_DdmzryjQOtOdQauTm_YxggbVM7EWelk8IBxsnC-d"  # a placeholder until proof requests exist (~6jpj)
 IBAN = "DE89370400440532013000"
 
 
