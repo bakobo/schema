@@ -1,0 +1,124 @@
+{
+  "$id": "EB8WttQdlE8T_wZCGhbOJv3BVhhm6ftr4JMKyp35xftj",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SEDI Ballot Packet Possession Receipt",
+  "description": "Provisional Bakobo profile: a county clerk attests that a verified voter held a mail-in ballot packet at a point in time. It says nothing about the voter or the ballot.",
+  "credentialType": "SEDI_Ballot_Packet_Receipt",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "v",
+    "t",
+    "d",
+    "i",
+    "rd",
+    "s",
+    "a"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type",
+      "const": "acm"
+    },
+    "d": {
+      "description": "Credential SAID",
+      "type": "string"
+    },
+    "u": {
+      "description": "Top-level nonce, at least a CESR 128-bit salt",
+      "type": "string",
+      "minLength": 24
+    },
+    "i": {
+      "description": "County clerk issuer AID",
+      "type": "string"
+    },
+    "rd": {
+      "description": "Clerk-owned registry SAID, so the clerk can revoke a receipt for a packet it later rejects",
+      "type": "string"
+    },
+    "s": {
+      "description": "Schema Section",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "a": {
+      "description": "Receipt attributes",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "d",
+            "u",
+            "i",
+            "election",
+            "packet",
+            "request",
+            "exchange",
+            "heldAt",
+            "basis"
+          ],
+          "properties": {
+            "d": {
+              "type": "string"
+            },
+            "u": {
+              "type": "string",
+              "minLength": 24,
+              "description": "Attribute nonce, at least a CESR 128-bit salt, so a guessed packet cannot be confirmed by recomputing this section's SAID"
+            },
+            "i": {
+              "description": "The holder AID that presented; a per-copy AID, never the SEDI Management AID",
+              "type": "string"
+            },
+            "election": {
+              "description": "Election identifier printed on the packet",
+              "type": "string",
+              "minLength": 1
+            },
+            "packet": {
+              "description": "Return-envelope packet identifier printed on the packet, never on the ballot card",
+              "type": "string",
+              "minLength": 1
+            },
+            "request": {
+              "description": "SAID of the clerk-signed request the packet's QR code carried",
+              "type": "string",
+              "minLength": 1
+            },
+            "exchange": {
+              "description": "SAID of the IPEX grant the holder presented in answer to that request",
+              "type": "string",
+              "minLength": 1
+            },
+            "heldAt": {
+              "description": "When the clerk verified the presentation, as an RFC 3339 date-time by the clerk's clock; the holder's KEL seal of the exchange timestamps it independently",
+              "type": "string",
+              "format": "date-time"
+            },
+            "basis": {
+              "description": "Schema SAID of the credential whose disclosure the clerk matched against the voter roll",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}
