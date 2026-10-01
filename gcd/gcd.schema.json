@@ -1,5 +1,5 @@
 {
-  "$id": "EO94qOAXKvls3FbMIl02mlyRBDXe0MydS6y2CchJkjqT",
+  "$id": "EK6LXCHdkwld-YU_Fa1CuwkCxATZl2B9xwvFZp19gprO",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Generalized Cooperative Delegation Credential",
   "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 4.0 names the targets of acts (constraints.targets): the objects a delegate may act on, or who may designate them, so a delegate cannot be made a confused deputy by a stranger who chooses where its authority lands; acts and targets are one constraint, so a credential that grants acts must also say which targets. Version 3.1 admits custom keys inside the constraints container and inside a duty, so an issuer can express a constraint or obligation the standard fields do not cover; the fail-closed rule on an unrecognized constraint key is unchanged, but it is now enforced by the verifier rather than by schema validation. Version 3.0 adopts the ACDC v2 envelope (acm/JSON: rd replaces ri, message type t, most-compact-form SAIDs). Version 2.0 organized the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classed duties in the rules block.",
@@ -161,7 +161,7 @@
                   }
                 },
                 "targets": {
-                  "description": "The objects the delegate may act on, or whose designation of them the delegate may act on -- the defense against a confused deputy, where a stranger chooses the target and the delegate supplies the authority. An OR-set: an act whose target is contained by SOME entry passes this field. Matching is EXACT over the kind's canonical form, because any loose comparison is a bypass. A target whose kind no entry names matches nothing, and an entry whose kind the verifier does not know matches nothing; a verifier that finds no entry containing the act's target MUST deny. An act whose target the grant itself fixes (a duty-driven act) passes only where the governance framework or the protocol binding says that act kind carries no target. Required whenever acts is present.",
+                  "description": "The objects the delegate may act on, or whose designation of them the delegate may act on -- the defense against a confused deputy, where a stranger chooses the target and the delegate supplies the authority. An OR-set: an act whose target is contained by SOME entry passes this field. Matching is EXACT over the kind's canonical form, because any loose comparison is a bypass. A target whose kind no entry names matches nothing, and an entry whose kind the verifier does not know matches nothing; a verifier that finds no entry containing the act's target MUST deny. An act whose target the grant itself fixes (a duty-driven act) passes only where the governance framework or the protocol binding says that act kind carries no target. Required whenever acts is present. Bounded: at most 1024 entries, 30 act points per entry, 64 designator AIDs, a 64-character kind and a 256-character id.",
                   "type": "array",
                   "uniqueItems": true,
                   "minItems": 1,
@@ -177,12 +177,13 @@
                         "additionalProperties": false,
                         "properties": {
                           "kind": {
-                            "description": "The kind of object, which fixes its canonical form and its containment rule. Standard kinds: aid and said (a qb64 identifier, matched by equality), iban (an ISO 13616 account number in electronic format -- no spaces, uppercase -- matched by equality; a verifier MUST also check its check digits, which this schema cannot). A governance framework (gfw) may define other kinds as lowercase dotted names. A verifier that does not know a kind MUST treat the entry as matching nothing.",
+                            "description": "The kind of object, which fixes its canonical form and its containment rule. Standard kinds: aid (a qb64 AID: Ed25519, Blake3 self-addressing, or ECDSA secp256k1/secp256r1) and said (a qb64 digest), both matched by equality, iban (an ISO 13616 account number in electronic format -- no spaces, uppercase -- matched by equality; a verifier MUST also check its check digits, which this schema cannot). A governance framework (gfw) may define other kinds as lowercase dotted names. A verifier that does not know a kind MUST treat the entry as matching nothing.",
                             "type": "string",
-                            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$"
+                            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$",
+                            "maxLength": 64
                           },
                           "id": {
-                            "description": "The object, in its kind's canonical form.",
+                            "description": "The object, in its kind's canonical form. The pattern admits only the qb64 derivation codes an aid or said can carry, with zero pad bits; a verifier MUST still parse the value as qb64 with a CESR parser, which a pattern cannot fully do.",
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 256
@@ -200,7 +201,8 @@
                                 "observe {info, record, commitment}",
                                 "{create, modify} record"
                               ]
-                            }
+                            },
+                            "maxItems": 30
                           }
                         },
                         "allOf": [
@@ -224,17 +226,30 @@
                             "if": {
                               "properties": {
                                 "kind": {
-                                  "enum": [
-                                    "aid",
-                                    "said"
-                                  ]
+                                  "const": "aid"
                                 }
                               }
                             },
                             "then": {
                               "properties": {
                                 "id": {
-                                  "pattern": "^(?:[A-Za-z0-9_-]{4}){11,22}$"
+                                  "pattern": "^(?:[BDE][A-P][A-Za-z0-9_-]{42}|1AA[ABIJ][A-Za-z0-9_-]{44})$"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "kind": {
+                                  "const": "said"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "id": {
+                                  "pattern": "^[EFGHI][A-P][A-Za-z0-9_-]{42}$"
                                 }
                               }
                             }
@@ -251,9 +266,10 @@
                         "additionalProperties": false,
                         "properties": {
                           "kind": {
-                            "description": "The kind of object, which fixes its canonical form and its containment rule. Standard kinds: aid and said (a qb64 identifier, matched by equality), iban (an ISO 13616 account number in electronic format -- no spaces, uppercase -- matched by equality; a verifier MUST also check its check digits, which this schema cannot). A governance framework (gfw) may define other kinds as lowercase dotted names. A verifier that does not know a kind MUST treat the entry as matching nothing. On a designator entry only, '*' means every kind.",
+                            "description": "The kind of object, which fixes its canonical form and its containment rule. Standard kinds: aid (a qb64 AID: Ed25519, Blake3 self-addressing, or ECDSA secp256k1/secp256r1) and said (a qb64 digest), both matched by equality, iban (an ISO 13616 account number in electronic format -- no spaces, uppercase -- matched by equality; a verifier MUST also check its check digits, which this schema cannot). A governance framework (gfw) may define other kinds as lowercase dotted names. A verifier that does not know a kind MUST treat the entry as matching nothing. On a designator entry only, '*' means every kind.",
                             "type": "string",
-                            "pattern": "^(?:\\*|[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*)$"
+                            "pattern": "^(?:\\*|[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*)$",
+                            "maxLength": 64
                           },
                           "designatedBy": {
                             "description": "Whose designation of a target the delegate may act on. 'any': anyone's, which is the most permissive stance and must be declared because it is never the default. {aids}: a target named in a request signed by one of these AIDs (the principal, or someone the principal names). {proof}: a target named by a party who satisfies the proof request with this SAID -- the same kind of object constraints.proofs references. The designator must have signed the designating request itself; a designation relayed through another party does not count.",
@@ -275,8 +291,9 @@
                                     "minItems": 1,
                                     "items": {
                                       "type": "string",
-                                      "pattern": "^(?:[A-Za-z0-9_-]{4}){11,22}$"
-                                    }
+                                      "pattern": "^(?:[BDE][A-P][A-Za-z0-9_-]{42}|1AA[ABIJ][A-Za-z0-9_-]{44})$"
+                                    },
+                                    "maxItems": 64
                                   }
                                 }
                               },
@@ -289,7 +306,7 @@
                                 "properties": {
                                   "proof": {
                                     "type": "string",
-                                    "pattern": "^(?:[A-Za-z0-9_-]{4}){11,22}$"
+                                    "pattern": "^[EFGHI][A-P][A-Za-z0-9_-]{42}$"
                                   }
                                 }
                               }
@@ -308,12 +325,14 @@
                                 "observe {info, record, commitment}",
                                 "{create, modify} record"
                               ]
-                            }
+                            },
+                            "maxItems": 30
                           }
                         }
                       }
                     ]
-                  }
+                  },
+                  "maxItems": 1024
                 },
                 "domains": {
                   "description": "Array of authorization-domain identifiers that scope where (in which authorization domain) the delegated authority applies. A domain is an issuer-defined namespace label; it is case-sensitive and compared verbatim.",

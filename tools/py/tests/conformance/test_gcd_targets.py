@@ -15,6 +15,12 @@ PRIOR_SAID = "EDqAod5ZiCNfQziVHjOALNNRabw2iwpAYqqOsEXUcxm5"
 AID = "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL"
 PROOF = "EGZ_DdmzryjQOtOdQauTm_YxggbVM7EWelk8IBxsnC-d"  # a placeholder until proof requests exist (~6jpj)
 IBAN = "DE89370400440532013000"
+ECDSA_AID = "1AAJAsBQkKhR8657x16VpIFI4zf8l98AXPn7VS6Q_1zhHpc5"
+MAX_TARGETS, MAX_ENTRY_ACTS, MAX_AIDS, MAX_KIND, MAX_ID = 1024, 30, 64, 64, 256
+EFFECTS = ["observe", "create", "modify", "preserve", "destroy"]
+KINDS = ["info", "record", "commitment", "authority", "resource", "relationship"]
+POINTS = [f"{e} {k}" for e in EFFECTS for k in KINDS]  # every point on the grid
+assert len(POINTS) == MAX_ENTRY_ACTS
 
 
 def _schema() -> dict:
@@ -144,6 +150,24 @@ def test_acts_without_targets_is_refused() -> None:
     pytest.param([{"kind": "aid", "id": AID, "acts": ["pay invoice"]}], id="entry-acts-off-grid"),
     pytest.param([{"kind": "aid", "id": AID, "acts": []}], id="entry-acts-empty"),
     pytest.param([{"kind": "aid", "id": AID, "maxAmount": "10 USD"}], id="entry-unknown-key"),
+    # qb64: a derivation code this kind admits, and zero pad bits, not just the right length
+    pytest.param([{"kind": "aid", "id": "_" * 44}], id="aid-no-derivation-code"),
+    pytest.param([{"kind": "said", "id": "_" * 44}], id="said-no-derivation-code"),
+    pytest.param([{"kind": "said", "id": "B" + AID[1:]}], id="said-with-a-key-code"),
+    pytest.param([{"kind": "aid", "id": "EZ" + AID[2:]}], id="aid-nonzero-pad-bits"),
+    pytest.param([{"kind": "aid", "designatedBy": {"aids": ["_" * 44]}}], id="designator-aid-malformed"),
+    pytest.param([{"kind": "aid", "designatedBy": {"proof": "D" + PROOF[1:]}}],
+                 id="designator-proof-not-a-said"),
+    # bounds: cap + 1 at every new collection and string
+    pytest.param([{"kind": f"k{n}", "id": "y"} for n in range(MAX_TARGETS + 1)],
+                 id="too-many-targets"),
+    pytest.param([{"kind": "aid", "id": AID, "acts": POINTS + ["observe {info, record}"]}],
+                 id="too-many-entry-acts"),
+    pytest.param([{"kind": "aid", "designatedBy": {"aids": [f"E{'A' * 42}{c}" for c in
+                   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"] + [ECDSA_AID]}}],
+                 id="too-many-designator-aids"),
+    pytest.param([{"kind": "k" * (MAX_KIND + 1), "id": "y"}], id="kind-too-long"),
+    pytest.param([{"kind": "acme.ref", "id": "y" * (MAX_ID + 1)}], id="id-too-long"),
 ])
 def test_a_malformed_target_is_refused(targets) -> None:
     instance = _with_targets(targets)
@@ -175,9 +199,22 @@ def test_targets_without_acts_is_admitted() -> None:
     pytest.param({"kind": "iban", "designatedBy": {"aids": [AID]}}, id="aid-designators"),
     pytest.param({"kind": "*", "designatedBy": {"proof": PROOF}}, id="proof-designator"),
     pytest.param({"kind": "iban", "id": IBAN, "acts": ["create commitment"]}, id="narrowed"),
+    pytest.param({"kind": "aid", "id": ECDSA_AID}, id="ecdsa-aid"),
+    pytest.param({"kind": "aid", "id": AID, "acts": POINTS}, id="entry-acts-at-cap"),
+    pytest.param({"kind": "k" * MAX_KIND, "id": "y" * MAX_ID}, id="kind-and-id-at-cap"),
 ])
 def test_a_well_formed_target_is_admitted(entry) -> None:
     _accepted(_with_targets([entry]))
+
+
+def test_targets_at_cap_are_admitted() -> None:
+    _accepted(_with_targets([{"kind": f"k{n}", "id": "y"} for n in range(MAX_TARGETS)]))
+
+
+def test_designator_aids_at_cap_are_admitted() -> None:
+    aids = [f"E{'A' * 42}{c}" for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"]
+    assert len(aids) == MAX_AIDS
+    _accepted(_with_targets([{"kind": "aid", "designatedBy": {"aids": aids}}]))
 
 
 def test_the_schema_says_unknown_kinds_match_nothing() -> None:
