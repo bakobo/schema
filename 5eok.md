@@ -1,6 +1,7 @@
 # IDEA: GCD 'designators' constraint -- whose designation of an act's TARGET the delegate may act on (principal only / holders of a credential of schema S / anyone); a credential-form defense against the confused deputy. Adopt only after tefa's designation-provenance work shows the rule is simple enough to standardize.
 kind: idea
 created: 2026-09-29T18:31Z
+closed: 2026-10-01T23:27Z
 
 - 2026-09-29T18:32Z THE PROBLEM. A confused deputy uses its own authority on a target someone else chose (Hardy 1988: a compiler with write access to a billing file is told by a user to put debug output there, and overwrites it). 'Designation' is the capability-literature word for choosing which object an action applies to. A GCD grants a region of act-space (acts, domains, monetaryLimit, ...) and names no objects, so every GCD check passes when a stranger picks the target. Example: a steward may pay invoices up to 500 USD; an email says 'pay invoice 123 to account Y'. If the principal sent it, fine. If a supplier named its own account, that is business-email compromise, and the GCD still verifies. ZCAP avoids this by construction, because a zcap names its invocationTarget, but ZCAP verification is closed-loop (the root is synthesized by the target) and a GCD must stay open-loop.
 
