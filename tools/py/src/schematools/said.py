@@ -75,10 +75,19 @@ def _saidify_children(node: dict, label: str) -> None:
     # Saider path below — so an aggregate can be self-consistent against this
     # module while failing Aggor.verifyDisclosure. That is not hypothetical: it
     # is what sedi-age shipped until this.i @lkfnoess.
+    #
+    # @5lffczug A block's SAID is computed over its most compact form: every
+    # SAID-bearing child is replaced by that child's SAID first, as keripy's
+    # Compactor does. Computing over expanded children agrees only for flat
+    # blocks.
     for value in node.values():
         if isinstance(value, dict) and label in value:
             _saidify_children(value, label)
-            _, saidified = Saider.saidify(sad=value, label=label)
+            compact = {
+                key: child[label] if isinstance(child, dict) and label in child else child
+                for key, child in value.items()
+            }
+            _, saidified = Saider.saidify(sad=compact, label=label)
             value[label] = saidified[label]
 
 
