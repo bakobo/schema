@@ -147,3 +147,12 @@ def test_a_reference_without_a_cesr_shape_is_refused(where: str, field: str, val
     instance = _example()
     (instance if where == "top" else instance["a"])[field] = value
     _refused(instance)
+
+
+@pytest.mark.parametrize("field", ["a", "s", "d"])
+@pytest.mark.parametrize("value", ["x", "E" + "A" * 42])
+def test_a_compact_section_or_said_without_a_cesr_shape_is_refused(field: str, value: str) -> None:
+    """Copilot on #14: a compacted section must still be a resolvable SAID (@zg5v5ip2)."""
+    instance = _example()
+    instance[field] = value
+    _refused(instance)

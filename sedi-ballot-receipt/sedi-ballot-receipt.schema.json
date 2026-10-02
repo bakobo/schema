@@ -1,5 +1,5 @@
 {
-  "$id": "EO4yKvwZwSfYEdlnKkJGq0wgAVX5b-UIzntMHnaYJ9_X",
+  "$id": "EHgmOzuf8cbn8ApkJthSRpIbHPVRE66EIfbOm7Detc3g",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Ballot Packet Possession Receipt",
   "description": "Provisional Bakobo profile: a county clerk attests that a verified voter held a mail-in ballot packet at a point in time. It says nothing about the voter or the ballot.",
@@ -27,7 +27,8 @@
     },
     "d": {
       "description": "Credential SAID",
-      "type": "string"
+      "type": "string",
+      "pattern": "^(?:[EFGHI][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "u": {
       "description": "Top-level nonce, at least a CESR 128-bit salt",
@@ -48,7 +49,8 @@
       "description": "Schema Section",
       "oneOf": [
         {
-          "type": "string"
+          "type": "string",
+          "pattern": "^(?:[EFGHI][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
         },
         {
           "type": "object"
@@ -59,7 +61,8 @@
       "description": "Receipt attributes",
       "oneOf": [
         {
-          "type": "string"
+          "type": "string",
+          "pattern": "^(?:[EFGHI][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
         },
         {
           "type": "object",
