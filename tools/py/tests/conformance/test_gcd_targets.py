@@ -18,7 +18,7 @@ AID = "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL"
 PROOF = "EGZ_DdmzryjQOtOdQauTm_YxggbVM7EWelk8IBxsnC-d"  # a placeholder until proof requests exist (~6jpj)
 IBAN = "DE89370400440532013000"
 ECDSA_AID = "1AAJAsBQkKhR8657x16VpIFI4zf8l98AXPn7VS6Q_1zhHpc5"
-MAX_TARGETS, MAX_ENTRY_ACTS, MAX_AIDS, MAX_KIND, MAX_ID = 1024, 30, 64, 64, 256
+MAX_TARGETS, MAX_ENTRY_ACTS, MAX_AIDS, MAX_KIND, MAX_ID, MAX_ACT = 1024, 30, 64, 64, 256, 128
 EFFECTS = ["observe", "create", "modify", "preserve", "destroy"]
 KINDS = ["info", "record", "commitment", "authority", "resource", "relationship"]
 POINTS = [f"{e} {k}" for e in EFFECTS for k in KINDS]  # every point on the grid
@@ -163,12 +163,9 @@ def test_acts_without_targets_is_refused() -> None:
     # bounds: cap + 1 at every new collection and string
     pytest.param([{"kind": f"k{n}", "id": "y"} for n in range(MAX_TARGETS + 1)],
                  id="too-many-targets"),
-    pytest.param([{"kind": "aid", "id": AID, "acts": POINTS + ["observe {info, record}"]}],
-                 id="too-many-entry-acts"),
     pytest.param([{"kind": "aid", "designatedBy": {"aids": [f"E{'A' * 42}{c}" for c in
                    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"] + [ECDSA_AID]}}],
                  id="too-many-designator-aids"),
-    pytest.param([{"kind": "k" * (MAX_KIND + 1), "id": "y"}], id="kind-too-long"),
     pytest.param([{"kind": "acme.ref", "id": "y" * (MAX_ID + 1)}], id="id-too-long"),
 ])
 def test_a_malformed_target_is_refused(targets) -> None:
@@ -257,3 +254,40 @@ def test_a_signature_is_not_an_aid() -> None:
     """A qb64 value of the right shape but a code outside PreDex is refused."""
     signature = _vector("0B", 0x5A)  # Ed25519 signature: 88 characters, not a prefix code
     _refused(_with_targets([{"kind": "aid", "id": signature}]))
+
+
+def _act(length: int) -> str:
+    """A valid act point of exactly this length, padded inside its brace enumeration."""
+    act = "observe {info," + " " * (length - len("observe {info,record}")) + "record}"
+    assert len(act) == length
+    return act
+
+
+#: The two entry shapes, so every bound is proven on both arms of the oneOf (#13 review).
+SHAPES = {"named": {"kind": "aid", "id": AID}, "designator": {"kind": "aid", "designatedBy": "any"}}
+
+
+def _entry(shape: str, **extra) -> dict:
+    return {**SHAPES[shape], **extra}
+
+
+def _refused_for_targets(entry: dict) -> None:
+    instance = _with_targets([entry])
+    _refused(instance)
+    arm = jsonschema.Draft202012Validator(_schema()["properties"]["a"]["oneOf"][1])
+    errors = list(arm.iter_errors(instance["a"]))
+    assert errors and all("targets" in list(e.absolute_path) for e in errors)
+
+
+@pytest.mark.parametrize("shape", SHAPES)
+def test_entry_bounds_hold_at_the_cap_on_both_shapes(shape) -> None:
+    _accepted(_with_targets([_entry(shape, acts=POINTS)]))
+    _accepted(_with_targets([_entry(shape, acts=[_act(MAX_ACT)])]))
+    _accepted(_with_targets([{**_entry(shape), "kind": "k" * MAX_KIND}]))
+
+
+@pytest.mark.parametrize("shape", SHAPES)
+def test_entry_bounds_refuse_one_past_the_cap_on_both_shapes(shape) -> None:
+    _refused_for_targets(_entry(shape, acts=POINTS + ["observe {info, record}"]))
+    _refused_for_targets(_entry(shape, acts=[_act(MAX_ACT + 1)]))
+    _refused_for_targets({**_entry(shape), "kind": "k" * (MAX_KIND + 1)})

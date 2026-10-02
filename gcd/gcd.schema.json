@@ -1,5 +1,5 @@
 {
-  "$id": "EDw72tf--RPMq2BUzOKSjVhASwXHyk3mzWx4sVmJrNwX",
+  "$id": "ELDiEui48xsASGvDcNdsOwPptW0v4i-oN6-75_I1d60c",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Generalized Cooperative Delegation Credential",
   "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 4.0 names the targets of acts (constraints.targets): the objects a delegate may act on, or who may designate them, so a delegate cannot be made a confused deputy by a stranger who chooses where its authority lands; acts and targets are one constraint, so a credential that grants acts must also say which targets. Version 3.1 admits custom keys inside the constraints container and inside a duty, so an issuer can express a constraint or obligation the standard fields do not cover; the fail-closed rule on an unrecognized constraint key is unchanged, but it is now enforced by the verifier rather than by schema validation. Version 3.0 adopts the ACDC v2 envelope (acm/JSON: rd replaces ri, message type t, most-compact-form SAIDs). Version 2.0 organized the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classed duties in the rules block.",
@@ -161,7 +161,7 @@
                   }
                 },
                 "targets": {
-                  "description": "The objects the delegate may act on, or whose designation of them the delegate may act on -- the defense against a confused deputy, where a stranger chooses the target and the delegate supplies the authority. An OR-set: an act whose target is contained by SOME entry passes this field. Matching is EXACT over the kind's canonical form, because any loose comparison is a bypass. A target whose kind no entry names matches nothing, and an entry whose kind the verifier does not know matches nothing; a verifier that finds no entry containing the act's target MUST deny. An act whose target the grant itself fixes (a duty-driven act) passes only where the governance framework or the protocol binding says that act kind carries no target. Required whenever acts is present. Bounded: at most 1024 entries, 30 act points per entry, 64 designator AIDs, a 64-character kind and a 256-character id.",
+                  "description": "The objects the delegate may act on, or whose designation of them the delegate may act on -- the defense against a confused deputy, where a stranger chooses the target and the delegate supplies the authority. An OR-set: an act whose target is contained by SOME entry passes this field. Matching is EXACT over the kind's canonical form, because any loose comparison is a bypass. A target whose kind no entry names matches nothing, and an entry whose kind the verifier does not know matches nothing; a verifier that finds no entry containing the act's target MUST deny. An act whose target the grant itself fixes (a duty-driven act) passes only where the governance framework or the protocol binding says that act kind carries no target. Required whenever acts is present. Bounded: at most 1024 entries, 30 act points per entry of at most 128 characters each, 64 designator AIDs, a 64-character kind and a 256-character id.",
                   "type": "array",
                   "uniqueItems": true,
                   "minItems": 1,
@@ -195,6 +195,7 @@
                             "minItems": 1,
                             "items": {
                               "type": "string",
+                              "maxLength": 128,
                               "pattern": "^(?:(?:observe|create|modify|preserve|destroy) (?:info|record|commitment|authority|resource|relationship|\\{(?:info|record|commitment|authority|resource|relationship)(?:[ ,]+(?:info|record|commitment|authority|resource|relationship))*\\})|\\{(?:observe|create|modify|preserve|destroy)(?:[ ,]+(?:observe|create|modify|preserve|destroy))*\\} (?:info|record|commitment|authority|resource|relationship))$",
                               "examples": [
                                 "create commitment",
@@ -319,6 +320,7 @@
                             "minItems": 1,
                             "items": {
                               "type": "string",
+                              "maxLength": 128,
                               "pattern": "^(?:(?:observe|create|modify|preserve|destroy) (?:info|record|commitment|authority|resource|relationship|\\{(?:info|record|commitment|authority|resource|relationship)(?:[ ,]+(?:info|record|commitment|authority|resource|relationship))*\\})|\\{(?:observe|create|modify|preserve|destroy)(?:[ ,]+(?:observe|create|modify|preserve|destroy))*\\} (?:info|record|commitment|authority|resource|relationship))$",
                               "examples": [
                                 "create commitment",
