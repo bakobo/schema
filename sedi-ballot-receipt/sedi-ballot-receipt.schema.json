@@ -1,5 +1,5 @@
 {
-  "$id": "EB8WttQdlE8T_wZCGhbOJv3BVhhm6ftr4JMKyp35xftj",
+  "$id": "EO4yKvwZwSfYEdlnKkJGq0wgAVX5b-UIzntMHnaYJ9_X",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Ballot Packet Possession Receipt",
   "description": "Provisional Bakobo profile: a county clerk attests that a verified voter held a mail-in ballot packet at a point in time. It says nothing about the voter or the ballot.",
@@ -10,6 +10,7 @@
     "v",
     "t",
     "d",
+    "u",
     "i",
     "rd",
     "s",
@@ -35,11 +36,13 @@
     },
     "i": {
       "description": "County clerk issuer AID",
-      "type": "string"
+      "type": "string",
+      "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "rd": {
       "description": "Clerk-owned registry SAID, so the clerk can revoke a receipt for a packet it later rejects",
-      "type": "string"
+      "type": "string",
+      "pattern": "^(?:[EFGHI][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
     },
     "s": {
       "description": "Schema Section",
@@ -82,7 +85,8 @@
             },
             "i": {
               "description": "The holder AID that presented; a per-copy AID, never the SEDI Management AID",
-              "type": "string"
+              "type": "string",
+              "pattern": "^(?:[BE][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
             },
             "election": {
               "description": "Election identifier printed on the packet",
@@ -97,12 +101,14 @@
             "request": {
               "description": "SAID of the clerk-signed request the packet's QR code carried",
               "type": "string",
-              "minLength": 1
+              "minLength": 1,
+              "pattern": "^(?:[EFGHI][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
             },
             "exchange": {
               "description": "SAID of the IPEX grant the holder presented in answer to that request",
               "type": "string",
-              "minLength": 1
+              "minLength": 1,
+              "pattern": "^(?:[EFGHI][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
             },
             "heldAt": {
               "description": "When the clerk verified the presentation, as an RFC 3339 date-time by the clerk's clock; the holder's KEL seal of the exchange timestamps it independently",
@@ -112,7 +118,8 @@
             "basis": {
               "description": "Schema SAID of the credential whose disclosure the clerk matched against the voter roll",
               "type": "string",
-              "minLength": 1
+              "minLength": 1,
+              "pattern": "^(?:[EFGHI][A-Za-z0-9_-]{43}|0[DEFG][A-Za-z0-9_-]{86})$"
             }
           },
           "additionalProperties": false

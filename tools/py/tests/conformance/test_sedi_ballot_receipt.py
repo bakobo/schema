@@ -1,4 +1,4 @@
-"""sedi-ballot-receipt: a clerk's receipt for mail-in ballot packet possession (`this.i` @3l8uwufr)."""
+"""sedi-ballot-receipt: a clerk's receipt for mail-in ballot packet possession (`this.i` @zg5v5ip2)."""
 
 import copy
 import json
@@ -50,7 +50,7 @@ def test_the_example_validates_and_is_saidified() -> None:
 
 
 def test_the_attribute_section_carries_nothing_about_the_voter_or_the_ballot() -> None:
-    """No voter attribute, no ballot content: exactly the receipt's own fields (@3l8uwufr)."""
+    """No voter attribute, no ballot content: exactly the receipt's own fields (@zg5v5ip2)."""
     block = _schema()["properties"]["a"]["oneOf"][1]
     assert set(block["properties"]) == ATTRIBUTES
     assert set(block["required"]) == ATTRIBUTES
@@ -73,7 +73,7 @@ def test_every_attribute_is_required(field: str) -> None:
     _refused(instance)
 
 
-@pytest.mark.parametrize("field", ["v", "t", "d", "i", "rd", "s", "a"])
+@pytest.mark.parametrize("field", ["v", "t", "d", "u", "i", "rd", "s", "a"])
 def test_top_level_required(field: str) -> None:
     instance = _example()
     del instance[field]
@@ -136,3 +136,14 @@ def test_the_page_names_what_is_deliberately_absent() -> None:
     text = (FOLDER / "index.md").read_text()
     for phrase in ("voter attribute", "edge", "ballot card", "SEDI Management AID"):
         assert phrase in text, phrase
+
+
+@pytest.mark.parametrize("where,field", [
+    ("top", "rd"), ("block", "request"), ("block", "exchange"), ("block", "basis"),
+    ("top", "i"), ("block", "i")])
+@pytest.mark.parametrize("value", ["x", "E" + "A" * 42, "E" + "A" * 43 + "A", "E" + "A" * 42 + "!"])
+def test_a_reference_without_a_cesr_shape_is_refused(where: str, field: str, value: str) -> None:
+    """Copilot on #14: a reference a consumer cannot resolve must not validate (@zg5v5ip2)."""
+    instance = _example()
+    (instance if where == "top" else instance["a"])[field] = value
+    _refused(instance)

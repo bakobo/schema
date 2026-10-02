@@ -1,6 +1,6 @@
 ## SEDI Ballot Packet Possession Receipt
 
-A county clerk attests that a verified voter held a mail-in ballot packet at a point in time. The voter scans the QR code on the packet's return envelope, never on the ballot card; the code carries the clerk's signed request (clerk AID and OOBI, election and packet identifiers, a single-use challenge nonce and an expiry). The voter's wallet presents what the request asks for, enough to match the voter roll, and the clerk verifies the presentation and issues this receipt. It is a provisional Bakobo profile for the SEDI Summit's mail-in ballot act, not Utah policy (`this.i` @3l8uwufr).
+A county clerk attests that a verified voter held a mail-in ballot packet at a point in time. The voter scans the QR code on the packet's return envelope, never on the ballot card; the code carries the clerk's signed request (clerk AID and OOBI, election and packet identifiers, a single-use challenge nonce and an expiry). The voter's wallet presents what the request asks for, enough to match the voter roll, and the clerk verifies the presentation and issues this receipt. It is a provisional Bakobo profile for the SEDI Summit's mail-in ballot act, not Utah policy (`this.i` @zg5v5ip2).
 
 ### Issuer and issuee
 
