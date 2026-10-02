@@ -75,11 +75,25 @@ def _saidify_children(node: dict, label: str) -> None:
     # Saider path below — so an aggregate can be self-consistent against this
     # module while failing Aggor.verifyDisclosure. That is not hypothetical: it
     # is what sedi-age shipped until this.i @lkfnoess.
+    #
+    # @5lffczug A block's SAID is computed over its most compact form: every
+    # SAID-bearing descendant is replaced by its SAID first, recursing through
+    # mappings that carry no SAID of their own, as keripy's Compactor does.
     for value in node.values():
-        if isinstance(value, dict) and label in value:
+        if isinstance(value, dict):
             _saidify_children(value, label)
-            _, saidified = Saider.saidify(sad=value, label=label)
-            value[label] = saidified[label]
+            if label in value:
+                _, saidified = Saider.saidify(sad=_compact(value, label), label=label)
+                value[label] = saidified[label]
+
+
+def _compact(node: dict, label: str) -> dict:
+    """Return node's most compact form: each SAID-bearing child mapping becomes its SAID."""
+    return {
+        key: (child[label] if label in child else _compact(child, label))
+        if isinstance(child, dict) else child
+        for key, child in node.items()
+    }
 
 
 def saidify_sad(sad: dict, *, label: str = SAD_LABEL) -> dict:
@@ -97,6 +111,6 @@ def saidify_sad(sad: dict, *, label: str = SAD_LABEL) -> dict:
     if "v" in out and label == SAD_LABEL:
         out = SerderACDC(sad=out, makify=True).sad
     elif label in out:
-        _, saidified = Saider.saidify(sad=out, label=label)
+        _, saidified = Saider.saidify(sad=_compact(out, label), label=label)
         out[label] = saidified[label]
     return out

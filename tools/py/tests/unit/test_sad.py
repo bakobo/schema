@@ -116,3 +116,32 @@ def test_saidify_sad_v2_top_said_is_most_compact():
     compact["r"] = out["r"]["d"]
     remade = SerderACDC(sad=compact, makify=True)
     assert remade.sad["d"] == out["d"]
+
+
+def test_nested_block_said_is_over_its_most_compact_form():
+    # @5lffczug: a block's SAID is computed with each SAID-bearing child
+    # replaced by that child's SAID, as keripy's Compactor does.
+    from keri.core.coring import Saider
+
+    sad = {
+        "d": "",
+        "a": {"d": "", "i": "EAb0-FaB5Z5lY56-Z8Fb9oArjL2HXhCqDLKfXuYEpdeC",
+              "givenName": {"d": "", "u": "0ABzZWRpaWRhdHRybm9uYzAw", "value": "Guy"}},
+    }
+    out = saidify_sad(sad)
+    block = out["a"]["givenName"]
+    _, checked = Saider.saidify(sad=copy.deepcopy(block), label="d")
+    assert block["d"] == checked["d"]
+    compact = dict(out["a"], givenName=block["d"])
+    _, checked = Saider.saidify(sad=compact, label="d")
+    assert out["a"]["d"] == checked["d"]
+
+
+def test_a_said_bearing_block_under_an_unlabeled_mapping_is_compacted():
+    # Copilot on #15: recurse through mappings that carry no SAID. The
+    # expected SAIDs are keripy 9a8b7aa7 Compactor's for this exact mad.
+    sad = {"d": "", "a": {"d": "", "x": {"inner": {"d": "", "u": "0ABzZWRpaWRhdHRybm9uYzAw", "value": "1"}}, "y": "z"}}
+    out = saidify_sad(sad)
+    assert out["a"]["x"]["inner"]["d"] == "EHmGMupQ_Aq1nD4BSEZHZSwRgsEwqWPxdmwSvani1bBJ"
+    assert out["a"]["d"] == "EIXil8zUo1f-6Sos9YIzWvgnnB9TZbP3Mc8BBDuOs5CS"
+    assert out["d"] == "EC7BzWvjszF1GVgCTOplK1JQ8PIKiISr7Ps_Zvz0mLBL"

@@ -35,11 +35,11 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 | [foreign-evidence](foreign-evidence/) | a reissuer's record of the checks it ran on a foreign credential, with no claim value |
 | [org-vet](org-vet/) | authenticate an org at an explicit level of assurance |
 | [proof-of-control](proof-of-control/) | issuee demonstrated control of a digital resource |
-| [sedi-iar](sedi-iar/) | Sam Smith's identity assurance receipt, pinned to keripy `ec307cd74` |
-| [sedi-core](sedi-core/) | Bakobo's compact-capable revision of Sam Smith's Core identity credential; [his original revision](sedi-core-0.1.0/) remains pinned to keripy `ec307cd74` |
-| [sedi-residence](sedi-residence/) | Bakobo's compact-capable revision of Sam Smith's Residence credential; [his original revision](sedi-residence-0.1.0/) remains pinned to keripy `ec307cd74` |
+| [sedi-iar](sedi-iar/) | Sam Smith's identity assurance receipt, pinned to keripy `9a8b7aa7` |
+| [sedi-core](sedi-core/) | Sam Smith's Core identity credential, pinned to keripy `9a8b7aa7`; [his `ec307cd74` revision](sedi-core-0.1.0/) and [Bakobo's compact amendment](sedi-core-0.2.0/) remain resolvable |
+| [sedi-residence](sedi-residence/) | Sam Smith's Residence credential, pinned to keripy `9a8b7aa7`; [his `ec307cd74` revision](sedi-residence-0.1.0/) and [Bakobo's compact amendment](sedi-residence-0.2.0/) remain resolvable |
 | [sedi-id](sedi-id/) | superseded Bakobo identity schema, retained for SAID resolution; its `rules.json` remains a standalone governance artifact |
-| [sedi-age](sedi-age/) | provisional Bakobo age threshold aggregate, with an E1E edge to Core |
+| [sedi-age](sedi-age/) | Sam Smith's age threshold aggregate, pinned to keripy `9a8b7aa7`, with an E1E and NI2I edge to Core; [Bakobo's superseded profile](sedi-age-3.0.0/) remains resolvable |
 | [sedi-present-age-portrait](sedi-present-age-portrait/) | holder-issued over-21 and portrait recipe, with I2I edges to Core and Age |
 | [sedi-present-county](sedi-present-county/) | holder-issued county recipe, with I2I edges to Core and Residence |
 | [sedi-guardian](sedi-guardian/) | provisional guardian credential with ward in a disclosable attribute block |
@@ -62,12 +62,7 @@ integrity, registry consistency, JSON-Schema validity, example validation,
 referential + example SAID integrity, and a should-reject negative corpus. See
 [`this.i` `@b6xh4m`](this.i) and [`@tq5wnh`](this.i).
 
-The three Sam Smith SEDI schemas are pinned to his [keripy test module at
-`ec307cd74`](https://github.com/WebOfTrust/keripy/blob/ec307cd74/tests/sedi/test_sedi.py).
-CI recomputes their SAIDs and checks their source bytes in addition to the
-corpus checks. The Age, presentation, guardian, ward, and authorization schemas
-are Bakobo profiles for the November SEDI Summit; they are not Sam's schemas or
-statements of Utah policy. Previous major versions remain in versioned
+The four Sam Smith SEDI schemas (IAR, Core, Residence and Age) are pinned to his [keripy test module at `9a8b7aa7`](https://github.com/WebOfTrust/keripy/blob/9a8b7aa7/tests/sedi/test_sedi.py), and their examples are his issued vectors for Guy. CI recomputes their SAIDs and checks their source bytes in addition to the corpus checks, and does the same for his earlier revisions at `ec307cd74` and every revision the re-pin displaced (`this.i` `@3x2jtfxc`). The presentation, guardian, ward, and authorization schemas are Bakobo profiles for the November SEDI Summit; they are not Sam's schemas or statements of Utah policy. Previous major versions remain in versioned
 directories and in [`registry.json`](registry.json).
 
 ## Tooling

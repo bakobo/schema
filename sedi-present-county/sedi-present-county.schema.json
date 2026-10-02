@@ -1,5 +1,5 @@
 {
-  "$id": "EOkso5ZxAnIOO4j8D8zsfxx2ECn0MB0Ml8A0sZx-6qT0",
+  "$id": "EB8EAlIHO4QP1crmlXMm8a-rt3k4xZPXN0uAixvtvhSA",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI County Presentation",
   "description": "A holder-issued one-time presentation of a county claim backed by I2I edges to SEDI Core and Residence. The verifier is the issuee; the holder is the issuer. The Residence county block is disclosed alongside this recipe.",
@@ -146,7 +146,7 @@
                     },
                     "s": {
                       "description": "SEDI Core schema SAID",
-                      "const": "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh"
+                      "const": "EAyyREL1r5OL8Z9HGl47df26rn_JRLsC7PVDBH5RtwLs"
                     },
                     "o": {
                       "description": "Edge operator: I2I asserts the issuer of this presentation is the issuee of the far node (same holder)",
@@ -187,7 +187,7 @@
                     },
                     "s": {
                       "description": "SEDI Residence schema SAID",
-                      "const": "EDg5tBqnVFoGILBgIknKs-0CHv3au4GczuPgjf4jx1X2"
+                      "const": "EH7ayivQLHwfBKwFhg7mcpOzHEWcvvJ24EO0OyzvPVKQ"
                     },
                     "o": {
                       "description": "Edge operator: I2I asserts the issuer of this presentation is the issuee of the far node (same holder)",

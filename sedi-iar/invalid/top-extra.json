@@ -1,27 +1,30 @@
 {
-  "v": "ACDCCAACAAJSONAAJo.",
-  "d": "EEEvnrUbRC_IWkiZ3lGs90iT51cKPyUoQHTyiqiW4ET5",
-  "i": "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-  "s": "EHp3Ik9q-6-sT0IFaLRJDEjd-j3zMRdy1aN6O6awCsZd",
+  "v": "ACDCCAACAAJSONAALj.",
+  "t": "acm",
+  "d": "EOci_-BIIESmZ_TbIkc4UZO2ic0e-_RqGzVxAMYNvnO_",
+  "u": "0ABndXlzZWRpY2hhbGxlbmdl",
+  "i": "EAgq2LY03zk9NUempbqdLzG4PiGnmVMqTD0DfrY9Whwh",
+  "s": "EFAB6k77bXHs6bg9PORW7UYF79GD_OuEcEjmBpwhcfRN",
   "a": {
-    "d": "ENVw3RFKz4mkmK3PWYwii3BQUnqAdtpSEWEJFR3Q2dRU",
-    "i": "EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-    "givenName": "example",
-    "middleName": "example",
-    "familyName": "example",
-    "birthDate": "example",
-    "facialImageProof": "example",
-    "legalPresenceStatus": "example",
+    "d": "EBvyK6QLiBkJqsCTCvPzP24Gb9BBEJRHsp6DGHDwQJOm",
+    "i": "EDB8gKNwzurf33pV2hsyGR9XFOmitDhc0LUzDamcU2JR",
+    "givenName": "Guy",
+    "middleName": "Marty McFly",
+    "familyName": "Brown",
+    "nameSuffix": "",
+    "birthDate": "2002-08-22T00:00:00.000000+00:00",
+    "facialImageProof": "",
+    "legalPresenceStatus": "citizen",
     "residence": {
-      "street": "example",
-      "city": "example",
-      "county": "example",
-      "state": "example",
-      "postcode": "example",
-      "country": "example"
+      "street": "157 E 300 N",
+      "city": "Beaver",
+      "county": "Beaver",
+      "state": "Utah",
+      "postcode": "84713",
+      "country": "United States"
     },
-    "proofingDatetime": "example",
-    "sediURL": "example"
+    "proofingDatetime": "2026-09-01T09:30:00.000000+00:00",
+    "sediURL": "https://example.com/sedi/here"
   },
   "unexpected": true
 }

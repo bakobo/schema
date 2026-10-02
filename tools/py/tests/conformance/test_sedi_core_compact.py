@@ -1,4 +1,4 @@
-"""The current Core accepts compact references and still checks expanded blocks."""
+"""The current Core, Sam Smith's at keripy 9a8b7aa7 (@3x2jtfxc), accepts compact attribute blocks and still checks expanded ones."""
 
 import json
 import hashlib
@@ -12,7 +12,7 @@ from schematools.said import compute_schema_said
 
 ROOT = Path(__file__).resolve().parents[4]
 ATTRIBUTES = (
-    "givenName", "middleName", "familyName", "birthDate", "facialImageProof",
+    "givenName", "middleName", "familyName", "nameSuffix", "birthDate", "facialImageProof",
     "legalPresenceStatus", "issuedDate", "expirationDate",
 )
 
@@ -32,10 +32,25 @@ def test_compact_attribute_block_validates(name: str) -> None:
     jsonschema.Draft202012Validator(_schema()).validate(instance)
 
 
-def test_compact_utah_agent_edge_validates() -> None:
+def test_a_compact_utah_agent_edge_is_refused() -> None:
+    """Sam's Core gives utahAgent no string arm; an issuer compacts the whole edge section or none of it."""
     instance = _example()
     instance["e"]["utahAgent"] = instance["e"]["utahAgent"]["d"]
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.Draft202012Validator(_schema()).validate(instance)
+
+
+@pytest.mark.parametrize("value", [True, False])
+def test_primary_is_a_required_boolean(value: bool) -> None:
+    instance = _example()
+    instance["a"]["primary"] = value
     jsonschema.Draft202012Validator(_schema()).validate(instance)
+    instance["a"]["primary"] = "true"
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.Draft202012Validator(_schema()).validate(instance)
+    del instance["a"]["primary"]
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.Draft202012Validator(_schema()).validate(instance)
 
 
 @pytest.mark.parametrize("name", ATTRIBUTES)
@@ -60,11 +75,15 @@ def test_compact_section_validates(section: str) -> None:
     jsonschema.Draft202012Validator(_schema()).validate(instance)
 
 
-def test_original_core_revision_remains_resolvable() -> None:
-    old = json.loads((ROOT / "sedi-core-0.1.0/sedi-core-0.1.0.schema.json").read_text())
+@pytest.mark.parametrize("folder,said", [
+    ("sedi-core-0.1.0", "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5"),
+    ("sedi-core-0.2.0", "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh"),
+])
+def test_earlier_core_revisions_remain_resolvable(folder: str, said: str) -> None:
+    old = json.loads((ROOT / f"{folder}/{folder}.schema.json").read_text())
     registry = json.loads((ROOT / "registry.json").read_text())
-    assert old["$id"] == "ED7zRxzpuvv89c6jDwgyBNOoW06Ut0wm_8jJQRqKYv_5"
-    assert registry[old["$id"]] == "sedi-core-0.1.0/sedi-core-0.1.0.schema.json"
+    assert old["$id"] == said == compute_schema_said(old)
+    assert registry[said] == f"{folder}/{folder}.schema.json"
 
 
 PRIOR_DEPENDENTS = (

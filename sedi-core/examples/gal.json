@@ -1,0 +1,76 @@
+{
+  "v": "ACDCCAACAAJSONAAfF.",
+  "t": "acm",
+  "d": "EA4iEqsUF-Fu6aT1DgBkqPWeT3Rw0W367veAkYSCkRMV",
+  "u": "0AAgHaUeg5Pvr7KQMPBeYfIs",
+  "i": "EKBCU6u_xObNhFc9uuz1VdntNt99xmB2fA5qz7Li-Sl-",
+  "rd": "EJv5HZo45iTHxlfDXzGubim62AjlPWNST11iCmfTG5LZ",
+  "s": "EAyyREL1r5OL8Z9HGl47df26rn_JRLsC7PVDBH5RtwLs",
+  "a": {
+    "d": "EAOShXJ0qsL90sE1-zoWFXyV7dKYDNhQ9wTzBw8yu2XE",
+    "u": "0ADkNrf84O_sw7WGXVMSkFWh",
+    "i": "EIaSWASllNlAuAFcDG1xbXGEkVw_oL0CX8_o1XkFTegY",
+    "rd": "EETKKNEzII7RVeqrIBWsSUifdAPYRp5qdTOQnsG_zzcm",
+    "primary": true,
+    "givenName": {
+      "d": "ECSb6A4qHXtoh1STpC-aBCvP4NTTh1UAudlbam0rBZ9i",
+      "u": "0AAe7cgRQjYZAcd0TVbjIxM-",
+      "value": "Gal"
+    },
+    "middleName": {
+      "d": "EDK4tSBPZt0oDDZZy4SB8IfH-XELBuVGMickB9y4xlHP",
+      "u": "0AAEbE87_XRwLHjbvj16wKqX",
+      "value": "Parker"
+    },
+    "familyName": {
+      "d": "EJoQ6tr804l4JYin_LC8l6qZy_bgQX1y3Re_nLIU6ltS",
+      "u": "0AAa6B2FyXtFiWpXFbJrMg3n",
+      "value": "Brown"
+    },
+    "nameSuffix": {
+      "d": "EMW0joKDT0vznNDZLiqC6df2acpqoqnc3w9W4-6qu_mK",
+      "u": "0ABDbo5XZIfCSAsfTVl9jZfF",
+      "value": ""
+    },
+    "birthDate": {
+      "d": "EL7FCUJJsNgmMpCWsI4jDDngm5dEHBN7cDbtD5rL1dPE",
+      "u": "0ADXx6eI6thDHeHaKi9vWVaj",
+      "value": "2002-11-01T00:00:00.000000+00:00"
+    },
+    "facialImageProof": {
+      "d": "EADiZTmwRLQ7fo3DOvpUCQYlD3dMSGb0L5WffZN68Lo2",
+      "u": "0AAUr_yhAHP31X1ZHOwUJE1z",
+      "value": "EGh8sVJumVosTZVgT95YAb0Vor_7JRKGjgCX_2C7I9h4"
+    },
+    "legalPresenceStatus": {
+      "d": "EGRj9vSBihOIrwHdXUEGq_Q3yBYU7j1d4I6rbb-cwXn9",
+      "u": "0AAsG7_ogfBljU-7OuuYg8eG",
+      "value": "citizen"
+    },
+    "issuedDate": {
+      "d": "EGA9BBKqOJdpsNl9tRcszQSSiPYfUu9dgh1RT5MTL3sC",
+      "u": "0ADyZipGvcuOxw1ChYws3pig",
+      "value": "2020-08-23T00:00:00.000000+00:00"
+    },
+    "expirationDate": {
+      "d": "EOz91vuot0DyY41pAUQ7UHmAVpYtKH-6JsfDysIj_OLD",
+      "u": "0ACDMVtW0LTB2zvojqA3idZS",
+      "value": "2028-09-01T00:00:00.000000+00:00"
+    }
+  },
+  "e": {
+    "d": "EJ2og1IbznbtGXXCsUVDc6Jyk1Pjwl31ABEhqgjKJ0L5",
+    "u": "0ADPO0qUnzzehhLuLlOE104a",
+    "utahAgent": {
+      "d": "ECIzJ7Yj_fZNVV2jme6AEgBZPLD_8VS69uNe2111wEba",
+      "u": "0AChBh2pZwiOkTy675JP3L-f",
+      "n": "EM62a9na-h-m81HgCPOJpx3h9iJHVmNeIb3n1EGV24HS",
+      "s": "EMnswUTHQ11HzWlqYVUJGVVtOelwW_bRckn622CkObDQ",
+      "o": "I2I"
+    }
+  },
+  "r": {
+    "d": "EFPxq4WPl29szUqbrQIviOh_Ls_RlrYbp4L-fdQH0XrX",
+    "l": ""
+  }
+}

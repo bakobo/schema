@@ -7,7 +7,7 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[4]
-CORE = "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh"
+CORE = "EAyyREL1r5OL8Z9HGl47df26rn_JRLsC7PVDBH5RtwLs"
 
 
 def load(name: str, filename: str) -> dict:
@@ -69,3 +69,24 @@ def test_guardian_issues_separately_revocable_ward_authorization() -> None:
     assert example["e"]["authority"]["n"] == guardian["d"]
     assert example["e"]["subject"]["n"] == ward["d"]
     assert isinstance(example["a"]["authz"]["rc"], list)
+
+
+def test_the_tier_c_examples_form_one_coherent_graph() -> None:
+    """Codex on #15: a re-pin must not collapse guardian and ward into one AID.
+
+    Gal (Sam Smith's guardian in keripy 9a8b7aa7) is the guardian and Guy is the ward.
+    """
+    guardian = load("sedi-guardian", "example.json")
+    ward_core = load("sedi-ward-core", "example.json")
+    authz = load("sedi-ward-authz", "example.json")
+    gal = "EIaSWASllNlAuAFcDG1xbXGEkVw_oL0CX8_o1XkFTegY"
+    guy = "EDB8gKNwzurf33pV2hsyGR9XFOmitDhc0LUzDamcU2JR"
+    assert (guardian["a"]["i"], guardian["a"]["ward"]["i"]) == (gal, guy)
+    gal_core = load("sedi-core", "examples/gal.json")  # Sam's issued vector for Gal
+    assert gal_core["a"]["i"] == gal and gal_core["s"] == CORE
+    assert (guardian["e"]["citizen"]["n"], guardian["e"]["citizen"]["s"]) == (gal_core["d"], CORE)
+    assert ward_core["a"]["i"] == guy
+    assert ward_core["e"]["guardian"]["n"] == guardian["d"]
+    assert (authz["i"], authz["a"]["i"]) == (gal, guy)
+    assert authz["e"]["authority"]["n"] == guardian["d"]
+    assert authz["e"]["subject"]["n"] == ward_core["d"]
