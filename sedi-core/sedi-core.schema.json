@@ -1,5 +1,5 @@
 {
-  "$id": "EAyyREL1r5OL8Z9HGl47df26rn_JRLsC7PVDBH5RtwLs",
+  "$id": "ECxPtf9IpBUT1pRZK4eaLA8O2jlc1oXYioYjcHo09eUC",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Core Schema",
   "description": "SEDI Core Identity JSON Schema for acm ACDC.",
@@ -456,6 +456,167 @@
                 "o": {
                   "description": "Edge Unary Operator",
                   "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "guardians": {
+              "description": "Guardian Edge Group Block",
+              "type": "object",
+              "required": [
+                "d",
+                "u",
+                "o",
+                "first"
+              ],
+              "properties": {
+                "d": {
+                  "description": "Edge Group SAID",
+                  "type": "string"
+                },
+                "u": {
+                  "description": "Edge Group UE",
+                  "type": "string"
+                },
+                "o": {
+                  "description": "Edge Group M-ary Operator",
+                  "type": "string"
+                },
+                "first": {
+                  "description": "First Guardian Edge Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Edge SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge UE",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "Far Node SAID",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "Far Node Schema SAID",
+                      "type": "string"
+                    },
+                    "o": {
+                      "description": "Edge Unary Operator",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "second": {
+                  "description": "Second Guardian Edge Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Edge SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge UE",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "Far Node SAID",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "Far Node Schema SAID",
+                      "type": "string"
+                    },
+                    "o": {
+                      "description": "Edge Unary Operator",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "third": {
+                  "description": "Third Guardian Edge Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Edge SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge UE",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "Far Node SAID",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "Far Node Schema SAID",
+                      "type": "string"
+                    },
+                    "o": {
+                      "description": "Edge Unary Operator",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "fourth": {
+                  "description": "Fourth Guardian Edge Block",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "n",
+                    "s",
+                    "o"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Edge SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Edge UE",
+                      "type": "string"
+                    },
+                    "n": {
+                      "description": "Far Node SAID",
+                      "type": "string"
+                    },
+                    "s": {
+                      "description": "Far Node Schema SAID",
+                      "type": "string"
+                    },
+                    "o": {
+                      "description": "Edge Unary Operator",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false

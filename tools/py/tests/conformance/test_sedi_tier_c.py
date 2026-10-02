@@ -7,7 +7,7 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[4]
-CORE = "EAyyREL1r5OL8Z9HGl47df26rn_JRLsC7PVDBH5RtwLs"
+CORE = "ECxPtf9IpBUT1pRZK4eaLA8O2jlc1oXYioYjcHo09eUC"
 
 
 def load(name: str, filename: str) -> dict:
@@ -34,14 +34,20 @@ def test_guardian_ward_is_disclosable_and_not_an_edge() -> None:
     assert load("sedi-guardian-2.0.0", "sedi-guardian-2.0.0.schema.json")["version"] == "2.0.0"
 
 
-def test_ward_core_has_ni2i_guardianship_edge() -> None:
-    guardian = load("sedi-guardian", "sedi-guardian.schema.json")
-    schema = load("sedi-ward-core", "sedi-ward-core.schema.json")
-    example = load("sedi-ward-core", "example.json")
-    edge = schema["properties"]["e"]["oneOf"][1]["properties"]["guardian"]["oneOf"][1]["properties"]
-    assert edge["s"]["const"] == guardian["$id"]
-    assert edge["o"]["const"] == "NI2I"
-    assert example["e"]["guardian"]["n"] == load("sedi-guardian", "example.json")["d"]
+def test_the_wards_core_reaches_its_guardianship_through_sams_guardians_group() -> None:
+    """@hxqwde3o: the ward's identity is Sam Smith's Core (keripy 80f77b73), whose optional
+    guardians edge group names the guardianship by NI2I; Bakobo's ward-core is superseded."""
+    guardian = load("sedi-guardian", "example.json")
+    core = load("sedi-core", "sedi-core.schema.json")
+    ward = load("sedi-core", "examples/wyn-ward.json")
+    group = core["properties"]["e"]["oneOf"][1]["properties"]["guardians"]
+    assert set(group["properties"]) == {"d", "u", "o", "first", "second", "third", "fourth"}
+    Draft202012Validator(core).validate(ward)
+    first = ward["e"]["guardians"]["first"]
+    assert (first["n"], first["s"], first["o"]) == (guardian["d"], guardian["s"], "NI2I")
+    assert ward["e"]["guardians"]["o"] == "OR"
+    assert ward["a"]["primary"] is False
+    assert "Superseded" in (ROOT / "sedi-ward-core" / "index.md").read_text()
 
 
 def test_ward_core_inherits_sam_core_optional_message_type() -> None:
@@ -57,7 +63,7 @@ def test_ward_core_inherits_sam_core_optional_message_type() -> None:
 
 def test_guardian_issues_separately_revocable_ward_authorization() -> None:
     guardian = load("sedi-guardian", "example.json")
-    ward = load("sedi-ward-core", "example.json")
+    ward = load("sedi-core", "examples/wyn-ward.json")
     schema = load("sedi-ward-authz", "sedi-ward-authz.schema.json")
     example = load("sedi-ward-authz", "example.json")
     assert "rd" in schema["required"]
@@ -74,19 +80,20 @@ def test_guardian_issues_separately_revocable_ward_authorization() -> None:
 def test_the_tier_c_examples_form_one_coherent_graph() -> None:
     """Codex on #15: a re-pin must not collapse guardian and ward into one AID.
 
-    Gal (Sam Smith's guardian in keripy 9a8b7aa7) is the guardian and Guy is the ward.
+    Gal (Sam Smith's guardian) is the guardian and Wyn, Sam's ward, is the ward (@hxqwde3o).
     """
     guardian = load("sedi-guardian", "example.json")
-    ward_core = load("sedi-ward-core", "example.json")
+    ward_core = load("sedi-core", "examples/wyn-ward.json")
     authz = load("sedi-ward-authz", "example.json")
     gal = "EIaSWASllNlAuAFcDG1xbXGEkVw_oL0CX8_o1XkFTegY"
-    guy = "EDB8gKNwzurf33pV2hsyGR9XFOmitDhc0LUzDamcU2JR"
-    assert (guardian["a"]["i"], guardian["a"]["ward"]["i"]) == (gal, guy)
+    wyn = "EKr8JLtfqWCmHrxO3yu8ocS2n9o0Tlspeaqm9ZOf3FM1"
+    assert (guardian["a"]["i"], guardian["a"]["ward"]["i"]) == (gal, wyn)
     gal_core = load("sedi-core", "examples/gal.json")  # Sam's issued vector for Gal
     assert gal_core["a"]["i"] == gal and gal_core["s"] == CORE
     assert (guardian["e"]["citizen"]["n"], guardian["e"]["citizen"]["s"]) == (gal_core["d"], CORE)
-    assert ward_core["a"]["i"] == guy
-    assert ward_core["e"]["guardian"]["n"] == guardian["d"]
-    assert (authz["i"], authz["a"]["i"]) == (gal, guy)
+    assert ward_core["a"]["i"] == wyn and ward_core["s"] == CORE
+    assert ward_core["e"]["guardians"]["first"]["n"] == guardian["d"]
+    assert (authz["i"], authz["a"]["i"]) == (gal, wyn)
+    assert authz["e"]["subject"]["s"] == CORE
     assert authz["e"]["authority"]["n"] == guardian["d"]
     assert authz["e"]["subject"]["n"] == ward_core["d"]

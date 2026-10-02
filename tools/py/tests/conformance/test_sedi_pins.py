@@ -1,6 +1,7 @@
 """Pinned SEDI schema vectors: Sam Smith's current schemas and every revision they displaced.
 
-The current IAR, Core, Residence and Age are Sam Smith's at keripy 9a8b7aa7 (`this.i` @3x2jtfxc).
+The current IAR, Core, Residence and Age are Sam Smith's at keripy 80f77b73, the Summit's frozen
+pin (`this.i` @3x2jtfxc, @hxqwde3o); only Core changed from 9a8b7aa7.
 The byte hashes also catch edits to formatting or key order that a schema SAID, which is computed
 over canonical JSON, cannot detect.
 """
@@ -16,18 +17,18 @@ import pytest
 from schematools.said import compute_schema_said
 
 ROOT = Path(__file__).resolve().parents[4]
-SAM_CURRENT = "https://github.com/WebOfTrust/keripy/blob/9a8b7aa7/tests/sedi/test_sedi.py"
+SAM_CURRENT = "https://github.com/WebOfTrust/keripy/blob/80f77b73/tests/sedi/test_sedi.py"
 SAM_ORIGINAL = "https://github.com/WebOfTrust/keripy/blob/ec307cd74/tests/sedi/test_sedi.py"
 
-# Sam's IarSchemaSaid, CoreSchemaSaid, ResidenceSchemaSaid and AgeSchemaSaid at 9a8b7aa7.
+# Sam's IarSchemaSaid, CoreSchemaSaid, ResidenceSchemaSaid and AgeSchemaSaid at 80f77b73.
 SAM_CURRENT_PINS = {
     "sedi-iar": (
         "EFAB6k77bXHs6bg9PORW7UYF79GD_OuEcEjmBpwhcfRN",
         "4ffecad00c3b4db27b67a18bc621dc19c2a6821c9a58189a06cc468561073b2a",
     ),
     "sedi-core": (
-        "EAyyREL1r5OL8Z9HGl47df26rn_JRLsC7PVDBH5RtwLs",
-        "70784bbf5d317760e0d488733c28b19d5281cd4e3dcdd946b778fb6582c4b934",
+        "ECxPtf9IpBUT1pRZK4eaLA8O2jlc1oXYioYjcHo09eUC",
+        "bf962fae8774169ac4d244f6a97c7e6ffaac4dbc43247ec8e08c825d0bd7dcdd",
     ),
     "sedi-residence": (
         "EH7ayivQLHwfBKwFhg7mcpOzHEWcvvJ24EO0OyzvPVKQ",
@@ -55,8 +56,28 @@ SAM_ORIGINAL_PINS = {
     ),
 }
 
-# Published Bakobo revisions displaced by the re-pin, kept byte for byte.
+# Published Bakobo revisions displaced by the re-pins, kept byte for byte.
 DISPLACED = {
+    "sedi-core-pre-guardians-0.1.0": (  # Sam's Core at 9a8b7aa7
+        "EAyyREL1r5OL8Z9HGl47df26rn_JRLsC7PVDBH5RtwLs",
+        "70784bbf5d317760e0d488733c28b19d5281cd4e3dcdd946b778fb6582c4b934",
+    ),
+    "sedi-present-county-pre-guardians-2.0.0": (
+        "EB8EAlIHO4QP1crmlXMm8a-rt3k4xZPXN0uAixvtvhSA",
+        "95b80dcc3bd7f2445be4b3e5c40468dee40b76cfb34af8335d944c7a9655170b",
+    ),
+    "sedi-present-age-portrait-pre-guardians-4.0.0": (
+        "EJa3e-HPIKURXlx9zxw2Wqzgs7wefdQQDX18pNycYz68",
+        "82d29e85c608314730ffa9528f1f4e5a92cfcbc6516d4b8f169b7d7e6859619e",
+    ),
+    "sedi-guardian-pre-guardians-3.0.0": (
+        "EGpQePxZPKq9nPF99rI9IawvJgMukfPxjI6WKN8GFVfV",
+        "95176689784f1f4db0a8a089cdaf7523a80d7dbdb1e77db895cee2d464be40c1",
+    ),
+    "sedi-ward-authz-pre-guardians-1.0.0": (
+        "EJBGTT5-5SAAWjQloHV69kcvg6vMLgNk-6tjzjEv2SSO",
+        "92ef65a839f4e994e8a2fcd119f172e6b0d543483bf98e195f615d7ce92da9b1",
+    ),
     "sedi-core-0.2.0": (
         "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh",
         "fecf18fcffc622820783e5cc8cc66653a61bf1ea6797a0d6ef5b46965b092cb9",
@@ -121,17 +142,17 @@ def test_displaced_revision_stays_resolvable_byte_for_byte(name: str) -> None:
 @pytest.mark.parametrize("path,said,digest", [
     ("sedi-iar/example.json", "EOci_-BIIESmZ_TbIkc4UZO2ic0e-_RqGzVxAMYNvnO_",
      "e49f57deed688664e054ea17c2b16ad3b713810a0750c665ab8c7a472cf057d2"),
-    ("sedi-core/example.json", "ENOVdsuMryEUCyZ1qQ26VSqtIMEzgOdyqZ2WCx2S11Nf",
-     "bda729b474bf5cf829b854aca700f241d6569beb0b677ad9e754c8b1ed849b87"),
-    ("sedi-core/examples/gal.json", "EA4iEqsUF-Fu6aT1DgBkqPWeT3Rw0W367veAkYSCkRMV",
-     "d7d361e78218b641e639b68067df0e164310218671e877ab16a6c857d4c80bca"),
-    ("sedi-residence/example.json", "EPb1xxIaIvPTckSE80yTOsKwECWvTYW_stqpzWvpI2PH",
-     "42015f6b68bb043e6bcbd0ebe631ee76a4b34695e6543a7fd8d639e295d0001c"),
-    ("sedi-age/example.json", "EL_TknAe1H0HFAO3GiFL3OFLDVCyIbo5e9C978_sKPwI",
-     "040ee58a78af4dbe640955986397268fbb362131b32e7b5020773f509b17cb1f"),
+    ("sedi-core/example.json", "EPTENGZEjGwW1CucdYRWGGfEi7StJgh24L7lzHcblsqA",
+     "d25d0ae59ae986aca34909f00f6fe7dc74ca2daa4b28748f8ac82ec2d92957b6"),
+    ("sedi-core/examples/gal.json", "EFku8VLyTCX2PxavSU2dQNwFXNeK0l8LnwpqQR1JjjO6",
+     "47eda533f8095e24f73fb350ef4278482e5e77cb2422f2c106ed860fcfd3c150"),
+    ("sedi-residence/example.json", "EOKNZS3kf6ikpxx6oXgzOYnL6dOUr1HMg2MPuvuAL2AW",
+     "b115f33f6e7e92d1237cbcd97d919ae31324a6606ea3d19f35302672253c3549"),
+    ("sedi-age/example.json", "EJpJdvPFzWEYRHDmSGo_KdBd0-17Op9GGgXUfPnfduci",
+     "a79bf1248d99d7722c2815f071a25940793e74caa827924262a8c0d1dffa104d"),
 ])
 def test_the_example_is_sams_issued_vector_byte_for_byte(path: str, said: str, digest: str) -> None:
-    """Each is Guy's or Gal's credential from Sam's test_sedi_acdcs at 9a8b7aa7, unmodified.
+    """Each is Guy's or Gal's credential from Sam's test_sedi_acdcs at 80f77b73, unmodified.
 
     Copilot on #15: the outer SAID alone does not pin the vector, because the linter skips
     aggregate elements (~7v2h) and a partial disclosure keeps its outer SAID. The digest pins
