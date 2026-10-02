@@ -82,7 +82,9 @@ def test_the_tier_c_examples_form_one_coherent_graph() -> None:
     gal = "EIaSWASllNlAuAFcDG1xbXGEkVw_oL0CX8_o1XkFTegY"
     guy = "EDB8gKNwzurf33pV2hsyGR9XFOmitDhc0LUzDamcU2JR"
     assert (guardian["a"]["i"], guardian["a"]["ward"]["i"]) == (gal, guy)
-    assert guardian["e"]["citizen"]["n"] == "EA4iEqsUF-Fu6aT1DgBkqPWeT3Rw0W367veAkYSCkRMV"  # Gal's Core
+    gal_core = load("sedi-core", "examples/gal.json")  # Sam's issued vector for Gal
+    assert gal_core["a"]["i"] == gal and gal_core["s"] == CORE
+    assert (guardian["e"]["citizen"]["n"], guardian["e"]["citizen"]["s"]) == (gal_core["d"], CORE)
     assert ward_core["a"]["i"] == guy
     assert ward_core["e"]["guardian"]["n"] == guardian["d"]
     assert (authz["i"], authz["a"]["i"]) == (gal, guy)

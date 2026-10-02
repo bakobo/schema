@@ -4,4 +4,4 @@ The state issues Core to the citizen. Its individually disclosed blocks are give
 
 **Legal presence status is endorsed.** Sam Smith confirmed in an email to Daniel Hardman on 2026-09-23 that `legalPresenceStatus` is an endorsed status, not only an input to proofing. The State plans visitor SEDIs, for example for Olympics visitors and out-of-state hunting licence holders, whose statuses are other than citizen. The values are still to be decided, so the schema keeps the field a free string. Utah Code [63A-20-301(2)(f)](https://le.utah.gov/xcode/Title63A/Chapter20/63A-20-S301.html) names name, birth date, image, and Utah residence address as endorsed attributes.
 
-[`example.json`](example.json) is Guy's Core from Sam's `test_sedi_acdcs` at `9a8b7aa7`, unmodified; its `utahAgent` far node is Sam's. [`invalid/`](invalid/) holds negative cases. `this.i` `@3x2jtfxc` records the re-pin.
+[`example.json`](example.json) is Guy's Core and [`examples/gal.json`](examples/gal.json) is Gal's, both from Sam's `test_sedi_acdcs` at `9a8b7aa7`, unmodified; their `utahAgent` far node is Sam's. [`invalid/`](invalid/) holds negative cases. `this.i` `@3x2jtfxc` records the re-pin.
