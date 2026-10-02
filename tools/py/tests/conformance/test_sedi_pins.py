@@ -118,12 +118,25 @@ def test_displaced_revision_stays_resolvable_byte_for_byte(name: str) -> None:
     _check(name, *DISPLACED[name], "published revision displaced by @3x2jtfxc")
 
 
-@pytest.mark.parametrize("name,example", [
-    ("sedi-iar", "EOci_-BIIESmZ_TbIkc4UZO2ic0e-_RqGzVxAMYNvnO_"),
-    ("sedi-core", "ENOVdsuMryEUCyZ1qQ26VSqtIMEzgOdyqZ2WCx2S11Nf"),
-    ("sedi-residence", "EPb1xxIaIvPTckSE80yTOsKwECWvTYW_stqpzWvpI2PH"),
-    ("sedi-age", "EL_TknAe1H0HFAO3GiFL3OFLDVCyIbo5e9C978_sKPwI"),
+@pytest.mark.parametrize("path,said,digest", [
+    ("sedi-iar/example.json", "EOci_-BIIESmZ_TbIkc4UZO2ic0e-_RqGzVxAMYNvnO_",
+     "e49f57deed688664e054ea17c2b16ad3b713810a0750c665ab8c7a472cf057d2"),
+    ("sedi-core/example.json", "ENOVdsuMryEUCyZ1qQ26VSqtIMEzgOdyqZ2WCx2S11Nf",
+     "bda729b474bf5cf829b854aca700f241d6569beb0b677ad9e754c8b1ed849b87"),
+    ("sedi-core/examples/gal.json", "EA4iEqsUF-Fu6aT1DgBkqPWeT3Rw0W367veAkYSCkRMV",
+     "d7d361e78218b641e639b68067df0e164310218671e877ab16a6c857d4c80bca"),
+    ("sedi-residence/example.json", "EPb1xxIaIvPTckSE80yTOsKwECWvTYW_stqpzWvpI2PH",
+     "42015f6b68bb043e6bcbd0ebe631ee76a4b34695e6543a7fd8d639e295d0001c"),
+    ("sedi-age/example.json", "EL_TknAe1H0HFAO3GiFL3OFLDVCyIbo5e9C978_sKPwI",
+     "040ee58a78af4dbe640955986397268fbb362131b32e7b5020773f509b17cb1f"),
 ])
-def test_the_example_is_sams_issued_vector_for_guy(name: str, example: str) -> None:
-    """Each example is Guy's credential from Sam's test_sedi_acdcs at 9a8b7aa7, unmodified."""
-    assert json.loads((ROOT / name / "example.json").read_text())["d"] == example, SAM_CURRENT
+def test_the_example_is_sams_issued_vector_byte_for_byte(path: str, said: str, digest: str) -> None:
+    """Each is Guy's or Gal's credential from Sam's test_sedi_acdcs at 9a8b7aa7, unmodified.
+
+    Copilot on #15: the outer SAID alone does not pin the vector, because the linter skips
+    aggregate elements (~7v2h) and a partial disclosure keeps its outer SAID. The digest pins
+    every byte, including Age's full A section.
+    """
+    raw = (ROOT / path).read_bytes()
+    assert json.loads(raw)["d"] == said, SAM_CURRENT
+    assert hashlib.sha256(raw).hexdigest() == digest, SAM_CURRENT
