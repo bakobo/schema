@@ -102,8 +102,9 @@ def test_the_example_is_issued_into_the_registry_its_identity_far_node_names(nam
     assert presentation["rd"] == core["a"]["rd"]
 
 
-def test_core_and_residence_name_the_same_presentation_registry() -> None:
-    """Both are issued to the same SMAID, whose one presentation registry both name."""
+def test_core_and_residence_name_the_same_holder() -> None:
+    """Both are issued to the same AID. Sam's Residence vector at 9a8b7aa7 omits the optional a.rd;
+    when a Residence names one, it must be the holder's presentation registry that Core names."""
     core, residence = _load("sedi-core/example.json"), _load("sedi-residence/example.json")
     assert core["a"]["i"] == residence["a"]["i"]
-    assert core["a"]["rd"] == residence["a"]["rd"]
+    assert residence["a"].get("rd", core["a"]["rd"]) == core["a"]["rd"]

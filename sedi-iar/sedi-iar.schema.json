@@ -1,5 +1,5 @@
 {
-  "$id": "EHp3Ik9q-6-sT0IFaLRJDEjd-j3zMRdy1aN6O6awCsZd",
+  "$id": "EFAB6k77bXHs6bg9PORW7UYF79GD_OuEcEjmBpwhcfRN",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI IAR Schema",
   "description": "SEDI IAR Identity Assurance Receipt JSON Schema for acm ACDC.",
@@ -63,6 +63,7 @@
             "givenName",
             "middleName",
             "familyName",
+            "nameSuffix",
             "birthDate",
             "facialImageProof",
             "legalPresenceStatus",
@@ -89,6 +90,10 @@
             },
             "familyName": {
               "description": "Family Name",
+              "type": "string"
+            },
+            "nameSuffix": {
+              "description": "Name Suffix",
               "type": "string"
             },
             "birthDate": {

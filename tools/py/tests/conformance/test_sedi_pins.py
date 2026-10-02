@@ -1,7 +1,8 @@
-"""Pinned SEDI schema vectors, including Sam Smith's original Core revision.
+"""Pinned SEDI schema vectors: Sam Smith's current schemas and every revision they displaced.
 
-The byte hashes also catch edits to formatting or key order that a schema SAID,
-which is computed over canonical JSON, cannot detect.
+The current IAR, Core, Residence and Age are Sam Smith's at keripy 9a8b7aa7 (`this.i` @3x2jtfxc).
+The byte hashes also catch edits to formatting or key order that a schema SAID, which is computed
+over canonical JSON, cannot detect.
 """
 
 from __future__ import annotations
@@ -15,10 +16,32 @@ import pytest
 from schematools.said import compute_schema_said
 
 ROOT = Path(__file__).resolve().parents[4]
-SAM_SOURCE = "https://github.com/WebOfTrust/keripy/blob/ec307cd74/tests/sedi/test_sedi.py"
+SAM_CURRENT = "https://github.com/WebOfTrust/keripy/blob/9a8b7aa7/tests/sedi/test_sedi.py"
+SAM_ORIGINAL = "https://github.com/WebOfTrust/keripy/blob/ec307cd74/tests/sedi/test_sedi.py"
 
-PINS = {
+# Sam's IarSchemaSaid, CoreSchemaSaid, ResidenceSchemaSaid and AgeSchemaSaid at 9a8b7aa7.
+SAM_CURRENT_PINS = {
     "sedi-iar": (
+        "EFAB6k77bXHs6bg9PORW7UYF79GD_OuEcEjmBpwhcfRN",
+        "4ffecad00c3b4db27b67a18bc621dc19c2a6821c9a58189a06cc468561073b2a",
+    ),
+    "sedi-core": (
+        "EAyyREL1r5OL8Z9HGl47df26rn_JRLsC7PVDBH5RtwLs",
+        "70784bbf5d317760e0d488733c28b19d5281cd4e3dcdd946b778fb6582c4b934",
+    ),
+    "sedi-residence": (
+        "EH7ayivQLHwfBKwFhg7mcpOzHEWcvvJ24EO0OyzvPVKQ",
+        "e115d4fc8f00cf54d07429f5286574388c5003177c23c0a5376706d00dd90708",
+    ),
+    "sedi-age": (
+        "EH-ZOEzzWm5hw351zL3IBJiEMDnJiKrv17lQp2JFj8Sb",
+        "9e8bf1e3f675ff671ce1b01a942f87d8c1daf7e235397f3db75dbdaba1992f20",
+    ),
+}
+
+# Sam's schemas at ec307cd74, the Summit's previous pin.
+SAM_ORIGINAL_PINS = {
+    "sedi-iar-pre-sam-repin-0.1.0": (
         "EHp3Ik9q-6-sT0IFaLRJDEjd-j3zMRdy1aN6O6awCsZd",
         "1ad44ebf935f69d2a0dfad37ba0fa4f8f563fec6d357ef8ac67e570d4c002afc",
     ),
@@ -32,38 +55,75 @@ PINS = {
     ),
 }
 
-CURRENT_CORE = (
-    "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh",
-    "fecf18fcffc622820783e5cc8cc66653a61bf1ea6797a0d6ef5b46965b092cb9",
-)
+# Published Bakobo revisions displaced by the re-pin, kept byte for byte.
+DISPLACED = {
+    "sedi-core-0.2.0": (
+        "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh",
+        "fecf18fcffc622820783e5cc8cc66653a61bf1ea6797a0d6ef5b46965b092cb9",
+    ),
+    "sedi-residence-0.2.0": (
+        "EDg5tBqnVFoGILBgIknKs-0CHv3au4GczuPgjf4jx1X2",
+        "2bfe9f3ab0836714554f90bc971cb2723306453ad0f953825dc22459ffa9797d",
+    ),
+    "sedi-age-3.0.0": (
+        "EOZgLvehWuTl_lOJjEX7sEqsif1jrk9f_H10_p85r65H",
+        "7fd2fde375155015d98937b89e1ebadc734b9c93075fe1e3c861df5f39c547f3",
+    ),
+    "sedi-present-county-pre-sam-repin-2.0.0": (
+        "EOkso5ZxAnIOO4j8D8zsfxx2ECn0MB0Ml8A0sZx-6qT0",
+        "e003416f2456502bbfd1b7fe9fd45dfdc3d68a07de1dba1f95217f539a8ef2ea",
+    ),
+    "sedi-present-age-portrait-pre-sam-repin-4.0.0": (
+        "EHcc2Ow86VVg37zhILHFz942GEYfQ8PGTwKb2h4KdJFU",
+        "b5566a70f707316dbac2be6aa626e84889f022ea6eaaae7362fb1595e31ce284",
+    ),
+    "sedi-guardian-pre-sam-repin-3.0.0": (
+        "EMQmtKXdW2bAgtzn9sUJ8VcWwasXvkL5JneYwU83m6Eh",
+        "acc7931b601f1cda130a7527d9367b45c1295da7ae68195f5d2b7b16cbacba63",
+    ),
+    "sedi-ward-core-pre-sam-repin-1.0.0": (
+        "EHM6a9atXNYYta67ZKp8VknJ0KiQ8m5BU6RkMWoK5_1Y",
+        "65f38245e2b4fbcca128ac141e6f35a73d3b612466deed81a4a994346cb2a5d3",
+    ),
+    "sedi-ward-authz-pre-sam-repin-1.0.0": (
+        "EPtKrKbreCiM9b0pY5aKk3d8qfRwCq7x7wVc2A70jKVF",
+        "ac0eba4c16f63421552f8a83785910f78494b21d17a0e8809c18d8aa6559621b",
+    ),
+}
 
-CURRENT_RESIDENCE = (
-    "EDg5tBqnVFoGILBgIknKs-0CHv3au4GczuPgjf4jx1X2",
-    "2bfe9f3ab0836714554f90bc971cb2723306453ad0f953825dc22459ffa9797d",
-)
 
-
-@pytest.mark.parametrize("name", PINS)
-def test_sam_schema_pin(name: str) -> None:
-    expected_said, expected_sha256 = PINS[name]
-    raw = (ROOT / name / f"{name}.schema.json").read_bytes()
+def _check(name: str, expected_said: str, expected_sha256: str, source: str) -> None:
+    relative = f"{name}/{name}.schema.json"
+    raw = (ROOT / relative).read_bytes()
     schema = json.loads(raw)
-    assert schema["$id"] == expected_said, SAM_SOURCE
-    assert compute_schema_said(schema) == expected_said, SAM_SOURCE
-    assert hashlib.sha256(raw).hexdigest() == expected_sha256, SAM_SOURCE
+    registry = json.loads((ROOT / "registry.json").read_text())
+    assert schema["$id"] == expected_said, source
+    assert compute_schema_said(schema) == expected_said, source
+    assert hashlib.sha256(raw).hexdigest() == expected_sha256, source
+    assert registry[expected_said] == relative
 
 
-def test_bakobo_compact_core_pin() -> None:
-    raw = (ROOT / "sedi-core/sedi-core.schema.json").read_bytes()
-    schema = json.loads(raw)
-    assert schema["$id"] == CURRENT_CORE[0]
-    assert compute_schema_said(schema) == CURRENT_CORE[0]
-    assert hashlib.sha256(raw).hexdigest() == CURRENT_CORE[1]
+@pytest.mark.parametrize("name", SAM_CURRENT_PINS)
+def test_sam_current_schema_pin(name: str) -> None:
+    _check(name, *SAM_CURRENT_PINS[name], SAM_CURRENT)
 
 
-def test_bakobo_compact_residence_pin() -> None:
-    raw = (ROOT / "sedi-residence/sedi-residence.schema.json").read_bytes()
-    schema = json.loads(raw)
-    assert schema["$id"] == CURRENT_RESIDENCE[0]
-    assert compute_schema_said(schema) == CURRENT_RESIDENCE[0]
-    assert hashlib.sha256(raw).hexdigest() == CURRENT_RESIDENCE[1]
+@pytest.mark.parametrize("name", SAM_ORIGINAL_PINS)
+def test_sam_original_schema_pin(name: str) -> None:
+    _check(name, *SAM_ORIGINAL_PINS[name], SAM_ORIGINAL)
+
+
+@pytest.mark.parametrize("name", DISPLACED)
+def test_displaced_revision_stays_resolvable_byte_for_byte(name: str) -> None:
+    _check(name, *DISPLACED[name], "published revision displaced by @3x2jtfxc")
+
+
+@pytest.mark.parametrize("name,example", [
+    ("sedi-iar", "EOci_-BIIESmZ_TbIkc4UZO2ic0e-_RqGzVxAMYNvnO_"),
+    ("sedi-core", "ENOVdsuMryEUCyZ1qQ26VSqtIMEzgOdyqZ2WCx2S11Nf"),
+    ("sedi-residence", "EPb1xxIaIvPTckSE80yTOsKwECWvTYW_stqpzWvpI2PH"),
+    ("sedi-age", "EL_TknAe1H0HFAO3GiFL3OFLDVCyIbo5e9C978_sKPwI"),
+])
+def test_the_example_is_sams_issued_vector_for_guy(name: str, example: str) -> None:
+    """Each example is Guy's credential from Sam's test_sedi_acdcs at 9a8b7aa7, unmodified."""
+    assert json.loads((ROOT / name / "example.json").read_text())["d"] == example, SAM_CURRENT

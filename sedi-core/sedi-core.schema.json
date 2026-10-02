@@ -1,10 +1,10 @@
 {
-  "$id": "ELNhZbCUiafPrMFnL2vRGEjylRu8zug-3M-goUft8bfh",
+  "$id": "EAyyREL1r5OL8Z9HGl47df26rn_JRLsC7PVDBH5RtwLs",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Core Schema",
   "description": "SEDI Core Identity JSON Schema for acm ACDC.",
   "credentialType": "SEDI_Core_ACDC_acm_message",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "type": "object",
   "required": [
     "v",
@@ -68,9 +68,11 @@
             "d",
             "u",
             "i",
+            "primary",
             "givenName",
             "middleName",
             "familyName",
+            "nameSuffix",
             "birthDate",
             "facialImageProof",
             "legalPresenceStatus",
@@ -87,22 +89,26 @@
               "type": "string"
             },
             "i": {
-              "description": "Issuee SMAID SEDI Management AID",
+              "description": "Issuee AID",
               "type": "string"
             },
             "rd": {
               "description": "Issuee Presentation Registry SAID",
               "type": "string"
             },
+            "primary": {
+              "description": "Primary True if not bulk issued else False",
+              "type": "boolean"
+            },
             "givenName": {
               "description": "Given Name Block",
               "oneOf": [
                 {
-                  "description": "SAID of the compact givenName block",
+                  "description": "Given Name SAID",
                   "type": "string"
                 },
                 {
-                  "description": "Given Name Block",
+                  "description": "Given Name Detail",
                   "type": "object",
                   "required": [
                     "d",
@@ -131,11 +137,11 @@
               "description": "Middle Name(s) Block",
               "oneOf": [
                 {
-                  "description": "SAID of the compact middleName block",
+                  "description": "Middle Name SAID",
                   "type": "string"
                 },
                 {
-                  "description": "Middle Name(s) Block",
+                  "description": "Middle Name Detail",
                   "type": "object",
                   "required": [
                     "d",
@@ -164,11 +170,11 @@
               "description": "Family Name Block",
               "oneOf": [
                 {
-                  "description": "SAID of the compact familyName block",
+                  "description": "Family Name SAID",
                   "type": "string"
                 },
                 {
-                  "description": "Family Name Block",
+                  "description": "Family Name Detail",
                   "type": "object",
                   "required": [
                     "d",
@@ -193,15 +199,48 @@
                 }
               ]
             },
+            "nameSuffix": {
+              "description": "Name Suffix Block",
+              "oneOf": [
+                {
+                  "description": "Name Suffix SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "Name Suffix Detail",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Name Suffix Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
             "birthDate": {
               "description": "Birth Date Block",
               "oneOf": [
                 {
-                  "description": "SAID of the compact birthDate block",
+                  "description": "Birth Date SAID",
                   "type": "string"
                 },
                 {
-                  "description": "Birth Date Block",
+                  "description": "Birth Date Detail",
                   "type": "object",
                   "required": [
                     "d",
@@ -230,11 +269,11 @@
               "description": "Facial Image Proof Block",
               "oneOf": [
                 {
-                  "description": "SAID of the compact facialImageProof block",
+                  "description": "Facial Image Proof SAID",
                   "type": "string"
                 },
                 {
-                  "description": "Facial Image Proof Block",
+                  "description": "Facial Image Proof Detail",
                   "type": "object",
                   "required": [
                     "d",
@@ -263,11 +302,11 @@
               "description": "Legal Presense Status Block",
               "oneOf": [
                 {
-                  "description": "SAID of the compact legalPresenceStatus block",
+                  "description": "Legal Presense Status SAID",
                   "type": "string"
                 },
                 {
-                  "description": "Legal Presense Status Block",
+                  "description": "Legal Presense Status Detail",
                   "type": "object",
                   "required": [
                     "d",
@@ -296,11 +335,11 @@
               "description": "Issued Date Block",
               "oneOf": [
                 {
-                  "description": "SAID of the compact issuedDate block",
+                  "description": "Issued Date SAID",
                   "type": "string"
                 },
                 {
-                  "description": "Issued Date Block",
+                  "description": "Issued Date Detail",
                   "type": "object",
                   "required": [
                     "d",
@@ -329,11 +368,11 @@
               "description": "Expiration Date Block",
               "oneOf": [
                 {
-                  "description": "SAID of the compact expirationDate block",
+                  "description": "Expiration Date SAID",
                   "type": "string"
                 },
                 {
-                  "description": "Expiration Date Block",
+                  "description": "Expiration Date Detail",
                   "type": "object",
                   "required": [
                     "d",
@@ -389,46 +428,37 @@
             },
             "utahAgent": {
               "description": "Utah Agent Edge Block",
-              "oneOf": [
-                {
-                  "description": "SAID of the compact utahAgent edge",
+              "type": "object",
+              "required": [
+                "d",
+                "u",
+                "n",
+                "s",
+                "o"
+              ],
+              "properties": {
+                "d": {
+                  "description": "Edge SAID",
                   "type": "string"
                 },
-                {
-                  "description": "Utah Agent Edge Block",
-                  "type": "object",
-                  "required": [
-                    "d",
-                    "u",
-                    "n",
-                    "s",
-                    "o"
-                  ],
-                  "properties": {
-                    "d": {
-                      "description": "Edge SAID",
-                      "type": "string"
-                    },
-                    "u": {
-                      "description": "Edge UE",
-                      "type": "string"
-                    },
-                    "n": {
-                      "description": "Far Node SAID",
-                      "type": "string"
-                    },
-                    "s": {
-                      "description": "Far Node Schema SAID",
-                      "type": "string"
-                    },
-                    "o": {
-                      "description": "Edge Unary Operator",
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false
+                "u": {
+                  "description": "Edge UE",
+                  "type": "string"
+                },
+                "n": {
+                  "description": "Far Node SAID",
+                  "type": "string"
+                },
+                "s": {
+                  "description": "Far Node Schema SAID",
+                  "type": "string"
+                },
+                "o": {
+                  "description": "Edge Unary Operator",
+                  "type": "string"
                 }
-              ]
+              },
+              "additionalProperties": false
             }
           },
           "additionalProperties": false

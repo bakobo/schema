@@ -7,3 +7,5 @@ Ward Core follows Sam's Core envelope, so `t` remains optional here even though 
 The `guardian` edge points to the state-issued guardianship credential, whose attribute block names the ward. A verifier checks that the ward AID matches, resolves the guardian credential, and checks its live registry status. Revoking guardianship can therefore remove the guardian's authority without revoking the ward's identity credential. The schema checks the local edge shape and operator; graph and status checks belong to the verifier.
 
 [`example.json`](example.json) forms a coherent local graph with [`sedi-guardian/example.json`](../sedi-guardian/example.json). [`invalid/`](invalid/) covers a missing guardian edge and wrong far-schema or operator. This is a Bakobo profile of the graph in [keripy discussion #1550](https://github.com/WebOfTrust/keripy/discussions/1550), not a Utah-approved schema.
+
+Sam Smith started a WardCore schema at keripy `9a8b7aa7`, but it still carries Core's SAID rather than its own, so this profile keeps its shape and only its `guardian` pin moved in the re-pin (`this.i` `@3x2jtfxc`).

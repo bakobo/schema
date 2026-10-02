@@ -1,4 +1,4 @@
-"""The current Residence accepts compact references and still checks expanded blocks (@a5kbqzfs)."""
+"""The current Residence, Sam Smith's at keripy 9a8b7aa7 (@3x2jtfxc), accepts compact attribute blocks and still checks expanded ones."""
 
 import json
 from pathlib import Path
@@ -10,7 +10,7 @@ from schematools.said import compute_schema_said
 
 ROOT = Path(__file__).resolve().parents[4]
 ATTRIBUTES = (
-    "street", "city", "county", "state", "postcode", "country", "issuedDate", "expirationDate",
+    "street", "city", "county", "state", "postcode", "country", "issuedDate",
 )
 SAM_RESIDENCE = "EEgFNN1XH90koG5J5pbXKlRNU6TnibizaTQmJcRfEcop"
 
@@ -47,10 +47,12 @@ def test_the_county_step_reveals_county_and_withholds_street_and_postcode() -> N
     _validate(instance)
 
 
-def test_compact_core_identity_edge_validates() -> None:
+def test_a_compact_core_identity_edge_is_refused() -> None:
+    """Sam's Residence gives coreIdentity no string arm; compact the whole edge section instead."""
     instance = _example()
     instance["e"]["coreIdentity"] = instance["e"]["coreIdentity"]["d"]
-    _validate(instance)
+    with pytest.raises(jsonschema.ValidationError):
+        _validate(instance)
 
 
 @pytest.mark.parametrize("name", ATTRIBUTES)
@@ -83,11 +85,15 @@ def test_compact_section_validates(section: str) -> None:
     _validate(instance)
 
 
-def test_the_amendment_is_versioned_and_named_as_bakobos() -> None:
+def test_the_current_residence_is_sams_and_the_bakobo_amendment_is_archived() -> None:
     schema = _schema()
-    assert schema["version"] == "0.2.0"
-    assert schema["$id"] != SAM_RESIDENCE
+    assert schema["$id"] == "EH7ayivQLHwfBKwFhg7mcpOzHEWcvvJ24EO0OyzvPVKQ"
     assert _example()["s"] == schema["$id"]
+    amendment = json.loads((ROOT / "sedi-residence-0.2.0/sedi-residence-0.2.0.schema.json").read_text())
+    registry = json.loads((ROOT / "registry.json").read_text())
+    assert amendment["version"] == "0.2.0"
+    assert amendment["$id"] == "EDg5tBqnVFoGILBgIknKs-0CHv3au4GczuPgjf4jx1X2" == compute_schema_said(amendment)
+    assert registry[amendment["$id"]] == "sedi-residence-0.2.0/sedi-residence-0.2.0.schema.json"
 
 
 def test_sams_residence_remains_resolvable() -> None:
