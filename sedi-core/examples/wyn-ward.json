@@ -1,0 +1,87 @@
+{
+  "v": "ACDCCAACAAJSONAAjG.",
+  "t": "acm",
+  "d": "EMMPK-J8YWBUcIVLu2we_qLeuIgfw-wr4xa60p9XPxpe",
+  "u": "0AA2MlkrX649UaLoE4LCCkH9",
+  "i": "EKBCU6u_xObNhFc9uuz1VdntNt99xmB2fA5qz7Li-Sl-",
+  "rd": "EJv5HZo45iTHxlfDXzGubim62AjlPWNST11iCmfTG5LZ",
+  "s": "ECxPtf9IpBUT1pRZK4eaLA8O2jlc1oXYioYjcHo09eUC",
+  "a": {
+    "d": "ELT-jXQpPpS32MkuqJ-0QCmCSOG2PhOfDUMpk-xUrwJH",
+    "u": "0AA_s2nabbdeAZwF3JjfnO2S",
+    "i": "EKr8JLtfqWCmHrxO3yu8ocS2n9o0Tlspeaqm9ZOf3FM1",
+    "primary": false,
+    "givenName": {
+      "d": "EKCbI7LM2X4t8JsVHtMAOOoVb5QQYHq6DeSHD28mywQm",
+      "u": "0ACI4aDqXnh9TxPQjD6t9Hxj",
+      "value": "Wyn"
+    },
+    "middleName": {
+      "d": "EPDk6T5mEGjVX1FTti3iaiIH9kHzgywDclD1rLJyaikS",
+      "u": "0AD9wK9pALAbcI4f4A3Nk_l8",
+      "value": "Biff"
+    },
+    "familyName": {
+      "d": "EFE_tlePMMqIE-p_kSpAGHS8XXC8wUlEChsKVAimOO4f",
+      "u": "0AAzJH9-zrvBCkTzbohPtGxU",
+      "value": "Brown"
+    },
+    "nameSuffix": {
+      "d": "EHGYewGuju4W-Nj0IRVlXg0mEld9Nvh8hDMIX56GFEyF",
+      "u": "0ABT57tmyCrrTCRb265VxiQl",
+      "value": ""
+    },
+    "birthDate": {
+      "d": "EBaEu3HRO-HIe_XUuX7mZtdi1O3mMD0hpTJt_qr6dBxV",
+      "u": "0AClzgUAU1nPamJMtvP5t7KD",
+      "value": "2012-06-21T00:00:00.000000+00:00"
+    },
+    "facialImageProof": {
+      "d": "EDCWzr0nm5U1GGSUeWdpNnhZdiC9qnzcrQ1lo_sd_4BO",
+      "u": "0ABZnItnZv4Srda8XgnTT-iV",
+      "value": "EA2bKh8cbMNVPsxS4ZfV0Tt9Zc2sD4nW7pQ1mR3yL5oX"
+    },
+    "legalPresenceStatus": {
+      "d": "EA5TD6VPhiTTg4lCK2SnbUip8dI4VYwhot3qlr9Y3bLA",
+      "u": "0ABRPKq-gS_CKApknYsdVrBI",
+      "value": "citizen"
+    },
+    "issuedDate": {
+      "d": "EETZ-tiFaXzvmL62Td2NZGE62EDCj6dq0mTz5jwyO5A6",
+      "u": "0ACkKfbJ_UmJyJ7U6BFqi9M7",
+      "value": "2026-09-23T00:00:00.000000+00:00"
+    },
+    "expirationDate": {
+      "d": "EApHFRE4OTmuMQPC89mQPgB36d3Vm0C6xRqGp0u3omHV",
+      "u": "0ACEKNaoMj9ZHatY4EqZKTJP",
+      "value": "2028-09-01T00:00:00.000000+00:00"
+    }
+  },
+  "e": {
+    "d": "EECtjcm0XiUKB6PnjqnkcOib3MwApbQf68IeG-eJAf_V",
+    "u": "0AARySR4JDpLn0eZaPqS28ns",
+    "utahAgent": {
+      "d": "EEvyVqqPopAU2p7Z2W7WREU7Cm-fxXw0rGIsyE7QERi6",
+      "u": "0ABTHEB1Dmm26ztL6ZggPIIr",
+      "n": "EM62a9na-h-m81HgCPOJpx3h9iJHVmNeIb3n1EGV24HS",
+      "s": "EMnswUTHQ11HzWlqYVUJGVVtOelwW_bRckn622CkObDQ",
+      "o": "I2I"
+    },
+    "guardians": {
+      "d": "EFLfjih4Rhyn21xRo284vB-uAUag3isQMIYBEtalELvT",
+      "u": "0ABx_oWhrQVi-nJR3lk3QMYw",
+      "o": "OR",
+      "first": {
+        "d": "EM-a1o7cl_m57Orv95iUbEw6xbW5YUN-N3auG0A72PTj",
+        "u": "0AC3T38GCz-oinu98wpWrisP",
+        "n": "ECcm7oztkpn3AjLEIili9RwWofUsof6tPtlP7cVHs-mZ",
+        "s": "ECY9m207KdsKfiu3uYUyb02VYmpOP9vDgwKDFPMjoCVp",
+        "o": "NI2I"
+      }
+    }
+  },
+  "r": {
+    "d": "EFPxq4WPl29szUqbrQIviOh_Ls_RlrYbp4L-fdQH0XrX",
+    "l": ""
+  }
+}
