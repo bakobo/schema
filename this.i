@@ -2316,3 +2316,34 @@ bakobo owns a home for general-purpose ACDC schemas, GCD chief among them = goal
         must still resolve and verify each SAID before admitting a claim. The accepted
         tradeoff is that the revised Core no longer has byte identity with Sam's
         upstream schema; the archived revision retains that provenance.
+    Publish a clerk-issued receipt for mail-in ballot packet possession = decision:
+      id: zg5v5ip2
+      why: >
+        The Summit's mail-in ballot act (plan MB, proposed by Christopher Bramwell and George
+        Mcewan, 2026-09-23) ends with the county clerk returning a credential that says "packet P
+        was in the possession of a verified voter at time t". No schema here or in Sam Smith's
+        module says that, so publish sedi-ballot-receipt 1.0.0 as a Bakobo provisional profile,
+        not Utah policy. The clerk issues it from its own registry, so a clerk that later rejects
+        the packet can revoke the receipt, to the AID that presented, which is the per-copy holder
+        AID and never the SEDI Management AID. The attribute section names the election, the
+        packet, the clerk's signed request by SAID, the IPEX grant exchange by SAID, the time the
+        clerk verified it, and the schema of the credential whose disclosure the clerk matched
+        against the voter roll. Naming the request and the exchange lets the holder's KEL seal of
+        the exchange, whose witness receipts timestamp it independently of the clerk's clock, be
+        joined to the receipt by anyone the holder shows both to. Deliberately absent: any voter
+        attribute (the clerk already holds exactly what was disclosed, and copying it here would
+        put identity into a credential the holder may show to others), any edge to the presented
+        Core (which would join the receipt to that copy for every later verifier), and anything
+        about the ballot itself, since the packet is separated from the ballot before counting and
+        possession is all this attests. Attributes are flat strings rather than selectively
+        disclosable blocks; the section as a whole can still be compacted to its SAID. Both nonces
+        are floored at 24 characters, a CESR 128-bit salt, as bindkey-private's are: the packet and
+        election identifiers are printed on paper and guessable, so without a real attribute nonce
+        a party holding a compacted receipt could confirm a guessed packet by recomputing the
+        attribute SAID. heldAt is an RFC 3339 date-time with an offset. Both nonces are required, and every
+        identifier the receipt names (the registry, the request, the exchange, the basis schema)
+        must have the shape of a CESR digest and each AID that of a CESR prefix, so a receipt
+        naming an unresolvable reference does not validate. Rejected
+        reusing attestation (a digest attestation has no election or packet semantics a verifier
+        could check) and a holder-issued presentation recipe (the point is the clerk's word, not
+        the holder's). Tradeoff: one more Bakobo-only SEDI schema to retire if Utah defines its own.

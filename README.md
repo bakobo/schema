@@ -45,6 +45,7 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 | [sedi-guardian](sedi-guardian/) | provisional guardian credential with ward in a disclosable attribute block |
 | [sedi-ward-core](sedi-ward-core/) | provisional Core variant for a ward, with an NI2I edge to guardianship |
 | [sedi-ward-authz](sedi-ward-authz/) | provisional guardian-issued, separately revocable ward authorization |
+| [sedi-ballot-receipt](sedi-ballot-receipt/) | provisional clerk-issued receipt that a verified voter held a mail-in ballot packet; no voter attribute, no edge, nothing about the ballot |
 
 ## Status
 
