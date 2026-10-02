@@ -6,6 +6,8 @@ from pathlib import Path
 import jsonschema
 import pytest
 
+from keri.core.coring import DigDex, Matter, PreDex
+
 from schematools.said import compute_schema_said, saidify_sad
 
 ROOT = Path(__file__).resolve().parents[4]
@@ -222,3 +224,36 @@ def test_the_schema_says_unknown_kinds_match_nothing() -> None:
     targets = _schema()["properties"]["a"]["oneOf"][1]["properties"]["constraints"]["properties"]["targets"]
     assert "matches nothing" in targets["description"]
     assert "MUST deny" in targets["description"]
+
+
+def _codes(dex) -> list[str]:
+    return sorted(value for name, value in vars(dex).items() if not name.startswith("_"))
+
+
+def _vector(code: str, fill: int) -> str:
+    """A well-formed qb64 value for this derivation code, made by keri itself."""
+    return Matter(raw=bytes([fill]) * Matter._rawSize(code), code=code).qb64
+
+
+@pytest.mark.parametrize("code", _codes(PreDex))
+@pytest.mark.parametrize("fill", [0x00, 0x5A, 0xFF])
+def test_every_keri_prefix_code_is_an_aid(code, fill) -> None:
+    """The aid kind is exactly keri's PreDex: every code it can derive a prefix with (#13 review)."""
+    aid = _vector(code, fill)
+    _accepted(_with_targets([{"kind": "aid", "id": aid}]))
+    _accepted(_with_targets([{"kind": "aid", "designatedBy": {"aids": [aid]}}]))
+
+
+@pytest.mark.parametrize("code", _codes(DigDex))
+@pytest.mark.parametrize("fill", [0x00, 0x5A, 0xFF])
+def test_every_keri_digest_code_is_a_said(code, fill) -> None:
+    said = _vector(code, fill)
+    _accepted(_with_targets([{"kind": "said", "id": said}]))
+    _accepted(_with_targets([{"kind": "*", "designatedBy": {"proof": said}}]))
+
+
+# Python validators also admit a trailing newline after an anchored pattern (~3b3s).
+def test_a_signature_is_not_an_aid() -> None:
+    """A qb64 value of the right shape but a code outside PreDex is refused."""
+    signature = _vector("0B", 0x5A)  # Ed25519 signature: 88 characters, not a prefix code
+    _refused(_with_targets([{"kind": "aid", "id": signature}]))

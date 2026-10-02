@@ -1,5 +1,5 @@
 {
-  "$id": "EK6LXCHdkwld-YU_Fa1CuwkCxATZl2B9xwvFZp19gprO",
+  "$id": "EDw72tf--RPMq2BUzOKSjVhASwXHyk3mzWx4sVmJrNwX",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Generalized Cooperative Delegation Credential",
   "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 4.0 names the targets of acts (constraints.targets): the objects a delegate may act on, or who may designate them, so a delegate cannot be made a confused deputy by a stranger who chooses where its authority lands; acts and targets are one constraint, so a credential that grants acts must also say which targets. Version 3.1 admits custom keys inside the constraints container and inside a duty, so an issuer can express a constraint or obligation the standard fields do not cover; the fail-closed rule on an unrecognized constraint key is unchanged, but it is now enforced by the verifier rather than by schema validation. Version 3.0 adopts the ACDC v2 envelope (acm/JSON: rd replaces ri, message type t, most-compact-form SAIDs). Version 2.0 organized the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classed duties in the rules block.",
@@ -177,7 +177,7 @@
                         "additionalProperties": false,
                         "properties": {
                           "kind": {
-                            "description": "The kind of object, which fixes its canonical form and its containment rule. Standard kinds: aid (a qb64 AID: Ed25519, Blake3 self-addressing, or ECDSA secp256k1/secp256r1) and said (a qb64 digest), both matched by equality, iban (an ISO 13616 account number in electronic format -- no spaces, uppercase -- matched by equality; a verifier MUST also check its check digits, which this schema cannot). A governance framework (gfw) may define other kinds as lowercase dotted names. A verifier that does not know a kind MUST treat the entry as matching nothing.",
+                            "description": "The kind of object, which fixes its canonical form and its containment rule. Standard kinds: aid (any qb64 identifier prefix KERI can derive: a basic Ed25519, ECDSA or Ed448 key, or a self-addressing digest) and said (any qb64 KERI digest, 256 or 512 bits), both matched by equality, iban (an ISO 13616 account number in electronic format -- no spaces, uppercase -- matched by equality; a verifier MUST also check its check digits, which this schema cannot). A governance framework (gfw) may define other kinds as lowercase dotted names. A verifier that does not know a kind MUST treat the entry as matching nothing.",
                             "type": "string",
                             "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$",
                             "maxLength": 64
@@ -233,7 +233,7 @@
                             "then": {
                               "properties": {
                                 "id": {
-                                  "pattern": "^(?:[BDE][A-P][A-Za-z0-9_-]{42}|1AA[ABIJ][A-Za-z0-9_-]{44})$"
+                                  "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
                                 }
                               }
                             }
@@ -249,7 +249,7 @@
                             "then": {
                               "properties": {
                                 "id": {
-                                  "pattern": "^[EFGHI][A-P][A-Za-z0-9_-]{42}$"
+                                  "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
                                 }
                               }
                             }
@@ -266,7 +266,7 @@
                         "additionalProperties": false,
                         "properties": {
                           "kind": {
-                            "description": "The kind of object, which fixes its canonical form and its containment rule. Standard kinds: aid (a qb64 AID: Ed25519, Blake3 self-addressing, or ECDSA secp256k1/secp256r1) and said (a qb64 digest), both matched by equality, iban (an ISO 13616 account number in electronic format -- no spaces, uppercase -- matched by equality; a verifier MUST also check its check digits, which this schema cannot). A governance framework (gfw) may define other kinds as lowercase dotted names. A verifier that does not know a kind MUST treat the entry as matching nothing. On a designator entry only, '*' means every kind.",
+                            "description": "The kind of object, which fixes its canonical form and its containment rule. Standard kinds: aid (any qb64 identifier prefix KERI can derive: a basic Ed25519, ECDSA or Ed448 key, or a self-addressing digest) and said (any qb64 KERI digest, 256 or 512 bits), both matched by equality, iban (an ISO 13616 account number in electronic format -- no spaces, uppercase -- matched by equality; a verifier MUST also check its check digits, which this schema cannot). A governance framework (gfw) may define other kinds as lowercase dotted names. A verifier that does not know a kind MUST treat the entry as matching nothing. On a designator entry only, '*' means every kind.",
                             "type": "string",
                             "pattern": "^(?:\\*|[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*)$",
                             "maxLength": 64
@@ -291,7 +291,7 @@
                                     "minItems": 1,
                                     "items": {
                                       "type": "string",
-                                      "pattern": "^(?:[BDE][A-P][A-Za-z0-9_-]{42}|1AA[ABIJ][A-Za-z0-9_-]{44})$"
+                                      "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
                                     },
                                     "maxItems": 64
                                   }
@@ -306,7 +306,7 @@
                                 "properties": {
                                   "proof": {
                                     "type": "string",
-                                    "pattern": "^[EFGHI][A-P][A-Za-z0-9_-]{42}$"
+                                    "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
                                   }
                                 }
                               }
