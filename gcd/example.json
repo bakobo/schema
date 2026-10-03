@@ -1,13 +1,13 @@
 {
-  "v": "ACDCCAACAAJSONAA7_.",
+  "v": "ACDCCAACAAJSONAA9h.",
   "t": "acm",
-  "d": "ELr_zPoGj5QTDZZrD2b9NnQFYV_gHQNR6k1hdUV0kDyZ",
+  "d": "EDEBNa1eJGXPhauEn1W-yHdmEXuxGwX9HwTNKN5CtOrq",
   "u": "0ADE6oAxBl4E7uKeGUb7BEYi",
   "i": "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL",
   "rd": "EM2YZ78SKE8eO4W1lQOJeer5xKZqLmJV7SPr3Ji5DMBZ",
-  "s": "EDqAod5ZiCNfQziVHjOALNNRabw2iwpAYqqOsEXUcxm5",
+  "s": "ELDiEui48xsASGvDcNdsOwPptW0v4i-oN6-75_I1d60c",
   "a": {
-    "d": "EFSYtX23kKdRryp-q6pYpAL-8463P0df5N2ei9LdGI19",
+    "d": "EKGcpnNRt95zyD1Mz8llbx-UUkJDhGEE8SmUh6bjK_pL",
     "u": "0AC9kH8q99PTCQNteGyI-F4g",
     "i": "EIkxoE8eYnPLCydPcyc_lhQgwOdBHwzkSe36e2gqEH-5",
     "dt": "2024-12-27T13:11:29.062000+00:00",
@@ -25,6 +25,16 @@
       ],
       "acts": [
         "{observe, create} commitment"
+      ],
+      "targets": [
+        {
+          "kind": "*",
+          "designatedBy": {
+            "aids": [
+              "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL"
+            ]
+          }
+        }
       ],
       "domains": [
         "payments"
