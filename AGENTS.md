@@ -7,9 +7,9 @@ How every Bakobo repo builds is governed by cross-cutting standards, canonical i
 work: `git clone --depth 1 https://github.com/bakobo/dev`. Always on:
 
 - **Intent-first** development and **strict TDD at 100% branch coverage of new code** — see the
-  sections below and [`dev/methodology.md`](../dev/methodology.md). A `this.i` node's `id:` is
-  opaque base32 — `^[a-z2-7]{8}$`, from a real random source
-  (`tr -dc 'a-z2-7' < /dev/urandom | head -c 8`), never a semantic label and never hand-typed.
+  sections below and [`dev/methodology.md`](../dev/methodology.md). A new `this.i` node's id is a
+  `nid:` — 8 digit-first bech32 characters minted by `i id` or `i add` and never typed or generated
+  any other way; a legacy `id:` (base32, hand-made, older) is grandfathered and never rewritten.
 - **Fail closed.** Untrusted input never carries authority; when something can't be checked, the
   effect does not land ([`org` principle 8](../org/design/purpose-and-principles.md)).
 - **High-quality errors.** Every error carries a stable symbolic code, says whether retrying could
