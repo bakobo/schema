@@ -1,12 +1,12 @@
 {
-  "v": "ACDCCAACAAJSONAA1Z.",
+  "v": "ACDCCAACAAJSONAA27.",
   "t": "acm",
-  "d": "ENaSSdLuxuw3hQ4eBWQuxQDGPSn6aU6B55ZYFslcjn5C",
+  "d": "EDJi33jcZodN6ylX8yaDfzqLq8r2RLEgT8PNFBE-6Efy",
   "i": "EEpjq0jMPWTgAIiusb37rCCwyFVYleJ1dsa9EzfcvEBB",
   "rd": "EAVblgVyCpzGY_8jH1vPOQTkyUb-YNixxwIGynQKfDNE",
-  "s": "EDqAod5ZiCNfQziVHjOALNNRabw2iwpAYqqOsEXUcxm5",
+  "s": "ELDiEui48xsASGvDcNdsOwPptW0v4i-oN6-75_I1d60c",
   "a": {
-    "d": "ELEpkT9vjvHwp9XbDpU3OIZ7Xeoomy67orJcMWwMlZeV",
+    "d": "EHE0mOOaqGJTDXCJJnYtl4nsOF82v2m9gxeD0ivUj0gf",
     "i": "EAZ_MkqQmJy746IldbNXAB5_lhhyOI8g8ym7EKi8XZZZ",
     "dt": "2026-08-01T09:00:00.000000+00:00",
     "gfw": "EEH0Q14-DKglGj-aYmqRF6HNTOIJwwvWVnMf9VH3o687",
@@ -24,6 +24,16 @@
       ],
       "acts": [
         "{create, modify} commitment"
+      ],
+      "targets": [
+        {
+          "kind": "*",
+          "designatedBy": {
+            "aids": [
+              "EEpjq0jMPWTgAIiusb37rCCwyFVYleJ1dsa9EzfcvEBB"
+            ]
+          }
+        }
       ],
       "jurisdictions": [
         "US-CA"

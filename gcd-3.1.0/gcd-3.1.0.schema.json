@@ -1,12 +1,12 @@
 {
-  "$id": "ELDiEui48xsASGvDcNdsOwPptW0v4i-oN6-75_I1d60c",
+  "$id": "EDqAod5ZiCNfQziVHjOALNNRabw2iwpAYqqOsEXUcxm5",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Generalized Cooperative Delegation Credential",
-  "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 4.0 names the targets of acts (constraints.targets): the objects a delegate may act on, or who may designate them, so a delegate cannot be made a confused deputy by a stranger who chooses where its authority lands; acts and targets are one constraint, so a credential that grants acts must also say which targets. Version 3.1 admits custom keys inside the constraints container and inside a duty, so an issuer can express a constraint or obligation the standard fields do not cover; the fail-closed rule on an unrecognized constraint key is unchanged, but it is now enforced by the verifier rather than by schema validation. Version 3.0 adopts the ACDC v2 envelope (acm/JSON: rd replaces ri, message type t, most-compact-form SAIDs). Version 2.0 organized the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classed duties in the rules block.",
+  "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 3.1 admits custom keys inside the constraints container and inside a duty, so an issuer can express a constraint or obligation the standard fields do not cover; the fail-closed rule on an unrecognized constraint key is unchanged, but it is now enforced by the verifier rather than by schema validation. Version 3.0 adopts the ACDC v2 envelope (acm/JSON: rd replaces ri, message type t, most-compact-form SAIDs). Version 2.0 organized the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classed duties in the rules block.",
   "$comment": "These credentials have no required edges. They can be chained by showing that the issuer's identifier is also an identifier associated with another credential of whatever type, but they do not require chaining. The optional e block carries an I2I issuer edge for that purpose.",
   "type": "object",
   "credentialType": "gcd-credential",
-  "version": "4.0.0",
+  "version": "3.1.0",
   "required": [
     "v",
     "d",
@@ -125,7 +125,7 @@
               }
             },
             "constraints": {
-              "description": "The enabling 'may': the allow-list dimensions that a stranger-verifier gates on. Within a field, values are ORed (any match satisfies that field); across fields they are ANDed (every present field must be satisfied). An absent field is unconstrained in that dimension. acts and targets are two keys for ONE dimension, act space located by (effect, state-kind, target): with neither present it is unconstrained, and acts without targets is invalid (dependentRequired), so an issuer who limits what kind of act may be done must also say on what, or declare that any target will do. Custom keys are allowed here (additionalProperties is true as of 3.1.0), so an issuer can express a constraint the standard fields do not cover; such a key takes its semantics from the governance framework named in gfw, and useStdIfPossible obliges an issuer to prefer a standard field wherever one fits. This container remains FAIL-CLOSED, but the obligation runs to the verifier, not to schema validation: a verifier that does not understand a key it finds here MUST assume that constraint is unmet and MUST deny. Admitting a key is not vouching for it, and validating against this schema is not an authorization decision. Nothing outside this container constrains the exercise of delegated authority.",
+              "description": "The enabling 'may': the allow-list dimensions that a stranger-verifier gates on. Within a field, values are ORed (any match satisfies that field); across fields they are ANDed (every present field must be satisfied). An absent field is unconstrained in that dimension. Custom keys are allowed here (additionalProperties is true as of 3.1.0), so an issuer can express a constraint the standard fields do not cover; such a key takes its semantics from the governance framework named in gfw, and useStdIfPossible obliges an issuer to prefer a standard field wherever one fits. This container remains FAIL-CLOSED, but the obligation runs to the verifier, not to schema validation: a verifier that does not understand a key it finds here MUST assume that constraint is unmet and MUST deny. Admitting a key is not vouching for it, and validating against this schema is not an authorization decision. Nothing outside this container constrains the exercise of delegated authority.",
               "type": "object",
               "additionalProperties": true,
               "properties": {
@@ -146,7 +146,7 @@
                   }
                 },
                 "acts": {
-                  "description": "The set of (effect, state-kind) POINTS this delegate may act on \u2014 the enabling 'may' over the act grid. Each entry is one point, written 'effect state-kind' (e.g. 'create commitment'), or a one-sided brace enumeration naming several kinds for one effect ('observe {info, record}') or several effects for one kind ('{create, modify} record'); items inside braces separate on one or more commas or spaces. effect is one of observe, create, modify, preserve, destroy; state-kind is one of info, record, commitment, authority, resource, relationship \u2014 the two axes of one coordinate, neither meaningful alone. An act is authorized only if EVERY (effect, state-kind) point it occupies is covered here. The gate (auto/rule/human) an act must clear is DERIVED per act from its points and its target via the governance framework (gfw), not enumerated here. A pure delegator (exerciseMode authorize) omits this field, having an empty act surface. Two-sided braces and wildcards are intentionally not allowed. acts and targets are one constraint: a credential that carries acts MUST carry targets, which names the objects these points may be exercised on (see targets).",
+                  "description": "The set of (effect, state-kind) POINTS this delegate may act on \u2014 the enabling 'may' over the act grid. Each entry is one point, written 'effect state-kind' (e.g. 'create commitment'), or a one-sided brace enumeration naming several kinds for one effect ('observe {info, record}') or several effects for one kind ('{create, modify} record'); items inside braces separate on one or more commas or spaces. effect is one of observe, create, modify, preserve, destroy; state-kind is one of info, record, commitment, authority, resource, relationship \u2014 the two axes of one coordinate, neither meaningful alone. An act is authorized only if EVERY (effect, state-kind) point it occupies is covered here. The gate (auto/rule/human) an act must clear is DERIVED per act from its points and its target via the governance framework (gfw), not enumerated here. A pure delegator (exerciseMode authorize) omits this field, having an empty act surface. Two-sided braces and wildcards are intentionally not allowed.",
                   "type": "array",
                   "uniqueItems": true,
                   "minItems": 1,
@@ -159,182 +159,6 @@
                       "{create, modify} record"
                     ]
                   }
-                },
-                "targets": {
-                  "description": "The objects the delegate may act on, or whose designation of them the delegate may act on -- the defense against a confused deputy, where a stranger chooses the target and the delegate supplies the authority. An OR-set: an act whose target is contained by SOME entry passes this field. Matching is EXACT over the kind's canonical form, because any loose comparison is a bypass. A target whose kind no entry names matches nothing, and an entry whose kind the verifier does not know matches nothing; a verifier that finds no entry containing the act's target MUST deny. An act whose target the grant itself fixes (a duty-driven act) passes only where the governance framework or the protocol binding says that act kind carries no target. Required whenever acts is present. Bounded: at most 1024 entries, 30 act points per entry of at most 128 characters each, 64 designator AIDs, a 64-character kind and a 256-character id.",
-                  "type": "array",
-                  "uniqueItems": true,
-                  "minItems": 1,
-                  "items": {
-                    "oneOf": [
-                      {
-                        "description": "A NAMED target: designation at grant time. The principal chose this object in advance, so a stranger checks an act's target against the credential alone, with no evidence about who asked for the act.",
-                        "type": "object",
-                        "required": [
-                          "kind",
-                          "id"
-                        ],
-                        "additionalProperties": false,
-                        "properties": {
-                          "kind": {
-                            "description": "The kind of object, which fixes its canonical form and its containment rule. Standard kinds: aid (any qb64 identifier prefix KERI can derive: a basic Ed25519, ECDSA or Ed448 key, or a self-addressing digest) and said (any qb64 KERI digest, 256 or 512 bits), both matched by equality, iban (an ISO 13616 account number in electronic format -- no spaces, uppercase -- matched by equality; a verifier MUST also check its check digits, which this schema cannot). A governance framework (gfw) may define other kinds as lowercase dotted names. A verifier that does not know a kind MUST treat the entry as matching nothing.",
-                            "type": "string",
-                            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$",
-                            "maxLength": 64
-                          },
-                          "id": {
-                            "description": "The object, in its kind's canonical form. The pattern admits only the qb64 derivation codes an aid or said can carry, with zero pad bits; a verifier MUST still parse the value as qb64 with a CESR parser, which a pattern cannot fully do.",
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 256
-                          },
-                          "acts": {
-                            "description": "Narrows, and never widens: an act on this entry's targets must be covered by these points AND by constraints.acts when that is present. Same syntax as constraints.acts.",
-                            "type": "array",
-                            "uniqueItems": true,
-                            "minItems": 1,
-                            "items": {
-                              "type": "string",
-                              "maxLength": 128,
-                              "pattern": "^(?:(?:observe|create|modify|preserve|destroy) (?:info|record|commitment|authority|resource|relationship|\\{(?:info|record|commitment|authority|resource|relationship)(?:[ ,]+(?:info|record|commitment|authority|resource|relationship))*\\})|\\{(?:observe|create|modify|preserve|destroy)(?:[ ,]+(?:observe|create|modify|preserve|destroy))*\\} (?:info|record|commitment|authority|resource|relationship))$",
-                              "examples": [
-                                "create commitment",
-                                "observe {info, record, commitment}",
-                                "{create, modify} record"
-                              ]
-                            },
-                            "maxItems": 30
-                          }
-                        },
-                        "allOf": [
-                          {
-                            "if": {
-                              "properties": {
-                                "kind": {
-                                  "const": "iban"
-                                }
-                              }
-                            },
-                            "then": {
-                              "properties": {
-                                "id": {
-                                  "pattern": "^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$"
-                                }
-                              }
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "kind": {
-                                  "const": "aid"
-                                }
-                              }
-                            },
-                            "then": {
-                              "properties": {
-                                "id": {
-                                  "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
-                                }
-                              }
-                            }
-                          },
-                          {
-                            "if": {
-                              "properties": {
-                                "kind": {
-                                  "const": "said"
-                                }
-                              }
-                            },
-                            "then": {
-                              "properties": {
-                                "id": {
-                                  "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
-                                }
-                              }
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "description": "A DESIGNATOR entry: designation at act time. Any target of this kind is covered if the party who named it in the act's request satisfies designatedBy. The act must then carry the signed request that named the target, so the verifier learns who designated it.",
-                        "type": "object",
-                        "required": [
-                          "kind",
-                          "designatedBy"
-                        ],
-                        "additionalProperties": false,
-                        "properties": {
-                          "kind": {
-                            "description": "The kind of object, which fixes its canonical form and its containment rule. Standard kinds: aid (any qb64 identifier prefix KERI can derive: a basic Ed25519, ECDSA or Ed448 key, or a self-addressing digest) and said (any qb64 KERI digest, 256 or 512 bits), both matched by equality, iban (an ISO 13616 account number in electronic format -- no spaces, uppercase -- matched by equality; a verifier MUST also check its check digits, which this schema cannot). A governance framework (gfw) may define other kinds as lowercase dotted names. A verifier that does not know a kind MUST treat the entry as matching nothing. On a designator entry only, '*' means every kind.",
-                            "type": "string",
-                            "pattern": "^(?:\\*|[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*)$",
-                            "maxLength": 64
-                          },
-                          "designatedBy": {
-                            "description": "Whose designation of a target the delegate may act on. 'any': anyone's, which is the most permissive stance and must be declared because it is never the default. {aids}: a target named in a request signed by one of these AIDs (the principal, or someone the principal names). {proof}: a target named by a party who satisfies the proof request with this SAID -- the same kind of object constraints.proofs references. The designator must have signed the designating request itself; a designation relayed through another party does not count.",
-                            "oneOf": [
-                              {
-                                "type": "string",
-                                "const": "any"
-                              },
-                              {
-                                "type": "object",
-                                "required": [
-                                  "aids"
-                                ],
-                                "additionalProperties": false,
-                                "properties": {
-                                  "aids": {
-                                    "type": "array",
-                                    "uniqueItems": true,
-                                    "minItems": 1,
-                                    "items": {
-                                      "type": "string",
-                                      "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
-                                    },
-                                    "maxItems": 64
-                                  }
-                                }
-                              },
-                              {
-                                "type": "object",
-                                "required": [
-                                  "proof"
-                                ],
-                                "additionalProperties": false,
-                                "properties": {
-                                  "proof": {
-                                    "type": "string",
-                                    "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
-                                  }
-                                }
-                              }
-                            ]
-                          },
-                          "acts": {
-                            "description": "Narrows, and never widens: an act on this entry's targets must be covered by these points AND by constraints.acts when that is present. Same syntax as constraints.acts.",
-                            "type": "array",
-                            "uniqueItems": true,
-                            "minItems": 1,
-                            "items": {
-                              "type": "string",
-                              "maxLength": 128,
-                              "pattern": "^(?:(?:observe|create|modify|preserve|destroy) (?:info|record|commitment|authority|resource|relationship|\\{(?:info|record|commitment|authority|resource|relationship)(?:[ ,]+(?:info|record|commitment|authority|resource|relationship))*\\})|\\{(?:observe|create|modify|preserve|destroy)(?:[ ,]+(?:observe|create|modify|preserve|destroy))*\\} (?:info|record|commitment|authority|resource|relationship))$",
-                              "examples": [
-                                "create commitment",
-                                "observe {info, record, commitment}",
-                                "{create, modify} record"
-                              ]
-                            },
-                            "maxItems": 30
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  "maxItems": 1024
                 },
                 "domains": {
                   "description": "Array of authorization-domain identifiers that scope where (in which authorization domain) the delegated authority applies. A domain is an issuer-defined namespace label; it is case-sensitive and compared verbatim.",
@@ -464,11 +288,6 @@
                   "description": "Instructions for constraints that must be evaluated by a human. Any GCD credential that has this field MUST NOT be verified without human judgment.",
                   "type": "string"
                 }
-              },
-              "dependentRequired": {
-                "acts": [
-                  "targets"
-                ]
               }
             },
             "terminatingEvents": {

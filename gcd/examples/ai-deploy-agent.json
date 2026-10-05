@@ -1,12 +1,12 @@
 {
-  "v": "ACDCCAACAAJSONAA7R.",
+  "v": "ACDCCAACAAJSONAA9i.",
   "t": "acm",
-  "d": "EOZxdT6IVEcHprw_GRNv-bHKV9JR_smP869723ayG7lX",
+  "d": "EHZQ39XGK-R9oN9AXPHtj0fJ5oeEttVXIKPCG4qUXV23",
   "i": "EDetDVohmE29HcYagvGJv5J2RbPomNsrfLRaqp670a8j",
   "rd": "EAS-cjMj_2rDH_p04jLS3h9fv-NLJOp5tZsNYVHDXwOX",
-  "s": "EDqAod5ZiCNfQziVHjOALNNRabw2iwpAYqqOsEXUcxm5",
+  "s": "ELDiEui48xsASGvDcNdsOwPptW0v4i-oN6-75_I1d60c",
   "a": {
-    "d": "EPv4U_WOyfuKO52PC8wiyVvk5Anx5n5yNMh41ohTzaEZ",
+    "d": "EEYq0B380l7ZkgS2uny7X7m9IgC7H6XW-nAlMuGcQtuc",
     "i": "EO8KDlV-eEFbq6IbXGlGtLCP_FeLX1VNriBqp-TIThQ8",
     "dt": "2026-08-01T09:00:00.000000+00:00",
     "gfw": "EKoEhpVdN2PzhBv7pmeIyAEKjA8l4fqSO8cyLMTzncBc",
@@ -26,6 +26,19 @@
         "observe {info, record}",
         "create {info, record}",
         "modify {info, record}"
+      ],
+      "targets": [
+        {
+          "kind": "acme.deploy-service",
+          "id": "billing-api"
+        },
+        {
+          "kind": "acme.deploy-service",
+          "id": "ledger-web",
+          "acts": [
+            "observe {info, record}"
+          ]
+        }
       ],
       "domains": [
         "deploy.staging"

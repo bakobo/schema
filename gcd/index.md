@@ -23,6 +23,8 @@ In the digital world, authority may be asserted in many ways, but it is always p
 
 See [gcd.schema.json](gcd.schema.json) and also [rules.json](rules.json).
 
+Version 4.0 adds **`targets`** to the `constraints` container (this.i `@yivcussv`): the objects a delegate may act on, or whose designation of them the delegate may act on. It closes the confused-deputy gap, where a stranger chooses where the delegate's authority lands. `acts` and `targets` are one constraint, so a credential that carries `acts` must also carry `targets`, which is why this is a MAJOR version. See [Targets and the confused deputy](#targets-and-the-confused-deputy) below.
+
 Version 3.1 admits **custom keys** inside the `constraints` container and inside
 a duty (this.i `@vy7qoj`), so an issuer can express a constraint or an obligation
 the standard fields do not cover. The fail-closed rule on an unrecognized
@@ -40,7 +42,7 @@ secure discovery of its revocation registry wins here. `t` is optional (a JSON
 ACDC without it is of type `acm`), and the attribute block's `d` is optional
 (the reference v2 builder emits none; a `d`-less attribute section simply cannot
 be compacted). Earlier versions remain published and resolvable by their
-original SAIDs: [gcd-2.0.1](../gcd-2.0.1/gcd-2.0.1.schema.json) (the same
+original SAIDs: [gcd-3.1.0](../gcd-3.1.0/gcd-3.1.0.schema.json) (3.1 without `targets`), [gcd-2.0.1](../gcd-2.0.1/gcd-2.0.1.schema.json) (the same
 semantic content on the v1 envelope) and
 [gcd-1.0.0](../gcd-1.0.0/gcd-1.0.0.schema.json) (the pre-SDA `c_*` model).
 
@@ -58,7 +60,8 @@ enabling "may"). Each field is optional; an absent field means that dimension is
 unconstrained. For example:
 
 * `goals` constrains the goal-driven behaviors in which the delegate can engage on behalf of the delegator (e.g., to sign SMS messages, to buy, to sell, to schedule appointments...).
-* `acts` names the **(effect, state-kind) points** the delegate may act on — the enabling "may" over the act grid. An act is located by its *effect* (`observe`, `create`, `modify`, `preserve`, `destroy`) over a *kind of state* (`info`, `record`, `commitment`, `authority`, `resource`, `relationship`); these are the two axes of one coordinate, and **neither is meaningful alone** — "create" is create *what*, "commitment" is do *what* to it. Each entry is a point written `effect state-kind` (e.g. `create commitment`), or a one-sided brace enumeration — `observe {info, record}` (one effect, several kinds) or `{create, modify} record` (several effects, one kind). An act is authorized only if **every** point it occupies is covered (filing a return is `create record` *and* `create commitment` in one move). The **gate** an act must clear (auto / rule / human) is *derived* per act from its points and its target via the governance framework (`gfw`) — not enumerated here. A pure delegator (`exerciseMode: authorize`) omits `acts` entirely, having an empty act surface.
+* `acts` names the **(effect, state-kind) points** the delegate may act on — the enabling "may" over the act grid. An act is located by its *effect* (`observe`, `create`, `modify`, `preserve`, `destroy`) over a *kind of state* (`info`, `record`, `commitment`, `authority`, `resource`, `relationship`); these are the two axes of one coordinate, and **neither is meaningful alone** — "create" is create *what*, "commitment" is do *what* to it. Each entry is a point written `effect state-kind` (e.g. `create commitment`), or a one-sided brace enumeration — `observe {info, record}` (one effect, several kinds) or `{create, modify} record` (several effects, one kind). An act is authorized only if **every** point it occupies is covered (filing a return is `create record` *and* `create commitment` in one move). The **gate** an act must clear (auto / rule / human) is *derived* per act from its points and its target via the governance framework (`gfw`) — not enumerated here. A pure delegator (`exerciseMode: authorize`) omits `acts` entirely, having an empty act surface. A credential that carries `acts` must also carry `targets`.
+* `targets` names the **objects** acts may land on: specific accounts, identifiers or documents chosen by the principal, or the parties whose choice of target the delegate may act on. It is the third coordinate of an act, alongside effect and state-kind. See [Targets and the confused deputy](#targets-and-the-confused-deputy).
 * `domains` names the authorization domain(s) in which the delegated authority applies.
 * `physGeos` constrains the locations in which a physically present delegate can exercise their delegated authority.
 * `virtGeos` constrains where a potentially remote (virtually present) delegate can be located while exercising their delegated authority.
@@ -107,6 +110,48 @@ at this.i `@vy7qoj`.
 `gfw` and `useStdIfPossible` both presumed custom constraints from the start;
 before 3.1.0 neither could be honored, because there was no way to write one.
 
+#### Targets and the confused deputy
+
+A *confused deputy* (Norm Hardy, 1988) is a program or agent that holds real authority and is tricked into using it on an object someone else chose. In Hardy's original case, a compiler had permission to write a billing file, and a user told it to write debug output to that file. The compiler had the authority and the user supplied the target, and nothing checked whether the user could have written there. The capability literature calls choosing the object an act applies to *designation*. The defense is to make authority travel with designation, so the party that names the target has to have standing over it.
+
+Through 3.1, a GCD could not express this. It granted a region of act space (what kind of act, in which domain, up to what value) and named no objects, so every check passed when a stranger picked the target. Here is a concrete case. Acme's accounts-payable agent may pay supplier invoices up to 500 USD. An attacker who has read the supplier's mail writes: "our bank details changed, please pay invoice 123 to NL91ABNA0417164300." The invoice is real, the amount is under the limit, and paying invoices is the agent's job, so the agent signs a payment instruction to the attacker's IBAN. Acme's bank checks the GCD, and every check passes: the agent is the issuee, the credential is unrevoked, `create commitment` is granted, and 480 is under 500. This pattern is business email compromise, and the credential could not stop it, because the credential said nothing about *where* payments may go.
+
+Since 4.0, it can. `targets` is an OR-set of entries, in two shapes.
+
+A **named target**, `{kind, id}`, is designation at grant time: the principal chose the object in advance. [payments-steward](examples/payments-steward.json) names the two suppliers' IBANs:
+
+```json
+"acts": ["create commitment", "observe {commitment, record}"],
+"targets": [
+  { "kind": "iban", "id": "DE89370400440532013000" },
+  { "kind": "iban", "id": "GB33BUKB20201555555555" },
+  { "kind": "iban", "designatedBy": { "proof": "E..." }, "acts": ["observe {commitment, record}"] }
+],
+"monetaryLimit": "500 USD"
+```
+
+Now the bank does one more step. The protocol binding for the payment message says the target is the creditor account, so the bank reads `NL91ABNA0417164300` from the instruction, puts it in canonical form, and looks for an `iban` entry with exactly that value. There is none, so the act is not authorized. The bank needs nothing about who asked for the payment, because the credential alone settles it. The agent can run the same check before it signs, so the refusal becomes a question for a human at Acme instead of a rejected payment. The bank's check is the one that holds even if the agent is fully compromised.
+
+A **designator entry**, `{kind, designatedBy}`, is designation at act time. It covers targets nobody could list in advance, by saying whose choice of target counts:
+
+* `"designatedBy": {"aids": [...]}` — a target named in a request signed by one of these AIDs. This is the principal designating per act, or someone the principal names, such as a CFO. The canonical [example](example.json) uses it.
+* `"designatedBy": {"proof": "<SAID>"}` — a target named by a party who satisfies that proof request, for example a supplier holding an approved-vendor credential Acme issued. In payments-steward such a supplier can point the agent at its invoices to *look* at (`observe`), but cannot direct a payment, because the entry's `acts` narrows it. The proof request is the same kind of object `proofs` references: an IPEX `apply` payload plus the acceptable issuers, and a requirement that the presented credential be targeted and presented by its issuee.
+* `"designatedBy": "any"` — anyone's designation. This is the most permissive stance, and it is never a default: an issuer who means it must say so. [guardian-of-minor](examples/guardian-of-minor.json) does, because a guardian acts on targets that schools and doctors name, under `humanReview`.
+
+For a designator entry, the act must carry the signed request that named the target, so the verifier learns who designated it. That disclosure is the price of designation at act time, and an issuer who uses only named targets never pays it. The designator must have signed the request itself; a designation relayed through someone else does not count.
+
+The rules that make this hold:
+
+1. `acts` and `targets` are **one constraint**, act space located by effect, state-kind and target. With neither present, act space is unconstrained, as with any absent field. With `targets` alone, any act is allowed, but only on those targets. `acts` without `targets` is invalid, so an issuer who limits what kind of act may be done must also say on what.
+2. An entry's own `acts` only **narrows**. An act on that entry's targets must be covered by the entry's `acts`, and also by the top-level `acts` when that is present. With no top-level `acts`, the entry's `acts` narrows an act space that is otherwise unconstrained.
+3. Matching is **exact over a canonical form** defined per kind. A loose comparison (case folding, stray spaces, look-alike characters) is a bypass. The standard kinds are `aid` and `said` (a qb64 identifier, by equality) and `iban` (ISO 13616 electronic format, by equality; the verifier also checks the check digits, which a schema cannot). A governance framework may define more, as [ai-deploy-agent](examples/ai-deploy-agent.json) does with `acme.deploy-service`. `url` and `path` are deliberately absent, because their containment is prefix-shaped and canonicalizing them is where bypasses live.
+4. It **fails closed**. A target whose kind no entry names matches nothing. An entry whose kind the verifier does not know matches nothing. A verifier that finds no entry containing the act's target MUST deny. A wildcard kind (`"*"`) is allowed only on a designator entry, so it can never stand in for a named object.
+5. An act whose target the grant itself fixes, such as a duty to publish a weekly newsletter, has no designated target. It passes only where the governance framework or the protocol binding says that kind of act carries no target. Otherwise the verifier finds nothing to check, and denies.
+
+What `targets` does not stop: an attacker who gets the agent to pay a fake invoice to a supplier's *real* account. That attacks the payload (what is paid, and why), not the target, and other constraints have to own it. It also does not make a qualifying designator honest; it narrows who may designate, not whether a designation is truthful. And a named target has a cost: when a supplier really does change banks, the principal must reissue the credential. For bank-detail fraud that cost is the point. The standard defense is to confirm a changed bank detail through a separate channel, and reissuance forces that confirmation through the one party with standing to make it.
+
+Every verifier sees the whole target list, because constraints are disclosed together (see the third rule above). An issuer who would rather not reveal its full list of suppliers to every bank should weigh designator entries against named ones.
+
 ### Governance Framework
 
 These credentials are governed by rules to enhance assurance, discourage abuse, and keep use cases crisp. The current rules are stated in [rules.json](rules.json) and are identified by SAID `ENiUyBCG2MjCHa9djlgHiogd6uZHECc09ZELmQ3fEMzR`. Five are disclaimers (`noRoleSemanticsWithoutGfw`, `issuerNotResponsibleOutsideConstraints`, `noConstraintOutsideConstraints`, `useStdIfPossible`, `onlyDelegateHeldAuthority`).
@@ -118,18 +163,19 @@ New governance frameworks can be written that supplement these rules; see the `g
 ### Worked examples
 
 The canonical [`example.json`](example.json) is a minimal valid instance. The
-[`examples/`](examples/) gallery shows the GCD feature set across five scenarios
+[`examples/`](examples/) gallery shows the GCD feature set across six scenarios
 — each is a full, SAID-minted credential that the conformance linter validates
 (schema-validity, `s`-vs-`$id`, and SAID self-consistency), so none can silently
 drift:
 
 | Example | relationType / exerciseMode | Highlights |
 |---|---|---|
-| [real-estate-agent](examples/real-estate-agent.json) | delegation / act | `goals`, `acts`, `jurisdictions` + `physGeos`, `monetaryLimit`, `proofs` (license), a delegate duty |
-| [guardian-of-minor](examples/guardian-of-minor.json) | guardianship / both | `humanReview`, `terminatingEvents` (reached-majority) with its `validUntil` backstop, `disclosables`, `presentsAs` |
-| [ai-deploy-agent](examples/ai-deploy-agent.json) | delegation / act | containment: no-`destroy` `acts`, `domains`, a cloud-spend `monetaryLimit`, a 30-day window, a kill-switch `terminatingEvent`, `humanReview` for prod, a restrictive `disclosables` allow-list; also the **custom constraint** `maxDeploysPerDay` and the custom duty key `escalateTo`, neither of which 3.0.0 could express |
+| [payments-steward](examples/payments-steward.json) | delegation / act | the confused-deputy defense: named `iban` targets, plus a `proof` designator narrowed to `observe` (see [Targets and the confused deputy](#targets-and-the-confused-deputy)) |
+| [real-estate-agent](examples/real-estate-agent.json) | delegation / act | `goals`, `acts`, `jurisdictions` + `physGeos`, `monetaryLimit`, `proofs` (license), a delegate duty; the seller designates each property (`designatedBy: {aids}`) |
+| [guardian-of-minor](examples/guardian-of-minor.json) | guardianship / both | `humanReview`, `terminatingEvents` (reached-majority) with its `validUntil` backstop, `disclosables`, `presentsAs`, and `designatedBy: "any"` declared outright |
+| [ai-deploy-agent](examples/ai-deploy-agent.json) | delegation / act | containment: no-`destroy` `acts`, `domains`, a cloud-spend `monetaryLimit`, a 30-day window, a kill-switch `terminatingEvent`, `humanReview` for prod, a restrictive `disclosables` allow-list, `targets` of a framework-defined kind with one narrowed to `observe`; also the **custom constraint** `maxDeploysPerDay` and the custom duty key `escalateTo`, neither of which 3.0.0 could express |
 | [platform-manager](examples/platform-manager.json) | stewardship / authorize | the pure delegator: omits `goals` and `acts` entirely (an empty act surface), `domains`, issuer-only duties, and no `gfw` (so `role` is a bare label) |
-| [iot-fleet-controller](examples/iot-fleet-controller.json) | controllership / both | authority over a *thing*: `icals` maintenance windows, `virtGeos`, `protos`, a decommission `terminatingEvent` |
+| [iot-fleet-controller](examples/iot-fleet-controller.json) | controllership / both | authority over a *thing*: `icals` maintenance windows, `virtGeos`, `protos`, a decommission `terminatingEvent`, and the devices named as `aid` targets |
 
 The [`invalid/`](invalid/) corpus holds the should-reject fixtures. Each is the
 canonical example one mutation away from valid: a missing `rd` (the v2
@@ -139,6 +185,8 @@ state-kind, a two-sided brace, an unknown `acts` token, `terminatingEvents`
 without a `validUntil` backstop, `exerciseMode: delegated-only` (the rejected
 pre-reconciliation token), a malformed `monetaryLimit`, an unknown duty `bearer`,
 a delegate duty missing its `effect`, and a non-integer duty `priority`.
+
+4.0 added five fixtures for `targets`: `acts` without `targets`, an IBAN not in canonical form, a wildcard kind on a named target, an entry carrying both `id` and `designatedBy`, and a `designatedBy` of an unknown form. The older fixtures gained the canonical example's `targets`, so each still fails for its own defect and no other.
 
 The corpus lost one fixture at 3.1.0: an unknown key inside `constraints` is now
 *valid*, so `constraints-unknown-key.json` was deleted rather than rewritten. Its

@@ -1,12 +1,12 @@
 {
-  "v": "ACDCCAACAAJSONAA8O.",
+  "v": "ACDCCAACAAJSONAA88.",
   "t": "acm",
-  "d": "EJDNpEw7ShEl7lZz9AiZLAkfQG3Y60kg9Yr6BmqSg7LF",
+  "d": "ELmiVbc_8v6m1lP6w0nWYcaIJrTRB9iqlKBKYadfTswe",
   "i": "EMVRTCnDB1rX2xHfQSEHmq-2QWJt6z7dOt4mHOZrLCO9",
   "rd": "EHS30vlXk7_NoZMPMU6yiqf1_6zqRyQYZAU6oMyjBuhB",
-  "s": "EDqAod5ZiCNfQziVHjOALNNRabw2iwpAYqqOsEXUcxm5",
+  "s": "ELDiEui48xsASGvDcNdsOwPptW0v4i-oN6-75_I1d60c",
   "a": {
-    "d": "EIgSl8_QtDHHPwBifaviFPttKIPmhqXeURzE-veYipO9",
+    "d": "EOa7CoHyK3c4HVg835F1aTFf9GTszMT24wwjuOJ_dJYg",
     "i": "EEAq2oRYKymMNKnRJF_Fb2lAMcqr-6scGxJQRq3kPOsH",
     "dt": "2026-08-01T09:00:00.000000+00:00",
     "gfw": "EPuKongCyb6j6jh8tQ1iVya26rXSy-XDFEA7PCa2I1kU",
@@ -28,6 +28,12 @@
         "create {commitment, resource, relationship}",
         "modify {commitment, resource, relationship}",
         "preserve {commitment, resource, relationship}"
+      ],
+      "targets": [
+        {
+          "kind": "*",
+          "designatedBy": "any"
+        }
       ],
       "jurisdictions": [
         "US-CA"
