@@ -1,5 +1,7 @@
 # SEDI Ward Core (`sedi-ward-core`)
 
+**Superseded.** At keripy `80f77b73` Sam Smith's own [Core](../sedi-core/) carries an optional `guardians` edge group, so a ward's identity is now his Core with that group, as in [`sedi-core/examples/wyn-ward.json`](../sedi-core/examples/wyn-ward.json) (`this.i` `@hxqwde3o`). This Bakobo variant stays resolvable for credentials pinned to it; issue new ward credentials under Core.
+
 **Bakobo provisional Tier C variant, version 1.0.0.** This keeps the attributes and `utahAgent` edge from [Sam Smith's Core schema at `ec307cd74`](https://github.com/WebOfTrust/keripy/blob/ec307cd74/tests/sedi/test_sedi.py#L138-L359) and adds a required `guardian` edge. The edge uses `NI2I`: the ward is the issuee of this credential, while another person is the issuee of the [guardianship credential](../sedi-guardian/). Sam Smith authored Core; Bakobo authored this variant. It has a distinct SAID, so an issuer must select it intentionally for a ward.
 
 Ward Core follows Sam's Core envelope, so `t` remains optional here even though other Bakobo profiles require `t: acm`.
@@ -7,3 +9,5 @@ Ward Core follows Sam's Core envelope, so `t` remains optional here even though 
 The `guardian` edge points to the state-issued guardianship credential, whose attribute block names the ward. A verifier checks that the ward AID matches, resolves the guardian credential, and checks its live registry status. Revoking guardianship can therefore remove the guardian's authority without revoking the ward's identity credential. The schema checks the local edge shape and operator; graph and status checks belong to the verifier.
 
 [`example.json`](example.json) forms a coherent local graph with [`sedi-guardian/example.json`](../sedi-guardian/example.json). [`invalid/`](invalid/) covers a missing guardian edge and wrong far-schema or operator. This is a Bakobo profile of the graph in [keripy discussion #1550](https://github.com/WebOfTrust/keripy/discussions/1550), not a Utah-approved schema.
+
+Sam Smith started a WardCore schema at keripy `9a8b7aa7`, but it still carries Core's SAID rather than its own, so this profile keeps its shape and only its `guardian` pin moved in the re-pin (`this.i` `@3x2jtfxc`).

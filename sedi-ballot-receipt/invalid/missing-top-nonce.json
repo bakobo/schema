@@ -1,0 +1,19 @@
+{
+  "v": "ACDCCAACAAJSONAAKE.",
+  "t": "acm",
+  "d": "ELHHbWplq01qOUUBh5PlS_UGBC6WiB35kfcpq4UWXjaN",
+  "i": "ENgysJvYdkzp2mesa2zDaBr8e2wZqqQrF9xeHeixWsR5",
+  "rd": "EGYKsxMQQkBDYUolFsG-pYJhDnu_4K9H7OJGUkyQGoIa",
+  "s": "EHgmOzuf8cbn8ApkJthSRpIbHPVRE66EIfbOm7Detc3g",
+  "a": {
+    "d": "ELq6YNLc9wo42Sz6WrC8-YowwmKY2Fv3oqlFJhYMgLHY",
+    "u": "0AByZWNlaXB0LWF0dHItc2x0",
+    "i": "EBf8rZ_yfFlNFfoMCVfiQda2UNBWkUXFlfVn73wY5Ly5",
+    "election": "UT-SL-2026-11-03-GEN",
+    "packet": "PKT-000417",
+    "request": "ECV1VRljRsMcgfE4wqhb0mf75-ZK-8cB5aO60KCF-rvQ",
+    "exchange": "EHCpEAOOjLXSrVLub3vl2DGPCxk0_2RzCSPW9z6YD9az",
+    "heldAt": "2026-11-17T15:04:05+00:00",
+    "basis": "ECxPtf9IpBUT1pRZK4eaLA8O2jlc1oXYioYjcHo09eUC"
+  }
+}

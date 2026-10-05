@@ -1,5 +1,5 @@
 {
-  "$id": "EPtKrKbreCiM9b0pY5aKk3d8qfRwCq7x7wVc2A70jKVF",
+  "$id": "EJjrclOqob8req1mLuuhg5Q8Ap2qZ2gUL5sk_gb-B8FN",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Ward Authorization",
   "description": "Provisional guardian-issued, separately revocable ward authorization. The resource-capability payload is a Bakobo profile of the syntax Sam left open in keripy discussion #1550.",
@@ -180,7 +180,7 @@
                       "type": "string"
                     },
                     "s": {
-                      "const": "EMQmtKXdW2bAgtzn9sUJ8VcWwasXvkL5JneYwU83m6Eh"
+                      "const": "ECY9m207KdsKfiu3uYUyb02VYmpOP9vDgwKDFPMjoCVp"
                     },
                     "o": {
                       "const": "I2I"
@@ -217,7 +217,7 @@
                       "type": "string"
                     },
                     "s": {
-                      "const": "EHM6a9atXNYYta67ZKp8VknJ0KiQ8m5BU6RkMWoK5_1Y"
+                      "const": "ECxPtf9IpBUT1pRZK4eaLA8O2jlc1oXYioYjcHo09eUC"
                     },
                     "o": {
                       "const": "E1E"
