@@ -162,7 +162,6 @@ Issuing or accepting a SEDI credential is binding acceptance of its referenced r
 
 Design decisions live in [`this.i`](../this.i) (`@sd4rkp` and children; the attribute-vs-aggregate
 reversal is `@sdav5t`). The reusable principle is distilled in
-[`docs/choosing-attribute-vs-aggregate.md`](../docs/choosing-attribute-vs-aggregate.md). The full
-research synthesis is in the `bakobo/sedi` repo (`sedi/artifacts/sedi-schema-synthesis.md`); the
+[`docs/choosing-attribute-vs-aggregate.md`](../docs/choosing-attribute-vs-aggregate.md). The
 executable reference for the disclosure + chain-link-confidentiality mechanics is keripy's
 `tests/acdc/test_clc_disclosure.py`.

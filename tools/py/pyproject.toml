@@ -6,9 +6,9 @@ readme = "README.md"
 # keri 2.1.0-dev0 (the pinned fork commit) requires >=3.14,<3.15.
 requires-python = ">=3.14,<3.15"
 # keri is the SAID conformance oracle (this.i @xv4m7d). The pin is EXACT: a
-# different keri could silently change every SAID. This commit — the same one
-# bakobo/heti pins — is differentially verified SAID-identical to the corpus
-# minted under keri 1.2.13, and adds the ACDC v2 (acm / rd / most-compact
+# different keri could silently change every SAID. This commit is
+# differentially verified SAID-identical to the corpus minted under keri
+# 1.2.13, and adds the ACDC v2 (acm / rd / most-compact
 # SAID) support the GCD 3.x examples need (this.i @m4vd7s, @h3or4x).
 dependencies = [
     "keri @ git+https://github.com/bakobo/keripy@a1f2f32bcf710b99878fa8457b8884ea6c3e2f5e",

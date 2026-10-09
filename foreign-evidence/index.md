@@ -1,6 +1,6 @@
 ## Foreign Evidence Credentials
 
-A reissuer's record that it verified a credential Bakobo did not produce, by that credential's own rules. The reissuer issues it to the holder who presented the foreign credential. The first use is the SEDI Summit's inbound act (plan M9): the European Commission reference issuer's test PID, as an SD-JWT VC, verified against the Commission's published test CA (`this.i` @vho4mibp).
+A reissuer's record that it verified a foreign credential, one issued outside the ACDC ecosystem, by that credential's own rules. The reissuer issues it to the holder who presented the foreign credential. The first case it was designed for is the European Commission reference issuer's test PID, as an SD-JWT VC, verified against the Commission's published test CA (`this.i` @vho4mibp).
 
 ### What it records
 
@@ -27,10 +27,10 @@ A reissuer's record that it verified a credential Bakobo did not produce, by tha
 
 ### What it does not record
 
-No claim value from the foreign credential, and no digest of it. A PID carries a name, a birth date and a nationality, and repeating them here would be a second copy of personal data under a signature that is not the issuing State's. A token digest would let anyone holding the PID link it to this record. The binding the demo needs comes from the issuee instead.
+No claim value from the foreign credential, and no digest of it. A PID carries a name, a birth date and a nationality, and repeating them here would be a second copy of personal data under a signature that is not the issuing State's. A token digest would let anyone holding the PID link it to this record. The link to the holder comes from the issuee instead.
 
 It is also not an endorsement. The rules say so: the reissuer records what it checked and when, not that the foreign issuer's claims are true, and a check describes the credential as it stood at `verifiedAt`.
 
 ### Schema
 
-The schema is in [`foreign-evidence.schema.json`](foreign-evidence.schema.json), its rules in [`rules.json`](rules.json), and an instance issued by heti for the Commission's test PID, verified with its CRL, in [`example.json`](example.json). The [`invalid/`](invalid) directory holds one fixture per defect.
+The schema is in [`foreign-evidence.schema.json`](foreign-evidence.schema.json), its rules in [`rules.json`](rules.json), and an example instance for the Commission's test PID, verified with its CRL, in [`example.json`](example.json). The [`invalid/`](invalid) directory holds one fixture per defect.
