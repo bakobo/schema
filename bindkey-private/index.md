@@ -1,6 +1,6 @@
 ## Private BindKey Credentials
 
-A holder declares, privately, a P-256 key it controls outside its KEL, so that a reissuer can bind a credential derived from the holder's credential to that key: the SD-JWT VC `cnf`, and later the mDoc `deviceKey`. The key may live in a phone's secure hardware, which is why it cannot simply be one of the AID's own signing keys. The holder issues this credential to itself (issuer and issuee are the same AID) into its own presentation registry, and shows it only to the reissuer, which verifies it before deriving. Derived from SEDI bulk copy k, a derivative binds to the key copy k's holder AID declares here (sedi-summit plan, decision D5; `this.i` @kakslwv3).
+A holder declares, privately, a P-256 key it controls outside its KEL, so that a reissuer (a party that derives a credential in another format, such as SD-JWT VC or mDoc, from an ACDC the holder already has) can bind the derived credential to that key: the SD-JWT VC `cnf`, and later the mDoc `deviceKey`. The key may live in a phone's secure hardware, which is why it cannot simply be one of the AID's own signing keys. The holder issues this credential to itself (issuer and issuee are the same AID) into its own presentation registry, and shows it only to the reissuer, which verifies it before deriving. A derivative made from a holder's bulk copy k binds to the key that copy k's holder AID declares here (`this.i` @kakslwv3).
 
 ### How it differs from `bindkey`
 
@@ -24,4 +24,4 @@ The schema cannot check that issuer and issuee are the same AID, that the AID is
 
 ### Schema
 
-The schema is in [`bindkey-private.schema.json`](bindkey-private.schema.json), its rules in [`rules.json`](rules.json), and a heti-issued instance in [`example.json`](example.json). The [`invalid/`](invalid) directory holds one fixture per defect.
+The schema is in [`bindkey-private.schema.json`](bindkey-private.schema.json), its rules in [`rules.json`](rules.json), and an example instance in [`example.json`](example.json). The [`invalid/`](invalid) directory holds one fixture per defect.

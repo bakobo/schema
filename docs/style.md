@@ -6,8 +6,8 @@ schemas adopt it when they next get a version bump; it is not a repo-wide rename
 
 ## Rules
 
-1. **camelCase.** The JSON default, and what imbu already writes for the relation
-   facet (`relationType`, `obligationBearer`, `presentsAs`, `exerciseMode`).
+1. **camelCase.** The JSON default, and what GCD already uses for the relation
+   facet (`relationType`, `liableParty`, `presentsAs`, `exerciseMode`).
 2. **Expressive, but an obvious abbreviation beats the full word.** "Obvious" =
    understood with no legend *and* no collision with a well-known other meaning.
    - ✅ `phys`, `virt`, `val`, `proto`, `geo` — obvious.
