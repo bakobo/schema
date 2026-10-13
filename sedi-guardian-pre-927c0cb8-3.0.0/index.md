@@ -1,0 +1,3 @@
+# SEDI Guardian 3.0.0 (Bakobo profile, superseded)
+
+**Superseded.** This is Bakobo's provisional Tier C guardian profile, version 3.0.0, preserved byte for byte with SAID `ECY9m207KdsKfiu3uYUyb02VYmpOP9vDgwKDFPMjoCVp` so credentials pinned to it remain resolvable. It carried `scope`, `powers`, `basis` and `recognition` attributes, the ward in a disclosable `a.ward` block, and `citizen` and `authorization` edges. At keripy `927c0cb8` Sam Smith published his own guardianship schema, which is now the [current `sedi-guardian`](../sedi-guardian/) (`this.i` `@6uxg0vj0`). This profile's governance artifact stays at [`sedi-guardian/rules.json`](../sedi-guardian/rules.json), the path its descriptions name.

@@ -1,5 +1,5 @@
 {
-  "$id": "EH7ayivQLHwfBKwFhg7mcpOzHEWcvvJ24EO0OyzvPVKQ",
+  "$id": "EH5hn7CbtDFxhS3IKioC8P-e4YyZoxqzhRpr4X_e32BD",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Residence Schema",
   "description": "SEDI Residence JSON Schema for acm ACDC.",
@@ -387,6 +387,38 @@
                     "type": "string"
                   },
                   "minItems": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "utahAgent": {
+              "description": "Utah Agent Edge Block",
+              "type": "object",
+              "required": [
+                "n",
+                "s",
+                "o"
+              ],
+              "properties": {
+                "d": {
+                  "description": "Edge SAID",
+                  "type": "string"
+                },
+                "u": {
+                  "description": "Edge UE",
+                  "type": "string"
+                },
+                "n": {
+                  "description": "Far Node SAID",
+                  "type": "string"
+                },
+                "s": {
+                  "description": "Far Node Schema SAID",
+                  "type": "string"
+                },
+                "o": {
+                  "description": "Edge Unary Operator",
+                  "type": "string"
                 }
               },
               "additionalProperties": false

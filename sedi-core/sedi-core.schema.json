@@ -1,5 +1,5 @@
 {
-  "$id": "ECxPtf9IpBUT1pRZK4eaLA8O2jlc1oXYioYjcHo09eUC",
+  "$id": "EN0JtdzBmFuTUzyJG9CXZhtdu-bW0V6L95bsVBzi-cY-",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Core Schema",
   "description": "SEDI Core Identity JSON Schema for acm ACDC.",
@@ -299,14 +299,14 @@
               ]
             },
             "legalPresenceStatus": {
-              "description": "Legal Presense Status Block",
+              "description": "Legal Presence Status Block",
               "oneOf": [
                 {
-                  "description": "Legal Presense Status SAID",
+                  "description": "Legal Presence Status SAID",
                   "type": "string"
                 },
                 {
-                  "description": "Legal Presense Status Detail",
+                  "description": "Legal Presence Status Detail",
                   "type": "object",
                   "required": [
                     "d",
@@ -323,7 +323,7 @@
                       "type": "string"
                     },
                     "value": {
-                      "description": "Legal Presense Status Value i.e. citizen",
+                      "description": "Legal Presence Status Value i.e. citizen",
                       "type": "string"
                     }
                   },
@@ -430,8 +430,6 @@
               "description": "Utah Agent Edge Block",
               "type": "object",
               "required": [
-                "d",
-                "u",
                 "n",
                 "s",
                 "o"

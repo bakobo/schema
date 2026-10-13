@@ -87,7 +87,7 @@ def test_compact_section_validates(section: str) -> None:
 
 def test_the_current_residence_is_sams_and_the_bakobo_amendment_is_archived() -> None:
     schema = _schema()
-    assert schema["$id"] == "EH7ayivQLHwfBKwFhg7mcpOzHEWcvvJ24EO0OyzvPVKQ"
+    assert schema["$id"] == "EH5hn7CbtDFxhS3IKioC8P-e4YyZoxqzhRpr4X_e32BD"
     assert _example()["s"] == schema["$id"]
     amendment = json.loads((ROOT / "sedi-residence-0.2.0/sedi-residence-0.2.0.schema.json").read_text())
     registry = json.loads((ROOT / "registry.json").read_text())

@@ -1,5 +1,5 @@
 {
-  "$id": "EH-ZOEzzWm5hw351zL3IBJiEMDnJiKrv17lQp2JFj8Sb",
+  "$id": "EPqXrwPT6b0_KghrrMuIdmuD68Aytv1XK6jU86EumgJV",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Age Schema",
   "description": "SEDI Age JSON Schema for acg ACDC.",
@@ -596,6 +596,38 @@
                     "type": "string"
                   },
                   "minItems": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "utahAgent": {
+              "description": "Utah Agent Edge Block",
+              "type": "object",
+              "required": [
+                "n",
+                "s",
+                "o"
+              ],
+              "properties": {
+                "d": {
+                  "description": "Edge SAID",
+                  "type": "string"
+                },
+                "u": {
+                  "description": "Edge UE",
+                  "type": "string"
+                },
+                "n": {
+                  "description": "Far Node SAID",
+                  "type": "string"
+                },
+                "s": {
+                  "description": "Far Node Schema SAID",
+                  "type": "string"
+                },
+                "o": {
+                  "description": "Edge Unary Operator",
+                  "type": "string"
                 }
               },
               "additionalProperties": false

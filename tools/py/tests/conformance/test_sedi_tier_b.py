@@ -8,9 +8,9 @@ import pytest
 from schematools.said import saidify_sad
 
 ROOT = Path(__file__).resolve().parents[4]
-CORE = "ECxPtf9IpBUT1pRZK4eaLA8O2jlc1oXYioYjcHo09eUC"
-RESIDENCE = "EH7ayivQLHwfBKwFhg7mcpOzHEWcvvJ24EO0OyzvPVKQ"
-AGE = "EH-ZOEzzWm5hw351zL3IBJiEMDnJiKrv17lQp2JFj8Sb"
+CORE = "EN0JtdzBmFuTUzyJG9CXZhtdu-bW0V6L95bsVBzi-cY-"
+RESIDENCE = "EH5hn7CbtDFxhS3IKioC8P-e4YyZoxqzhRpr4X_e32BD"
+AGE = "EPqXrwPT6b0_KghrrMuIdmuD68Aytv1XK6jU86EumgJV"
 
 
 def _load(name: str, filename: str) -> dict:
@@ -31,7 +31,10 @@ def test_the_portrait_presentation_chains_to_core_and_sams_age() -> None:
 
 
 def test_sams_age_replaces_ours_and_ours_is_archived_as_superseded() -> None:
-    """@3x2jtfxc: Sam's Age at keripy 9a8b7aa7 is the current sedi-age; Bakobo's 3.0.0 profile stays resolvable."""
+    """@3x2jtfxc, @6uxg0vj0: Sam's Age at keripy 927c0cb8 is the current sedi-age; Bakobo's 3.0.0 profile stays resolvable.
+
+    His vector for Guy carries ["E1E", "DI1I", "NI2I"] as data; the demo's own leaves use ["E1E", "NI2I"].
+    """
     sams = _load("sedi-age", "sedi-age.schema.json")
     ours = _load("sedi-age-3.0.0", "sedi-age-3.0.0.schema.json")
     registry = json.loads((ROOT / "registry.json").read_text())
@@ -42,7 +45,7 @@ def test_sams_age_replaces_ours_and_ours_is_archived_as_superseded() -> None:
     example = _load("sedi-age", "example.json")
     core = _load("sedi-core", "example.json")
     edge = example["e"]["coreIdentity"]
-    assert (edge["n"], edge["s"], edge["o"]) == (core["d"], CORE, ["E1E", "NI2I"])
+    assert (edge["n"], edge["s"], edge["o"]) == (core["d"], CORE, ["E1E", "DI1I", "NI2I"])
     assert example["A"][1]["i"] == core["a"]["i"]
 
 
@@ -77,7 +80,7 @@ def test_county_presentation_example_matches_its_source_credentials() -> None:
     assert presentation["a"]["county"] == residence["a"]["county"]["value"]
 
 
-@pytest.mark.parametrize("name", ["sedi-age", "sedi-present-age-portrait", "sedi-present-county", "sedi-guardian"])
+@pytest.mark.parametrize("name", ["sedi-age", "sedi-present-age-portrait", "sedi-present-county", "sedi-ward-authz"])
 def test_current_bakobo_sedi_profiles_have_no_v1_inner_schema_ids(name: str) -> None:
     schema = _load(name, f"{name}.schema.json")
     assert '"$id"' not in json.dumps(schema["properties"])

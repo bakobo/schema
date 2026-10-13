@@ -55,7 +55,7 @@ credentials, that complexity is not worth paying.
   components. A fixed, heterogeneous, labeled set → **attribute `a`**, each attribute a nested
   partially-disclosable block. Bonus: as a plain v1 ACDC it version-stamps and SAIDs cleanly under this
   repo's pinned oracle.
-- **[`sedi-age`](../sedi-age)** — age-threshold flags `over13` through `over70` (Sam Smith's schema at keripy `9a8b7aa7`). A homogeneous boolean vector you disclose a subset of → **aggregate `A`**, matching the ISO mDL `age_over_NN` element. Sam reached the same choice independently.
+- **[`sedi-age`](../sedi-age)** — age-threshold flags `over13` through `over70` (Sam Smith's schema at keripy `927c0cb8`). A homogeneous boolean vector you disclose a subset of → **aggregate `A`**, matching the ISO mDL `age_over_NN` element. Sam reached the same choice independently.
 
 ## Caveats worth remembering
 
