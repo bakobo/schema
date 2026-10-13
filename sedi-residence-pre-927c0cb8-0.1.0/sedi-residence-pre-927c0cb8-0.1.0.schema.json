@@ -1,0 +1,429 @@
+{
+  "$id": "EH7ayivQLHwfBKwFhg7mcpOzHEWcvvJ24EO0OyzvPVKQ",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SEDI Residence Schema",
+  "description": "SEDI Residence JSON Schema for acm ACDC.",
+  "credentialType": "SEDI_Residence_ACDC_acm_message",
+  "version": "0.1.0",
+  "type": "object",
+  "required": [
+    "v",
+    "d",
+    "i",
+    "rd",
+    "s",
+    "a",
+    "e",
+    "r"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type",
+      "type": "string"
+    },
+    "d": {
+      "description": "Message SAID",
+      "type": "string"
+    },
+    "u": {
+      "description": "Message UE",
+      "type": "string"
+    },
+    "i": {
+      "description": "Issuer AID",
+      "type": "string"
+    },
+    "rd": {
+      "description": "Registry SAID",
+      "type": "string"
+    },
+    "s": {
+      "description": "Schema Section",
+      "oneOf": [
+        {
+          "description": "Schema Section SAID",
+          "type": "string"
+        },
+        {
+          "description": "Schema Section Detail",
+          "type": "object"
+        }
+      ]
+    },
+    "a": {
+      "description": "Attribute Section",
+      "oneOf": [
+        {
+          "description": "Attribute Section SAID",
+          "type": "string"
+        },
+        {
+          "description": "Attribute Section Detail",
+          "type": "object",
+          "required": [
+            "d",
+            "u",
+            "i",
+            "street",
+            "city",
+            "county",
+            "state",
+            "postcode",
+            "country",
+            "issuedDate"
+          ],
+          "properties": {
+            "d": {
+              "description": "Attribute Section SAID",
+              "type": "string"
+            },
+            "u": {
+              "description": "Attribute Section UE",
+              "type": "string"
+            },
+            "i": {
+              "description": "Issuee AID",
+              "type": "string"
+            },
+            "rd": {
+              "description": "Issuee Presentation Registry SAID",
+              "type": "string"
+            },
+            "street": {
+              "description": "Street Address Block",
+              "oneOf": [
+                {
+                  "description": "Street Address SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "Street Address Detail",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Street Address Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "city": {
+              "description": "City Name Block",
+              "oneOf": [
+                {
+                  "description": "City Name SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "City Name Detail",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "City Name Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "county": {
+              "description": "County Name Block",
+              "oneOf": [
+                {
+                  "description": "County Name SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "County Name Detail",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "County Name Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "state": {
+              "description": "State Name Block",
+              "oneOf": [
+                {
+                  "description": "State Name SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "State Name Detail",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "State Name Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "postcode": {
+              "description": "Postcode Block",
+              "oneOf": [
+                {
+                  "description": "Postcode SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "Postcode Detail",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Postcode Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "country": {
+              "description": "Country Name Block",
+              "oneOf": [
+                {
+                  "description": "Country Name SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "Country Name Detail",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Country Name Value",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "issuedDate": {
+              "description": "Issued Date Block",
+              "oneOf": [
+                {
+                  "description": "Issued Date SAID",
+                  "type": "string"
+                },
+                {
+                  "description": "Issued Date Detail",
+                  "type": "object",
+                  "required": [
+                    "d",
+                    "u",
+                    "value"
+                  ],
+                  "properties": {
+                    "d": {
+                      "description": "Block SAID",
+                      "type": "string"
+                    },
+                    "u": {
+                      "description": "Bock UE",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Issued Date Value as RFC-3339/ISO-8601 time MBZ",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "e": {
+      "description": "Edge Section",
+      "oneOf": [
+        {
+          "description": "Edge Section SAID",
+          "type": "string"
+        },
+        {
+          "description": "Edge Section Detail",
+          "type": "object",
+          "required": [
+            "d",
+            "u",
+            "coreIdentity"
+          ],
+          "properties": {
+            "d": {
+              "description": "Edge Section SAID",
+              "type": "string"
+            },
+            "u": {
+              "description": "Edge Section UE",
+              "type": "string"
+            },
+            "coreIdentity": {
+              "description": "Core Identity Edge Block",
+              "type": "object",
+              "required": [
+                "d",
+                "u",
+                "n",
+                "s",
+                "o"
+              ],
+              "properties": {
+                "d": {
+                  "description": "Edge SAID",
+                  "type": "string"
+                },
+                "u": {
+                  "description": "Edge UE",
+                  "type": "string"
+                },
+                "n": {
+                  "description": "Far Node SAID",
+                  "type": "string"
+                },
+                "s": {
+                  "description": "Far Node Schema SAID",
+                  "type": "string"
+                },
+                "o": {
+                  "description": "Edge Unary Operator",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "description": "Rule Section",
+      "oneOf": [
+        {
+          "description": "Rule Section SAID",
+          "type": "string"
+        },
+        {
+          "description": "Rule Section Detail",
+          "type": "object",
+          "required": [
+            "d",
+            "l"
+          ],
+          "properties": {
+            "d": {
+              "description": "Rule Section SAID",
+              "type": "string"
+            },
+            "l": {
+              "description": "Legal Language",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

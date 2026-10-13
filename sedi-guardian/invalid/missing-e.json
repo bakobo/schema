@@ -1,42 +1,31 @@
 {
-  "v": "ACDCCAACAAJSONAAQd.",
+  "v": "ACDCCAACAAJSONAANy.",
   "t": "acm",
-  "d": "EMgkx97MiNbRhrun_g8GK6H7fcAO7PYfZETy1lePT52L",
-  "u": "0ABpbmNhcHRzYWx0cGFkMDAw",
-  "i": "EGA-48IbFJLG0nG0nv2eJoevtvNpElOqnSM_HBDZNNgc",
-  "rd": "EC-DlJTW3_34SsV5PSG0-U7hxR3uVj8JfCoC5e-8pCBB",
-  "s": "ECY9m207KdsKfiu3uYUyb02VYmpOP9vDgwKDFPMjoCVp",
+  "d": "EKLOMTD-M6Bps3XOTmjo15DbBng51s90jB-ZA5zMCFEh",
+  "u": "0AD6lLdhk43u3NiIcuPLLbfk",
+  "i": "EKBCU6u_xObNhFc9uuz1VdntNt99xmB2fA5qz7Li-Sl-",
+  "rd": "EDOfxmEeOsWdi5ZQyuy98W4s15vmV1RWVFuqm4GZflTn",
+  "s": "EDJzXg34opr6-odFix6lpiccfHF7ksITHuIES_MQRH4b",
   "a": {
-    "ward": {
-      "d": "EKhoGN4FDenjCYd1twUWffWrn1jW8qjxQB9vi3HtN_SC",
-      "u": "0ABzZWRpd2FyZG5vbmNlMDAw",
-      "i": "EKr8JLtfqWCmHrxO3yu8ocS2n9o0Tlspeaqm9ZOf3FM1"
-    },
-    "d": "EFifbmtpCF9oXVw0VzcXD0eYKpsL4ZU0nN3F6UqaVpWu",
-    "u": "0ABpbmNhcGFzYWx0cGFkMDAw",
+    "d": "EP7n0N0UOHsnITfP-0wWAaWBqPWFuQsVR2F9Kh94VGli",
+    "u": "0AD3Q4iiJnHA_xzBtWhCqvTs",
     "i": "EIaSWASllNlAuAFcDG1xbXGEkVw_oL0CX8_o1XkFTegY",
-    "basis": "courtGuardianIncapacitated",
-    "fiduciary": "bestInterest",
-    "recognition": {
-      "authorityType": "court",
-      "court": "Third District Court, Salt Lake County",
-      "caseNumber": "234500123",
-      "orderDate": "2026-03-10",
-      "lettersReference": "Letters of Guardianship 234500123-LG",
-      "appointingState": "US-UT",
-      "registrationStatus": "native"
+    "rd": "EETKKNEzII7RVeqrIBWsSUifdAPYRp5qdTOQnsG_zzcm",
+    "role": "parent",
+    "ward": "EKr8JLtfqWCmHrxO3yu8ocS2n9o0Tlspeaqm9ZOf3FM1",
+    "issuedDate": {
+      "d": "ELspENyn_TjT7HHSpNq_pFT-6tCN5K-hJTNW3sg4vXvS",
+      "u": "0AAE27DuamUjOeHr-DHSHRqk",
+      "value": "2012-06-21T00:00:00.000000+00:00"
     },
-    "effectiveDate": "2026-03-10",
-    "reviewDueDate": "2027-03-10",
-    "scope": [
-      "healthCare",
-      "residence"
-    ],
-    "powers": [
-      "read",
-      "message",
-      "profile"
-    ]
+    "expirationDate": {
+      "d": "EDx5Jmnrj0rUufq3eilSLbQ9P3PZ0dU60D4mjLIAeYkV",
+      "u": "0ACvBOvecBpiu24zq3DpTzU7",
+      "value": "2030-06-21T00:00:00.000000+00:00"
+    }
   },
-  "r": "EKLBoGWUawixiHtnA5LZ23cPfWjG1niiLlRIhDUGmHRz"
+  "r": {
+    "d": "EFPxq4WPl29szUqbrQIviOh_Ls_RlrYbp4L-fdQH0XrX",
+    "l": ""
+  }
 }

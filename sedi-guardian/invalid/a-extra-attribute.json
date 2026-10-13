@@ -1,0 +1,45 @@
+{
+  "v": "ACDCCAACAAJSONAASu.",
+  "t": "acm",
+  "d": "EPcmNKla90TSO86eu52J4bIoXqNodBq5hBunL5xO2XkU",
+  "u": "0AD6lLdhk43u3NiIcuPLLbfk",
+  "i": "EKBCU6u_xObNhFc9uuz1VdntNt99xmB2fA5qz7Li-Sl-",
+  "rd": "EDOfxmEeOsWdi5ZQyuy98W4s15vmV1RWVFuqm4GZflTn",
+  "s": "EDJzXg34opr6-odFix6lpiccfHF7ksITHuIES_MQRH4b",
+  "a": {
+    "d": "EHpxtU0JsJy_rT34SbEDeQwlZ9fzkZbw-yBZA6b9jbfg",
+    "u": "0AD3Q4iiJnHA_xzBtWhCqvTs",
+    "i": "EIaSWASllNlAuAFcDG1xbXGEkVw_oL0CX8_o1XkFTegY",
+    "rd": "EETKKNEzII7RVeqrIBWsSUifdAPYRp5qdTOQnsG_zzcm",
+    "role": "parent",
+    "ward": "EKr8JLtfqWCmHrxO3yu8ocS2n9o0Tlspeaqm9ZOf3FM1",
+    "issuedDate": {
+      "d": "ELspENyn_TjT7HHSpNq_pFT-6tCN5K-hJTNW3sg4vXvS",
+      "u": "0AAE27DuamUjOeHr-DHSHRqk",
+      "value": "2012-06-21T00:00:00.000000+00:00"
+    },
+    "expirationDate": {
+      "d": "EDx5Jmnrj0rUufq3eilSLbQ9P3PZ0dU60D4mjLIAeYkV",
+      "u": "0ACvBOvecBpiu24zq3DpTzU7",
+      "value": "2030-06-21T00:00:00.000000+00:00"
+    },
+    "scope": [
+      "health"
+    ]
+  },
+  "e": {
+    "d": "EBm0m0ZVYWilqMB2VdwdiYhcPMpSiKnalXjgdnkdUZsF",
+    "u": "0ACvBOvecBpiu24zq3DpTzU7",
+    "utahAgent": {
+      "d": "EBfgqQ9Qj5zRNeMbVnUYTzEUMv_KVOOkwWcEf-NGXVq1",
+      "u": "0ACorjl5HxMjQxNW_D50WLif",
+      "n": "EOD4QiWo1oa6UtiEr456Lu0ba3v1Cmd6qOPoRbAdx2hD",
+      "s": "EGx4BLclkjhaK1501guyBifxuTTJLwuK61InBTdkKF7v",
+      "o": "DI2I"
+    }
+  },
+  "r": {
+    "d": "EFPxq4WPl29szUqbrQIviOh_Ls_RlrYbp4L-fdQH0XrX",
+    "l": ""
+  }
+}
