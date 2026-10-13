@@ -1,5 +1,5 @@
 {
-  "$id": "ELSG-UTE1csyti500RHkMj8n7vvAJdGg5cyQ7vyoImrP",
+  "$id": "EEDcDtWJYUy5tCjobSl2SSb65qIvsIsAKF1NPecepNIF",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SEDI Ward Authorization",
   "description": "Provisional guardian-issued, separately revocable ward authorization. The resource-capability payload is a Bakobo profile of the syntax Sam left open in keripy discussion #1550.",
@@ -80,7 +80,7 @@
               "type": "string"
             },
             "authz": {
-              "description": "Resource and capability grants; every caps list must be checked against guardian powers",
+              "description": "Resource and capability grants; every caps list must be authorized for the guardian's role by a policy the verifier holds, and a verifier must reject any capability it cannot so authorize",
               "type": "object",
               "required": [
                 "rc"

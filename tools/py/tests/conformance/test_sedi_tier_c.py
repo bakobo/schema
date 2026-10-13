@@ -100,3 +100,15 @@ def test_the_tier_c_examples_form_one_coherent_graph() -> None:
     assert (authz["i"], authz["a"]["i"]) == (GAL, WYN)
     assert (authz["e"]["authority"]["n"], authz["e"]["authority"]["s"]) == (guardian["d"], GUARDIAN)
     assert (authz["e"]["subject"]["n"], authz["e"]["subject"]["s"]) == (ward_core["d"], CORE)
+
+
+def test_a_ward_authorization_is_bounded_by_the_guardians_role_and_fails_closed() -> None:
+    """Hostile pass on #18: Sam's guardianship has a role and no powers, so the profile must not
+    tell a verifier to check capabilities against powers that no longer exist, and a capability no
+    policy authorizes for the role must be refused rather than accepted on schema validation."""
+    schema = load("sedi-ward-authz", "sedi-ward-authz.schema.json")
+    authz = schema["properties"]["a"]["oneOf"][1]["properties"]["authz"]["description"]
+    assert "powers" not in authz
+    assert "role" in authz and "reject" in authz
+    index = (ROOT / "sedi-ward-authz" / "index.md").read_text()
+    assert "`powers`" not in index and "must reject" in index
