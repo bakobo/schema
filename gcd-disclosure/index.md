@@ -4,7 +4,7 @@ A would-be agent of record tells the principal, before any [GCD](../gcd/) exists
 
 ### Issuer and issuee
 
-The issuer `i` is the party that will be named as `agentOfRecord` in the GCD; a delegate that is a legal person acting for itself is its own agent of record, so it discloses too. The issuee `a.i` is the principal. That is the GCD's issuer unless the GCD sets `principal`, as when a court appoints a guardian, so the GCD's `disclosure` edge uses the operator `NI2I` and a verifier checks both parties against the GCD's facet.
+The issuer `i` is the party that will be named as `agentOfRecord` in the GCD; a delegate that is a legal person acting for itself discloses too when it chooses to name itself as its own agent of record, and otherwise issues no disclosure (this.i @2fgsylgz). The issuee `a.i` is the principal. That is the GCD's issuer unless the GCD sets `principal`, as when a court appoints a guardian, so the GCD's `disclosure` edge uses the operator `NI2I` and a verifier checks both parties against the GCD's facet.
 
 ### What it says
 

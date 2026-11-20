@@ -4,7 +4,7 @@ A legal person accepts appointment under a [GCD](../gcd/), without qualification
 
 ### Who issues it, and when
 
-The acceptance is issued after the GCD by the GCD's `agentOfRecord`. A delegate that is a legal person acting for itself is named as its own agent of record, so it accepts too. Its issuee `a.i` is the GCD's issuer, and its `gcd` edge names the GCD it accepts by its exact SAID, with the GCD 5.0.0 schema SAID pinned. `capacity` says which case applies: `agentOfRecord` for an agent that acts through a delegate other than itself, such as the operator of an AI delegate, and `delegate` for a delegate that is its own agent of record.
+The acceptance is issued after the GCD by the GCD's `agentOfRecord`. A delegate that is a legal person acting for itself may name itself as its own agent of record, as a paid professional may, and then it accepts too; one that does not accepts by admitting the GCD and issues no acceptance (this.i @2fgsylgz). Its issuee `a.i` is the GCD's issuer, and its `gcd` edge names the GCD it accepts by its exact SAID, with the GCD 5.0.0 schema SAID pinned. `capacity` says which case applies: `agentOfRecord` for an agent that acts through a delegate other than itself, such as the operator of an AI delegate, and `delegate` for a delegate that chose to name itself as its own agent of record.
 
 Under the GCD's `acceptance` rule, when the GCD names an agent of record, no act is authorized until that agent has issued an acceptance, and a verifier must deny an act for which none is shown. The agent's assent is therefore a precondition that a stranger can check open-loop. When a principal uses its own software as the delegate and names no agent of record, no acceptance is needed, because there is no agent to assent.
 
