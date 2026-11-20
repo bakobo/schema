@@ -1,5 +1,5 @@
 {
-  "$id": "EH8LIbOIwRn2A__ayXx3vHFrB3moaI8uUCf8oJGiNltB",
+  "$id": "EOMyk6XkhWF4mAWiqeBoryJ5xI8SaHzn68ZKjMT4U5ER",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "GCD Acceptance",
   "description": "A legal person accepts appointment under a GCD 5.0.0 credential, without qualification, and undertakes the duties whose bearer is the delegate (this.i @8tpzdyl5; Restatement (Third) of Agency \u00a71.01 makes agency a relationship of mutual assent). It is issued after the GCD by the GCD's agent of record, which is the delegate itself when a delegate that is a legal person acting for itself chose to name itself (this.i @2fgsylgz), and its issuee is the GCD's issuer. Where the GCD names an agent of record, a verifier denies every act under it until it is shown a matching acceptance, so the agent's assent is a precondition a stranger can check open-loop. It is a separate credential rather than an IPEX admit, because an admit authenticates a key, not a legal person's intent. An acceptance carries nothing that could qualify it: a qualified acceptance is no acceptance.",
@@ -130,7 +130,7 @@
                 "s": {
                   "description": "SAID of the GCD 5.0.0 schema",
                   "type": "string",
-                  "const": "EN_5OzUUk4sA6e87h3NeahSLJiq4RdEFsaoIICLjwjdz"
+                  "const": "EFUH9aeakbVVjcS_hNcOcKpwyIYbeXcMpFe3OcCq-BUU"
                 },
                 "o": {
                   "description": "Operator: no issuer-to-issuee constraint, because the acceptor is the GCD's agent of record, which need not be its issuee.",

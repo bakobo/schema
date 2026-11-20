@@ -204,7 +204,7 @@ The [`invalid/`](invalid/) corpus holds the should-reject fixtures, each the can
 
 [1] Dazza Greenwood. 2026. Written Agent Authorizations: 25 Instruments, Dissected for AI-Agent Design. Version 0.3.4. GitHub repository dazzaji/agent4whom, commit 8df8730. https://github.com/dazzaji/agent4whom/tree/8df8730
 
-[2] Daniel Hardman. 2026. The Shape of Delegated Authority. Version 1.2. Codecraft Papers. https://dhh1128.github.io/papers/sda.html
+[2] Daniel Hardman. 2026. The Shape of Delegated Authority. Version 1.3. Codecraft Papers. https://dhh1128.github.io/papers/sda.html
 
 [3] Daniel Hardman. 2025. Intent and Boundaries: A Framework for Digital Agency. Version 1.1. Codecraft Papers. DOI: https://doi.org/10.2139/ssrn.5909382
 

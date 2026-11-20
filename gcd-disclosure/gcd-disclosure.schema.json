@@ -1,5 +1,5 @@
 {
-  "$id": "EFvxeVDmIBpN7wWuHl-VbXbvmWae96yQK5ev8Sjt0-qf",
+  "$id": "EFkZqT6epdYaMaSnkn9I6p1qmMSlaUAr0jMNqmODdP3T",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "GCD Disclosure",
   "description": "A would-be agent of record states, to the principal and before any GCD exists, all compensation it expects from any party and every material conflict of interest it has in connection with acting for the principal. A GCD that names an agent of record must reference that agent's disclosure by its disclosure edge, and issuing it is evidence of the principal's consent to exactly what the disclosure states, and to nothing else; a change is disclosed before the issuer acts on it (this.i @8tpzdyl5; Restatement (Third) of Agency \u00a78.06). This is not a constraint credential: a verifier never gates an act on it, and it is targeted to the principal, so it uses selective disclosure. Its attribute section is a labeled field map (choosing-attribute-vs-aggregate: the fields are fixed and heterogeneous, and their labels leak nothing) that carries a required salty nonce, so the section can travel compacted to its SAID: a verifier who follows a GCD's disclosure edge learns that a disclosure was made and can check it was this one, while who pays the agent, and how much, is shown only to the principal and to whomever the principal chooses. Publishing an agent's compensation to every verifier would be a privacy harm.",
@@ -67,9 +67,9 @@
               "type": "string"
             },
             "u": {
-              "description": "Attribute nonce, at least a CESR 128-bit salt, so a compacted attribute section cannot be confirmed by guessing its contents and recomputing its SAID",
+              "description": "Attribute nonce: a CESR-encoded 128-bit salt (code 0A and 22 base64url characters) drawn at random, so a compacted attribute section cannot be confirmed by guessing its contents and recomputing its SAID. The schema checks the shape; randomness is the issuer's obligation, which no schema can check.",
               "type": "string",
-              "minLength": 24
+              "pattern": "^0A[A-Za-z0-9_-]{22}$"
             },
             "i": {
               "description": "AID of the issuee: the principal to whom the disclosure is made",
@@ -99,12 +99,14 @@
                     "description": "Who pays: the payer's AID where it has one, otherwise its name",
                     "type": "string",
                     "minLength": 1,
+                    "pattern": "\\S",
                     "maxLength": 256
                   },
                   "basis": {
                     "description": "What is paid and how it is computed, in plain words: a flat fee, a percentage, a referral commission, a benefit in kind",
                     "type": "string",
                     "minLength": 1,
+                    "pattern": "\\S",
                     "maxLength": 1024
                   }
                 }
@@ -119,6 +121,7 @@
               "items": {
                 "type": "string",
                 "minLength": 1,
+                "pattern": "\\S",
                 "maxLength": 1024
               }
             }

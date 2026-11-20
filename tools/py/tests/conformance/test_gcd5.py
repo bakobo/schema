@@ -821,3 +821,38 @@ def test_each_companion_ships_fixtures_that_its_schema_refuses(folder) -> None:
     assert len(fixtures) >= 3
     for path in fixtures:
         assert _errors(schema, _load(path)), path.name
+
+
+# --- hostile pass on #19: the disclosure's nonce and its content ------------------------------
+
+
+def _disclosure_example() -> dict:
+    return _load(DISCLOSURE / "example.json")
+
+
+def _disclosure_valid(instance: dict) -> bool:
+    schema = _load(DISCLOSURE / "gcd-disclosure.schema.json")
+    return jsonschema.Draft202012Validator(schema).is_valid(instance)
+
+
+def test_the_disclosure_nonce_must_be_a_cesr_128_bit_salt() -> None:
+    """A run of 24 zeros is not a salt, and a guessable nonce lets anyone confirm hidden content."""
+    assert _disclosure_valid(_disclosure_example())
+    for bad in ("0" * 24, "x" * 24, "0A" + "!" * 22, "0A" + "a" * 21, "0A" + "a" * 23):
+        instance = _disclosure_example()
+        instance["a"]["u"] = bad
+        assert not _disclosure_valid(instance), bad
+
+
+@pytest.mark.parametrize("path, value", [
+    (["conflicts"], [" "]),
+    (["conflicts"], ["\t\n"]),
+    (["compensation"], [{"payer": " ", "basis": "a flat fee"}]),
+    (["compensation"], [{"payer": "Alder Supply", "basis": "   "}]),
+])
+def test_whitespace_is_not_disclosure_content(path, value) -> None:
+    instance = _disclosure_example()
+    instance["a"].pop("compensation", None)
+    instance["a"].pop("conflicts", None)
+    instance["a"][path[0]] = value
+    assert not _disclosure_valid(instance)
