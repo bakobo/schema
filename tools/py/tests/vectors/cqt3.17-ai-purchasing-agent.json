@@ -1,0 +1,7 @@
+{
+  "_source": "Computed once with the cqt3.17 reference implementation (dhh1128/canonical-quoted-text, impl/python/cqt.py, algorithm_3_17, Unicode 17.0.0) and vendored here, so the test suite carries no runtime dependency on it. The digest is keri's Blake3-256 Diger over the canonical UTF-8 bytes.",
+  "canon": "cqt3.17",
+  "text": "Harbor Workshop appoints Northstar Procurement as its agent to buy shop consumables from Fairline Supply, acting through Northstar's purchasing service.\n\nNorthstar may place one order, for no more than 400 US dollars in total, before 15 December 2026. The authority ends when that order is placed or on that date, whichever comes first.\n\nNorthstar may not open an account in Harbor's name, change a delivery address, or accept a substitution without asking Harbor first.\n",
+  "canonical": "Harbor Workshop appoints Northstar Procurement as its agent to buy shop consumables from Fairline Supply, acting through Northstar's purchasing service. Northstar may place one order, for no more than 400 US dollars in total, before 15 December 2026. The authority ends when that order is placed or on that date, whichever comes first. Northstar may not open an account in Harbor's name, change a delivery address, or accept a substitution without asking Harbor first.",
+  "digest": "EIehA1qcOpFPJrEqM6NYSAoUHt8kdjonoc7lTCPunC0V"
+}
