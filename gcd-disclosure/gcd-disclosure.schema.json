@@ -1,8 +1,8 @@
 {
-  "$id": "EEwH10hs-VvdeyFBXSfmisjn8q89rwfAbKm9VcUXkBWS",
+  "$id": "EFvxeVDmIBpN7wWuHl-VbXbvmWae96yQK5ev8Sjt0-qf",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "GCD Disclosure",
-  "description": "A would-be agent of record states, to the principal and before any GCD exists, all compensation it expects from any party and every material conflict of interest it has in connection with acting for the principal. A GCD that references this disclosure by its disclosure edge records the principal's informed consent to exactly what it states, and to nothing else (this.i @8tpzdyl5; Restatement (Third) of Agency \u00a78.06). This is not a constraint credential: a verifier never gates an act on it, and it is targeted to the principal, so it uses selective disclosure. Its attribute section is a labeled field map (choosing-attribute-vs-aggregate: the fields are fixed and heterogeneous, and their labels leak nothing) that carries a required salty nonce, so the section can travel compacted to its SAID: a verifier who follows a GCD's disclosure edge learns that a disclosure was made and can check it was this one, while who pays the agent, and how much, is shown only to the principal and to whomever the principal chooses. Publishing an agent's compensation to every verifier would be a privacy harm.",
+  "description": "A would-be agent of record states, to the principal and before any GCD exists, all compensation it expects from any party and every material conflict of interest it has in connection with acting for the principal. A GCD that names an agent of record must reference that agent's disclosure by its disclosure edge, and issuing it is evidence of the principal's consent to exactly what the disclosure states, and to nothing else; a change is disclosed before the issuer acts on it (this.i @8tpzdyl5; Restatement (Third) of Agency \u00a78.06). This is not a constraint credential: a verifier never gates an act on it, and it is targeted to the principal, so it uses selective disclosure. Its attribute section is a labeled field map (choosing-attribute-vs-aggregate: the fields are fixed and heterogeneous, and their labels leak nothing) that carries a required salty nonce, so the section can travel compacted to its SAID: a verifier who follows a GCD's disclosure edge learns that a disclosure was made and can check it was this one, while who pays the agent, and how much, is shown only to the principal and to whomever the principal chooses. Publishing an agent's compensation to every verifier would be a privacy harm.",
   "credentialType": "gcd-disclosure",
   "version": "1.0.0",
   "type": "object",
@@ -159,7 +159,7 @@
                 {
                   "description": "simple compact rule form",
                   "type": "string",
-                  "const": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure."
+                  "const": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure, and it will disclose any change before acting on it."
                 },
                 {
                   "description": "Rule detail",
@@ -168,7 +168,7 @@
                     "l": {
                       "description": "Associated legal language",
                       "type": "string",
-                      "const": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure."
+                      "const": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure, and it will disclose any change before acting on it."
                     }
                   },
                   "required": [

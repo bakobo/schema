@@ -1,8 +1,8 @@
 {
-  "$id": "EOf3WP8mTdo3DMpThNXsLPegu72yDX-j5F_WNcvxm06q",
+  "$id": "EHuvQNz2qMnoyhJ9YbCXdqk_pXSKdKApTURxASnBB-Bf",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "GCD Acceptance",
-  "description": "A legal person accepts appointment under a GCD 5.0.0 credential, without qualification, and undertakes the duties whose bearer is the delegate (this.i @8tpzdyl5; Restatement (Third) of Agency \u00a71.01 makes agency a relationship of mutual assent). It is issued after the GCD, by the GCD's agent of record, or by the delegate when no agent of record is named and the delegate is a legal person, and its issuee is the GCD's issuer. Where the GCD's acceptance rule requires one, a verifier denies every act under that GCD until it is shown a matching acceptance, so the agent's assent is a precondition a stranger can check open-loop. It is a separate credential rather than an IPEX admit, because an admit authenticates a key, not a legal person's intent. An acceptance carries nothing that could qualify it: a qualified acceptance is no acceptance.",
+  "description": "A legal person accepts appointment under a GCD 5.0.0 credential, without qualification, and undertakes the duties whose bearer is the delegate (this.i @8tpzdyl5; Restatement (Third) of Agency \u00a71.01 makes agency a relationship of mutual assent). It is issued after the GCD by the GCD's agent of record, which is the delegate itself when the delegate is a legal person acting for itself, and its issuee is the GCD's issuer. Where the GCD names an agent of record, a verifier denies every act under it until it is shown a matching acceptance, so the agent's assent is a precondition a stranger can check open-loop. It is a separate credential rather than an IPEX admit, because an admit authenticates a key, not a legal person's intent. An acceptance carries nothing that could qualify it: a qualified acceptance is no acceptance.",
   "credentialType": "gcd-acceptance",
   "version": "1.0.0",
   "type": "object",
@@ -35,7 +35,7 @@
       "type": "string"
     },
     "i": {
-      "description": "AID of the accepting legal person: the GCD's agent of record, or its delegate when no agent of record is named",
+      "description": "AID of the accepting legal person: the agentOfRecord the GCD names",
       "type": "string",
       "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
     },
@@ -82,7 +82,7 @@
               "format": "date-time"
             },
             "capacity": {
-              "description": "The capacity in which the issuer accepts. agentOfRecord: it is the agentOfRecord the GCD names. delegate: the GCD names no agent of record, and the issuer is its delegate and a legal person.",
+              "description": "The capacity in which the agent of record accepts. agentOfRecord: an agent of record that acts through a delegate other than itself, such as the operator of an AI delegate. delegate: the GCD's delegate, a legal person acting for itself and named as its own agent of record.",
               "type": "string",
               "enum": [
                 "agentOfRecord",
@@ -130,10 +130,10 @@
                 "s": {
                   "description": "SAID of the GCD 5.0.0 schema",
                   "type": "string",
-                  "const": "EJ670TDvdSeqyATI953-99xOFihOX3erIfdEvRJITQY5"
+                  "const": "EEOBUVSdhNa_l9ESr3up_xgeSPd5tox76pxKGTRXyznt"
                 },
                 "o": {
-                  "description": "Operator: no issuer-to-issuee constraint, because the acceptor is the GCD's agent of record or delegate, never its issuee by that fact alone.",
+                  "description": "Operator: no issuer-to-issuee constraint, because the acceptor is the GCD's agent of record, which need not be its issuee.",
                   "type": "string",
                   "const": "NI2I"
                 }
@@ -164,7 +164,7 @@
                 {
                   "description": "simple compact rule form",
                   "type": "string",
-                  "const": "The issuer of this acceptance accepts, without qualification, appointment under the referenced credential and the rules that credential carries, and undertakes as its own the duties whose bearer is the delegate."
+                  "const": "The issuer of this acceptance accepts, without qualification, appointment under the referenced credential and the rules that credential carries, which were available to it in full before it issued this acceptance, and undertakes as its own the duties whose bearer is the delegate."
                 },
                 {
                   "description": "Rule detail",
@@ -173,7 +173,7 @@
                     "l": {
                       "description": "Associated legal language",
                       "type": "string",
-                      "const": "The issuer of this acceptance accepts, without qualification, appointment under the referenced credential and the rules that credential carries, and undertakes as its own the duties whose bearer is the delegate."
+                      "const": "The issuer of this acceptance accepts, without qualification, appointment under the referenced credential and the rules that credential carries, which were available to it in full before it issued this acceptance, and undertakes as its own the duties whose bearer is the delegate."
                     }
                   },
                   "required": [
