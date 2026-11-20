@@ -22,6 +22,8 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 | Schema | What it asserts |
 |---|---|
 | **[gcd](gcd/)** | **Generalized Cooperative Delegation** — the authorizations, duties, and constraints of a delegate |
+| [gcd-disclosure](gcd-disclosure/) | a would-be agent of record's disclosure of compensation and conflicts to the principal, made before a GCD is issued |
+| [gcd-acceptance](gcd-acceptance/) | a legal person's unqualified acceptance of appointment under a GCD, which a verifier must see before any act when the GCD names an agent of record |
 | [ai-coder](ai-coder/) | a developer is committed to and capable of using AI coding tools responsibly |
 | [ai-user-coca](ai-user-coca/) | commitment to a code of conduct for AI use |
 | [attestation](attestation/) | verifiable attestation of a data digest |
@@ -51,8 +53,9 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 
 GCD's inherited JSON was **repaired and re-SAIDified** (Task 1), and GCD has now
 been **evolved to v2.0** (Task 2). The attributes block is organized into named
-containers — a `facet` (`relationType`, `liableParty`, `presentsAs`,
-`exerciseMode`) and a fail-closed `constraints` gate (`goals`, `effects`,
+containers — a `facet` (`relationType`, `presentsAs`, `exerciseMode`, and
+until 5.0.0 `liableParty`, which 5.0.0 replaced with `principal` and
+`agentOfRecord`) and a fail-closed `constraints` gate (`goals`, `effects`,
 `stateKinds`, `domains`, `jurisdictions`, `physGeos`/`virtGeos`, `icals`,
 `monetaryLimit`, `protos`, `proofs`, `validFrom`/`validUntil`, `humanReview`) —
 with sibling `terminatingEvents` (voiding) and `disclosables` (outbound) axes,

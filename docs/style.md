@@ -7,14 +7,15 @@ schemas adopt it when they next get a version bump; it is not a repo-wide rename
 ## Rules
 
 1. **camelCase.** The JSON default, and what GCD already uses for the relation
-   facet (`relationType`, `liableParty`, `presentsAs`, `exerciseMode`).
+   facet (`relationType`, `principal`, `agentOfRecord`, `presentsAs`, `exerciseMode`).
 2. **Expressive, but an obvious abbreviation beats the full word.** "Obvious" =
    understood with no legend *and* no collision with a well-known other meaning.
    - ✅ `phys`, `virt`, `val`, `proto`, `geo` — obvious.
    - ❌ `dom` for domain — collides with the HTML DOM → use `domain`.
 3. **Abbreviate freely; amputate never.** An abbreviation shortens a *word*
-   (`information`→`info`); it must not drop a word. `liableParty` stays — `party`
-   alone loses the load-bearing "liable".
+   (`information`→`info`); it must not drop a word. GCD 4.0.0's `liableParty`
+   was the worked case — `party` alone would have lost the load-bearing "liable"
+   — and `agentOfRecord` keeps its whole phrase for the same reason.
 4. **Array-valued fields are plural.** Pluralize the English word, *then*
    abbreviate: `goals`, `protos`, `proofs`, `physGeos`,
    `virtGeos`. An abbreviation whose plural is not *itself* clearly plural is
@@ -70,4 +71,6 @@ In v2.0 these all live inside the `constraints` container (this.i `@h4tqm7`,
 New v2.0 fields with no v1 `c_*` ancestor: the a-block siblings
 `terminatingEvents` and `disclosables` (`@v3rk5p`); the `facet` members `role`,
 `relationType`, `liableParty`, `presentsAs`, `exerciseMode` (`@k7wd3m`,
-`@x4nq6t`); and the `r`-block `duties` array (`@m6tq4w`).
+`@x4nq6t`); and the `r`-block `duties` array (`@m6tq4w`). GCD 5.0.0 replaced
+`liableParty` with `principal` and `agentOfRecord` and added `durable` and
+`grantText` to the facet (`@0yxjpld6`).
