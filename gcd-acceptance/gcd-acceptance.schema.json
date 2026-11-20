@@ -1,0 +1,197 @@
+{
+  "$id": "EOf3WP8mTdo3DMpThNXsLPegu72yDX-j5F_WNcvxm06q",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GCD Acceptance",
+  "description": "A legal person accepts appointment under a GCD 5.0.0 credential, without qualification, and undertakes the duties whose bearer is the delegate (this.i @8tpzdyl5; Restatement (Third) of Agency \u00a71.01 makes agency a relationship of mutual assent). It is issued after the GCD, by the GCD's agent of record, or by the delegate when no agent of record is named and the delegate is a legal person, and its issuee is the GCD's issuer. Where the GCD's acceptance rule requires one, a verifier denies every act under that GCD until it is shown a matching acceptance, so the agent's assent is a precondition a stranger can check open-loop. It is a separate credential rather than an IPEX admit, because an admit authenticates a key, not a legal person's intent. An acceptance carries nothing that could qualify it: a qualified acceptance is no acceptance.",
+  "credentialType": "gcd-acceptance",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "v",
+    "d",
+    "i",
+    "rd",
+    "s",
+    "a",
+    "e",
+    "r"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type. Optional; an ACDC JSON message without it is of type acm.",
+      "type": "string"
+    },
+    "d": {
+      "description": "SAID of the credential",
+      "type": "string",
+      "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+    },
+    "u": {
+      "description": "A salty nonce",
+      "type": "string"
+    },
+    "i": {
+      "description": "AID of the accepting legal person: the GCD's agent of record, or its delegate when no agent of record is named",
+      "type": "string",
+      "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
+    },
+    "rd": {
+      "description": "Registry SAID. Required: an acceptance is a condition of authority that a verifier checks, so its status must be discoverable the same way the GCD's is.",
+      "type": "string",
+      "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+    },
+    "s": {
+      "description": "SAID of this schema",
+      "type": "string"
+    },
+    "a": {
+      "oneOf": [
+        {
+          "description": "SAID of the attribute section",
+          "type": "string"
+        },
+        {
+          "description": "Attribute section",
+          "type": "object",
+          "required": [
+            "i",
+            "dt",
+            "capacity"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of the attribute section",
+              "type": "string"
+            },
+            "u": {
+              "description": "A salty nonce",
+              "type": "string"
+            },
+            "i": {
+              "description": "AID of the issuee: the issuer of the referenced GCD",
+              "type": "string",
+              "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
+            },
+            "dt": {
+              "description": "Issuance datetime, ISO-8601 datetime string. It is later than the referenced GCD's.",
+              "type": "string",
+              "format": "date-time"
+            },
+            "capacity": {
+              "description": "The capacity in which the issuer accepts. agentOfRecord: it is the agentOfRecord the GCD names. delegate: the GCD names no agent of record, and the issuer is its delegate and a legal person.",
+              "type": "string",
+              "enum": [
+                "agentOfRecord",
+                "delegate"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "e": {
+      "oneOf": [
+        {
+          "description": "Edges block SAID",
+          "type": "string"
+        },
+        {
+          "description": "Edges detail",
+          "type": "object",
+          "required": [
+            "d",
+            "gcd"
+          ],
+          "properties": {
+            "d": {
+              "description": "Edges block SAID",
+              "type": "string"
+            },
+            "gcd": {
+              "description": "The GCD whose appointment this accepts.",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "n",
+                "s",
+                "o"
+              ],
+              "properties": {
+                "n": {
+                  "description": "SAID of the accepted GCD",
+                  "type": "string",
+                  "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+                },
+                "s": {
+                  "description": "SAID of the GCD 5.0.0 schema",
+                  "type": "string",
+                  "const": "EJ670TDvdSeqyATI953-99xOFihOX3erIfdEvRJITQY5"
+                },
+                "o": {
+                  "description": "Operator: no issuer-to-issuee constraint, because the acceptor is the GCD's agent of record or delegate, never its issuee by that fact alone.",
+                  "type": "string",
+                  "const": "NI2I"
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "oneOf": [
+        {
+          "description": "Rules section SAID",
+          "type": "string"
+        },
+        {
+          "description": "Rules detail",
+          "type": "object",
+          "properties": {
+            "d": {
+              "description": "Rule section SAID",
+              "type": "string"
+            },
+            "unqualifiedAcceptance": {
+              "description": "unqualifiedAcceptance Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The issuer of this acceptance accepts, without qualification, appointment under the referenced credential and the rules that credential carries, and undertakes as its own the duties whose bearer is the delegate."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The issuer of this acceptance accepts, without qualification, appointment under the referenced credential and the rules that credential carries, and undertakes as its own the duties whose bearer is the delegate."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "d",
+            "unqualifiedAcceptance"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}
