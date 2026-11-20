@@ -1,4 +1,8 @@
-"""GCD 4.0.0: the targets of acts, and who may designate them (`this.i` @yivcussv)."""
+"""GCD 4.0.0: the targets of acts, and who may designate them (`this.i` @yivcussv).
+
+Targets are unchanged in 5.0.0 (@3w3rkmt3), so these oracles run against the current gcd/; the
+4.0.0-specific claims run against its archive at gcd-4.0.0/.
+"""
 
 import json
 from pathlib import Path
@@ -13,6 +17,7 @@ from schematools.said import compute_schema_said, saidify_sad
 ROOT = Path(__file__).resolve().parents[4]
 FOLDER = ROOT / "gcd"
 ARCHIVE = ROOT / "gcd-3.1.0"
+ARCHIVE_4 = ROOT / "gcd-4.0.0"
 PRIOR_SAID = "EDqAod5ZiCNfQziVHjOALNNRabw2iwpAYqqOsEXUcxm5"
 AID = "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL"
 PROOF = "EGZ_DdmzryjQOtOdQauTm_YxggbVM7EWelk8IBxsnC-d"  # a placeholder until proof requests exist (~6jpj)
@@ -60,13 +65,12 @@ def _accepted(instance) -> None:
     assert not _errors(instance), [e.message for e in _errors(instance)]
 
 
-def test_the_schema_names_itself_is_registered_and_is_4_0_0() -> None:
+def test_the_schema_names_itself_and_is_registered() -> None:
     schema = _schema()
     assert compute_schema_said(schema) == schema["$id"]
     assert schema["$id"] != PRIOR_SAID
     registry = _load(ROOT / "registry.json")
     assert registry[schema["$id"]] == "gcd/gcd.schema.json"
-    assert schema["version"] == "4.0.0"
 
 
 def test_3_1_0_is_archived_under_its_own_said() -> None:
@@ -80,10 +84,11 @@ def test_3_1_0_is_archived_under_its_own_said() -> None:
 def test_a_3_1_0_credential_that_carries_acts_is_not_a_4_0_0_one() -> None:
     """The reason this is MAJOR: acts without targets was valid, and is not now (@k3wm7d)."""
     prior = _load(ARCHIVE / "example.json")
-    prior["s"] = _schema()["$id"]
+    four = _load(ARCHIVE_4 / "gcd-4.0.0.schema.json")
+    prior["s"] = four["$id"]
     assert "acts" in prior["a"]["constraints"] and "targets" not in prior["a"]["constraints"]
-    _refused(prior)
-    arm = jsonschema.Draft202012Validator(_schema()["properties"]["a"]["oneOf"][1])
+    assert list(jsonschema.Draft202012Validator(four).iter_errors(prior))
+    arm = jsonschema.Draft202012Validator(four["properties"]["a"]["oneOf"][1])
     assert [e.validator for e in arm.iter_errors(prior["a"])] == ["dependentRequired"]
 
 

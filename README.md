@@ -22,6 +22,8 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 | Schema | What it asserts |
 |---|---|
 | **[gcd](gcd/)** | **Generalized Cooperative Delegation** — the authorizations, duties, and constraints of a delegate |
+| [gcd-disclosure](gcd-disclosure/) | a would-be agent of record's disclosure of compensation and conflicts to the principal, made before a GCD is issued |
+| [gcd-acceptance](gcd-acceptance/) | a legal person's unqualified acceptance of appointment under a GCD, which a verifier must see before any act when the GCD names an agent of record |
 | [ai-coder](ai-coder/) | a developer is committed to and capable of using AI coding tools responsibly |
 | [ai-user-coca](ai-user-coca/) | commitment to a code of conduct for AI use |
 | [attestation](attestation/) | verifiable attestation of a data digest |
@@ -49,18 +51,7 @@ Each schema lives in its own directory (`<name>/<name>.schema.json`, plus an
 
 ## Status
 
-GCD's inherited JSON was **repaired and re-SAIDified** (Task 1), and GCD has now
-been **evolved to v2.0** (Task 2). The attributes block is organized into named
-containers — a `facet` (`relationType`, `liableParty`, `presentsAs`,
-`exerciseMode`) and a fail-closed `constraints` gate (`goals`, `effects`,
-`stateKinds`, `domains`, `jurisdictions`, `physGeos`/`virtGeos`, `icals`,
-`monetaryLimit`, `protos`, `proofs`, `validFrom`/`validUntil`, `humanReview`) —
-with sibling `terminatingEvents` (voiding) and `disclosables` (outbound) axes,
-and first-class `duties` in the rules block. Version `1.0.0` is preserved intact
-under [`gcd-1.0.0/`](gcd-1.0.0/). The whole corpus is validated in CI — SAID
-integrity, registry consistency, JSON-Schema validity, example validation,
-referential + example SAID integrity, and a should-reject negative corpus. See
-[`this.i` `@b6xh4m`](this.i) and [`@tq5wnh`](this.i).
+GCD is at version 5.0.0, grounded in agency law ([`this.i` `@3w3rkmt3`](this.i)). Its attributes block holds a closed `facet` (`role`, `relationType`, `principal`, `agentOfRecord`, `presentsAs`, `exerciseMode`, `durable`, `grantText`) and a fail-closed `constraints` gate (`goals`, `acts`, `targets`, `reservedPowers`, `domains`, `jurisdictions`, `physGeos`/`virtGeos`, `icals`, `monetaryLimit`, `protos`, `proofs`, `validFrom`/`validUntil`, `humanReview`, `reviewers`), with sibling `terminatingEvents` (voiding) and `disclosables` (outbound) axes. Its rules block is a complete Ricardian contract with first-class duties, and two companions, [`gcd-disclosure`](gcd-disclosure/) and [`gcd-acceptance`](gcd-acceptance/), carry an agent of record's disclosure and acceptance. See [`gcd/index.md`](gcd/index.md) and [`gcd/legal-grounding.md`](gcd/legal-grounding.md). Earlier versions stay published and resolvable by SAID, back to [`gcd-1.0.0/`](gcd-1.0.0/). The whole corpus is validated in CI: SAID integrity, registry consistency, JSON-Schema validity, example validation, referential and example SAID integrity, and a should-reject negative corpus.
 
 The five Sam Smith SEDI schemas (IAR, Core, Residence, Age and Guardian) are pinned to his [keripy test module at `927c0cb8`](https://github.com/WebOfTrust/keripy/blob/927c0cb8/tests/sedi/test_sedi.py), the last planned re-pin before the Summit freeze on 2026-10-16; late changes reopen it only by Daniel Hardman's decision (`this.i` `@6uxg0vj0`). Their examples are his issued vectors for Guy, Gal and Wyn. CI recomputes their SAIDs and checks their source bytes in addition to the corpus checks, and does the same for his earlier revisions at `ec307cd74` and every revision the re-pin displaced (`this.i` `@3x2jtfxc`). The presentation, ward, and authorization schemas are Bakobo profiles for the November SEDI Summit; they are not Sam's schemas or statements of Utah policy. Previous major versions remain in versioned
 directories and in [`registry.json`](registry.json).

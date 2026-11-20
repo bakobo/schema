@@ -1,12 +1,12 @@
 {
-  "$id": "ELDiEui48xsASGvDcNdsOwPptW0v4i-oN6-75_I1d60c",
+  "$id": "EAcsLmboTQ1SbsGklHYjLrTpODbJSUstBzbUAzFZ_m3z",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Generalized Cooperative Delegation Credential",
-  "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 4.0 names the targets of acts (constraints.targets): the objects a delegate may act on, or who may designate them, so a delegate cannot be made a confused deputy by a stranger who chooses where its authority lands; acts and targets are one constraint, so a credential that grants acts must also say which targets. Version 3.1 admits custom keys inside the constraints container and inside a duty, so an issuer can express a constraint or obligation the standard fields do not cover; the fail-closed rule on an unrecognized constraint key is unchanged, but it is now enforced by the verifier rather than by schema validation. Version 3.0 adopts the ACDC v2 envelope (acm/JSON: rd replaces ri, message type t, most-compact-form SAIDs). Version 2.0 organized the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classed duties in the rules block.",
-  "$comment": "These credentials have no required edges. They can be chained by showing that the issuer's identifier is also an identifier associated with another credential of whatever type, but they do not require chaining. The optional e block carries an I2I issuer edge for that purpose.",
+  "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 5.0 grounds the credential in agency law (this.i @3w3rkmt3) and separates three jobs: the constraints container is the only machine gate, the rules bind only the parties who issued, admitted or accepted the credential, and toward relying parties the rules state conditions of reliance and defer to applicable law. The facet names roles rather than liability: liableParty is gone, and principal and agentOfRecord name the party bound by the delegate's acts and the legal person who acts through the delegate, beside durable and a digest of the principal's own grant text (grantText); the facet is closed. The credential has a light path and a heavy path (this.i @2fgsylgz), so it suits in-house and informal delegation as well as strongly legal ones. On the light path no agentOfRecord is named: the delegate is either the principal's own software, for which the principal answers as its own, or a legal person acting for itself, which accepts by admitting the credential; no disclosure or acceptance credential is involved. On the heavy path an agentOfRecord is named, which is required when a third party such as an AI vendor operates the delegate and optional for a legal person acting for itself; a gcd-disclosure then precedes the grant and a gcd-acceptance follows it. Reserved powers are conferred only by name (constraints.reservedPowers), and humanReview names who may approve (constraints.reviewers). Optional edges name the parent credential of a sub-delegation, a gcd-disclosure made by the agent of record before the grant, and evidence of how the grant was executed; acceptance is a separate gcd-acceptance credential issued after it. The rules are complete and supersede every earlier version, add an optional governing law, and carry seven baseline duties, six of them owed by the delegate in a new prose duty shape. Version 4.0 names the targets of acts (constraints.targets): the objects a delegate may act on, or who may designate them, so a delegate cannot be made a confused deputy by a stranger who chooses where its authority lands; acts and targets are one constraint, so a credential that grants acts must also say which targets. Version 3.1 admits custom keys inside the constraints container and inside a duty, so an issuer can express a constraint or obligation the standard fields do not cover; the fail-closed rule on an unrecognized constraint key is unchanged, but it is now enforced by the verifier rather than by schema validation. Version 3.0 adopts the ACDC v2 envelope (acm/JSON: rd replaces ri, message type t, most-compact-form SAIDs). Version 2.0 organized the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classed duties in the rules block.",
+  "$comment": "These credentials have no required edges block. When the e block is present it carries an I2I issuer edge that chains the issuer's identity to another credential, and optionally a parent edge (required by the subDelegation rule whenever the issuer's own authority is delegated), a disclosure edge to a gcd-disclosure, and an execution edge to evidence of how the grant was made. Acceptance by an agent of record is not an edge here, because the acceptor does not sign the GCD; it is a gcd-acceptance credential that points at this one.",
   "type": "object",
   "credentialType": "gcd-credential",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "required": [
     "v",
     "d",
@@ -76,18 +76,19 @@
               "format": "date-time"
             },
             "gfw": {
-              "description": "A SAID that identifies a governance framework that adds richer semantics to the role field and any custom constraints present in this credential. The SAID identifies a JSON rules block that supplements the generic rules in the rules block (r field). The location of this additional rules block is assumed to be published somewhere that stakeholders know. When defined, a verifier MUST NOT impute a delegator's approval of delegated authority to a delegate without understanding and enforcing the rules of these extra rules.",
+              "description": "A SAID that identifies a governance framework that adds richer semantics to the role field and any custom constraints present in this credential. The SAID identifies a JSON rules block that supplements the generic rules in the rules block (r field). The location of this additional rules block is assumed to be published somewhere that stakeholders know. A governance framework may narrow the authority the constraints grant but never widens it, and may reserve further powers but never release one. When defined, a verifier MUST NOT impute a delegator's approval of delegated authority to a delegate without understanding and enforcing the rules of these extra rules.",
               "type": "string",
               "examples": [
                 "EK2r6EnDXre2pecTBO8s99j4OtNaaDIhVyr7uGugDhmp"
               ]
             },
             "facet": {
-              "description": "The relationship facet: descriptive accountability metadata about the delegation relationship, orthogonal to the enabling constraints. A verifier MAY ignore the facet for the raw authorization decision; only the constraints container gates. Unknown keys here are safe to ignore (forward-compatible), so this container is NOT fail-closed.",
+              "description": "The relationship facet: descriptive metadata about the delegation relationship, orthogonal to the enabling constraints. It names roles, not liability, which is a conclusion for law to reach from the facts. A verifier MAY ignore the facet for the raw authorization decision; only the constraints container gates, together with the acceptance, sub-delegation and human-review conditions the rules state. This container is CLOSED as of 5.0.0: an unknown key is rejected, so tooling that still writes the 4.0.0 liableParty cannot carry it forward with its old, ambiguous meaning.",
               "type": "object",
+              "additionalProperties": false,
               "properties": {
                 "role": {
-                  "description": "A string that names a profile of duties and corresponding authorizations that the delegator intends to confer on the delegate. When gfw is defined, if it specifies formal semantics for this role, then the role may supplement or clarify constraints, or add new ones that a GCD credential is otherwise incapable of modeling. When gfw is NOT defined, this field becomes a simple descriptive label, and no party is justified in expecting it to convey any constraints.",
+                  "description": "A string that names a profile of duties and corresponding authorizations that the delegator intends to confer on the delegate. When gfw is defined and specifies formal semantics for this role, the role may narrow the authority the constraints grant, or add constraints a GCD credential is otherwise incapable of modeling, but never widens that authority or confers a reserved power. When gfw is NOT defined, this field is a simple descriptive label with no enforceable meaning, and no party is justified in expecting it to convey any constraints.",
                   "type": "string",
                   "examples": [
                     "realtor",
@@ -105,9 +106,15 @@
                     "stewardship"
                   ]
                 },
-                "liableParty": {
-                  "description": "Who answers OUTWARD if an act taken under this delegation goes wrong -- the party the world holds responsible. This is distinct from the grantor (issuer i), the beneficiary (relationType), the actor (the delegate), and the inward accountability expressed by the duties in the r block. It may differ from the actor.",
-                  "type": "string"
+                "principal": {
+                  "description": "AID of the principal: the party bound by the delegate's authorized acts and on whose account they are taken (Restatement (Third) of Agency \u00a71.01, \u00a76.01, \u00a77.03). Absent, it defaults to the issuer; set it only when the two differ, as when an officer issues for a company or a court issues for an individual subject to guardianship. Who is liable for an act is for the law to decide, not this field.",
+                  "type": "string",
+                  "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
+                },
+                "agentOfRecord": {
+                  "description": "AID of the agent of record: the legal person the principal appoints as agent and who acts through the delegate, such as the company that operates an AI delegate. It is an agent because the principal appointed it and it assented by issuing a gcd-acceptance, and it owes the duties whose bearer is the delegate. Required when a third party operates the delegate, such as an AI vendor. Optional for a delegate that is a legal person acting for itself, which may name itself here to bring the disclosure and acceptance rules into play, as a paid professional may. Absent, it is the issuer's representation that no one other than the principal or the delegate itself operates the delegate: the delegate is then either the principal's own software, which is the principal's own instrument, or a legal person acting for itself, which accepts by admitting this credential and owes the duties whose bearer is the delegate directly. When present, a verifier denies every act until it is shown a matching gcd-acceptance, and this credential must carry a disclosure edge. Liability is for the law to decide, not this field.",
+                  "type": "string",
+                  "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
                 },
                 "presentsAs": {
                   "description": "The facet-AID the act is presented under to a counterparty (for example, an 'Office of the CEO' facet an assistant is delegated into). Presenting-as without this granted capability is impersonation. The signer is always the actor's own key; presentsAs governs only the presented identity, not the signature.",
@@ -121,11 +128,46 @@
                     "authorize",
                     "both"
                   ]
+                },
+                "durable": {
+                  "description": "The principal's stated intent that the authority survive the principal's loss of capacity. Absent means false, the common-law default (Restatement (Third) of Agency \u00a73.08). Whether it does survive is for the law governing the relationship; the termination rule gives this field effect only where that law does.",
+                  "type": "boolean"
+                },
+                "grantText": {
+                  "description": "A digest of the words the principal approved as the grant, so a party or tribunal shown the text can check that it is the one this credential was issued on. The text itself is not inlined, because a GCD discloses every attribute to every verifier. Ambiguous terms are read against the party that drafted them, so the drafter is named.",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "digest",
+                    "canon"
+                  ],
+                  "properties": {
+                    "digest": {
+                      "description": "The CESR-encoded Blake3-256 digest of the grant text's canonical form under canon.",
+                      "type": "string",
+                      "pattern": "^E[A-P][A-Za-z0-9_-]{42}$"
+                    },
+                    "canon": {
+                      "description": "The canonicalization applied to the text before it is digested. Fixed to the exact identifier cqt3.17 (Canonical Quoted Text 3.17), which that specification requires be bound in whatever is signed.",
+                      "type": "string",
+                      "const": "cqt3.17"
+                    },
+                    "drafter": {
+                      "description": "Who drafted the grant text.",
+                      "type": "string",
+                      "enum": [
+                        "principal",
+                        "agentOfRecord",
+                        "delegate",
+                        "other"
+                      ]
+                    }
+                  }
                 }
               }
             },
             "constraints": {
-              "description": "The enabling 'may': the allow-list dimensions that a stranger-verifier gates on. Within a field, values are ORed (any match satisfies that field); across fields they are ANDed (every present field must be satisfied). An absent field is unconstrained in that dimension. acts and targets are two keys for ONE dimension, act space located by (effect, state-kind, target): with neither present it is unconstrained, and acts without targets is invalid (dependentRequired), so an issuer who limits what kind of act may be done must also say on what, or declare that any target will do. Custom keys are allowed here (additionalProperties is true as of 3.1.0), so an issuer can express a constraint the standard fields do not cover; such a key takes its semantics from the governance framework named in gfw, and useStdIfPossible obliges an issuer to prefer a standard field wherever one fits. This container remains FAIL-CLOSED, but the obligation runs to the verifier, not to schema validation: a verifier that does not understand a key it finds here MUST assume that constraint is unmet and MUST deny. Admitting a key is not vouching for it, and validating against this schema is not an authorization decision. Nothing outside this container constrains the exercise of delegated authority.",
+              "description": "The enabling 'may': the allow-list dimensions that a stranger-verifier gates on. Within a field, values are ORed (any match satisfies that field); across fields they are ANDed (every present field must be satisfied). An absent field is unconstrained in that dimension. acts and targets are two keys for ONE dimension, act space located by (effect, state-kind, target): with neither present it is unconstrained, and acts without targets is invalid (dependentRequired), so an issuer who limits what kind of act may be done must also say on what, or declare that any target will do. Custom keys are allowed here (additionalProperties is true as of 3.1.0), so an issuer can express a constraint the standard fields do not cover; such a key takes its semantics from the governance framework named in gfw, and useStdIfPossible obliges an issuer to prefer a standard field wherever one fits. This container remains FAIL-CLOSED, but the obligation runs to the verifier, not to schema validation: a verifier that does not understand a key it finds here MUST assume that constraint is unmet and MUST deny. Admitting a key is not vouching for it, and validating against this schema is not an authorization decision. This container is the only part of the credential a verifier evaluates to permit or deny an act, together with the acceptance, sub-delegation and human-review conditions the rules state; the rules, any ancestor credential and applicable law may further limit the authority a delegate has in law.",
               "type": "object",
               "additionalProperties": true,
               "properties": {
@@ -336,6 +378,27 @@
                   },
                   "maxItems": 1024
                 },
+                "reservedPowers": {
+                  "description": "The reserved powers this credential confers, each by name, from a closed vocabulary aligned to UPOAA \u00a7201(a) plus channel redirection and self-dealing; the reservedPowers rule defines each one. Absent means none is conferred: a reserved power is never conferred by the breadth of a grant, by a role, by a governance framework, or by the absence of this field, and a verifier MUST deny an act it can classify as a reserved power whose code is not listed here; whether an act is one is otherwise for applicable law, and a verifier's failure to classify an act confers nothing. A governance framework may reserve further powers but never release one. Narrowing, suspending or revoking a grant is never a reserved power.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "substitute",
+                      "redirectNotice",
+                      "selfDeal",
+                      "gift",
+                      "trust",
+                      "survivorship",
+                      "beneficiary",
+                      "waiveAnnuity",
+                      "fiduciaryPowers",
+                      "disclaim"
+                    ]
+                  }
+                },
                 "domains": {
                   "description": "Array of authorization-domain identifiers that scope where (in which authorization domain) the delegated authority applies. A domain is an issuer-defined namespace label; it is case-sensitive and compared verbatim.",
                   "type": "array",
@@ -351,7 +414,7 @@
                   }
                 },
                 "jurisdictions": {
-                  "description": "Array of ISO 3166-1 alpha2 codes for countries and possibly ISO 3166-2 codes for regions or provinces. These codes enumerate legal jurisdictions where the delegator MAY accept a delegate's actions as transferring legal obligations to the delegator. Note the use of the word \"MAY\". Even if all other constraints are met, a delegator is not committing to accept legal responsibility for arbitrary actions of a delegate by enumerating jurisdictions here. Acceptance of legal responsibility needs a custom governance framework. Rather, the delegator is communicating that, if a verifier requires legal recourse, the verifier MUST NOT impute the delegator's approval of delegated authority to the delegate in jurisdictions that do not match this list. Verifiers that do not require legal recourse MAY ignore this field. This field is case-sensitive.",
+                  "description": "Array of ISO 3166-1 alpha2 codes for countries and possibly ISO 3166-2 codes for regions or provinces. These codes enumerate legal jurisdictions where the delegator MAY accept a delegate's actions as transferring legal obligations to the delegator. Note the use of the word \"MAY\". Even if all other constraints are met, a delegator is not committing to accept legal responsibility for arbitrary actions of a delegate by enumerating jurisdictions here. Acceptance of legal responsibility needs a custom governance framework. Rather, the delegator is communicating that, if a verifier requires legal recourse, the verifier MUST NOT impute the delegator's approval of delegated authority to the delegate in jurisdictions that do not match this list. Verifiers that do not require legal recourse MAY ignore this field. This field is case-sensitive. This is not the law that governs the relationship among the parties, which the rules' governingLaw entry names.",
                   "type": "array",
                   "uniqueItems": true,
                   "minItems": 1,
@@ -461,13 +524,59 @@
                   "format": "date-time"
                 },
                 "humanReview": {
-                  "description": "Instructions for constraints that must be evaluated by a human. Any GCD credential that has this field MUST NOT be verified without human judgment.",
+                  "description": "Instructions for constraints that must be evaluated by a human. An act this field covers is gated on an approval that a reviewer named or qualified in reviewers has signed before the act and that identifies the act by its digest, so the gate is checkable open-loop; the quality of the review is a duty under the humanReview rule, not part of the gate. Any GCD credential that has this field MUST carry reviewers, and MUST NOT be verified without such an approval.",
                   "type": "string"
+                },
+                "reviewers": {
+                  "description": "Who may sign the approvals that humanReview requires. An OR-set: an approval passes if its signer satisfies SOME entry. {aids}: a reviewer whose AID is listed. {proof}: a reviewer who satisfies the proof request with this SAID, the same kind of object constraints.proofs references. Required whenever humanReview is present. Bounded at 64 entries of at most 64 AIDs each.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "maxItems": 64,
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "required": [
+                          "aids"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "aids": {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "minItems": 1,
+                            "maxItems": 64,
+                            "items": {
+                              "type": "string",
+                              "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "required": [
+                          "proof"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "proof": {
+                            "type": "string",
+                            "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+                          }
+                        }
+                      }
+                    ]
+                  }
                 }
               },
               "dependentRequired": {
                 "acts": [
                   "targets"
+                ],
+                "humanReview": [
+                  "reviewers"
                 ]
               }
             },
@@ -558,6 +667,85 @@
                 "s",
                 "o"
               ]
+            },
+            "parent": {
+              "description": "The GCD under which the issuer holds the authority it delegates here. Required by the subDelegation rule whenever the issuer's own authority is delegated, and the parent must list substitute among its reserved powers; authority under this credential is then the intersection of its constraints and reserved powers with those of every ancestor. The absence of this edge is the issuer's representation that it holds the authority in its own right, not proof of it. Operator I2I: this credential's issuer is the parent's issuee. The parent's schema is not pinned, because a GCD cannot name its own SAID; s, when present, MUST be the SAID of a GCD schema, and a verifier MUST deny if it cannot obtain and verify every ancestor.",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "n",
+                "o"
+              ],
+              "properties": {
+                "n": {
+                  "description": "SAID of the parent GCD",
+                  "type": "string",
+                  "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+                },
+                "s": {
+                  "description": "SAID of the parent's schema, which MUST be a GCD schema",
+                  "type": "string",
+                  "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+                },
+                "o": {
+                  "description": "Operator indicating the issuer AID of this ACDC MUST be the issuee AID of the parent.",
+                  "type": "string",
+                  "const": "I2I"
+                }
+              }
+            },
+            "disclosure": {
+              "description": "The gcd-disclosure the agent of record issued to the principal before this credential. Required whenever facet.agentOfRecord is present. Issuing this credential is evidence of the principal's consent to the compensation and conflicts that disclosure states, and to nothing else (the disclosure rule). Operator NI2I, because the disclosure's issuee is the principal, which differs from this credential's issuer when principal is set; a verifier checks that the disclosure's issuer is the agentOfRecord and its issuee is the principal, or the issuer when principal is absent.",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "n",
+                "s",
+                "o"
+              ],
+              "properties": {
+                "n": {
+                  "description": "SAID of the gcd-disclosure credential",
+                  "type": "string",
+                  "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+                },
+                "s": {
+                  "description": "SAID of the gcd-disclosure schema",
+                  "type": "string",
+                  "const": "EFkZqT6epdYaMaSnkn9I6p1qmMSlaUAr0jMNqmODdP3T"
+                },
+                "o": {
+                  "description": "Operator: no issuer-to-issuee constraint; the edge description states the parties a verifier checks.",
+                  "type": "string",
+                  "const": "NI2I"
+                }
+              }
+            },
+            "execution": {
+              "description": "Evidence of how the grant was made: a notarization, a witnessed recording, a face-to-face attestation. This is where evidence of the principal's understanding and capacity belongs, attested by someone other than the issuer. Operator NI2I, because the attester's issuee need not be this credential's issuer.",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "n",
+                "o"
+              ],
+              "properties": {
+                "n": {
+                  "description": "SAID of the credential that attests the execution",
+                  "type": "string",
+                  "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+                },
+                "s": {
+                  "description": "SAID of that credential's schema",
+                  "type": "string",
+                  "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+                },
+                "o": {
+                  "description": "Operator: no issuer-to-issuee constraint.",
+                  "type": "string",
+                  "const": "NI2I"
+                }
+              }
             }
           },
           "additionalProperties": false
@@ -578,13 +766,13 @@
               "description": "Rule section SAID",
               "type": "string"
             },
-            "noRoleSemanticsWithoutGfw": {
-              "description": "noRoleSemanticsWithoutGfw Disclaimer",
+            "scope": {
+              "description": "scope Clause",
               "oneOf": [
                 {
                   "description": "simple compact rule form",
                   "type": "string",
-                  "const": "All parties agree that the role field has no enforceable semantics unless the gfw field is also defined, and its rules formally describe what the role means."
+                  "const": "In these rules, the principal is the party named in the principal field, or the issuer if that field is absent; the delegate is the issuee; the agent of record is the legal person named in the agentOfRecord field; and a relying party is anyone who relies on this credential as evidence of authority. These rules are complete. They supersede every earlier version of the rules of this credential type, and no clause of an earlier version applies to this credential."
                 },
                 {
                   "description": "Rule detail",
@@ -593,7 +781,7 @@
                     "l": {
                       "description": "Associated legal language",
                       "type": "string",
-                      "const": "All parties agree that the role field has no enforceable semantics unless the gfw field is also defined, and its rules formally describe what the role means."
+                      "const": "In these rules, the principal is the party named in the principal field, or the issuer if that field is absent; the delegate is the issuee; the agent of record is the legal person named in the agentOfRecord field; and a relying party is anyone who relies on this credential as evidence of authority. These rules are complete. They supersede every earlier version of the rules of this credential type, and no clause of an earlier version applies to this credential."
                     }
                   },
                   "required": [
@@ -603,22 +791,22 @@
                 }
               ]
             },
-            "issuerNotResponsibleOutsideConstraints": {
-              "description": "issuerNotResponsibleOutsideConstraints Disclaimer",
+            "bindingParties": {
+              "description": "bindingParties Clause",
               "oneOf": [
                 {
                   "description": "simple compact rule form",
                   "type": "string",
-                  "const": "Although verifiers set their own standards for verification, verifiers and issuees/delegates agree that they cannot not use this credential as proof that delegator has the right to exercise delegated authority under conditions when the constraints say otherwise."
+                  "const": "The issuer is bound by these rules by issuing this credential. A delegate that is a legal person is bound by admitting it. The agent of record is bound by issuing an acceptance of this credential. Any person that, with notice of these rules, controls the delegate's keys or directs the delegate's acts under this credential thereby undertakes the duties whose bearer is the delegate, as if it were the agent of record; this undertaking does not cure the absence of a required acceptance, and naming a person does not by itself bind that person. Duties whose bearer is the delegate are owed by the agent of record, or, where none is named, by a delegate that is a legal person. These rules are made for the benefit of the principal, who may enforce them whether or not it issued this credential. No other agreement narrows these duties unless the principal signed it and it identifies this credential. A relying party is bound only by an agreement it has separately made; otherwise, the clauses that concern relying parties state the conditions on which this credential may be relied on and impose no obligation on them. Software is bound by nothing."
                 },
                 {
-                  "description": "rule detail",
+                  "description": "Rule detail",
                   "type": "object",
                   "properties": {
                     "l": {
                       "description": "Associated legal language",
                       "type": "string",
-                      "const": "Although verifiers set their own standards for verification, verifiers and issuees/delegates agree that they cannot not use this credential as proof that delegator has the right to exercise delegated authority under conditions when the constraints say otherwise."
+                      "const": "The issuer is bound by these rules by issuing this credential. A delegate that is a legal person is bound by admitting it. The agent of record is bound by issuing an acceptance of this credential. Any person that, with notice of these rules, controls the delegate's keys or directs the delegate's acts under this credential thereby undertakes the duties whose bearer is the delegate, as if it were the agent of record; this undertaking does not cure the absence of a required acceptance, and naming a person does not by itself bind that person. Duties whose bearer is the delegate are owed by the agent of record, or, where none is named, by a delegate that is a legal person. These rules are made for the benefit of the principal, who may enforce them whether or not it issued this credential. No other agreement narrows these duties unless the principal signed it and it identifies this credential. A relying party is bound only by an agreement it has separately made; otherwise, the clauses that concern relying parties state the conditions on which this credential may be relied on and impose no obligation on them. Software is bound by nothing."
                     }
                   },
                   "required": [
@@ -628,13 +816,13 @@
                 }
               ]
             },
-            "noConstraintOutsideConstraints": {
-              "description": "noConstraintOutsideConstraints Disclaimer",
+            "machineGate": {
+              "description": "machineGate Clause",
               "oneOf": [
                 {
                   "description": "simple compact rule form",
                   "type": "string",
-                  "const": "All parties agree that enforceable constraints exist only inside the constraints container, or in the role field when gfw is defined. Nothing outside the constraints container constrains the exercise of delegated authority, and an unrecognized key inside the constraints container MUST be treated as fail-closed. This allows verifiers to know with confidence whether all constraints have been satisfied, even if they do not recognize other fields elsewhere in the credential."
+                  "const": "A verifier permits an act only if all of the following hold, and denies if any is missing, unrecognized or unverifiable: every constraint in the constraints container is satisfied; where the gfw field is present, or where the constraints container holds a key that is not a standard field, the verifier implements the governance framework named in gfw and that framework's semantics are satisfied, so that a custom constraint with no framework named always fails; the act is not one the verifier classifies as a reserved power that the reservedPowers constraint does not list; where the agentOfRecord field is present, the disclosure edge references a disclosure issued by the agent of record to the principal, and an acceptance issued by the agent of record that identifies this credential is shown, each with a signature that verifies against its issuer's key state; where the parent edge is present, every ancestor credential is shown, verifies and is satisfied, and the immediate parent lists substitute among its reserved powers; where the humanReview constraint is present, an approval that identifies the act is shown, signed by a reviewer the reviewers constraint names or qualifies, with a signature that verifies against that reviewer's key state; no terminating event is shown; and the credential chain, revocation status and key state verify. This list is exhaustive, and no other clause of these rules adds a condition a verifier checks, though any clause may limit authority in law. A successful verification establishes only that these conditions held when checked, not that the delegate had authority in law."
                 },
                 {
                   "description": "Rule detail",
@@ -643,7 +831,7 @@
                     "l": {
                       "description": "Associated legal language",
                       "type": "string",
-                      "const": "All parties agree that enforceable constraints exist only inside the constraints container, or in the role field when gfw is defined. Nothing outside the constraints container constrains the exercise of delegated authority, and an unrecognized key inside the constraints container MUST be treated as fail-closed. This allows verifiers to know with confidence whether all constraints have been satisfied, even if they do not recognize other fields elsewhere in the credential."
+                      "const": "A verifier permits an act only if all of the following hold, and denies if any is missing, unrecognized or unverifiable: every constraint in the constraints container is satisfied; where the gfw field is present, or where the constraints container holds a key that is not a standard field, the verifier implements the governance framework named in gfw and that framework's semantics are satisfied, so that a custom constraint with no framework named always fails; the act is not one the verifier classifies as a reserved power that the reservedPowers constraint does not list; where the agentOfRecord field is present, the disclosure edge references a disclosure issued by the agent of record to the principal, and an acceptance issued by the agent of record that identifies this credential is shown, each with a signature that verifies against its issuer's key state; where the parent edge is present, every ancestor credential is shown, verifies and is satisfied, and the immediate parent lists substitute among its reserved powers; where the humanReview constraint is present, an approval that identifies the act is shown, signed by a reviewer the reviewers constraint names or qualifies, with a signature that verifies against that reviewer's key state; no terminating event is shown; and the credential chain, revocation status and key state verify. This list is exhaustive, and no other clause of these rules adds a condition a verifier checks, though any clause may limit authority in law. A successful verification establishes only that these conditions held when checked, not that the delegate had authority in law."
                     }
                   },
                   "required": [
@@ -654,12 +842,12 @@
               ]
             },
             "useStdIfPossible": {
-              "description": "useStdIfPossible Disclaimer",
+              "description": "useStdIfPossible Clause",
               "oneOf": [
                 {
                   "description": "simple compact rule form",
                   "type": "string",
-                  "const": "Issuers agree that if it is reasonable to express a constraint in one of the pre-defined ways, they will do so, rather than expressing the constraint in a note or in a custom field. This allows verifiers to be confident that when one of the pre-defined constraints is absent, delegated authority is unconstrained in its corresponding dimension."
+                  "const": "Issuers agree to express a constraint in a standard field wherever one reasonably fits, rather than in a custom field or in prose, so that a verifier can rely on the absence of a standard field to mean that the credential imposes no constraint in that dimension. The absence of a standard field never confers a reserved power."
                 },
                 {
                   "description": "Rule detail",
@@ -668,7 +856,7 @@
                     "l": {
                       "description": "Associated legal language",
                       "type": "string",
-                      "const": "Issuers agree that if it is reasonable to express a constraint in one of the pre-defined ways, they will do so, rather than expressing the constraint in a note or in a custom field. This allows verifiers to be confident that when one of the pre-defined constraints is absent, delegated authority is unconstrained in its corresponding dimension."
+                      "const": "Issuers agree to express a constraint in a standard field wherever one reasonably fits, rather than in a custom field or in prose, so that a verifier can rely on the absence of a standard field to mean that the credential imposes no constraint in that dimension. The absence of a standard field never confers a reserved power."
                     }
                   },
                   "required": [
@@ -678,13 +866,13 @@
                 }
               ]
             },
-            "onlyDelegateHeldAuthority": {
-              "description": "onlyDelegateHeldAuthority Disclaimer",
+            "governanceFramework": {
+              "description": "governanceFramework Clause",
               "oneOf": [
                 {
                   "description": "simple compact rule form",
                   "type": "string",
-                  "const": "Issuers agree to only delegate authority that they reasonably believe they hold. Whether they do in fact hold that authority is still a matter for verifiers to evaluate (e.g., via edges or separate proving interactions), but this rule creates a modest accountability for data quality."
+                  "const": "A role has no enforceable meaning unless the gfw field names a governance framework that defines it. A governance framework, and any role or custom constraint it defines, may narrow the authority the constraints grant but never widens it."
                 },
                 {
                   "description": "Rule detail",
@@ -693,7 +881,348 @@
                     "l": {
                       "description": "Associated legal language",
                       "type": "string",
-                      "const": "Issuers agree to only delegate authority that they reasonably believe they hold. Whether they do in fact hold that authority is still a matter for verifiers to evaluate (e.g., via edges or separate proving interactions), but this rule creates a modest accountability for data quality."
+                      "const": "A role has no enforceable meaning unless the gfw field names a governance framework that defines it. A governance framework, and any role or custom constraint it defines, may narrow the authority the constraints grant but never widens it."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "relianceWithinConstraints": {
+              "description": "relianceWithinConstraints Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Within its constraints and subject to these rules, every ancestor credential and applicable law, this credential is the issuer's representation, made for the principal where they differ, that the delegate has the authority it describes. Where the issuer differs from the principal, the credential alone does not prove that the issuer was authorized to issue it. Outside its constraints, no representation is made and the credential alone does not establish authority. Admissibility, weight, apparent authority, ratification and the protection of good-faith reliance are for applicable law."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Within its constraints and subject to these rules, every ancestor credential and applicable law, this credential is the issuer's representation, made for the principal where they differ, that the delegate has the authority it describes. Where the issuer differs from the principal, the credential alone does not prove that the issuer was authorized to issue it. Outside its constraints, no representation is made and the credential alone does not establish authority. Admissibility, weight, apparent authority, ratification and the protection of good-faith reliance are for applicable law."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "subjectToLaw": {
+              "description": "subjectToLaw Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Nothing in these rules waives, narrows or displaces a right or duty that applicable law makes mandatory, and where a clause conflicts with mandatory law, the law governs. Nothing in this credential confers authority for an act that the law requires the principal to perform in person or in a particular form. If a clause is unenforceable, the remaining clauses continue to apply, and the gap is filled as the governing law provides. Rights and obligations that accrued before authority ended survive its end."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Nothing in these rules waives, narrows or displaces a right or duty that applicable law makes mandatory, and where a clause conflicts with mandatory law, the law governs. Nothing in this credential confers authority for an act that the law requires the principal to perform in person or in a particular form. If a clause is unenforceable, the remaining clauses continue to apply, and the gap is filled as the governing law provides. Rights and obligations that accrued before authority ended survive its end."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "onlyHeldAuthority": {
+              "description": "onlyHeldAuthority Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The issuer agrees to delegate only authority it reasonably believes it holds. This credential conveys no authority the issuer did not hold, whatever its constraints say."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The issuer agrees to delegate only authority it reasonably believes it holds. This credential conveys no authority the issuer did not hold, whatever its constraints say."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "reservedPowers": {
+              "description": "reservedPowers Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "A reserved power is conferred only where the reservedPowers constraint names it. It is never conferred by the breadth of a grant, by a role, by a governance framework, by an approval, or by the absence of a constraint. The reserved powers are: substitute, to confer, transfer or substitute authority over the principal's affairs, including appointing a sub-delegate or a substitute; redirectNotice, to change, redirect or suspend any channel through which the principal receives notice of, or exercises control over, the principal's affairs, including the principal's addresses and contact details held by others; selfDeal, to take an act in which the delegate, the agent of record, or a person related to either acts on the other side or receives a benefit, other than compensation disclosed before this credential was issued; gift, to make a gift; trust, to create, amend, revoke or terminate a trust; survivorship, to create or change rights of survivorship; beneficiary, to create or change a beneficiary designation; waiveAnnuity, to waive the principal's right to be a beneficiary of a joint and survivor annuity; fiduciaryPowers, to exercise fiduciary powers that the principal has authority to delegate; and disclaim, to disclaim property, including a power of appointment. Whether an act is a reserved power is for applicable law, and a verifier's failure to classify an act as one confers nothing. A governance framework may reserve further powers but may not release any. Narrowing, suspending or revoking this credential, or any other act by which the principal reduces authority it has granted, is never a reserved power."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "A reserved power is conferred only where the reservedPowers constraint names it. It is never conferred by the breadth of a grant, by a role, by a governance framework, by an approval, or by the absence of a constraint. The reserved powers are: substitute, to confer, transfer or substitute authority over the principal's affairs, including appointing a sub-delegate or a substitute; redirectNotice, to change, redirect or suspend any channel through which the principal receives notice of, or exercises control over, the principal's affairs, including the principal's addresses and contact details held by others; selfDeal, to take an act in which the delegate, the agent of record, or a person related to either acts on the other side or receives a benefit, other than compensation disclosed before this credential was issued; gift, to make a gift; trust, to create, amend, revoke or terminate a trust; survivorship, to create or change rights of survivorship; beneficiary, to create or change a beneficiary designation; waiveAnnuity, to waive the principal's right to be a beneficiary of a joint and survivor annuity; fiduciaryPowers, to exercise fiduciary powers that the principal has authority to delegate; and disclaim, to disclaim property, including a power of appointment. Whether an act is a reserved power is for applicable law, and a verifier's failure to classify an act as one confers nothing. A governance framework may reserve further powers but may not release any. Narrowing, suspending or revoking this credential, or any other act by which the principal reduces authority it has granted, is never a reserved power."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "subDelegation": {
+              "description": "subDelegation Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "A credential whose issuer holds its authority by delegation must name the exact credential under which it holds it in its parent edge, and that parent must list substitute among its reserved powers. Authority under such a credential is the intersection of its constraints and reserved powers with those of every ancestor, and ends when any ancestor's authority ends. The absence of a parent edge is the issuer's representation that it holds the authority in its own right, not proof of it. A delegate that appoints a sub-delegate remains answerable to the principal for it."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "A credential whose issuer holds its authority by delegation must name the exact credential under which it holds it in its parent edge, and that parent must list substitute among its reserved powers. Authority under such a credential is the intersection of its constraints and reserved powers with those of every ancestor, and ends when any ancestor's authority ends. The absence of a parent edge is the issuer's representation that it holds the authority in its own right, not proof of it. A delegate that appoints a sub-delegate remains answerable to the principal for it."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "acceptance": {
+              "description": "acceptance Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Where the agentOfRecord field is present, no act is authorized under this credential until the agent of record has issued an acceptance that identifies itself and this credential by its exact identifier. An acceptance is unqualified and is given after this credential is issued; a qualified acceptance is no acceptance. Omitting the agentOfRecord field is the issuer's representation that no one other than the principal or the delegate itself operates the delegate. In that case no acceptance is required: a delegate that is a legal person acting for itself accepts by admitting this credential, and where the delegate is the principal's own software, the principal answers for its acts as its own. A delegate that is a legal person may also be named as its own agent of record, which brings the disclosure and acceptance clauses into play."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Where the agentOfRecord field is present, no act is authorized under this credential until the agent of record has issued an acceptance that identifies itself and this credential by its exact identifier. An acceptance is unqualified and is given after this credential is issued; a qualified acceptance is no acceptance. Omitting the agentOfRecord field is the issuer's representation that no one other than the principal or the delegate itself operates the delegate. In that case no acceptance is required: a delegate that is a legal person acting for itself accepts by admitting this credential, and where the delegate is the principal's own software, the principal answers for its acts as its own. A delegate that is a legal person may also be named as its own agent of record, which brings the disclosure and acceptance clauses into play."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "disclosure": {
+              "description": "disclosure Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Where the agentOfRecord field is present, this credential must reference, in its disclosure edge, a disclosure issued by the agent of record to the principal before this credential. Issuing this credential is evidence of consent to the compensation and conflicts that disclosure states, and to nothing else: the principal's own consent where the principal issued it, and otherwise consent given for the principal by an issuer with authority to give it. A conflict or compensation not stated there, including one that arises later, is not consented to until the agent of record discloses it and the principal approves."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Where the agentOfRecord field is present, this credential must reference, in its disclosure edge, a disclosure issued by the agent of record to the principal before this credential. Issuing this credential is evidence of consent to the compensation and conflicts that disclosure states, and to nothing else: the principal's own consent where the principal issued it, and otherwise consent given for the principal by an issuer with authority to give it. A conflict or compensation not stated there, including one that arises later, is not consented to until the agent of record discloses it and the principal approves."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "termination": {
+              "description": "termination Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "As between the parties, authority under this credential ends as the law governing their relationship provides, including on the death, loss of capacity or dissolution of a principal and on the dissolution of an agent of record. The durable field records the principal's intent and has the effect that law gives it. These rules do not define incapacity. A terminating event is a credential that satisfies a proof request listed in the terminatingEvents field; a terminating event ends authority for a verifier only when it is shown to that verifier, so the issuer's duty to revoke, and the validUntil constraint, remain the backstops. Whether an act taken in good faith, without notice that authority had ended, binds the principal is for the governing law. Termination and revocation are prospective and do not undo acts completed while authority existed. The agent of record may renounce this delegation by notice to the principal, which ends its authority prospectively. The duties of confidentiality and of keeping and producing records survive the end of authority."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "As between the parties, authority under this credential ends as the law governing their relationship provides, including on the death, loss of capacity or dissolution of a principal and on the dissolution of an agent of record. The durable field records the principal's intent and has the effect that law gives it. These rules do not define incapacity. A terminating event is a credential that satisfies a proof request listed in the terminatingEvents field; a terminating event ends authority for a verifier only when it is shown to that verifier, so the issuer's duty to revoke, and the validUntil constraint, remain the backstops. Whether an act taken in good faith, without notice that authority had ended, binds the principal is for the governing law. Termination and revocation are prospective and do not undo acts completed while authority existed. The agent of record may renounce this delegation by notice to the principal, which ends its authority prospectively. The duties of confidentiality and of keeping and producing records survive the end of authority."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "humanReview": {
+              "description": "humanReview Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Where the humanReview constraint is present, an act is gated on an approval that a reviewer named or qualified in the reviewers constraint has signed before the act and that identifies the act by its digest. A reviewer must have authority to refuse, access to the evidence on which the act rests, and time to consider it; an approval given without these breaches the delegate's duties even though it satisfies the gate. Where the principal is an individual able to take part, review means the principal's own decision, with whatever support the principal chooses."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Where the humanReview constraint is present, an act is gated on an approval that a reviewer named or qualified in the reviewers constraint has signed before the act and that identifies the act by its digest. A reviewer must have authority to refuse, access to the evidence on which the act rests, and time to consider it; an approval given without these breaches the delegate's duties even though it satisfies the gate. Where the principal is an individual able to take part, review means the principal's own decision, with whatever support the principal chooses."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "grantTextStatus": {
+              "description": "grantTextStatus Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Where the grantText field is present, a text that matches its digest under its stated canonicalization is evidence of the words the principal approved. Neither the digest nor the drafter proves the principal's receipt, approval, capacity or assent. The text never widens the constraints, though it may evidence a narrower grant. Its interpretation is for applicable law, and the agent of record preserves the text and evidence of its approval."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Where the grantText field is present, a text that matches its digest under its stated canonicalization is evidence of the words the principal approved. Neither the digest nor the drafter proves the principal's receipt, approval, capacity or assent. The text never widens the constraints, though it may evidence a narrower grant. Its interpretation is for applicable law, and the agent of record preserves the text and evidence of its approval."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "governingLaw": {
+              "description": "governingLaw Clause. Its detail form may also carry the governing-law entry itself: law, the ISO 3166-1 alpha-2 or ISO 3166-2 codes of the law that governs these rules and the relationship among the parties bound by them. Present only in the detail form, and optional; it never gates an act, which is why it is here and not in the constraints container. No forum is named, because several model acts void pre-dispute forum and arbitration clauses.",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "If the governingLaw entry is present, it names the law that governs these rules and the relationship among the parties bound by them. It does not displace protection that mandatory law gives a consumer, an employee or a person subject to guardianship, and it does not govern the authority of a representative toward, or the effect of an act on, a relying party that has not agreed to it."
+                },
+                {
+                  "description": "Rule detail, optionally naming the governing law",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "If the governingLaw entry is present, it names the law that governs these rules and the relationship among the parties bound by them. It does not displace protection that mandatory law gives a consumer, an employee or a person subject to guardianship, and it does not govern the authority of a representative toward, or the effect of an act on, a relying party that has not agreed to it."
+                    },
+                    "law": {
+                      "description": "ISO 3166-1 alpha-2 country codes, or ISO 3166-2 codes for a subdivision, naming the governing law. Case-sensitive.",
+                      "type": "array",
+                      "uniqueItems": true,
+                      "minItems": 1,
+                      "maxItems": 16,
+                      "items": {
+                        "type": "string",
+                        "pattern": "^([A-Z]{2})([-][A-Za-z0-9]+)?$",
+                        "examples": [
+                          "US-CA",
+                          "DE",
+                          "IN-TN"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "delegateWarranty": {
+              "description": "delegateWarranty Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The delegate and any agent of record represent only that they act within the authority this credential describes, as it reads when they act. They make no representation that the issuer held the authority it purports to grant."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The delegate and any agent of record represent only that they act within the authority this credential describes, as it reads when they act. They make no representation that the issuer held the authority it purports to grant."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "dutyConflicts": {
+              "description": "dutyConflicts Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Where duties conflict, a duty of higher priority outranks one of lower priority, except that a conflict involving loyalty, confidentiality or escalate is never resolved by priority and must be referred to the principal."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Where duties conflict, a duty of higher priority outranks one of lower priority, except that a conflict involving loyalty, confidentiality or escalate is never resolved by priority and must be referred to the principal."
                     }
                   },
                   "required": [
@@ -704,14 +1233,14 @@
               ]
             },
             "duties": {
-              "description": "First-class structured obligations (the 'must'), distinct from the enabling constraints and from the disclaimer clauses above. Each duty names its bearer. A delegate duty is a machine-structured obligation the delegate MUST perform; an issuer duty names a governance obligation the issuer accepts. Duties are disclosure and accountability -- a stranger-verifier does not gate on them -- so they live here in r, not in a.constraints. This field is optional; the baseline governance ruleset carries the standing issuer duty timelyReviewAndRevoke. A duty may carry custom keys beyond the ones defined here, whose semantics come from the governance framework named in gfw.",
+              "description": "First-class obligations (the 'must'), distinct from the enabling constraints and from the clauses above. Each duty names its bearer. A delegate duty is owed by the agent of record, or, where none is named, by a delegate that is a legal person; it is either structured (an effect toward a goal) or prose (a named legal duty). An issuer duty names a governance obligation the issuer accepts. Duties are accountability, not gates -- a stranger-verifier does not gate on them -- so they live here in r, not in a.constraints. Required: every GCD carries the seven baseline duties exactly as the baseline rules state them (timelyReviewAndRevoke, actWithinScope, loyalty, care, confidentiality, keepRecords, escalate), and may add more. A duty may carry custom keys beyond the ones defined here, whose semantics come from the governance framework named in gfw.",
               "type": "array",
-              "minItems": 1,
+              "minItems": 7,
               "uniqueItems": true,
               "items": {
                 "oneOf": [
                   {
-                    "description": "A duty the delegate MUST perform. Custom keys are allowed (additionalProperties is true as of 3.1.0), taking their semantics from the governance framework named in gfw; bearer remains a closed const, so an unknown bearer is still rejected.",
+                    "description": "A structured duty the delegate MUST perform: an effect directed toward a goal. Custom keys are allowed, taking their semantics from the governance framework named in gfw; bearer remains a closed const, so an unknown bearer is still rejected. It carries effect and goal and never rule or l, which makes it distinct from the prose shape.",
                     "type": "object",
                     "additionalProperties": true,
                     "required": [
@@ -746,13 +1275,70 @@
                         "type": "string"
                       },
                       "priority": {
-                        "description": "Precedence for fail-loud conflict resolution: a higher-priority duty outranks a lower one; ties escalate rather than being silently dropped.",
+                        "description": "Precedence for fail-loud conflict resolution: a higher-priority duty outranks a lower one; ties escalate rather than being silently dropped. A conflict involving loyalty, confidentiality or escalate is never resolved by priority and must be referred to the principal.",
                         "type": "integer"
                       }
+                    },
+                    "not": {
+                      "anyOf": [
+                        {
+                          "required": [
+                            "rule"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "l"
+                          ]
+                        }
+                      ]
                     }
                   },
                   {
-                    "description": "A duty the issuer MUST perform. Custom keys are allowed (additionalProperties is true as of 3.1.0), taking their semantics from the governance framework named in gfw; bearer remains a closed const, so an unknown bearer is still rejected.",
+                    "description": "A legal duty the delegate MUST perform, stated in prose. It is owed by the agent of record, or, where none is named, by a delegate that is a legal person, and by anyone who controls the delegate's keys or directs its acts with notice of these rules (the bindingParties rule). Custom keys are allowed, taking their semantics from the governance framework named in gfw. It carries rule and l and never effect or goal, which makes it distinct from the structured shape.",
+                    "type": "object",
+                    "additionalProperties": true,
+                    "required": [
+                      "bearer",
+                      "rule",
+                      "l",
+                      "priority"
+                    ],
+                    "properties": {
+                      "bearer": {
+                        "type": "string",
+                        "const": "delegate"
+                      },
+                      "rule": {
+                        "description": "The name of the duty (for example, loyalty).",
+                        "type": "string"
+                      },
+                      "l": {
+                        "description": "Associated legal language stating the duty.",
+                        "type": "string"
+                      },
+                      "priority": {
+                        "description": "Precedence for fail-loud conflict resolution: a higher-priority duty outranks a lower one; ties escalate rather than being silently dropped. A conflict involving loyalty, confidentiality or escalate is never resolved by priority and must be referred to the principal.",
+                        "type": "integer"
+                      }
+                    },
+                    "not": {
+                      "anyOf": [
+                        {
+                          "required": [
+                            "effect"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "goal"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "description": "A duty the issuer MUST perform. Custom keys are allowed, taking their semantics from the governance framework named in gfw; bearer remains a closed const, so an unknown bearer is still rejected.",
                     "type": "object",
                     "additionalProperties": true,
                     "required": [
@@ -774,27 +1360,251 @@
                         "type": "string"
                       },
                       "priority": {
-                        "description": "Precedence for fail-loud conflict resolution: a higher-priority duty outranks a lower one; ties escalate rather than being silently dropped.",
+                        "description": "Precedence for fail-loud conflict resolution: a higher-priority duty outranks a lower one; ties escalate rather than being silently dropped. A conflict involving loyalty, confidentiality or escalate is never resolved by priority and must be referred to the principal.",
                         "type": "integer"
                       }
                     }
                   }
                 ]
-              }
+              },
+              "allOf": [
+                {
+                  "contains": {
+                    "type": "object",
+                    "required": [
+                      "bearer",
+                      "rule",
+                      "l",
+                      "priority"
+                    ],
+                    "properties": {
+                      "bearer": {
+                        "const": "issuer"
+                      },
+                      "rule": {
+                        "const": "timelyReviewAndRevoke"
+                      },
+                      "l": {
+                        "const": "Issuers agree to review each delegation they have issued on a cadence appropriate to its stakes, and to revoke or narrow it promptly once the conditions that justified the grant no longer hold. This duty does not extend authority, since a delegation is valid only while its constraints are met, and it creates no liability toward a relying party."
+                      },
+                      "priority": {
+                        "const": 1
+                      }
+                    }
+                  }
+                },
+                {
+                  "contains": {
+                    "type": "object",
+                    "required": [
+                      "bearer",
+                      "rule",
+                      "l",
+                      "priority"
+                    ],
+                    "properties": {
+                      "bearer": {
+                        "const": "delegate"
+                      },
+                      "rule": {
+                        "const": "actWithinScope"
+                      },
+                      "l": {
+                        "const": "Act only within the constraints of this credential and the principal's lawful instructions."
+                      },
+                      "priority": {
+                        "const": 5
+                      }
+                    }
+                  }
+                },
+                {
+                  "contains": {
+                    "type": "object",
+                    "required": [
+                      "bearer",
+                      "rule",
+                      "l",
+                      "priority"
+                    ],
+                    "properties": {
+                      "bearer": {
+                        "const": "delegate"
+                      },
+                      "rule": {
+                        "const": "loyalty"
+                      },
+                      "l": {
+                        "const": "Act loyally for the principal in all matters connected with this delegation, according to the principal's stated goals and instructions. Do not deal with the principal as an adverse party, act for a party whose interests conflict with the principal's, or obtain a benefit from any party in connection with the principal's affairs, except as the principal consented after disclosure of all material facts."
+                      },
+                      "priority": {
+                        "const": 5
+                      }
+                    }
+                  }
+                },
+                {
+                  "contains": {
+                    "type": "object",
+                    "required": [
+                      "bearer",
+                      "rule",
+                      "l",
+                      "priority"
+                    ],
+                    "properties": {
+                      "bearer": {
+                        "const": "delegate"
+                      },
+                      "rule": {
+                        "const": "care"
+                      },
+                      "l": {
+                        "const": "Act with the care, competence and diligence normally exercised in similar circumstances, and with any special skill that the delegate or the agent of record holds itself out as having."
+                      },
+                      "priority": {
+                        "const": 4
+                      }
+                    }
+                  }
+                },
+                {
+                  "contains": {
+                    "type": "object",
+                    "required": [
+                      "bearer",
+                      "rule",
+                      "l",
+                      "priority"
+                    ],
+                    "properties": {
+                      "bearer": {
+                        "const": "delegate"
+                      },
+                      "rule": {
+                        "const": "confidentiality"
+                      },
+                      "l": {
+                        "const": "Use information obtained through this delegation only for the delegated purpose. Do not disclose it except as the delegation requires, and do not combine it with other information to build a profile of the principal beyond what that purpose needs. These rules are not an agreement for the processing of personal data under any data-protection law."
+                      },
+                      "priority": {
+                        "const": 5
+                      }
+                    }
+                  }
+                },
+                {
+                  "contains": {
+                    "type": "object",
+                    "required": [
+                      "bearer",
+                      "rule",
+                      "l",
+                      "priority"
+                    ],
+                    "properties": {
+                      "bearer": {
+                        "const": "delegate"
+                      },
+                      "rule": {
+                        "const": "keepRecords"
+                      },
+                      "l": {
+                        "const": "Keep a record of each act taken under this credential sufficient to reconstruct the credential and ancestor identifiers, the disclosure, the acceptance, the act and its time, any required approvals, and the verification and revocation evidence relied on; keep no more than that purpose needs; follow the retention schedule the principal or applicable law sets, but preserve records needed for a reasonably anticipated claim, dispute or legal hold; and give the principal access to them on request."
+                      },
+                      "priority": {
+                        "const": 3
+                      }
+                    }
+                  }
+                },
+                {
+                  "contains": {
+                    "type": "object",
+                    "required": [
+                      "bearer",
+                      "rule",
+                      "l",
+                      "priority"
+                    ],
+                    "properties": {
+                      "bearer": {
+                        "const": "delegate"
+                      },
+                      "rule": {
+                        "const": "escalate"
+                      },
+                      "l": {
+                        "const": "Before taking an act that involves a conflict of interest not stated in the disclosure, or that a reasonable agent in the delegate's position would recognize as at the edge of this credential's authority, stop and refer it to the principal, and do not proceed until the principal approves by a message it signs that identifies the act. An approval never authorizes an act outside the constraints and cannot confer a reserved power that the reservedPowers constraint does not list. Exercising a listed reserved power within the constraints does not by itself require referral."
+                      },
+                      "priority": {
+                        "const": 5
+                      }
+                    }
+                  }
+                }
+              ]
             }
           },
           "additionalProperties": false,
           "required": [
             "d",
-            "noRoleSemanticsWithoutGfw",
-            "issuerNotResponsibleOutsideConstraints",
-            "noConstraintOutsideConstraints",
+            "scope",
+            "bindingParties",
+            "machineGate",
             "useStdIfPossible",
-            "onlyDelegateHeldAuthority"
+            "governanceFramework",
+            "relianceWithinConstraints",
+            "subjectToLaw",
+            "onlyHeldAuthority",
+            "reservedPowers",
+            "subDelegation",
+            "acceptance",
+            "disclosure",
+            "termination",
+            "humanReview",
+            "grantTextStatus",
+            "governingLaw",
+            "delegateWarranty",
+            "dutyConflicts",
+            "duties"
           ]
         }
       ]
     }
   },
-  "additionalProperties": true
+  "additionalProperties": true,
+  "if": {
+    "required": [
+      "a"
+    ],
+    "properties": {
+      "a": {
+        "type": "object",
+        "required": [
+          "facet"
+        ],
+        "properties": {
+          "facet": {
+            "type": "object",
+            "required": [
+              "agentOfRecord"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "then": {
+    "required": [
+      "e"
+    ],
+    "properties": {
+      "e": {
+        "required": [
+          "disclosure"
+        ]
+      }
+    }
+  }
 }

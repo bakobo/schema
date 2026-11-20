@@ -1,0 +1,26 @@
+{
+  "v": "ACDCCAACAAJSONAAO_.",
+  "t": "acm",
+  "d": "EGiQ3cPtxsaU6sIVCMN1qvIpP9f0pH6eINbjGRi4PLiy",
+  "i": "EPRTsm44npxhWZ0fyw7bB2P2AHZbVEPcYIwXadxiUuFJ",
+  "rd": "EKFsbTgtWLDtvhcvUmI4CS4gawiekFNVvho80xTHH-Mr",
+  "s": "EJ5tBaSuIrCaedGvotaVRwnUs0WuJQ0rI6xkzpyfwhzU",
+  "a": {
+    "d": "EAXTCGjx8h8EIKVsLM-a2X-oDmx55ogRnu0WWKklha9q",
+    "i": "EBpSo_beKcwWiQkfJ8uVLW8EbfFzA2BGHnROM8Gf6KzS",
+    "dt": "2026-12-01T09:05:00.000000+00:00",
+    "capacity": "agentOfRecord"
+  },
+  "e": {
+    "d": "EL1mZCfuytiDnVmcV6ZjBkZWCGGfhjdTlgH22iK2OFuN",
+    "gcd": {
+      "n": "EKuXEoyJDGYU7uYGdgPwB1VeyegznA667zER3pPiJC_L",
+      "s": "EAcsLmboTQ1SbsGklHYjLrTpODbJSUstBzbUAzFZ_m3z",
+      "o": "NI2I"
+    }
+  },
+  "r": {
+    "d": "EGnaL7YXLUrC9zHFAmaFSxA2UMKyh1U2nDW7A8gS-xsx",
+    "unqualifiedAcceptance": "The issuer accepts appointment under the referenced credential, subject to its own terms of service."
+  }
+}

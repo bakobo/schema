@@ -1,0 +1,195 @@
+{
+  "$id": "EFkZqT6epdYaMaSnkn9I6p1qmMSlaUAr0jMNqmODdP3T",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GCD Disclosure",
+  "description": "A would-be agent of record states, to the principal and before any GCD exists, all compensation it expects from any party and every material conflict of interest it has in connection with acting for the principal. A GCD that names an agent of record must reference that agent's disclosure by its disclosure edge, and issuing it is evidence of the principal's consent to exactly what the disclosure states, and to nothing else; a change is disclosed before the issuer acts on it (this.i @8tpzdyl5; Restatement (Third) of Agency \u00a78.06). This is not a constraint credential: a verifier never gates an act on it, and it is targeted to the principal, so it uses selective disclosure. Its attribute section is a labeled field map (choosing-attribute-vs-aggregate: the fields are fixed and heterogeneous, and their labels leak nothing) that carries a required salty nonce, so the section can travel compacted to its SAID: a verifier who follows a GCD's disclosure edge learns that a disclosure was made and can check it was this one, while who pays the agent, and how much, is shown only to the principal and to whomever the principal chooses. Publishing an agent's compensation to every verifier would be a privacy harm.",
+  "credentialType": "gcd-disclosure",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "v",
+    "d",
+    "i",
+    "s",
+    "a",
+    "r"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type. Optional; an ACDC JSON message without it is of type acm.",
+      "type": "string"
+    },
+    "d": {
+      "description": "SAID of the credential",
+      "type": "string",
+      "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+    },
+    "u": {
+      "description": "A salty nonce",
+      "type": "string"
+    },
+    "i": {
+      "description": "AID of the issuer: the would-be agent of record making the disclosure",
+      "type": "string",
+      "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
+    },
+    "rd": {
+      "description": "Registry SAID. Optional: a disclosure is a statement made once, and a changed disclosure is a new one that a new GCD must reference.",
+      "type": "string",
+      "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+    },
+    "s": {
+      "description": "SAID of this schema",
+      "type": "string"
+    },
+    "a": {
+      "oneOf": [
+        {
+          "description": "SAID of the attribute section, which is what a verifier other than the principal usually sees",
+          "type": "string"
+        },
+        {
+          "description": "Attribute section. At least one of compensation and conflicts is present; a disclosure that states nothing is not one.",
+          "type": "object",
+          "required": [
+            "d",
+            "u",
+            "i",
+            "dt"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of the attribute section",
+              "type": "string"
+            },
+            "u": {
+              "description": "Attribute nonce: a CESR-encoded 128-bit salt (code 0A and 22 base64url characters) drawn at random, so a compacted attribute section cannot be confirmed by guessing its contents and recomputing its SAID. The schema checks the shape; randomness is the issuer's obligation, which no schema can check.",
+              "type": "string",
+              "pattern": "^0A[A-Za-z0-9_-]{22}$"
+            },
+            "i": {
+              "description": "AID of the issuee: the principal to whom the disclosure is made",
+              "type": "string",
+              "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
+            },
+            "dt": {
+              "description": "Issuance datetime, ISO-8601 datetime string. A GCD that references this disclosure is issued after it.",
+              "type": "string",
+              "format": "date-time"
+            },
+            "compensation": {
+              "description": "Every payment or other benefit the issuer expects from any party in connection with acting for the issuee, including from the issuee. Absent means the issuer expects none.",
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 64,
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "required": [
+                  "payer",
+                  "basis"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "payer": {
+                    "description": "Who pays: the payer's AID where it has one, otherwise its name",
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S",
+                    "maxLength": 256
+                  },
+                  "basis": {
+                    "description": "What is paid and how it is computed, in plain words: a flat fee, a percentage, a referral commission, a benefit in kind",
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S",
+                    "maxLength": 1024
+                  }
+                }
+              }
+            },
+            "conflicts": {
+              "description": "Every material conflict of interest the issuer has in acting for the issuee, one per entry, in plain words. Absent means the issuer has none.",
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 64,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S",
+                "maxLength": 1024
+              }
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "compensation"
+              ]
+            },
+            {
+              "required": [
+                "conflicts"
+              ]
+            }
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "oneOf": [
+        {
+          "description": "Rules section SAID",
+          "type": "string"
+        },
+        {
+          "description": "Rules detail",
+          "type": "object",
+          "properties": {
+            "d": {
+              "description": "Rule section SAID",
+              "type": "string"
+            },
+            "completeDisclosure": {
+              "description": "completeDisclosure Clause",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure, and it will disclose any change before acting on it."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure, and it will disclose any change before acting on it."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "d",
+            "completeDisclosure"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

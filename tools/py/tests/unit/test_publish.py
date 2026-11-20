@@ -192,6 +192,23 @@ def test_build_docs_stubs_when_no_index_md(synthetic_repo, tmp_path):
     assert "# Widget" in (docs / "widget" / "index.md").read_text()
 
 
+def test_build_docs_carries_a_schemas_other_markdown_pages(synthetic_repo, tmp_path):
+    # this.i @3w3rkmt3: gcd/legal-grounding.md must publish beside gcd/index.md, so a
+    # relative link from the narrative resolves on the site as it does on GitHub
+    (synthetic_repo / "widget" / "index.md").write_text("# Widget\n\nSee [grounding](grounding.md).\n")
+    (synthetic_repo / "widget" / "grounding.md").write_text("# Grounding\n\nWhy.\n")
+    (synthetic_repo / "widget" / "notes").mkdir()
+    (synthetic_repo / "widget" / "notes" / "deep.md").write_text("# Not carried\n")
+    out = tmp_path / "_docs"
+    publish.build_docs(synthetic_repo, out)
+    assert (out / "widget" / "grounding.md").read_text() == "# Grounding\n\nWhy.\n"
+    # only the schema folder's own pages: nested folders (examples/, invalid/) are not pages
+    assert not (out / "widget" / "notes").exists()
+    # the narrative is still generated with its front matter, not overwritten by the copy
+    index = (out / "widget" / "index.md").read_text()
+    assert index.startswith("---") and "See [grounding](grounding.md)." in index
+
+
 def test_build_docs_folds_in_committed_docs_dir(synthetic_repo, tmp_path):
     committed = synthetic_repo / "docs"
     committed.mkdir()

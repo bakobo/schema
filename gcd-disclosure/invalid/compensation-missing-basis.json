@@ -1,0 +1,29 @@
+{
+  "v": "ACDCCAACAAJSONAARd.",
+  "t": "acm",
+  "d": "EKcEOymYHrKKQH6sguCXeUTNMfZHTJUOdcvOkgIIMMeG",
+  "i": "EPRTsm44npxhWZ0fyw7bB2P2AHZbVEPcYIwXadxiUuFJ",
+  "s": "EFkZqT6epdYaMaSnkn9I6p1qmMSlaUAr0jMNqmODdP3T",
+  "a": {
+    "d": "EBRKh0FNsayBzy4tFkBfLQe2HPNXvRyLWn2n55Jq4jJB",
+    "u": "0ABQCnSU6n_NTIV-_Hg2kS3s",
+    "i": "EBpSo_beKcwWiQkfJ8uVLW8EbfFzA2BGHnROM8Gf6KzS",
+    "dt": "2026-11-30T16:00:00.000000+00:00",
+    "compensation": [
+      {
+        "payer": "EBpSo_beKcwWiQkfJ8uVLW8EbfFzA2BGHnROM8Gf6KzS"
+      },
+      {
+        "payer": "ELLbjRbqexGvtuGJKL2ZjgBpGn1oa6y5t6Td66Ujg1vs",
+        "basis": "A referral commission of 2 percent of each order's value, under Northstar's merchant-network agreement with Fairline."
+      }
+    ],
+    "conflicts": [
+      "Northstar holds a minority equity interest in Fairline Supply."
+    ]
+  },
+  "r": {
+    "d": "EEhC1styxcBnlS5pn5Nf_7ZTwu-Mg6VCCrkWnDnHHeLM",
+    "completeDisclosure": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure, and it will disclose any change before acting on it."
+  }
+}

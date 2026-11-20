@@ -1,0 +1,800 @@
+{
+  "$id": "ELDiEui48xsASGvDcNdsOwPptW0v4i-oN6-75_I1d60c",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Generalized Cooperative Delegation Credential",
+  "description": "Define the authorizations, duties, and constraints of a delegate who receives delegated authority. Version 4.0 names the targets of acts (constraints.targets): the objects a delegate may act on, or who may designate them, so a delegate cannot be made a confused deputy by a stranger who chooses where its authority lands; acts and targets are one constraint, so a credential that grants acts must also say which targets. Version 3.1 admits custom keys inside the constraints container and inside a duty, so an issuer can express a constraint or obligation the standard fields do not cover; the fail-closed rule on an unrecognized constraint key is unchanged, but it is now enforced by the verifier rather than by schema validation. Version 3.0 adopts the ACDC v2 envelope (acm/JSON: rd replaces ri, message type t, most-compact-form SAIDs). Version 2.0 organized the attributes block into named containers (facet, constraints) with sibling voiding (terminatingEvents) and outbound-disclosure (disclosables) axes, and first-classed duties in the rules block.",
+  "$comment": "These credentials have no required edges. They can be chained by showing that the issuer's identifier is also an identifier associated with another credential of whatever type, but they do not require chaining. The optional e block carries an I2I issuer edge for that purpose.",
+  "type": "object",
+  "credentialType": "gcd-credential",
+  "version": "4.0.0",
+  "required": [
+    "v",
+    "d",
+    "i",
+    "rd",
+    "s",
+    "a",
+    "r"
+  ],
+  "properties": {
+    "v": {
+      "description": "ACDC version string",
+      "type": "string"
+    },
+    "t": {
+      "description": "Message type. Optional; an ACDC JSON message without it is of type acm.",
+      "type": "string"
+    },
+    "d": {
+      "description": "SAID of the credential",
+      "type": "string"
+    },
+    "u": {
+      "description": "A salty nonce",
+      "type": "string"
+    },
+    "i": {
+      "description": "AID of the issuer (the delegator)",
+      "type": "string"
+    },
+    "rd": {
+      "description": "Registry SAID: the SAID of the registry inception (rip) event of the issuer's credential-status registry. Required: a GCD is authority evidence, and secure discovery of its revocation registry outweighs correlation minimization here.",
+      "type": "string"
+    },
+    "s": {
+      "description": "SAID of this schema",
+      "type": "string"
+    },
+    "a": {
+      "oneOf": [
+        {
+          "description": "SAID of attributes block",
+          "type": "string"
+        },
+        {
+          "description": "Attributes block",
+          "type": "object",
+          "required": [
+            "i"
+          ],
+          "properties": {
+            "d": {
+              "description": "SAID of attributes block",
+              "type": "string"
+            },
+            "u": {
+              "description": "A salty nonce",
+              "type": "string"
+            },
+            "i": {
+              "description": "AID of the delegate (the issuee) who receives the delegated authority. When the delegate is also a KERI cooperative-delegated AID of the issuer, this is the AID as it appears in the delegator's interaction event \u2014 but GCD does not require a KERI cooperative-delegation binding; it documents delegated authority for any issuer-to-delegate relationship.",
+              "type": "string"
+            },
+            "dt": {
+              "description": "Issuance datetime, ISO-8601 datetime string",
+              "type": "string",
+              "format": "date-time"
+            },
+            "gfw": {
+              "description": "A SAID that identifies a governance framework that adds richer semantics to the role field and any custom constraints present in this credential. The SAID identifies a JSON rules block that supplements the generic rules in the rules block (r field). The location of this additional rules block is assumed to be published somewhere that stakeholders know. When defined, a verifier MUST NOT impute a delegator's approval of delegated authority to a delegate without understanding and enforcing the rules of these extra rules.",
+              "type": "string",
+              "examples": [
+                "EK2r6EnDXre2pecTBO8s99j4OtNaaDIhVyr7uGugDhmp"
+              ]
+            },
+            "facet": {
+              "description": "The relationship facet: descriptive accountability metadata about the delegation relationship, orthogonal to the enabling constraints. A verifier MAY ignore the facet for the raw authorization decision; only the constraints container gates. Unknown keys here are safe to ignore (forward-compatible), so this container is NOT fail-closed.",
+              "type": "object",
+              "properties": {
+                "role": {
+                  "description": "A string that names a profile of duties and corresponding authorizations that the delegator intends to confer on the delegate. When gfw is defined, if it specifies formal semantics for this role, then the role may supplement or clarify constraints, or add new ones that a GCD credential is otherwise incapable of modeling. When gfw is NOT defined, this field becomes a simple descriptive label, and no party is justified in expecting it to convey any constraints.",
+                  "type": "string",
+                  "examples": [
+                    "realtor",
+                    "guardian",
+                    "coach"
+                  ]
+                },
+                "relationType": {
+                  "description": "Whose interest the delegated act serves, and the subject's standing. delegation: the delegate acts for a self-sovereign delegator. guardianship: the delegate acts for a non-sovereign dependent. controllership: the delegate acts over a thing. stewardship: guardianship's fiduciary posture applied to a domain the steward runs as their own.",
+                  "type": "string",
+                  "enum": [
+                    "delegation",
+                    "guardianship",
+                    "controllership",
+                    "stewardship"
+                  ]
+                },
+                "liableParty": {
+                  "description": "Who answers OUTWARD if an act taken under this delegation goes wrong -- the party the world holds responsible. This is distinct from the grantor (issuer i), the beneficiary (relationType), the actor (the delegate), and the inward accountability expressed by the duties in the r block. It may differ from the actor.",
+                  "type": "string"
+                },
+                "presentsAs": {
+                  "description": "The facet-AID the act is presented under to a counterparty (for example, an 'Office of the CEO' facet an assistant is delegated into). Presenting-as without this granted capability is impersonation. The signer is always the actor's own key; presentsAs governs only the presented identity, not the signature.",
+                  "type": "string"
+                },
+                "exerciseMode": {
+                  "description": "Which of the two independent authorities this credential confers. act: authority-to-act only (the delegate performs gated acts itself). authorize: authority-to-authorize only -- the pure delegator, with an empty set of goals, who may sanction others' gated acts but performs none itself. both: authority-to-act and authority-to-authorize.",
+                  "type": "string",
+                  "enum": [
+                    "act",
+                    "authorize",
+                    "both"
+                  ]
+                }
+              }
+            },
+            "constraints": {
+              "description": "The enabling 'may': the allow-list dimensions that a stranger-verifier gates on. Within a field, values are ORed (any match satisfies that field); across fields they are ANDed (every present field must be satisfied). An absent field is unconstrained in that dimension. acts and targets are two keys for ONE dimension, act space located by (effect, state-kind, target): with neither present it is unconstrained, and acts without targets is invalid (dependentRequired), so an issuer who limits what kind of act may be done must also say on what, or declare that any target will do. Custom keys are allowed here (additionalProperties is true as of 3.1.0), so an issuer can express a constraint the standard fields do not cover; such a key takes its semantics from the governance framework named in gfw, and useStdIfPossible obliges an issuer to prefer a standard field wherever one fits. This container remains FAIL-CLOSED, but the obligation runs to the verifier, not to schema validation: a verifier that does not understand a key it finds here MUST assume that constraint is unmet and MUST deny. Admitting a key is not vouching for it, and validating against this schema is not an authorization decision. Nothing outside this container constrains the exercise of delegated authority.",
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "goals": {
+                  "description": "Array of Hyperledger Aries goal codes (https://bit.ly/3ROeww6) that describe purpose-seeking behaviors that are valid for the delegate. Goal codes are matched as if they contained a trailing .* wildcard; that is, the \"sell\" goal code matches \"sell.consumer\" and \"sell.enterprise\". This field is case-insensitive.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "sell.consumer",
+                      "meetupcorp.personal.date",
+                      "employment.check-references",
+                      "cci.healthcare.arrange"
+                    ],
+                    "type": "string",
+                    "pattern": "^([a-z]([a-z0-9]*[-._/]?))+[a-z0-9]+$"
+                  }
+                },
+                "acts": {
+                  "description": "The set of (effect, state-kind) POINTS this delegate may act on \u2014 the enabling 'may' over the act grid. Each entry is one point, written 'effect state-kind' (e.g. 'create commitment'), or a one-sided brace enumeration naming several kinds for one effect ('observe {info, record}') or several effects for one kind ('{create, modify} record'); items inside braces separate on one or more commas or spaces. effect is one of observe, create, modify, preserve, destroy; state-kind is one of info, record, commitment, authority, resource, relationship \u2014 the two axes of one coordinate, neither meaningful alone. An act is authorized only if EVERY (effect, state-kind) point it occupies is covered here. The gate (auto/rule/human) an act must clear is DERIVED per act from its points and its target via the governance framework (gfw), not enumerated here. A pure delegator (exerciseMode authorize) omits this field, having an empty act surface. Two-sided braces and wildcards are intentionally not allowed. acts and targets are one constraint: a credential that carries acts MUST carry targets, which names the objects these points may be exercised on (see targets).",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "pattern": "^(?:(?:observe|create|modify|preserve|destroy) (?:info|record|commitment|authority|resource|relationship|\\{(?:info|record|commitment|authority|resource|relationship)(?:[ ,]+(?:info|record|commitment|authority|resource|relationship))*\\})|\\{(?:observe|create|modify|preserve|destroy)(?:[ ,]+(?:observe|create|modify|preserve|destroy))*\\} (?:info|record|commitment|authority|resource|relationship))$",
+                    "examples": [
+                      "create commitment",
+                      "observe {info, record, commitment}",
+                      "{create, modify} record"
+                    ]
+                  }
+                },
+                "targets": {
+                  "description": "The objects the delegate may act on, or whose designation of them the delegate may act on -- the defense against a confused deputy, where a stranger chooses the target and the delegate supplies the authority. An OR-set: an act whose target is contained by SOME entry passes this field. Matching is EXACT over the kind's canonical form, because any loose comparison is a bypass. A target whose kind no entry names matches nothing, and an entry whose kind the verifier does not know matches nothing; a verifier that finds no entry containing the act's target MUST deny. An act whose target the grant itself fixes (a duty-driven act) passes only where the governance framework or the protocol binding says that act kind carries no target. Required whenever acts is present. Bounded: at most 1024 entries, 30 act points per entry of at most 128 characters each, 64 designator AIDs, a 64-character kind and a 256-character id.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "oneOf": [
+                      {
+                        "description": "A NAMED target: designation at grant time. The principal chose this object in advance, so a stranger checks an act's target against the credential alone, with no evidence about who asked for the act.",
+                        "type": "object",
+                        "required": [
+                          "kind",
+                          "id"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "kind": {
+                            "description": "The kind of object, which fixes its canonical form and its containment rule. Standard kinds: aid (any qb64 identifier prefix KERI can derive: a basic Ed25519, ECDSA or Ed448 key, or a self-addressing digest) and said (any qb64 KERI digest, 256 or 512 bits), both matched by equality, iban (an ISO 13616 account number in electronic format -- no spaces, uppercase -- matched by equality; a verifier MUST also check its check digits, which this schema cannot). A governance framework (gfw) may define other kinds as lowercase dotted names. A verifier that does not know a kind MUST treat the entry as matching nothing.",
+                            "type": "string",
+                            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$",
+                            "maxLength": 64
+                          },
+                          "id": {
+                            "description": "The object, in its kind's canonical form. The pattern admits only the qb64 derivation codes an aid or said can carry, with zero pad bits; a verifier MUST still parse the value as qb64 with a CESR parser, which a pattern cannot fully do.",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 256
+                          },
+                          "acts": {
+                            "description": "Narrows, and never widens: an act on this entry's targets must be covered by these points AND by constraints.acts when that is present. Same syntax as constraints.acts.",
+                            "type": "array",
+                            "uniqueItems": true,
+                            "minItems": 1,
+                            "items": {
+                              "type": "string",
+                              "maxLength": 128,
+                              "pattern": "^(?:(?:observe|create|modify|preserve|destroy) (?:info|record|commitment|authority|resource|relationship|\\{(?:info|record|commitment|authority|resource|relationship)(?:[ ,]+(?:info|record|commitment|authority|resource|relationship))*\\})|\\{(?:observe|create|modify|preserve|destroy)(?:[ ,]+(?:observe|create|modify|preserve|destroy))*\\} (?:info|record|commitment|authority|resource|relationship))$",
+                              "examples": [
+                                "create commitment",
+                                "observe {info, record, commitment}",
+                                "{create, modify} record"
+                              ]
+                            },
+                            "maxItems": 30
+                          }
+                        },
+                        "allOf": [
+                          {
+                            "if": {
+                              "properties": {
+                                "kind": {
+                                  "const": "iban"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "id": {
+                                  "pattern": "^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "kind": {
+                                  "const": "aid"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "id": {
+                                  "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "if": {
+                              "properties": {
+                                "kind": {
+                                  "const": "said"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "id": {
+                                  "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "description": "A DESIGNATOR entry: designation at act time. Any target of this kind is covered if the party who named it in the act's request satisfies designatedBy. The act must then carry the signed request that named the target, so the verifier learns who designated it.",
+                        "type": "object",
+                        "required": [
+                          "kind",
+                          "designatedBy"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "kind": {
+                            "description": "The kind of object, which fixes its canonical form and its containment rule. Standard kinds: aid (any qb64 identifier prefix KERI can derive: a basic Ed25519, ECDSA or Ed448 key, or a self-addressing digest) and said (any qb64 KERI digest, 256 or 512 bits), both matched by equality, iban (an ISO 13616 account number in electronic format -- no spaces, uppercase -- matched by equality; a verifier MUST also check its check digits, which this schema cannot). A governance framework (gfw) may define other kinds as lowercase dotted names. A verifier that does not know a kind MUST treat the entry as matching nothing. On a designator entry only, '*' means every kind.",
+                            "type": "string",
+                            "pattern": "^(?:\\*|[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*)$",
+                            "maxLength": 64
+                          },
+                          "designatedBy": {
+                            "description": "Whose designation of a target the delegate may act on. 'any': anyone's, which is the most permissive stance and must be declared because it is never the default. {aids}: a target named in a request signed by one of these AIDs (the principal, or someone the principal names). {proof}: a target named by a party who satisfies the proof request with this SAID -- the same kind of object constraints.proofs references. The designator must have signed the designating request itself; a designation relayed through another party does not count.",
+                            "oneOf": [
+                              {
+                                "type": "string",
+                                "const": "any"
+                              },
+                              {
+                                "type": "object",
+                                "required": [
+                                  "aids"
+                                ],
+                                "additionalProperties": false,
+                                "properties": {
+                                  "aids": {
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "minItems": 1,
+                                    "items": {
+                                      "type": "string",
+                                      "pattern": "^(?:[BDEFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85}|1AA[ABIJ][A-Za-z0-9_-]{44}|1AA[CD][A-Za-z0-9_-]{76}|1AAE[A-Za-z0-9_-]{152})$"
+                                    },
+                                    "maxItems": 64
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "required": [
+                                  "proof"
+                                ],
+                                "additionalProperties": false,
+                                "properties": {
+                                  "proof": {
+                                    "type": "string",
+                                    "pattern": "^(?:[EFGHI][A-P][A-Za-z0-9_-]{42}|0[DEFG][A-D][A-Za-z0-9_-]{85})$"
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "acts": {
+                            "description": "Narrows, and never widens: an act on this entry's targets must be covered by these points AND by constraints.acts when that is present. Same syntax as constraints.acts.",
+                            "type": "array",
+                            "uniqueItems": true,
+                            "minItems": 1,
+                            "items": {
+                              "type": "string",
+                              "maxLength": 128,
+                              "pattern": "^(?:(?:observe|create|modify|preserve|destroy) (?:info|record|commitment|authority|resource|relationship|\\{(?:info|record|commitment|authority|resource|relationship)(?:[ ,]+(?:info|record|commitment|authority|resource|relationship))*\\})|\\{(?:observe|create|modify|preserve|destroy)(?:[ ,]+(?:observe|create|modify|preserve|destroy))*\\} (?:info|record|commitment|authority|resource|relationship))$",
+                              "examples": [
+                                "create commitment",
+                                "observe {info, record, commitment}",
+                                "{create, modify} record"
+                              ]
+                            },
+                            "maxItems": 30
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "maxItems": 1024
+                },
+                "domains": {
+                  "description": "Array of authorization-domain identifiers that scope where (in which authorization domain) the delegated authority applies. A domain is an issuer-defined namespace label; it is case-sensitive and compared verbatim.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "examples": [
+                      "payments",
+                      "deploy.prod",
+                      "hr.hiring"
+                    ]
+                  }
+                },
+                "jurisdictions": {
+                  "description": "Array of ISO 3166-1 alpha2 codes for countries and possibly ISO 3166-2 codes for regions or provinces. These codes enumerate legal jurisdictions where the delegator MAY accept a delegate's actions as transferring legal obligations to the delegator. Note the use of the word \"MAY\". Even if all other constraints are met, a delegator is not committing to accept legal responsibility for arbitrary actions of a delegate by enumerating jurisdictions here. Acceptance of legal responsibility needs a custom governance framework. Rather, the delegator is communicating that, if a verifier requires legal recourse, the verifier MUST NOT impute the delegator's approval of delegated authority to the delegate in jurisdictions that do not match this list. Verifiers that do not require legal recourse MAY ignore this field. This field is case-sensitive.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "IN-TN",
+                      "IN-MH",
+                      "BD",
+                      "JP",
+                      "KR-11"
+                    ],
+                    "type": "string",
+                    "pattern": "^([A-Z]{2})([-][A-Za-z0-9]+)?$"
+                  }
+                },
+                "physGeos": {
+                  "description": "Array of ISO 3166-1 alpha2 codes for countries (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) and possibly ISO 3166-2 codes for regions or provinces (https://en.wikipedia.org/wiki/ISO_3166-2). These codes identify where a physically present delegate MAY be located while exercising their delegated authority. Location MUST be determined by a strong test of physical presence (e.g., by a closed-circuit camera, by a human doing identity verification). A verifier MUST NOT impute the delegator's approval of delegated authority to the delegate unless they have solid proof of physical presence in a matching location. This field is case-sensitive.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "US-CA",
+                      "FR",
+                      "CA-BC",
+                      "AD-07",
+                      "AU-NSW"
+                    ],
+                    "type": "string",
+                    "pattern": "^([A-Z]{2})([-][A-Za-z0-9]+)?$"
+                  }
+                },
+                "virtGeos": {
+                  "description": "Array of ISO 3166-1 alpha2 codes for countries and possibly ISO 3166-2 codes for regions or provinces. These codes identify where a possibly remote (virtually present) delegate MAY be located while validly exercising their delegated authority. Location is loosely determined in ways familiar on the web today (e.g., by internet geolocation, by cell phone triangulation). Because such methods often lack strong assurance, this constraint may be weaker than physGeos. This field is case-sensitive.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "US-CA",
+                      "FR",
+                      "CA-BC",
+                      "AD-07",
+                      "AU-NSW"
+                    ],
+                    "type": "string",
+                    "pattern": "^([A-Z]{2})([-][A-Za-z0-9]+)?$"
+                  }
+                },
+                "icals": {
+                  "description": "Array of iCalendar objects or object fragments, as defined in [RFC 5545](https://www.rfc-editor.org/rfc/rfc5545) and its subsequent updates. Each item characterizes (in full, or preferably, in part) an event profile in which the delegate MAY exercise their delegated authority, subject to other constraints. The iCal properties that establish GCD constraints are: DTSTART, DTEND, RRULE, RDATE, EXDATE, and LOCATION. All other properties, including BEGIN and END, SHOULD be suppressed for brevity and MUST be ignored by all parties when evaluating constraints. DTSTART and DTEND establish timing constraints; RRULE and RDATE and EXDATE establish recurrence rules and exceptions. LOCATION is a semicolon-delimited list of URLs that give context to the event -- for example, links to a web meeting or a chat room, and an event is considered to have a matching location if it takes place in one of these locations. When a verifier tests a candidate event against items in the icals array, all constraining properties of the item must match the candidate event to produce a match, except that the candidate event does not have to recur; it only has to occur at a time that the recurrence rule would allow. This field is case-insensitive.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "DTSTART:20240918T143000Z\nDTEND:19960920T220000Z",
+                      "DTSTART;TZID=America/New_York:20230825T094500\nDTEND;TZID=America/New_York:20230825T100000\nRRULE:FREQ=WEEKLY;WKST=SU;UNTIL=20251009T035959Z;BYDAY=MO,WE,FR\nURL:https://zoom.us/12345"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "monetaryLimit": {
+                  "description": "Constrains the financial stakes of the delegated action; the delegate can act only in contexts where a financial value less than this value is at stake. Value is a string containing a magnitude, then a space, then a currency-like unit: an ISO 4217 currency symbol, a cryptocurrency abbreviation, or a brief single-token commodity-value symbol with obvious meaning. This field is money-locked: it is NOT a general 'stakes' quantity. Non-money or unquantifiable stakes route to the governance gate, not here.",
+                  "type": "string",
+                  "pattern": "^[0-9]+(\\.[0-9]+)? +\\S+$",
+                  "examples": [
+                    "25 CHF",
+                    "0.3 BTC",
+                    "4 OZ-XAU"
+                  ]
+                },
+                "protos": {
+                  "description": "Array of strings that each name a protocol followed by one or more formally named roles in that protocol. The delegate is authorized to participate in the named protocols in any of the named roles, subject to other constraints. Protocols that are defined in a formal standard MUST be identified by the standard org and number, if possible (e.g., HTTP/2 is identified by \"rfc7540\", and a credit card protocol \"iso8353\"). In some cases, a semver-style number is used instead of a standard number (as with the EMV credit card protocol, which is represented with \"emv3.0\"). DIDComm protocols use PIURIs (https://bit.ly/474pyRZ). The protocol name is followed by a colon, and then a comma-separated list of role names. This field is case-insensitive. Comparisons of strings in this constraint field MUST ignore whitespace and punctuation except the punctuation in version numbers.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "rfc7540:client,server,gateway",
+                      "emv3.0: Acquirer, Merchant"
+                    ],
+                    "type": "string",
+                    "pattern": "^[^:]+: *.+$"
+                  }
+                },
+                "proofs": {
+                  "description": "Array of SAIDs that each identify an IPEX proof request. The delegate is allowed to exercise delegated authority only if at least one proof request in the array is satisfied (the array is an OR). An AND of proofs is expressed as a single composite proof request, so this array never needs AND semantics.",
+                  "type": "array",
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "items": {
+                    "examples": [
+                      "EGZ_DdmzryjQOtOdQauTm_YxggbVM7EWelk8IBxsnC-d"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "validFrom": {
+                  "description": "Time after which delegated authority becomes active. Including this constraint allows a delegator to issue a GCD credential before -- possibly long before -- the authority becomes active. This field is somewhat like the icals DTSTART. However, icals SHOULD be used to list multiple valid time ranges; this field SHOULD be used to define a single absolute floor.",
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "validUntil": {
+                  "description": "Time at which delegated authority expires. Including this constraint allows a delegator to issue a GCD credential that lapses naturally without having to be revoked. This field is somewhat like the icals DTEND. However, icals SHOULD be used to list multiple valid time ranges; this field SHOULD be used to define a single absolute ceiling. A GCD that carries terminatingEvents MUST also carry a validUntil, so a never-fired termination signal cannot leave authority alive forever.",
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "humanReview": {
+                  "description": "Instructions for constraints that must be evaluated by a human. Any GCD credential that has this field MUST NOT be verified without human judgment.",
+                  "type": "string"
+                }
+              },
+              "dependentRequired": {
+                "acts": [
+                  "targets"
+                ]
+              }
+            },
+            "terminatingEvents": {
+              "description": "Voiding polarity: an array of SAIDs that each identify a proof request for an attested event whose occurrence VOIDS this delegated authority. ANY one firing ends the authority (the array is an OR of termination conditions). These are proof-shaped attested facts, not live predicates, so the credential's meaning stays static and any two verifiers replay to the same result. A credential that carries terminatingEvents MUST also carry constraints.validUntil as a hard backstop.",
+              "type": "array",
+              "uniqueItems": true,
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "examples": [
+                  "EGZ_DdmzryjQOtOdQauTm_YxggbVM7EWelk8IBxsnC-d"
+                ]
+              }
+            },
+            "disclosables": {
+              "description": "Outbound-disclosure axis: an array of credential-SCHEMA SAIDs that the delegate MAY reveal about its principal while acting under this delegation. Absent means unconstrained; present means an allow-list at schema granularity. Intra-credential selective disclosure remains ACDC's job.",
+              "type": "array",
+              "uniqueItems": true,
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "examples": [
+                  "ENPXp1vQzRF6JwIuS-mp2U8Uf1MoADoP_GqQ62VsDZWY"
+                ]
+              }
+            }
+          },
+          "if": {
+            "required": [
+              "terminatingEvents"
+            ]
+          },
+          "then": {
+            "required": [
+              "constraints"
+            ],
+            "properties": {
+              "constraints": {
+                "required": [
+                  "validUntil"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "e": {
+      "oneOf": [
+        {
+          "description": "Edges block SAID",
+          "type": "string"
+        },
+        {
+          "description": "Edges detail",
+          "type": "object",
+          "required": [
+            "d",
+            "issuer"
+          ],
+          "properties": {
+            "d": {
+              "description": "Edges block SAID",
+              "type": "string"
+            },
+            "issuer": {
+              "description": "Edge credential that proves the identity of the issuer.",
+              "type": "object",
+              "properties": {
+                "n": {
+                  "description": "SAID of a credential that proves the identity of the issuer",
+                  "type": "string"
+                },
+                "s": {
+                  "description": "SAID of credential schema that proves the identity of the issuer",
+                  "type": "string"
+                },
+                "o": {
+                  "description": "Operator indicating issuer AID of this ACDC MUST be the Issuee AID of the node this Edge points to.",
+                  "type": "string",
+                  "const": "I2I"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "n",
+                "s",
+                "o"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "r": {
+      "oneOf": [
+        {
+          "description": "Rules section SAID",
+          "type": "string"
+        },
+        {
+          "description": "Rules detail",
+          "type": "object",
+          "properties": {
+            "d": {
+              "description": "Rule section SAID",
+              "type": "string"
+            },
+            "noRoleSemanticsWithoutGfw": {
+              "description": "noRoleSemanticsWithoutGfw Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "All parties agree that the role field has no enforceable semantics unless the gfw field is also defined, and its rules formally describe what the role means."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "All parties agree that the role field has no enforceable semantics unless the gfw field is also defined, and its rules formally describe what the role means."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "issuerNotResponsibleOutsideConstraints": {
+              "description": "issuerNotResponsibleOutsideConstraints Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Although verifiers set their own standards for verification, verifiers and issuees/delegates agree that they cannot not use this credential as proof that delegator has the right to exercise delegated authority under conditions when the constraints say otherwise."
+                },
+                {
+                  "description": "rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Although verifiers set their own standards for verification, verifiers and issuees/delegates agree that they cannot not use this credential as proof that delegator has the right to exercise delegated authority under conditions when the constraints say otherwise."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "noConstraintOutsideConstraints": {
+              "description": "noConstraintOutsideConstraints Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "All parties agree that enforceable constraints exist only inside the constraints container, or in the role field when gfw is defined. Nothing outside the constraints container constrains the exercise of delegated authority, and an unrecognized key inside the constraints container MUST be treated as fail-closed. This allows verifiers to know with confidence whether all constraints have been satisfied, even if they do not recognize other fields elsewhere in the credential."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "All parties agree that enforceable constraints exist only inside the constraints container, or in the role field when gfw is defined. Nothing outside the constraints container constrains the exercise of delegated authority, and an unrecognized key inside the constraints container MUST be treated as fail-closed. This allows verifiers to know with confidence whether all constraints have been satisfied, even if they do not recognize other fields elsewhere in the credential."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "useStdIfPossible": {
+              "description": "useStdIfPossible Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Issuers agree that if it is reasonable to express a constraint in one of the pre-defined ways, they will do so, rather than expressing the constraint in a note or in a custom field. This allows verifiers to be confident that when one of the pre-defined constraints is absent, delegated authority is unconstrained in its corresponding dimension."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Issuers agree that if it is reasonable to express a constraint in one of the pre-defined ways, they will do so, rather than expressing the constraint in a note or in a custom field. This allows verifiers to be confident that when one of the pre-defined constraints is absent, delegated authority is unconstrained in its corresponding dimension."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "onlyDelegateHeldAuthority": {
+              "description": "onlyDelegateHeldAuthority Disclaimer",
+              "oneOf": [
+                {
+                  "description": "simple compact rule form",
+                  "type": "string",
+                  "const": "Issuers agree to only delegate authority that they reasonably believe they hold. Whether they do in fact hold that authority is still a matter for verifiers to evaluate (e.g., via edges or separate proving interactions), but this rule creates a modest accountability for data quality."
+                },
+                {
+                  "description": "Rule detail",
+                  "type": "object",
+                  "properties": {
+                    "l": {
+                      "description": "Associated legal language",
+                      "type": "string",
+                      "const": "Issuers agree to only delegate authority that they reasonably believe they hold. Whether they do in fact hold that authority is still a matter for verifiers to evaluate (e.g., via edges or separate proving interactions), but this rule creates a modest accountability for data quality."
+                    }
+                  },
+                  "required": [
+                    "l"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "duties": {
+              "description": "First-class structured obligations (the 'must'), distinct from the enabling constraints and from the disclaimer clauses above. Each duty names its bearer. A delegate duty is a machine-structured obligation the delegate MUST perform; an issuer duty names a governance obligation the issuer accepts. Duties are disclosure and accountability -- a stranger-verifier does not gate on them -- so they live here in r, not in a.constraints. This field is optional; the baseline governance ruleset carries the standing issuer duty timelyReviewAndRevoke. A duty may carry custom keys beyond the ones defined here, whose semantics come from the governance framework named in gfw.",
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "oneOf": [
+                  {
+                    "description": "A duty the delegate MUST perform. Custom keys are allowed (additionalProperties is true as of 3.1.0), taking their semantics from the governance framework named in gfw; bearer remains a closed const, so an unknown bearer is still rejected.",
+                    "type": "object",
+                    "additionalProperties": true,
+                    "required": [
+                      "bearer",
+                      "effect",
+                      "goal",
+                      "priority"
+                    ],
+                    "properties": {
+                      "bearer": {
+                        "type": "string",
+                        "const": "delegate"
+                      },
+                      "effect": {
+                        "description": "The effect the delegate MUST bring about (same axis as constraints.effects).",
+                        "type": "string",
+                        "enum": [
+                          "observe",
+                          "create",
+                          "modify",
+                          "preserve",
+                          "destroy"
+                        ]
+                      },
+                      "goal": {
+                        "description": "The goal code the duty is directed toward.",
+                        "type": "string",
+                        "pattern": "^([a-z]([a-z0-9]*[-._/]?))+[a-z0-9]+$"
+                      },
+                      "cadence": {
+                        "description": "Optional description of how often the duty must be performed (free text or an iCalendar RRULE fragment).",
+                        "type": "string"
+                      },
+                      "priority": {
+                        "description": "Precedence for fail-loud conflict resolution: a higher-priority duty outranks a lower one; ties escalate rather than being silently dropped.",
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  {
+                    "description": "A duty the issuer MUST perform. Custom keys are allowed (additionalProperties is true as of 3.1.0), taking their semantics from the governance framework named in gfw; bearer remains a closed const, so an unknown bearer is still rejected.",
+                    "type": "object",
+                    "additionalProperties": true,
+                    "required": [
+                      "bearer",
+                      "rule",
+                      "priority"
+                    ],
+                    "properties": {
+                      "bearer": {
+                        "type": "string",
+                        "const": "issuer"
+                      },
+                      "rule": {
+                        "description": "The name of a governance rule the issuer accepts as an obligation (for example, timelyReviewAndRevoke).",
+                        "type": "string"
+                      },
+                      "l": {
+                        "description": "Optional associated legal language for the named rule.",
+                        "type": "string"
+                      },
+                      "priority": {
+                        "description": "Precedence for fail-loud conflict resolution: a higher-priority duty outranks a lower one; ties escalate rather than being silently dropped.",
+                        "type": "integer"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "d",
+            "noRoleSemanticsWithoutGfw",
+            "issuerNotResponsibleOutsideConstraints",
+            "noConstraintOutsideConstraints",
+            "useStdIfPossible",
+            "onlyDelegateHeldAuthority"
+          ]
+        }
+      ]
+    }
+  },
+  "additionalProperties": true
+}

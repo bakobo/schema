@@ -1,0 +1,20 @@
+{
+  "v": "ACDCCAACAAJSONAAM-.",
+  "t": "acm",
+  "d": "EIyv-Q_DGIxGGnWBxyDdPNyCjYRKA6O5ujNZhhmcaJv9",
+  "i": "ECNXUuTakH8D3FCmZ-kN_Xu6MT93BdusqNRLv8CiP6l_",
+  "s": "EFkZqT6epdYaMaSnkn9I6p1qmMSlaUAr0jMNqmODdP3T",
+  "a": {
+    "d": "EGnm04KpLi_T23ryeubPP7frrWLkzV_FGvT6pC83Q1xK",
+    "u": "0ABcJ1aHwgW_Xlr8X55TkJxA",
+    "i": "EA5TsJKj07u4vtaqaQVetj96HHt2GZ5xIm3IwCnBJY7F",
+    "dt": "2026-10-25T09:00:00.000000+00:00",
+    "conflicts": [
+      "The attorney-in-fact is the principal's son and a residuary beneficiary under her will."
+    ]
+  },
+  "r": {
+    "d": "EEhC1styxcBnlS5pn5Nf_7ZTwu-Mg6VCCrkWnDnHHeLM",
+    "completeDisclosure": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure, and it will disclose any change before acting on it."
+  }
+}

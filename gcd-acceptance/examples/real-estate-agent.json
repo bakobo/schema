@@ -1,0 +1,26 @@
+{
+  "v": "ACDCCAACAAJSONAAO6.",
+  "t": "acm",
+  "d": "EGBgfPkHAve0EBIv_SWYhls9MsbO8-7KdPqg7U2KBXEx",
+  "i": "EAZ_MkqQmJy746IldbNXAB5_lhhyOI8g8ym7EKi8XZZZ",
+  "rd": "EJfxsrAFvMyKnKDlPdIrR6k-EZs2ySdB6SAIL-fbUzO1",
+  "s": "EJ5tBaSuIrCaedGvotaVRwnUs0WuJQ0rI6xkzpyfwhzU",
+  "a": {
+    "d": "EPxezP3oZ5qWw4r-OR2brNIOeNSy9spBNPe64KzvYP3A",
+    "i": "EEpjq0jMPWTgAIiusb37rCCwyFVYleJ1dsa9EzfcvEBB",
+    "dt": "2026-08-01T09:30:00.000000+00:00",
+    "capacity": "delegate"
+  },
+  "e": {
+    "d": "ENdMyedc0iLWaHWWgoySui2hAkv7ALRwGDcKm-glwaFy",
+    "gcd": {
+      "n": "EKuhARvjsHknUesPgPJ9QnXP-mzat5i1mmgLKhZx1nol",
+      "s": "EAcsLmboTQ1SbsGklHYjLrTpODbJSUstBzbUAzFZ_m3z",
+      "o": "NI2I"
+    }
+  },
+  "r": {
+    "d": "EGnaL7YXLUrC9zHFAmaFSxA2UMKyh1U2nDW7A8gS-xsx",
+    "unqualifiedAcceptance": "The issuer of this acceptance accepts, without qualification, appointment under the referenced credential and the rules that credential carries, which were available to it in full before it issued this acceptance, and undertakes as its own the duties whose bearer is the delegate."
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "v": "ACDCCAACAAJSONAEE9.",
+  "t": "acm",
+  "d": "EHrtBxqVTbV5o757QDCQmZ1zWNRdo3FB-TlbOPfcYSB5",
+  "u": "0ADE6oAxBl4E7uKeGUb7BEYi",
+  "i": "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL",
+  "rd": "EM2YZ78SKE8eO4W1lQOJeer5xKZqLmJV7SPr3Ji5DMBZ",
+  "s": "EAcsLmboTQ1SbsGklHYjLrTpODbJSUstBzbUAzFZ_m3z",
+  "a": {
+    "d": "EDS9Aah1JzQrGN0lZ8IGxDOqgPbVqp9rNMvZDn605kxP",
+    "u": "0AC9kH8q99PTCQNteGyI-F4g",
+    "i": "EIkxoE8eYnPLCydPcyc_lhQgwOdBHwzkSe36e2gqEH-5",
+    "dt": "2024-12-27T13:11:29.062000+00:00",
+    "gfw": "EK2r6EnDXre2pecTBO8s99j4OtNaaDIhVyr7uGugDhmp",
+    "facet": {
+      "role": "realtor",
+      "relationType": "delegation",
+      "presentsAs": "EIkxoE8eYnPLCydPcyc_lhQgwOdBHwzkSe36e2gqEH-5",
+      "exerciseMode": "act"
+    },
+    "constraints": {
+      "goals": [
+        "meetupcorp.personal.date"
+      ],
+      "acts": [
+        "{observe, create} commitment"
+      ],
+      "targets": [
+        {
+          "kind": "*",
+          "designatedBy": {
+            "aids": [
+              "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL"
+            ]
+          }
+        }
+      ],
+      "domains": [
+        "payments"
+      ],
+      "jurisdictions": [
+        "US-CA"
+      ],
+      "physGeos": [
+        "US"
+      ],
+      "virtGeos": [
+        "US"
+      ],
+      "icals": [
+        "DTSTART;TZID=America/New_York:20230825T094500\nDTEND;TZID=America/New_York:20230825T100000\nRRULE:FREQ=WEEKLY;WKST=SU;UNTIL=20251009T035959Z;BYDAY=MO,WE,FR\nURL:https://zoom.us/12345"
+      ],
+      "monetaryLimit": "25 CHF",
+      "protos": [
+        "rfc7540:client,server,gateway"
+      ],
+      "proofs": [
+        "EGZ_DdmzryjQOtOdQauTm_YxggbVM7EWelk8IBxsnC-d"
+      ],
+      "validFrom": "2024-12-17T10:39:29.769000+00:00",
+      "validUntil": "2025-12-17T10:39:29.769000+00:00",
+      "humanReview": "Any commitment over 10 CHF needs the principal's approval."
+    },
+    "terminatingEvents": [
+      "ELwZATxnfjVKZHo6cwShlFCy1pFEWJHHpYcRenzLLTOK"
+    ],
+    "disclosables": [
+      "EPUEWatIUsS0ONbdz-rPaSP4t21FU6lG35QXMo24C2RS"
+    ]
+  },
+  "e": {
+    "d": "EGbMyeCJ9ERVz7GfaS7V-nNvqeSYmg3q6rW7czGyad6m",
+    "issuer": {
+      "n": "EIpaOx1NJc0N_Oj5xzWhFQp6EpB847yTex62xQ7uuSQL",
+      "s": "ENPXp1vQzRF6JwIuS-mp2U8Uf1MoADoP_GqQ62VsDZWY",
+      "o": "I2I"
+    }
+  },
+  "r": {
+    "d": "EDB18sUOGuGcnUR1EuOnNL3eGqfUESfNczy0xvF5iuwD",
+    "scope": "In these rules, the principal is the party named in the principal field, or the issuer if that field is absent; the delegate is the issuee; the agent of record is the legal person named in the agentOfRecord field; and a relying party is anyone who relies on this credential as evidence of authority. These rules are complete. They supersede every earlier version of the rules of this credential type, and no clause of an earlier version applies to this credential.",
+    "bindingParties": "The issuer is bound by these rules by issuing this credential. A delegate that is a legal person is bound by admitting it. The agent of record is bound by issuing an acceptance of this credential. Any person that, with notice of these rules, controls the delegate's keys or directs the delegate's acts under this credential thereby undertakes the duties whose bearer is the delegate, as if it were the agent of record; this undertaking does not cure the absence of a required acceptance, and naming a person does not by itself bind that person. Duties whose bearer is the delegate are owed by the agent of record, or, where none is named, by a delegate that is a legal person. These rules are made for the benefit of the principal, who may enforce them whether or not it issued this credential. No other agreement narrows these duties unless the principal signed it and it identifies this credential. A relying party is bound only by an agreement it has separately made; otherwise, the clauses that concern relying parties state the conditions on which this credential may be relied on and impose no obligation on them. Software is bound by nothing.",
+    "machineGate": "A verifier permits an act only if all of the following hold, and denies if any is missing, unrecognized or unverifiable: every constraint in the constraints container is satisfied; where the gfw field is present, or where the constraints container holds a key that is not a standard field, the verifier implements the governance framework named in gfw and that framework's semantics are satisfied, so that a custom constraint with no framework named always fails; the act is not one the verifier classifies as a reserved power that the reservedPowers constraint does not list; where the agentOfRecord field is present, the disclosure edge references a disclosure issued by the agent of record to the principal, and an acceptance issued by the agent of record that identifies this credential is shown, each with a signature that verifies against its issuer's key state; where the parent edge is present, every ancestor credential is shown, verifies and is satisfied, and the immediate parent lists substitute among its reserved powers; where the humanReview constraint is present, an approval that identifies the act is shown, signed by a reviewer the reviewers constraint names or qualifies, with a signature that verifies against that reviewer's key state; no terminating event is shown; and the credential chain, revocation status and key state verify. This list is exhaustive, and no other clause of these rules adds a condition a verifier checks, though any clause may limit authority in law. A successful verification establishes only that these conditions held when checked, not that the delegate had authority in law.",
+    "useStdIfPossible": "Issuers agree to express a constraint in a standard field wherever one reasonably fits, rather than in a custom field or in prose, so that a verifier can rely on the absence of a standard field to mean that the credential imposes no constraint in that dimension. The absence of a standard field never confers a reserved power.",
+    "governanceFramework": "A role has no enforceable meaning unless the gfw field names a governance framework that defines it. A governance framework, and any role or custom constraint it defines, may narrow the authority the constraints grant but never widens it.",
+    "relianceWithinConstraints": "Within its constraints and subject to these rules, every ancestor credential and applicable law, this credential is the issuer's representation, made for the principal where they differ, that the delegate has the authority it describes. Where the issuer differs from the principal, the credential alone does not prove that the issuer was authorized to issue it. Outside its constraints, no representation is made and the credential alone does not establish authority. Admissibility, weight, apparent authority, ratification and the protection of good-faith reliance are for applicable law.",
+    "subjectToLaw": "Nothing in these rules waives, narrows or displaces a right or duty that applicable law makes mandatory, and where a clause conflicts with mandatory law, the law governs. Nothing in this credential confers authority for an act that the law requires the principal to perform in person or in a particular form. If a clause is unenforceable, the remaining clauses continue to apply, and the gap is filled as the governing law provides. Rights and obligations that accrued before authority ended survive its end.",
+    "onlyHeldAuthority": "The issuer agrees to delegate only authority it reasonably believes it holds. This credential conveys no authority the issuer did not hold, whatever its constraints say.",
+    "reservedPowers": "A reserved power is conferred only where the reservedPowers constraint names it. It is never conferred by the breadth of a grant, by a role, by a governance framework, by an approval, or by the absence of a constraint. The reserved powers are: substitute, to confer, transfer or substitute authority over the principal's affairs, including appointing a sub-delegate or a substitute; redirectNotice, to change, redirect or suspend any channel through which the principal receives notice of, or exercises control over, the principal's affairs, including the principal's addresses and contact details held by others; selfDeal, to take an act in which the delegate, the agent of record, or a person related to either acts on the other side or receives a benefit, other than compensation disclosed before this credential was issued; gift, to make a gift; trust, to create, amend, revoke or terminate a trust; survivorship, to create or change rights of survivorship; beneficiary, to create or change a beneficiary designation; waiveAnnuity, to waive the principal's right to be a beneficiary of a joint and survivor annuity; fiduciaryPowers, to exercise fiduciary powers that the principal has authority to delegate; and disclaim, to disclaim property, including a power of appointment. Whether an act is a reserved power is for applicable law, and a verifier's failure to classify an act as one confers nothing. A governance framework may reserve further powers but may not release any. Narrowing, suspending or revoking this credential, or any other act by which the principal reduces authority it has granted, is never a reserved power.",
+    "subDelegation": "A credential whose issuer holds its authority by delegation must name the exact credential under which it holds it in its parent edge, and that parent must list substitute among its reserved powers. Authority under such a credential is the intersection of its constraints and reserved powers with those of every ancestor, and ends when any ancestor's authority ends. The absence of a parent edge is the issuer's representation that it holds the authority in its own right, not proof of it. A delegate that appoints a sub-delegate remains answerable to the principal for it.",
+    "acceptance": "Where the agentOfRecord field is present, no act is authorized under this credential until the agent of record has issued an acceptance that identifies itself and this credential by its exact identifier. An acceptance is unqualified and is given after this credential is issued; a qualified acceptance is no acceptance. Omitting the agentOfRecord field is the issuer's representation that no one other than the principal or the delegate itself operates the delegate. In that case no acceptance is required: a delegate that is a legal person acting for itself accepts by admitting this credential, and where the delegate is the principal's own software, the principal answers for its acts as its own. A delegate that is a legal person may also be named as its own agent of record, which brings the disclosure and acceptance clauses into play.",
+    "disclosure": "Where the agentOfRecord field is present, this credential must reference, in its disclosure edge, a disclosure issued by the agent of record to the principal before this credential. Issuing this credential is evidence of consent to the compensation and conflicts that disclosure states, and to nothing else: the principal's own consent where the principal issued it, and otherwise consent given for the principal by an issuer with authority to give it. A conflict or compensation not stated there, including one that arises later, is not consented to until the agent of record discloses it and the principal approves.",
+    "termination": "As between the parties, authority under this credential ends as the law governing their relationship provides, including on the death, loss of capacity or dissolution of a principal and on the dissolution of an agent of record. The durable field records the principal's intent and has the effect that law gives it. These rules do not define incapacity. A terminating event is a credential that satisfies a proof request listed in the terminatingEvents field; a terminating event ends authority for a verifier only when it is shown to that verifier, so the issuer's duty to revoke, and the validUntil constraint, remain the backstops. Whether an act taken in good faith, without notice that authority had ended, binds the principal is for the governing law. Termination and revocation are prospective and do not undo acts completed while authority existed. The agent of record may renounce this delegation by notice to the principal, which ends its authority prospectively. The duties of confidentiality and of keeping and producing records survive the end of authority.",
+    "humanReview": "Where the humanReview constraint is present, an act is gated on an approval that a reviewer named or qualified in the reviewers constraint has signed before the act and that identifies the act by its digest. A reviewer must have authority to refuse, access to the evidence on which the act rests, and time to consider it; an approval given without these breaches the delegate's duties even though it satisfies the gate. Where the principal is an individual able to take part, review means the principal's own decision, with whatever support the principal chooses.",
+    "grantTextStatus": "Where the grantText field is present, a text that matches its digest under its stated canonicalization is evidence of the words the principal approved. Neither the digest nor the drafter proves the principal's receipt, approval, capacity or assent. The text never widens the constraints, though it may evidence a narrower grant. Its interpretation is for applicable law, and the agent of record preserves the text and evidence of its approval.",
+    "governingLaw": "If the governingLaw entry is present, it names the law that governs these rules and the relationship among the parties bound by them. It does not displace protection that mandatory law gives a consumer, an employee or a person subject to guardianship, and it does not govern the authority of a representative toward, or the effect of an act on, a relying party that has not agreed to it.",
+    "delegateWarranty": "The delegate and any agent of record represent only that they act within the authority this credential describes, as it reads when they act. They make no representation that the issuer held the authority it purports to grant.",
+    "dutyConflicts": "Where duties conflict, a duty of higher priority outranks one of lower priority, except that a conflict involving loyalty, confidentiality or escalate is never resolved by priority and must be referred to the principal.",
+    "duties": [
+      {
+        "bearer": "issuer",
+        "rule": "timelyReviewAndRevoke",
+        "l": "Issuers agree to review each delegation they have issued on a cadence appropriate to its stakes, and to revoke or narrow it promptly once the conditions that justified the grant no longer hold. This duty does not extend authority, since a delegation is valid only while its constraints are met, and it creates no liability toward a relying party.",
+        "priority": 1
+      },
+      {
+        "bearer": "delegate",
+        "rule": "actWithinScope",
+        "l": "Act only within the constraints of this credential and the principal's lawful instructions.",
+        "priority": 5
+      },
+      {
+        "bearer": "delegate",
+        "rule": "loyalty",
+        "l": "Act loyally for the principal in all matters connected with this delegation, according to the principal's stated goals and instructions. Do not deal with the principal as an adverse party, act for a party whose interests conflict with the principal's, or obtain a benefit from any party in connection with the principal's affairs, except as the principal consented after disclosure of all material facts.",
+        "priority": 5
+      },
+      {
+        "bearer": "delegate",
+        "rule": "care",
+        "l": "Act with the care, competence and diligence normally exercised in similar circumstances, and with any special skill that the delegate or the agent of record holds itself out as having.",
+        "priority": 4
+      },
+      {
+        "bearer": "delegate",
+        "rule": "confidentiality",
+        "l": "Use information obtained through this delegation only for the delegated purpose. Do not disclose it except as the delegation requires, and do not combine it with other information to build a profile of the principal beyond what that purpose needs. These rules are not an agreement for the processing of personal data under any data-protection law.",
+        "priority": 5
+      },
+      {
+        "bearer": "delegate",
+        "rule": "keepRecords",
+        "l": "Keep a record of each act taken under this credential sufficient to reconstruct the credential and ancestor identifiers, the disclosure, the acceptance, the act and its time, any required approvals, and the verification and revocation evidence relied on; keep no more than that purpose needs; follow the retention schedule the principal or applicable law sets, but preserve records needed for a reasonably anticipated claim, dispute or legal hold; and give the principal access to them on request.",
+        "priority": 3
+      },
+      {
+        "bearer": "delegate",
+        "rule": "escalate",
+        "l": "Before taking an act that involves a conflict of interest not stated in the disclosure, or that a reasonable agent in the delegate's position would recognize as at the edge of this credential's authority, stop and refer it to the principal, and do not proceed until the principal approves by a message it signs that identifies the act. An approval never authorizes an act outside the constraints and cannot confer a reserved power that the reservedPowers constraint does not list. Exercising a listed reserved power within the constraints does not by itself require referral.",
+        "priority": 5
+      },
+      {
+        "bearer": "delegate",
+        "effect": "create",
+        "goal": "meetupcorp.personal.date",
+        "cadence": "FREQ=WEEKLY",
+        "priority": 2
+      }
+    ]
+  }
+}

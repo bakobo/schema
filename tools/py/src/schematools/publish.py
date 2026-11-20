@@ -261,6 +261,12 @@ def build_docs(root: str | Path, out: str | Path) -> list[str]:
         (page_dir / "index.md").write_text(
             _front_matter(_schema_description(schema, entry.name)) + _schema_doc(entry)
         )
+        # A schema folder's other top-level pages (gcd/legal-grounding.md) publish
+        # beside its narrative, so relative links resolve on the site as on GitHub
+        # (this.i @3w3rkmt3). Nested folders (examples/, invalid/) are not pages.
+        for page in sorted(entry.path.parent.glob("*.md")):
+            if page.name != "index.md":
+                shutil.copyfile(page, page_dir / page.name)
 
     if federation:
         eco = _front_matter(

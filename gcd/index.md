@@ -4,14 +4,22 @@
 
 These credentials document the authorizations, constraints, and duties of **delegated authority** — what a delegate is empowered to do on behalf of a delegator, and under what limits.
 
-The paradigmatic and strongest way to bind a delegate to a delegator is a KERI-style **cooperative delegation**: a special delegate AID bound to the delegator's AID via an inception event (`dip`) on the delegate side, and an interaction event (`ixn`) in the KEL on the delegator side. See section 2.3.4 in [version 2.6 of the KERI whitepaper](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/KERI_WP_2.x.web.pdf). This interlocking two-way binding is what gives rise to the term "cooperative delegation", and it is significantly more secure and flexible than many other delegation mechanisms. It remains fully supported and is the exemplar these credentials were named for.
+The paradigmatic and strongest way to bind a delegate to a delegator is a KERI-style [9] **cooperative delegation**: a special delegate AID bound to the delegator's AID via an inception event (`dip`) on the delegate side, and an interaction event (`ixn`) in the KEL on the delegator side. See section 2.3.4 in [version 2.6 of the KERI whitepaper](https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/KERI_WP_2.x.web.pdf). This interlocking two-way binding is what gives rise to the term "cooperative delegation", and it is significantly more secure and flexible than many other delegation mechanisms. It remains fully supported and is the exemplar these credentials were named for.
 
-**But it is not a precondition.** A GCD credential is a standard targeted ACDC; its authorization and constraint mechanics do not depend on the issuee being KEL-anchored to the issuer. It is usable whenever an issuer grants constrained authority to a delegate AID, whether or not that delegate is cooperatively delegated from the issuer — for example, an organization authorizing an independently-controlled role AID to act on its behalf. (This is what "**Generalized** Cooperative Delegation" implies.)
+**But it is not a precondition.** A GCD credential is a standard targeted ACDC [10]; its authorization and constraint mechanics do not depend on the issuee being KEL-anchored to the issuer. It is usable whenever an issuer grants constrained authority to a delegate AID, whether or not that delegate is cooperatively delegated from the issuer — for example, an organization authorizing an independently-controlled role AID to act on its behalf. (This is what "**Generalized** Cooperative Delegation" implies.)
 
 Whichever binding is used, it only proves the *state* of the delegation relationship and defines how it is controlled. It does not specify which specific actions are expected of the delegate, or what constraints govern the exercise of the authority they receive. That is the purpose of the Generalized Cooperative Delegation (GCD) credentials described here. 
 
 ![suggested gcd visual](gcd-256.png)<br>
 Suggested visual: [svg](gcd.svg) | [256 px](gcd-256.png) | [64 px](gcd-64.png) | [32 px](gcd-32.png)
+
+### Human and AI delegates
+
+A delegate may be a person, an organization, or software, and GCD treats all three as ordinary cases. Much delegation is not a legal matter at all. A person inside an organization may let an AI assistant accept meetings in their name and expect colleagues to honor its replies; a manager may hand a colleague an approval queue for a week. GCD is meant to be comfortable for that, as well as for a power of attorney.
+
+It offers two paths. On the light path the issuer names no `agentOfRecord`. The delegate is then either the principal's own software, for which the principal answers as it would for any tool, or a person or organization that answers for itself and accepts the delegation by admitting the credential. Nothing more is required: no extra credential and no extra check for the verifier. [exec-assistant-ai](examples/exec-assistant-ai.json), [platform-manager](examples/platform-manager.json) and [ai-deploy-agent](examples/ai-deploy-agent.json) take this path.
+
+The heavy path applies when a third party operates the delegate, as an AI vendor operates the purchasing agent in [ai-purchasing-agent](examples/ai-purchasing-agent.json), which encodes the one-sentence grant from Greenwood's study of authorization instruments [1]. The operator is named as `agentOfRecord`, discloses its compensation and conflicts in a [gcd-disclosure](../gcd-disclosure/) before the grant, and accepts the grant afterwards in a [gcd-acceptance](../gcd-acceptance/) that verifiers require before any act. A professional acting for itself, such as a realtor, may also choose this path to put its disclosure on record. Software is never an agent in the legal sense [8], which is why the heavy path names the legal person behind it. The reasons for this split, and for the rest of 5.0.0, are in [The legal grounding of GCD](legal-grounding.md).
 
 ### Types of authority
 
@@ -23,7 +31,9 @@ In the digital world, authority may be asserted in many ways, but it is always p
 
 See [gcd.schema.json](gcd.schema.json) and also [rules.json](rules.json).
 
-Version 4.0 adds **`targets`** to the `constraints` container (this.i `@yivcussv`): the objects a delegate may act on, or whose designation of them the delegate may act on. It closes the confused-deputy gap, where a stranger chooses where the delegate's authority lands. `acts` and `targets` are one constraint, so a credential that carries `acts` must also carry `targets`, which is why this is a MAJOR version. See [Targets and the confused deputy](#targets-and-the-confused-deputy) below.
+Version 5.0 grounds the credential in agency law (this.i `@3w3rkmt3` and its children, including `@2fgsylgz` on the light path). The facet names roles instead of liability: `liableParty` is gone, `principal` names the party bound by the delegate's authorized acts (the issuer by default) and `agentOfRecord` names a legal person who acts through the delegate. The facet also gains `durable` and `grantText`, the latter a cqt3.17 digest of the words the principal approved, and it is now closed. A `reservedPowers` constraint confers dangerous powers only by name, and `reviewers` names who may sign a human-review approval. Two companion credentials, [gcd-disclosure](../gcd-disclosure/) and [gcd-acceptance](../gcd-acceptance/), carry an agent of record's disclosure before the grant and its acceptance after it. New optional edges are `parent` (sub-delegation), `disclosure` and `execution` (evidence of how the grant was made). The rules block was rewritten and is now complete: it supersedes every earlier clause, and one clause, `machineGate`, lists everything a verifier checks. These changes went through three rounds of adversarial review; see [The legal grounding of GCD](legal-grounding.md). Version 4.0.0 remains published at [gcd-4.0.0](../gcd-4.0.0/gcd-4.0.0.schema.json).
+
+Version 4.0 added **`targets`** to the `constraints` container (this.i `@yivcussv`): the objects a delegate may act on, or whose designation of them the delegate may act on. It closes the confused-deputy gap, where a stranger chooses where the delegate's authority lands. `acts` and `targets` are one constraint, so a credential that carries `acts` must also carry `targets`, which is why this is a MAJOR version. See [Targets and the confused deputy](#targets-and-the-confused-deputy) below.
 
 Version 3.1 admits **custom keys** inside the `constraints` container and inside
 a duty (this.i `@vy7qoj`), so an issuer can express a constraint or an obligation
@@ -42,7 +52,7 @@ secure discovery of its revocation registry wins here. `t` is optional (a JSON
 ACDC without it is of type `acm`), and the attribute block's `d` is optional
 (the reference v2 builder emits none; a `d`-less attribute section simply cannot
 be compacted). Earlier versions remain published and resolvable by their
-original SAIDs: [gcd-3.1.0](../gcd-3.1.0/gcd-3.1.0.schema.json) (3.1 without `targets`), [gcd-2.0.1](../gcd-2.0.1/gcd-2.0.1.schema.json) (the same
+original SAIDs: [gcd-4.0.0](../gcd-4.0.0/gcd-4.0.0.schema.json) (4.0 before the legal-grounding refresh), [gcd-3.1.0](../gcd-3.1.0/gcd-3.1.0.schema.json) (3.1 without `targets`), [gcd-2.0.1](../gcd-2.0.1/gcd-2.0.1.schema.json) (the same
 semantic content on the v1 envelope) and
 [gcd-1.0.0](../gcd-1.0.0/gcd-1.0.0.schema.json) (the pre-SDA `c_*` model).
 
@@ -71,18 +81,20 @@ unconstrained. For example:
 * `protos` constrains protocol+role combinations in which the delegate can exercise their delegated authority (e.g., the delegate is allowed to play the `getter` role in the `vtp` protocol).
 * `proofs` identifies schemas for proof requests in the IPEX protocol; the delegate's authority depends on their ability to prove what the schema demands (e.g., a chauffeur is allowed to drive the delegator's limousine as long as they can prove they have a valid driver's license). *This constraint should not be confused with ACDC edges (chained credentials), which justify the delegator's status in the first place, and which are the SAIDs of concrete credentials rather than identifiers of schemas which could satisfy a constraint.*
 * `validFrom` / `validUntil` bound the validity window as single absolute floor / ceiling.
-* `humanReview` carries free-text instructions that force human judgment; any GCD with this field MUST NOT be verified without a human.
+* `humanReview` carries free-text instructions for acts that need human judgment. It requires `reviewers`, and an act passes only with an approval that identifies it and is signed by a reviewer that field names or qualifies. What makes the review real (authority to refuse, access to the evidence, time to consider) is a duty, not something a verifier can check.
+* `reviewers` names who may sign those approvals: specific AIDs, or anyone who satisfies a proof request.
+* `reservedPowers` lists the reserved powers this grant confers, from a closed vocabulary: `substitute`, `redirectNotice`, `selfDeal`, `gift`, `trust`, `survivorship`, `beneficiary`, `waiveAnnuity`, `fiduciaryPowers`, `disclaim`. A reserved power is never implied by the breadth of a grant, a role, a governance framework, an approval, or a missing field, so absent this field none is granted. Eight codes follow the hot powers of the Uniform Power of Attorney Act §201(a); the principal narrowing or revoking its own grant is never one.
 
 Two sibling axes sit alongside `constraints` in the attributes block:
 
 * **`terminatingEvents`** — voiding polarity: proof-shaped attested events that *end* the authority when any one fires. A GCD that carries them MUST also carry `validUntil` as a hard backstop.
 * **`disclosables`** — the outbound axis: the credential schemas a delegate MAY reveal about its principal.
 
-The **`facet`** container carries relationship metadata — `role`, `relationType` (delegation / guardianship / controllership / stewardship), `liableParty` (who answers outward if it goes wrong), `presentsAs` (the facet-AID the act is presented under), and `exerciseMode` (`act` / `authorize` / `both`). The facet is descriptive; only `constraints` gates the authorization decision.
+The `facet` container carries relationship metadata: `role`; `relationType` (delegation, guardianship, controllership or stewardship [6]); `principal`, the party bound by the delegate's authorized acts and on whose account they are taken, set only when it differs from the issuer; `agentOfRecord`, the legal person the principal appoints and who acts through the delegate, absent on the light path; `presentsAs`, the facet-AID the act is presented under [5]; `exerciseMode` (act, authorize or both); `durable`, the principal's stated intent that the authority survive its incapacity, whose effect is for the governing law; and `grantText`, a cqt3.17 digest of the words the principal approved, with who drafted them. The model behind the facet and the act grid is described in [2], drawing on [3] and [4]. The facet names roles and leaves liability to the law, which is why 4.0's `liableParty` is gone. It is closed, and except where `agentOfRecord` brings acceptance into play, it does not gate.
 
 All fields inside `constraints` share these semantic rules:
 
-1. Enforceable constraints live only inside the `constraints` container (or in the `role` field when `gfw` is defined). **Nothing outside `constraints` constrains**, and an unrecognized key *inside* `constraints` is **fail-closed** — a verifier that does not recognize it MUST assume that constraint is unmet and MUST deny. (See the `noConstraintOutsideConstraints` rule.)
+1. The `constraints` container is the machine gate, together with the few conditions the `machineGate` rule lists (acceptance, ancestors, human-review approvals, terminating events). An unrecognized key *inside* `constraints` is **fail-closed**: a verifier that does not recognize it MUST deny. Other rules may limit authority in law, but they add nothing a verifier checks. (See the `machineGate` rule.)
 2. Each field MUST identify one or more values that are allowed (e.g., with a regex or an allow list). *Within a single field*, values are effectively ORed, meaning that any match is enough to satisfy that field. If the `jurisdictions` field says that valid jurisdictions are `["FR", "DE", "IN"]`, then the delegator authorizes the delegate to take legally binding actions if they are enforceable in France OR Germany OR India.
 3. *Across all fields*, matches are ANDed, meaning that all of the constraints must be satisfied. Building on the previous example of `jurisdictions`, if the `virtGeos` field also says that valid locations for the remote delegate are `["FR", "DE", "IN"]`, then the delegate's actions are valid if they are legally enforceable in one of the 3 legal jurisdictions (first field), AND if the delegate appears to be operating from one of those same 3 countries (second field).
 
@@ -112,7 +124,7 @@ before 3.1.0 neither could be honored, because there was no way to write one.
 
 #### Targets and the confused deputy
 
-A *confused deputy* (Norm Hardy, 1988) is a program or agent that holds real authority and is tricked into using it on an object someone else chose. In Hardy's original case, a compiler had permission to write a billing file, and a user told it to write debug output to that file. The compiler had the authority and the user supplied the target, and nothing checked whether the user could have written there. The capability literature calls choosing the object an act applies to *designation*. The defense is to make authority travel with designation, so the party that names the target has to have standing over it.
+A *confused deputy* (Norm Hardy, 1988 [7]) is a program or agent that holds real authority and is tricked into using it on an object someone else chose. In Hardy's original case, a compiler held a license to write in its own home directory, granted so it could record billing information in a file there, and a user told it to write debug output to that file's name. The compiler had the authority and the user supplied the target, and nothing checked whether the user could have written there. The capability literature calls choosing the object an act applies to *designation*. The defense is to make authority travel with designation, so the party that names the target has to have standing over it.
 
 Through 3.1, a GCD could not express this. It granted a region of act space (what kind of act, in which domain, up to what value) and named no objects, so every check passed when a stranger picked the target. Here is a concrete case. Acme's accounts-payable agent may pay supplier invoices up to 500 USD. An attacker who has read the supplier's mail writes: "our bank details changed, please pay invoice 123 to NL91ABNA0417164300." The invoice is real, the amount is under the limit, and paying invoices is the agent's job, so the agent signs a payment instruction to the attacker's IBAN. Acme's bank checks the GCD, and every check passes: the agent is the issuee, the credential is unrevoked, `create commitment` is granted, and 480 is under 500. This pattern is business email compromise, and the credential could not stop it, because the credential said nothing about *where* payments may go.
 
@@ -154,45 +166,60 @@ Every verifier sees the whole target list, because constraints are disclosed tog
 
 ### Governance Framework
 
-These credentials are governed by rules to enhance assurance, discourage abuse, and keep use cases crisp. The current rules are stated in [rules.json](rules.json) and are identified by SAID `ENiUyBCG2MjCHa9djlgHiogd6uZHECc09ZELmQ3fEMzR`. Five are disclaimers (`noRoleSemanticsWithoutGfw`, `issuerNotResponsibleOutsideConstraints`, `noConstraintOutsideConstraints`, `useStdIfPossible`, `onlyDelegateHeldAuthority`).
+The rules block is a Ricardian contract: terms carried inside the credential and identified by SAID. The baseline is [rules.json](rules.json). In 5.0.0 it is complete and supersedes every earlier version, so no 4.0 clause survives into a 5.0 credential. It separates three jobs that earlier versions mixed together.
 
-In v2.0 the rules block also carries first-class **duties** (the "must"), each named by its `bearer`. A `bearer: delegate` duty is a structured obligation `{effect, goal, cadence?, priority}`; a `bearer: issuer` duty names a governance obligation `{rule, l?, priority}`. Since 3.1.0 a duty may also carry custom keys, defined by the framework named in `gfw`; `bearer` itself stays closed, so an unknown bearer is still rejected. The baseline ruleset carries `timelyReviewAndRevoke` — the issuer's standing duty to review each delegation on a cadence appropriate to its stakes and to revoke or narrow it promptly once the conditions that justified the grant no longer hold (it does not extend authority; see this.i `@k3wm7d`). Voiding of an authority by an attested event is expressed with the `terminatingEvents` axis in the attributes block (this.i `@v5nq2r`).
+The machine gate is one clause, `machineGate`, which lists every condition a verifier checks and says the list is exhaustive. Binding follows signatures: the issuer is bound by issuing, an agent of record by its acceptance, a delegate that is a person or organization by admitting the credential, and anyone who controls the delegate with notice of the rules by that conduct. A relying party is bound only by an agreement it makes separately; for everyone else, the clauses about reliance state conditions, not obligations. Within its constraints, the credential is the issuer's representation, made for the principal, of the delegate's authority; outside them it is no evidence of authority.
 
-New governance frameworks can be written that supplement these rules; see the `gfw` field in the schema. It is also possible to modify or override these rules, by placing a different value in the `r` field. The act of issuing or receiving a GCD credential constitutes binding acceptance of the rules.
+The other clauses cover reserved powers, sub-delegation (a child's authority is the intersection of its ancestors', and the parent must grant `substitute`), acceptance and disclosure, termination (deferred to the governing law, with `terminatingEvents`, revocation and `validUntil` as what a verifier sees), human review, the status of the grant text, an optional governing law that never displaces mandatory protections, a savings clause for mandatory law, what the delegate warrants, and how conflicting duties resolve.
+
+Duties are the "must". A `bearer: issuer` duty names a governance obligation `{rule, l, priority}`; a `bearer: delegate` duty is either structured `{effect, goal, cadence?, priority}` or, since 5.0.0, a prose legal duty `{rule, l, priority}`. The baseline carries the issuer's `timelyReviewAndRevoke` and six delegate duties: `actWithinScope`, `loyalty`, `care`, `confidentiality`, `keepRecords` and `escalate`. Delegate duties are owed by the agent of record, or on the light path by a delegate that is a legal person; software owes nothing, and when the principal deploys its own software, the principal answers for it. A conflict that involves loyalty, confidentiality or escalate is referred to the principal, never resolved by priority. Since 3.1.0 a duty may carry custom keys defined by the framework named in `gfw`.
+
+A governance framework named in `gfw` may give `role` meaning and define custom constraints, but it may only narrow the authority the constraints grant, never widen it. [The legal grounding of GCD](legal-grounding.md) explains each clause and its sources.
+
+### Companion credentials
+
+[gcd-disclosure](../gcd-disclosure/) is issued by a would-be agent of record to the principal before the grant. It states the compensation the agent expects from anyone and its material conflicts, and the GCD references it in its `disclosure` edge, so issuing the grant is evidence of consent to exactly that disclosure. [gcd-acceptance](../gcd-acceptance/) is issued by the agent of record after the grant. It names the GCD exactly and accepts it without qualification, and a verifier requires it before any act whenever `agentOfRecord` is present. Neither is needed on the light path.
 
 ### Worked examples
 
-The canonical [`example.json`](example.json) is a minimal valid instance. The
-[`examples/`](examples/) gallery shows the GCD feature set across six scenarios
-— each is a full, SAID-minted credential that the conformance linter validates
-(schema-validity, `s`-vs-`$id`, and SAID self-consistency), so none can silently
-drift:
+The canonical [`example.json`](example.json) is a minimal valid instance. The [`examples/`](examples/) gallery covers the feature set across eleven scenarios, from in-house delegation to a durable power of attorney. Each is a full, SAID-minted credential that the conformance linter validates (schema validity, `s` against `$id`, and SAID self-consistency), so none can drift silently.
 
-| Example | relationType / exerciseMode | Highlights |
-|---|---|---|
-| [payments-steward](examples/payments-steward.json) | delegation / act | the confused-deputy defense: named `iban` targets, plus a `proof` designator narrowed to `observe` (see [Targets and the confused deputy](#targets-and-the-confused-deputy)) |
-| [real-estate-agent](examples/real-estate-agent.json) | delegation / act | `goals`, `acts`, `jurisdictions` + `physGeos`, `monetaryLimit`, `proofs` (license), a delegate duty; the seller designates each property (`designatedBy: {aids}`) |
-| [guardian-of-minor](examples/guardian-of-minor.json) | guardianship / both | `humanReview`, `terminatingEvents` (reached-majority) with its `validUntil` backstop, `disclosables`, `presentsAs`, and `designatedBy: "any"` declared outright |
-| [ai-deploy-agent](examples/ai-deploy-agent.json) | delegation / act | containment: no-`destroy` `acts`, `domains`, a cloud-spend `monetaryLimit`, a 30-day window, a kill-switch `terminatingEvent`, `humanReview` for prod, a restrictive `disclosables` allow-list, `targets` of a framework-defined kind with one narrowed to `observe`; also the **custom constraint** `maxDeploysPerDay` and the custom duty key `escalateTo`, neither of which 3.0.0 could express |
-| [platform-manager](examples/platform-manager.json) | stewardship / authorize | the pure delegator: omits `goals` and `acts` entirely (an empty act surface), `domains`, issuer-only duties, and no `gfw` (so `role` is a bare label) |
-| [iot-fleet-controller](examples/iot-fleet-controller.json) | controllership / both | authority over a *thing*: `icals` maintenance windows, `virtGeos`, `protos`, a decommission `terminatingEvent`, and the devices named as `aid` targets |
+| Example | Path | relationType / exerciseMode | Highlights |
+|---|---|---|---|
+| [exec-assistant-ai](examples/exec-assistant-ai.json) | light | delegation / act | a person's own AI assistant, honored by colleagues: `presentsAs` the person's office, targets designated by holders of an employee credential, no agent of record |
+| [platform-manager](examples/platform-manager.json) | light | stewardship / authorize | the pure delegator, an employee: no `goals` or `acts`, `domains`, and `reservedPowers: ["substitute"]` so it can sub-delegate |
+| [sub-delegated-assistant](examples/sub-delegated-assistant.json) | light | delegation / act | a `parent` edge to platform-manager's grant, with constraints inside it |
+| [ai-deploy-agent](examples/ai-deploy-agent.json) | light | delegation / act | the organization's own software: no-`destroy` acts, a kill-switch `terminatingEvent`, `humanReview` with `reviewers` for production, and the custom constraint `maxDeploysPerDay` |
+| [payments-steward](examples/payments-steward.json) | light | delegation / act | the confused-deputy defense: named `iban` targets, plus a `proof` designator narrowed to `observe` |
+| [tax-information-reader](examples/tax-information-reader.json) | light | delegation / act | information only, the analogue of IRS Form 8821: every act is an `observe` point |
+| [guardian-of-minor](examples/guardian-of-minor.json) | light | guardianship / both | a court-appointed guardian: `principal` names the person under guardianship, an `execution` edge, `terminatingEvents` with a `validUntil` backstop, `disclosables` |
+| [ai-purchasing-agent](examples/ai-purchasing-agent.json) | heavy | delegation / act | Greenwood's one-sentence grant: an AI vendor as `agentOfRecord`, a `grantText` digest, one named merchant, `monetaryLimit: "400 USD"`, a completion `terminatingEvent`, a `disclosure` edge; its acceptance is [gcd-acceptance/example.json](../gcd-acceptance/example.json) |
+| [real-estate-agent](examples/real-estate-agent.json) | heavy | delegation / act | a realtor naming itself as agent of record: `jurisdictions`, `physGeos`, a license `proof`, properties designated by the seller |
+| [iot-fleet-controller](examples/iot-fleet-controller.json) | heavy | controllership / both | a vendor operating devices: `icals` maintenance windows, `virtGeos`, `protos`, the devices as `aid` targets |
+| [durable-financial-poa](examples/durable-financial-poa.json) | heavy | delegation / act | `durable: true`, an `execution` edge to a notarization, a death `terminatingEvent`, a governing law, and `reservedPowers: ["substitute"]` granted by name |
 
-The [`invalid/`](invalid/) corpus holds the should-reject fixtures. Each is the
-canonical example one mutation away from valid: a missing `rd` (the v2
-envelope's required registry binding), a missing issuee (`a.i`), a missing
-top-level `s`, a non-string top-level `d`, an `acts` point missing its
-state-kind, a two-sided brace, an unknown `acts` token, `terminatingEvents`
-without a `validUntil` backstop, `exerciseMode: delegated-only` (the rejected
-pre-reconciliation token), a malformed `monetaryLimit`, an unknown duty `bearer`,
-a delegate duty missing its `effect`, and a non-integer duty `priority`.
+The [`invalid/`](invalid/) corpus holds the should-reject fixtures, each the canonical example one mutation away from valid. 5.0.0 added fixtures for a `liableParty` in the closed facet, a 4.0 rule key, a missing baseline duty, a delegate duty with both `effect` and `rule` or a prose duty without `l`, `agentOfRecord` without a `disclosure` edge, `humanReview` without `reviewers`, an unknown reserved-power code, a `parent` edge with the wrong operator, a non-boolean `durable`, a `grantText` with the wrong canonicalization or a malformed digest, and an unknown governing-law code. The older fixtures were re-pointed at the new schema so each still fails for its own defect and no other.
 
-4.0 added five fixtures for `targets`: `acts` without `targets`, an IBAN not in canonical form, a wildcard kind on a named target, an entry carrying both `id` and `designatedBy`, and a `designatedBy` of an unknown form. The older fixtures gained the canonical example's `targets`, so each still fails for its own defect and no other.
+### References
 
-The corpus lost one fixture at 3.1.0: an unknown key inside `constraints` is now
-*valid*, so `constraints-unknown-key.json` was deleted rather than rewritten. Its
-job — proving the schema does not go quietly on that key — passed to a positive
-oracle, the `maxDeploysPerDay` / `escalateTo` pair in
-[ai-deploy-agent](examples/ai-deploy-agent.json), which 3.0.0 rejected and 3.1.0
-accepts. A regression to a closed container fails the conformance suite on that
-example.
+[1] Dazza Greenwood. 2026. Written Agent Authorizations: 25 Instruments, Dissected for AI-Agent Design. Version 0.3.4. GitHub repository dazzaji/agent4whom, commit 8df8730. https://github.com/dazzaji/agent4whom/tree/8df8730
 
+[2] Daniel Hardman. 2026. The Shape of Delegated Authority. Version 1.3. Codecraft Papers. https://dhh1128.github.io/papers/sda.html
+
+[3] Daniel Hardman. 2025. Intent and Boundaries: A Framework for Digital Agency. Version 1.1. Codecraft Papers. DOI: https://doi.org/10.2139/ssrn.5909382
+
+[4] Daniel Hardman. 2025. Syntelos: A Hierarchical Taxonomy of Intent in Digital Interactions. Version 1.1. Codecraft Papers. https://dhh1128.github.io/papers/syntelos.html
+
+[5] Daniel Hardman. 2026. Identity Facets. Version 0.11. Codecraft Papers. https://dhh1128.github.io/papers/if.html
+
+[6] Hyperledger Aries. RFC 0103: Indirect Identity Control. https://identity.foundation/aries-rfcs/latest/concepts/0103-indirect-identity-control/
+
+[7] Norm Hardy. 1988. The Confused Deputy (or why capabilities might have been invented). ACM SIGOPS Operating Systems Review 22, 4 (Oct. 1988), 36–38. DOI: https://doi.org/10.1145/54289.871709
+
+[8] Deborah A. DeMott. 2026. When Agentic AI Met the Common Law of Agency. Harvard Journal of Law & Technology (forthcoming). DOI: https://doi.org/10.2139/ssrn.6838660
+
+[9] Samuel M. Smith. Key Event Receipt Infrastructure (KERI). Trust over IP Foundation. https://trustoverip.github.io/kswg-keri-specification/
+
+[10] Samuel M. Smith. Authentic Chained Data Containers (ACDC). Trust over IP Foundation. https://trustoverip.github.io/kswg-acdc-specification/
+
+The legal and regulatory sources behind 5.0.0 are cited in [The legal grounding of GCD](legal-grounding.md).
