@@ -20,7 +20,7 @@ Either list may be absent, which says the issuer expects no compensation or has 
 
 A disclosure is not a constraint credential. No verifier gates an act on it, and it is addressed to the principal. Who pays an agent, and how much, is the principal's business and the agent's, and publishing it to every verifier who checks a GCD would be a privacy harm. So the attribute section carries a required salty nonce (`a.u`, at least a CESR 128-bit salt) and can travel compacted to its SAID. A verifier that follows a GCD's `disclosure` edge learns that a disclosure was made and can confirm it was this one, without seeing what it says. The principal can show the expanded form to anyone it chooses.
 
-It is an attribute section rather than an aggregate, following [Choosing attribute vs aggregate](../choosing-attribute-vs-aggregate.md): the fields are a fixed, heterogeneous set whose labels leak nothing.
+It is an attribute section rather than an aggregate, following [Choosing attribute vs aggregate](../docs/choosing-attribute-vs-aggregate.md): the fields are a fixed, heterogeneous set whose labels leak nothing.
 
 ### Schema
 

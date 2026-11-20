@@ -856,3 +856,10 @@ def test_whitespace_is_not_disclosure_content(path, value) -> None:
     instance["a"].pop("conflicts", None)
     instance["a"][path[0]] = value
     assert not _disclosure_valid(instance)
+
+
+def test_the_machine_gate_needs_a_framework_for_a_role_only_when_gfw_is_named() -> None:
+    """Copilot on #19: a bare role label without gfw (the light path) must not force a framework."""
+    gate = _load(GCD / "rules.json")["machineGate"]
+    assert "where the gfw field is present and the role field is present" in gate
+    assert "a custom constraint with no framework named always fails" in gate
