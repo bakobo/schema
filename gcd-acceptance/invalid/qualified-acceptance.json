@@ -1,10 +1,10 @@
 {
-  "v": "ACDCCAACAAJSONAAN6.",
+  "v": "ACDCCAACAAJSONAAO_.",
   "t": "acm",
-  "d": "EMQ5wg7vams7eZkdB-kDm7FQsA1mA8rNfU9-lpAThf6B",
+  "d": "EJTwNwx9EmfVZf47MB5f6lxqTfJRqRgnJSgxiAgz0eFP",
   "i": "EPRTsm44npxhWZ0fyw7bB2P2AHZbVEPcYIwXadxiUuFJ",
-  "rd": "EGBkMWiFLqR_U1rF3lM_mUaL5SxgD7UYqElnCRC03LYn",
-  "s": "EOf3WP8mTdo3DMpThNXsLPegu72yDX-j5F_WNcvxm06q",
+  "rd": "EKFsbTgtWLDtvhcvUmI4CS4gawiekFNVvho80xTHH-Mr",
+  "s": "EHuvQNz2qMnoyhJ9YbCXdqk_pXSKdKApTURxASnBB-Bf",
   "a": {
     "d": "EAXTCGjx8h8EIKVsLM-a2X-oDmx55ogRnu0WWKklha9q",
     "i": "EBpSo_beKcwWiQkfJ8uVLW8EbfFzA2BGHnROM8Gf6KzS",
@@ -13,15 +13,15 @@
     "conditions": "Accepted only for orders under 100 USD."
   },
   "e": {
-    "d": "EC0YesJ2JHMpp0yZv7lHZsQ_k9_CWC1ndoBvwiBZEH-f",
+    "d": "EFHgf4vMytajtpnnfOZ7r2a-PIO7EdXqn1pJrdkd3heK",
     "gcd": {
-      "n": "EPVlbaNksnsbp6fYAHqzkkaMANsIZY3R9ulOovj6Zm1C",
-      "s": "EJ670TDvdSeqyATI953-99xOFihOX3erIfdEvRJITQY5",
+      "n": "ENN0g09P779qY4avBZReqgPuocRW1KD7HzVTLDKJvjXa",
+      "s": "EEOBUVSdhNa_l9ESr3up_xgeSPd5tox76pxKGTRXyznt",
       "o": "NI2I"
     }
   },
   "r": {
-    "d": "EEG3wwOHi7Qsn6NjxlmW6cgpQ3WvM9mR6W8P3InOxA4W",
-    "unqualifiedAcceptance": "The issuer of this acceptance accepts, without qualification, appointment under the referenced credential and the rules that credential carries, and undertakes as its own the duties whose bearer is the delegate."
+    "d": "EGnaL7YXLUrC9zHFAmaFSxA2UMKyh1U2nDW7A8gS-xsx",
+    "unqualifiedAcceptance": "The issuer of this acceptance accepts, without qualification, appointment under the referenced credential and the rules that credential carries, which were available to it in full before it issued this acceptance, and undertakes as its own the duties whose bearer is the delegate."
   }
 }

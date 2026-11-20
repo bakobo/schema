@@ -1,0 +1,26 @@
+{
+  "v": "ACDCCAACAAJSONAAPu.",
+  "t": "acm",
+  "d": "EJyD4mG2XoPv0HpOKM8e-Ploz3NCXNfdd_ZPwqQTs8P2",
+  "i": "EAZ_MkqQmJy746IldbNXAB5_lhhyOI8g8ym7EKi8XZZZ",
+  "s": "EFvxeVDmIBpN7wWuHl-VbXbvmWae96yQK5ev8Sjt0-qf",
+  "a": {
+    "d": "EEciKzENezx8p2I6pBPOebuGzmW4QxJBLp3FiZeyyo8k",
+    "u": "0AC5FR1IMqsWu7Whta4rYh53",
+    "i": "EEpjq0jMPWTgAIiusb37rCCwyFVYleJ1dsa9EzfcvEBB",
+    "dt": "2026-07-28T09:00:00.000000+00:00",
+    "compensation": [
+      {
+        "payer": "EEpjq0jMPWTgAIiusb37rCCwyFVYleJ1dsa9EzfcvEBB",
+        "basis": "A commission of 3 percent of the sale price, paid at closing."
+      }
+    ],
+    "conflicts": [
+      "The agent's brokerage may also represent a buyer of the property, as a dual agent, with the seller's written consent."
+    ]
+  },
+  "r": {
+    "d": "EEhC1styxcBnlS5pn5Nf_7ZTwu-Mg6VCCrkWnDnHHeLM",
+    "completeDisclosure": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure, and it will disclose any change before acting on it."
+  }
+}

@@ -1,17 +1,17 @@
 {
-  "v": "ACDCCAACAAJSONAAQo.",
+  "v": "ACDCCAACAAJSONAARd.",
   "t": "acm",
-  "d": "ENuVEBqe4bT1vtQbiRQjd1DrHLrKxAniN8UNc_5ljHgi",
+  "d": "EC67kK1GLm4wPyLhFUCOeoaN-ZF62cmsCAJPczUMY7_0",
   "i": "EPRTsm44npxhWZ0fyw7bB2P2AHZbVEPcYIwXadxiUuFJ",
-  "s": "EEwH10hs-VvdeyFBXSfmisjn8q89rwfAbKm9VcUXkBWS",
+  "s": "EFvxeVDmIBpN7wWuHl-VbXbvmWae96yQK5ev8Sjt0-qf",
   "a": {
-    "d": "EAgwXhb5vvThMIIcmbWl_6s97ZMbyf1JeXw-jQ1z6zNL",
-    "u": "0ADHuK9a-SZA7YpxYK36NzhY",
+    "d": "EBRKh0FNsayBzy4tFkBfLQe2HPNXvRyLWn2n55Jq4jJB",
+    "u": "0ABQCnSU6n_NTIV-_Hg2kS3s",
     "i": "EBpSo_beKcwWiQkfJ8uVLW8EbfFzA2BGHnROM8Gf6KzS",
     "dt": "2026-11-30T16:00:00.000000+00:00"
   },
   "r": {
-    "d": "EFEVpOzb6KX56YsfL9Z4d_RCCCBzTIwe-Ah0Ti1mpu7W",
-    "completeDisclosure": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure."
+    "d": "EEhC1styxcBnlS5pn5Nf_7ZTwu-Mg6VCCrkWnDnHHeLM",
+    "completeDisclosure": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure, and it will disclose any change before acting on it."
   }
 }

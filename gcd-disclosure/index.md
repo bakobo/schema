@@ -1,10 +1,10 @@
 ## GCD Disclosure
 
-A would-be agent of record tells the principal, before any [GCD](../gcd/) exists, all the compensation it expects from any party and every material conflict of interest it has in acting for the principal. A GCD that points at the disclosure through its `disclosure` edge records the principal's consent, given with knowledge of the disclosure, to exactly what it states and to nothing else (`this.i` @8tpzdyl5). A principal can consent to a conflict only after it has been disclosed (Restatement (Third) of Agency §8.06), which is why the disclosure comes before the grant and is a credential of its own rather than part of the acceptance that follows it.
+A would-be agent of record tells the principal, before any [GCD](../gcd/) exists, all the compensation it expects from any party and every material conflict of interest it has in acting for the principal. A GCD that names an `agentOfRecord` must point at that agent's disclosure through its `disclosure` edge, and issuing the GCD is evidence of the principal's consent to exactly what the disclosure states and to nothing else (`this.i` @8tpzdyl5). A conflict or compensation that arises later is not consented to until the agent discloses it and the principal approves, and the disclosure's one rule commits the agent to disclose any change before acting on it. A principal can consent to a conflict only after it has been disclosed (Restatement (Third) of Agency §8.06), which is why the disclosure comes before the grant and is a credential of its own rather than part of the acceptance that follows it.
 
 ### Issuer and issuee
 
-The issuer `i` is the party that will be named as `agentOfRecord` in the GCD. The issuee `a.i` is the principal. The GCD's `disclosure` edge uses the operator `I2I`, so the GCD's issuer must be the disclosure's issuee.
+The issuer `i` is the party that will be named as `agentOfRecord` in the GCD; a delegate that is a legal person acting for itself is its own agent of record, so it discloses too. The issuee `a.i` is the principal. That is the GCD's issuer unless the GCD sets `principal`, as when a court appoints a guardian, so the GCD's `disclosure` edge uses the operator `NI2I` and a verifier checks both parties against the GCD's facet.
 
 ### What it says
 
@@ -14,7 +14,7 @@ The issuer `i` is the party that will be named as `agentOfRecord` in the GCD. Th
 | `compensation` | each payment or benefit the issuer expects, as `{payer, basis}`: who pays (an AID where the payer has one, otherwise a name) and what is paid, in plain words |
 | `conflicts` | each material conflict of interest, one per entry, in plain words |
 
-Either list may be absent, which says the issuer expects no compensation or has no conflict, but not both: a disclosure that states nothing is not one. The single rule, `completeDisclosure`, makes the issuer answer for completeness.
+Either list may be absent, which says the issuer expects no compensation or has no conflict, but not both: a disclosure that states nothing is not one. The single rule, `completeDisclosure`, makes the issuer answer for completeness and for disclosing any change.
 
 ### Why it uses selective disclosure
 
@@ -24,4 +24,4 @@ It is an attribute section rather than an aggregate, following [Choosing attribu
 
 ### Schema
 
-The schema is in [`gcd-disclosure.schema.json`](gcd-disclosure.schema.json), its rules in [`rules.json`](rules.json), an instance in [`example.json`](example.json) (the disclosure behind the GCD gallery's `ai-purchasing-agent`), and one fixture per defect in [`invalid/`](invalid).
+The schema is in [`gcd-disclosure.schema.json`](gcd-disclosure.schema.json), its rules in [`rules.json`](rules.json), an instance in [`example.json`](example.json) (the disclosure behind the GCD gallery's `ai-purchasing-agent`), the disclosures behind the other GCD examples that name an agent of record in [`examples/`](examples), and one fixture per defect in [`invalid/`](invalid).

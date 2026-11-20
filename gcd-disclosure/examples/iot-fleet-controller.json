@@ -1,0 +1,26 @@
+{
+  "v": "ACDCCAACAAJSONAAPG.",
+  "t": "acm",
+  "d": "EPW30unJHdnzXRjlHywrkWE-M5eoEsBOmzFZWFSvDjbf",
+  "i": "ECs3P_4LYTH8DZ8EPaJclUBR8f_VzfN6XIF07Cp9ZloU",
+  "s": "EFvxeVDmIBpN7wWuHl-VbXbvmWae96yQK5ev8Sjt0-qf",
+  "a": {
+    "d": "EK5MZClmlNujthG4idiB1oY6V35vP15VJY8_ED3DG0Ys",
+    "u": "0AAXV76j7AZErfs-w4t62COY",
+    "i": "EO208tzf2dCxspgkL427V3GtLp0S1JbxCeYRMOrSWDS8",
+    "dt": "2026-07-25T09:00:00.000000+00:00",
+    "compensation": [
+      {
+        "payer": "EO208tzf2dCxspgkL427V3GtLp0S1JbxCeYRMOrSWDS8",
+        "basis": "A monthly service fee per managed device, under the operations contract."
+      }
+    ],
+    "conflicts": [
+      "The vendor resells replacement parts for the devices it maintains."
+    ]
+  },
+  "r": {
+    "d": "EEhC1styxcBnlS5pn5Nf_7ZTwu-Mg6VCCrkWnDnHHeLM",
+    "completeDisclosure": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure, and it will disclose any change before acting on it."
+  }
+}

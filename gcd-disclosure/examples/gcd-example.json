@@ -1,0 +1,23 @@
+{
+  "v": "ACDCCAACAAJSONAANW.",
+  "t": "acm",
+  "d": "EJD4VKfUlKh9dTabJMqW6mM_ylYafZu1uXy1AAnwYZp6",
+  "i": "EIkxoE8eYnPLCydPcyc_lhQgwOdBHwzkSe36e2gqEH-5",
+  "s": "EFvxeVDmIBpN7wWuHl-VbXbvmWae96yQK5ev8Sjt0-qf",
+  "a": {
+    "d": "EDafOmvOU0wLaZGtRfx_i6EqPE0JS0xW-DoqY2vfcxa1",
+    "u": "0ABGvqACWzMCJU8Je3jYdROM",
+    "i": "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL",
+    "dt": "2024-12-20T10:00:00.000000+00:00",
+    "compensation": [
+      {
+        "payer": "EC4SuEyzrRwu3FWFrK0Ubd9xejlo5bUwAtGcbBGUk2nL",
+        "basis": "A fee of 5 percent of each booking's value."
+      }
+    ]
+  },
+  "r": {
+    "d": "EEhC1styxcBnlS5pn5Nf_7ZTwu-Mg6VCCrkWnDnHHeLM",
+    "completeDisclosure": "The issuer states in this disclosure all compensation it expects from any party, and every material conflict of interest it has, in connection with acting for the issuee under any credential that references this disclosure, and it will disclose any change before acting on it."
+  }
+}
