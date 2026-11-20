@@ -93,8 +93,8 @@ def _failing_sections(schema: dict, instance: dict) -> set[str]:
             if _errors(_arm(schema, section), instance[section]):
                 failing.add(section)
     envelope = {key: value for key, value in schema.items() if key != "properties"}
-    envelope["properties"] = {key: value for key, value in schema["properties"].items()
-                              if key not in ("a", "e", "r")}
+    envelope["properties"] = {key: ({} if key in ("a", "e", "r") else value)
+                              for key, value in schema["properties"].items()}
     if _errors(envelope, instance):
         failing.add("envelope")
     return failing
