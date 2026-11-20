@@ -3,7 +3,8 @@
 The schema-level oracles for @0yxjpld6 (principal, agentOfRecord, durable, grantText; a closed
 facet), @39eu7enh (reservedPowers), @8tpzdyl5 (gcd-disclosure before the grant, gcd-acceptance
 after it) and @8u06glee (complete, superseding rules; parent, disclosure and execution edges;
-governing law; the delegate prose duty and the seven baseline duties).
+governing law; the delegate prose duty and the seven baseline duties), with the light path of
+@2fgsylgz (rules revision 5: no agent of record, no disclosure, no acceptance credential).
 """
 
 import copy
@@ -166,9 +167,27 @@ def test_the_facet_is_closed_and_names_roles_not_liability() -> None:
     assert set(facet["properties"]) == {"role", "relationType", "principal", "agentOfRecord",
                                         "presentsAs", "exerciseMode", "durable", "grantText"}
     assert "defaults to the issuer" in facet["properties"]["principal"]["description"]
-    assert "own software" in facet["properties"]["agentOfRecord"]["description"]
-    assert "its own agent of record" in facet["properties"]["agentOfRecord"]["description"]
-    assert "law" in facet["properties"]["agentOfRecord"]["description"]
+    description = facet["properties"]["agentOfRecord"]["description"]
+    assert "own software" in description
+    assert "law" in description
+
+
+def test_agent_of_record_describes_the_light_and_heavy_paths() -> None:
+    """@2fgsylgz: required for a third-party operator, optional for a legal person acting for itself."""
+    description = _arm(_gcd_schema(), "a")["properties"]["facet"]["properties"]["agentOfRecord"]["description"]
+    assert "Required when a third party operates the delegate" in description
+    assert "Optional for a delegate that is a legal person acting for itself" in description
+    assert "accepts by admitting this credential" in description
+    assert "no one other than the principal or the delegate itself operates the delegate" in description
+    assert "is named here as its own agent of record" not in description
+    top = _gcd_schema()["description"]
+    assert "@2fgsylgz" in top and "light path" in top and "heavy path" in top
+
+
+def test_acceptance_capacity_describes_an_optional_self_naming() -> None:
+    capacity = _arm(_acceptance_schema(), "a")["properties"]["capacity"]["description"]
+    assert "chose to name itself" in capacity
+    assert "accepts by admitting the GCD" in capacity
 
 
 @pytest.mark.parametrize("key,value", [
@@ -188,7 +207,8 @@ def test_the_facet_is_closed_and_names_roles_not_liability() -> None:
     pytest.param("grantText", {"digest": SAID, "canon": "cqt3.17", "text": "inline"}, id="grant-text-open"),
 ])
 def test_a_bad_facet_is_refused_for_its_facet_only(key, value) -> None:
-    instance = _with(["a", "facet", key], value)
+    """On the heavy example, so naming an agent of record never trips the disclosure-edge condition."""
+    instance = _with(["a", "facet", key], value, _heavy())
     _refused(instance)
     assert _failing_sections(_gcd_schema(), instance) == {"a"}
 
@@ -203,7 +223,7 @@ def test_a_bad_facet_is_refused_for_its_facet_only(key, value) -> None:
       for d in ("principal", "agentOfRecord", "delegate", "other")],
 ])
 def test_a_well_formed_facet_field_is_admitted(key, value) -> None:
-    _accepted(_with(["a", "facet", key], value))
+    _accepted(_with(["a", "facet", key], value, _heavy()))
 
 
 def test_the_cqt_vector_is_the_blake3_digest_of_its_canonical_text() -> None:
@@ -321,19 +341,32 @@ def test_a_bad_edge_is_refused_for_its_edges_only(name, edge) -> None:
     assert _failing_sections(_gcd_schema(), instance) == {"e"}
 
 
+def _heavy() -> dict:
+    return _gallery()["ai-purchasing-agent"]
+
+
 def test_an_agent_of_record_requires_a_disclosure_edge() -> None:
     """Rules revision 3: the disclosure rule makes the edge mandatory wherever agentOfRecord is named."""
-    no_agent = _without(["a", "facet", "agentOfRecord"])
-    _accepted(_without(["e", "disclosure"], no_agent))
-    for instance in (_without(["e", "disclosure"]), _without(["e"])):
+    _accepted(_heavy())
+    for instance in (_without(["e", "disclosure"], _heavy()), _without(["e"], _heavy()),
+                     _with(["a", "facet", "agentOfRecord"], AID)):
         _refused(instance)
         assert _failing_sections(_gcd_schema(), instance) == {"envelope"}
 
 
+def test_a_light_path_gcd_validates_without_agent_of_record_or_disclosure() -> None:
+    """@2fgsylgz: omitting agentOfRecord needs no disclosure edge, and no edges block at all."""
+    light = _example()
+    assert "agentOfRecord" not in light["a"]["facet"]
+    assert "disclosure" not in light["e"]
+    _accepted(light)
+    _accepted(_without(["e"], light))
+
+
 def test_the_disclosure_condition_ignores_compact_sections() -> None:
     """A compacted a or e block cannot be inspected, so the condition neither fires nor fails on it."""
-    _accepted(_with(["a"], _example()["a"]["d"], _without(["e", "disclosure"])))
-    _accepted(_with(["e"], _example()["e"]["d"]))
+    _accepted(_with(["a"], _heavy()["a"]["d"], _without(["e", "disclosure"], _heavy())))
+    _accepted(_with(["e"], _heavy()["e"]["d"], _heavy()))
 
 
 def test_the_parent_edge_says_its_schema_must_be_a_gcd() -> None:
@@ -350,6 +383,19 @@ def test_rules_json_carries_exactly_the_5_0_0_clauses_in_order() -> None:
     assert list(rules) == ["d", *RULE_KEYS, "duties"]
     assert [duty["rule"] for duty in rules["duties"]] == BASELINE_DUTIES
     assert not set(OLD_RULE_KEYS) & set(rules)
+
+
+def test_the_rules_are_revision_5_with_the_light_path() -> None:
+    """@2fgsylgz: a legal-person delegate binds itself by admitting; omitting agentOfRecord is no longer
+    a representation that the principal operates the delegate."""
+    rules = _rules()
+    assert "A delegate that is a legal person is bound by admitting it." in rules["bindingParties"]
+    assert "or, where none is named, by a delegate that is a legal person" in rules["bindingParties"]
+    assert "accepts by admitting this credential" in rules["acceptance"]
+    assert "is named as its own agent of record" not in rules["acceptance"]
+    assert "the principal itself operates the delegate" not in rules["acceptance"]
+    prose = _arm(_gcd_schema(), "r")["properties"]["duties"]["items"]["oneOf"][1]["description"]
+    assert "where none is named, by a delegate that is a legal person" in prose
 
 
 def test_the_schema_requires_every_clause_verbatim_in_either_form() -> None:
@@ -480,23 +526,34 @@ def test_the_gallery_has_the_5_0_0_examples() -> None:
     assert set(_gallery()) == {
         "ai-deploy-agent", "guardian-of-minor", "iot-fleet-controller", "payments-steward",
         "platform-manager", "real-estate-agent", "ai-purchasing-agent", "durable-financial-poa",
-        "sub-delegated-assistant", "tax-information-reader"}
+        "sub-delegated-assistant", "tax-information-reader", "exec-assistant-ai"}
 
 
-SELF_APPOINTED = {"example", "real-estate-agent", "platform-manager", "iot-fleet-controller", "guardian-of-minor",
-                  "durable-financial-poa", "tax-information-reader"}
-OWN_SOFTWARE = {"ai-deploy-agent", "payments-steward", "sub-delegated-assistant"}
+LIGHT = {"example", "platform-manager", "guardian-of-minor", "tax-information-reader", "ai-deploy-agent",
+         "payments-steward", "sub-delegated-assistant", "exec-assistant-ai"}
+SELF_NAMED = {"real-estate-agent", "iot-fleet-controller", "durable-financial-poa"}
+THIRD_PARTY = {"ai-purchasing-agent"}
 
 
 def test_who_is_named_agent_of_record() -> None:
-    """A legal person acting for itself is its own agent of record; the issuer's own software has none."""
+    """@2fgsylgz: light examples name no agent of record; heavy ones name a third party or themselves."""
     examples = _all_gcd_examples()
-    assert SELF_APPOINTED | OWN_SOFTWARE | {"ai-purchasing-agent"} == set(examples)
-    for name in SELF_APPOINTED:
-        assert examples[name]["a"]["facet"]["agentOfRecord"] == examples[name]["a"]["i"], name
-    for name in OWN_SOFTWARE:
+    assert LIGHT | SELF_NAMED | THIRD_PARTY == set(examples)
+    for name in LIGHT:
         assert "agentOfRecord" not in examples[name]["a"]["facet"], name
         assert "disclosure" not in examples[name].get("e", {}), name
+    for name in SELF_NAMED:
+        assert examples[name]["a"]["facet"]["agentOfRecord"] == examples[name]["a"]["i"], name
+    for name in THIRD_PARTY:
+        gcd = examples[name]
+        assert gcd["a"]["facet"]["agentOfRecord"] not in (gcd["i"], gcd["a"]["i"]), name
+
+
+def test_every_heavy_gcd_example_has_an_acceptance() -> None:
+    accepted = {acceptance["e"]["gcd"]["n"] for acceptance in
+                [_load(ACCEPTANCE / "example.json"), *map(_load, sorted((ACCEPTANCE / "examples").glob("*.json")))]}
+    for name, instance in _all_gcd_examples().items():
+        assert (instance["d"] in accepted) == ("agentOfRecord" in instance["a"]["facet"]), name
 
 
 def test_every_agent_of_record_disclosed_to_the_principal_before_the_grant() -> None:
@@ -543,11 +600,29 @@ def test_the_guardian_example_names_the_individual_as_principal() -> None:
     guardian = _gallery()["guardian-of-minor"]
     facet = guardian["a"]["facet"]
     assert facet["principal"] not in (guardian["i"], guardian["a"]["i"])
-    assert facet["agentOfRecord"] == guardian["a"]["i"], "the guardian accepts its own appointment"
-    disclosure = _load(DISCLOSURE / "examples" / "guardian-of-minor.json")
-    assert guardian["e"]["disclosure"]["n"] == disclosure["d"]
-    assert disclosure["a"]["i"] == facet["principal"], "the disclosure is made to the principal"
+    assert "agentOfRecord" not in facet, "the court-appointed guardian accepts by admitting the credential"
+    assert "disclosure" not in guardian["e"]
     assert guardian["e"]["execution"]["o"] == "NI2I"
+
+
+def test_the_exec_assistant_is_an_in_house_instrument_colleagues_honor() -> None:
+    """@2fgsylgz: X delegates scheduling to X's own AI assistant Y, with no agent of record."""
+    gcd = _gallery()["exec-assistant-ai"]
+    facet, constraints = gcd["a"]["facet"], gcd["a"]["constraints"]
+    assert gcd["e"]["issuer"]["o"] == "I2I" and set(gcd["e"]) == {"d", "issuer"}
+    assert gcd["a"]["i"] != gcd["i"]
+    assert "agentOfRecord" not in facet and "principal" not in facet
+    assert facet["relationType"] == "delegation" and facet["exerciseMode"] == "act"
+    assert facet["presentsAs"] not in (gcd["i"], gcd["a"]["i"])
+    assert constraints["acts"] == ["observe {info, commitment}", "create commitment"]
+    assert len(constraints["targets"]) == 1
+    target = constraints["targets"][0]
+    assert set(target["designatedBy"]) == {"proof"}
+    assert target["acts"] == ["observe commitment", "create commitment"]
+    assert constraints["domains"] and "reservedPowers" not in constraints
+    assert constraints["monetaryLimit"].split()[1] and float(constraints["monetaryLimit"].split()[0]) <= 100
+    start, end = constraints["validFrom"], constraints["validUntil"]
+    assert start < end and int(end[:4]) * 12 + int(end[5:7]) - int(start[:4]) * 12 - int(start[5:7]) <= 12
 
 
 def test_the_purchasing_agent_is_greenwoods_sentence_made_concrete() -> None:
