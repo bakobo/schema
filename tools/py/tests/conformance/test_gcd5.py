@@ -34,7 +34,7 @@ OLD_RULE_KEYS = ["noRoleSemanticsWithoutGfw", "issuerNotResponsibleOutsideConstr
 RULE_KEYS = ["scope", "bindingParties", "machineGate", "useStdIfPossible", "governanceFramework",
              "relianceWithinConstraints", "subjectToLaw", "onlyHeldAuthority", "reservedPowers",
              "subDelegation", "acceptance", "disclosure", "termination", "humanReview",
-             "governingLaw", "delegateWarranty", "dutyConflicts"]
+             "grantTextStatus", "governingLaw", "delegateWarranty", "dutyConflicts"]
 BASELINE_DUTIES = ["timelyReviewAndRevoke", "actWithinScope", "loyalty", "care", "confidentiality",
                    "keepRecords", "escalate"]
 
@@ -167,6 +167,7 @@ def test_the_facet_is_closed_and_names_roles_not_liability() -> None:
                                         "presentsAs", "exerciseMode", "durable", "grantText"}
     assert "defaults to the issuer" in facet["properties"]["principal"]["description"]
     assert "own software" in facet["properties"]["agentOfRecord"]["description"]
+    assert "its own agent of record" in facet["properties"]["agentOfRecord"]["description"]
     assert "law" in facet["properties"]["agentOfRecord"]["description"]
 
 
@@ -297,9 +298,9 @@ def test_well_formed_optional_edges_are_admitted(name, edge) -> None:
 
 def test_a_disclosure_edge_pins_the_disclosure_schema() -> None:
     disclosure = _load(DISCLOSURE / "gcd-disclosure.schema.json")["$id"]
-    _accepted(_edge("disclosure", {"n": SAID, "s": disclosure, "o": "I2I"}))
-    for bad in ({"n": SAID, "s": SAID, "o": "I2I"}, {"n": SAID, "s": disclosure, "o": "NI2I"},
-                {"n": SAID, "o": "I2I"}):
+    _accepted(_edge("disclosure", {"n": SAID, "s": disclosure, "o": "NI2I"}))
+    for bad in ({"n": SAID, "s": SAID, "o": "NI2I"}, {"n": SAID, "s": disclosure, "o": "I2I"},
+                {"n": SAID, "o": "NI2I"}):
         instance = _edge("disclosure", bad)
         _refused(instance)
         assert _failing_sections(_gcd_schema(), instance) == {"e"}
@@ -318,6 +319,21 @@ def test_a_bad_edge_is_refused_for_its_edges_only(name, edge) -> None:
     instance = _edge(name, edge)
     _refused(instance)
     assert _failing_sections(_gcd_schema(), instance) == {"e"}
+
+
+def test_an_agent_of_record_requires_a_disclosure_edge() -> None:
+    """Rules revision 3: the disclosure rule makes the edge mandatory wherever agentOfRecord is named."""
+    no_agent = _without(["a", "facet", "agentOfRecord"])
+    _accepted(_without(["e", "disclosure"], no_agent))
+    for instance in (_without(["e", "disclosure"]), _without(["e"])):
+        _refused(instance)
+        assert _failing_sections(_gcd_schema(), instance) == {"envelope"}
+
+
+def test_the_disclosure_condition_ignores_compact_sections() -> None:
+    """A compacted a or e block cannot be inspected, so the condition neither fires nor fails on it."""
+    _accepted(_with(["a"], _example()["a"]["d"], _without(["e", "disclosure"])))
+    _accepted(_with(["e"], _example()["e"]["d"]))
 
 
 def test_the_parent_edge_says_its_schema_must_be_a_gcd() -> None:
@@ -467,6 +483,54 @@ def test_the_gallery_has_the_5_0_0_examples() -> None:
         "sub-delegated-assistant", "tax-information-reader"}
 
 
+SELF_APPOINTED = {"example", "real-estate-agent", "platform-manager", "iot-fleet-controller", "guardian-of-minor",
+                  "durable-financial-poa", "tax-information-reader"}
+OWN_SOFTWARE = {"ai-deploy-agent", "payments-steward", "sub-delegated-assistant"}
+
+
+def test_who_is_named_agent_of_record() -> None:
+    """A legal person acting for itself is its own agent of record; the issuer's own software has none."""
+    examples = _all_gcd_examples()
+    assert SELF_APPOINTED | OWN_SOFTWARE | {"ai-purchasing-agent"} == set(examples)
+    for name in SELF_APPOINTED:
+        assert examples[name]["a"]["facet"]["agentOfRecord"] == examples[name]["a"]["i"], name
+    for name in OWN_SOFTWARE:
+        assert "agentOfRecord" not in examples[name]["a"]["facet"], name
+        assert "disclosure" not in examples[name].get("e", {}), name
+
+
+def test_every_agent_of_record_disclosed_to_the_principal_before_the_grant() -> None:
+    disclosures = {d["d"]: d for d in [_load(DISCLOSURE / "example.json"),
+                                       *map(_load, sorted((DISCLOSURE / "examples").glob("*.json")))]}
+    used = set()
+    for name, instance in _all_gcd_examples().items():
+        facet = instance["a"]["facet"]
+        if "agentOfRecord" not in facet:
+            continue
+        disclosure = disclosures[instance["e"]["disclosure"]["n"]]
+        used.add(disclosure["d"])
+        assert disclosure["i"] == facet["agentOfRecord"], name
+        assert disclosure["a"]["i"] == facet.get("principal", instance["i"]), name
+        assert disclosure["a"]["dt"] < instance["a"]["dt"], name
+        _accepted(disclosure, _disclosure_schema())
+        assert saidify_sad(disclosure) == disclosure
+    assert used == set(disclosures), "every disclosure example backs some GCD example"
+
+
+def test_every_acceptance_example_accepts_a_gallery_gcd_after_it() -> None:
+    by_said = {instance["d"]: instance for instance in _all_gcd_examples().values()}
+    acceptances = [_load(ACCEPTANCE / "example.json"), *map(_load, sorted((ACCEPTANCE / "examples").glob("*.json")))]
+    assert len(acceptances) >= 2
+    for acceptance in acceptances:
+        _accepted(acceptance, _acceptance_schema())
+        assert saidify_sad(acceptance) == acceptance
+        gcd = by_said[acceptance["e"]["gcd"]["n"]]
+        assert acceptance["i"] == gcd["a"]["facet"]["agentOfRecord"]
+        assert acceptance["a"]["i"] == gcd["i"] and acceptance["a"]["dt"] > gcd["a"]["dt"]
+        expected = "delegate" if gcd["a"]["facet"]["agentOfRecord"] == gcd["a"]["i"] else "agentOfRecord"
+        assert acceptance["a"]["capacity"] == expected
+
+
 def test_humans_review_only_where_reviewers_are_named() -> None:
     reviewed = [name for name, instance in _all_gcd_examples().items()
                 if "humanReview" in instance["a"].get("constraints", {})]
@@ -479,7 +543,10 @@ def test_the_guardian_example_names_the_individual_as_principal() -> None:
     guardian = _gallery()["guardian-of-minor"]
     facet = guardian["a"]["facet"]
     assert facet["principal"] not in (guardian["i"], guardian["a"]["i"])
-    assert "agentOfRecord" not in facet
+    assert facet["agentOfRecord"] == guardian["a"]["i"], "the guardian accepts its own appointment"
+    disclosure = _load(DISCLOSURE / "examples" / "guardian-of-minor.json")
+    assert guardian["e"]["disclosure"]["n"] == disclosure["d"]
+    assert disclosure["a"]["i"] == facet["principal"], "the disclosure is made to the principal"
     assert guardian["e"]["execution"]["o"] == "NI2I"
 
 
@@ -547,6 +614,7 @@ GCD_FIXTURES = {
     "duty-effect-and-rule": "r",
     "baseline-duty-missing": "r",
     "old-rule-key": "r",
+    "agent-of-record-without-disclosure": "envelope",
 }
 
 
@@ -593,7 +661,7 @@ def test_the_disclosure_records_its_selective_disclosure_choice() -> None:
 def test_the_disclosure_rule_is_verbatim() -> None:
     clause = ("The issuer states in this disclosure all compensation it expects from any party, and every "
               "material conflict of interest it has, in connection with acting for the issuee under any "
-              "credential that references this disclosure.")
+              "credential that references this disclosure, and it will disclose any change before acting on it.")
     rules = _load(DISCLOSURE / "rules.json")
     assert saidify_sad(rules) == rules
     assert list(rules.values())[1:] == [clause]
@@ -644,8 +712,8 @@ def test_the_acceptance_example_validates_and_is_saidified() -> None:
 
 def test_the_acceptance_rule_is_verbatim() -> None:
     clause = ("The issuer of this acceptance accepts, without qualification, appointment under the referenced "
-              "credential and the rules that credential carries, and undertakes as its own the duties whose "
-              "bearer is the delegate.")
+              "credential and the rules that credential carries, which were available to it in full before it "
+              "issued this acceptance, and undertakes as its own the duties whose bearer is the delegate.")
     rules = _load(ACCEPTANCE / "rules.json")
     assert saidify_sad(rules) == rules
     assert list(rules.values())[1:] == [clause]
