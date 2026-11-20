@@ -859,7 +859,9 @@ def test_whitespace_is_not_disclosure_content(path, value) -> None:
 
 
 def test_the_machine_gate_needs_a_framework_for_a_role_only_when_gfw_is_named() -> None:
-    """Copilot on #19: a bare role label without gfw (the light path) must not force a framework."""
+    """Copilot on #19: a bare role label without gfw (the light path) must not force a framework.
+    Hostile fix pass on #19: a named gfw is enforced whether or not a role or custom key is present."""
     gate = _load(GCD / "rules.json")["machineGate"]
-    assert "where the gfw field is present and the role field is present" in gate
+    assert "where the gfw field is present, or where the constraints container holds a key" in gate
+    assert "the role field is present" not in gate
     assert "a custom constraint with no framework named always fails" in gate
